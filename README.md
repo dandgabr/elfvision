@@ -21,9 +21,11 @@ Preferences button.
 
 ## Status
 
-Milestones M0 and M1 are done (see [Roadmap](#roadmap)). **This build shows demo
-data**: three scenarios of fake providers exercise every state, and no real provider
-is connected until M2. The extension is for personal use and is not published to
+Milestones M0, M1 and M2 are done (see [Roadmap](#roadmap)). **Command Code is the
+only real provider**: paste its API key on the Accounts page of Preferences and the
+bar shows your five-hour and weekly usage and the monthly balance. The other providers
+come in M3. An Advanced option switches to demo data (three scenarios of made-up
+providers that exercise every state). The extension is for personal use and is not published to
 extensions.gnome.org, because three of the planned providers authenticate with
 another application's OAuth client, which those providers' terms may not allow (see
 [ADR 0003](docs/adr/0003-security-model.md)).
@@ -179,7 +181,7 @@ design are in [docs/adr](docs/adr/README.md).
 |---|---|---|
 | M0 | Skeleton: panel button, bar, popup with demo cards | done |
 | M1 | Data layer (contract, scheduler, cache), themes, appearance settings | done, in PR #1 |
-| M2 | Command Code with an API key stored in libsecret | next |
+| M2 | Command Code with an API key stored in libsecret | done |
 | M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | planned |
 | M4 | Notifications, connection alerts, polish | planned |
 
@@ -188,10 +190,10 @@ Details in [ADR 0008](docs/adr/0008-mvp-roadmap.md).
 ## Security
 
 The extension does not read or change files, tokens or settings of any AI tool
-(Claude Code, Codex CLI and others). It keeps its own credentials. From M2 on,
-secrets are stored in the desktop keyring through libsecret, never in GSettings,
-files or logs, and there is no plaintext fallback. Until then the build holds no
-credentials at all.
+(Claude Code, Codex CLI and others). It keeps its own credentials. Secrets are stored
+in the desktop keyring through libsecret, never in GSettings, files or logs, and there
+is no plaintext fallback. The Command Code key is sent only to `api.commandcode.ai`
+over HTTPS, without following redirects.
 
 Credentials stay out of the repository: `.gitignore` excludes `*.local.json`,
 `providers.json`, `credentials*.json`, `auth.json`, `.env` files, `*.pem`, `*.key`

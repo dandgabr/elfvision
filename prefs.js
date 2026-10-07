@@ -6,6 +6,7 @@ import Gtk from 'gi://Gtk';
 
 import {API_KEY, clearSecret, lookupSecret, storeSecret} from './lib/services/secrets.js';
 import {DEFAULT_THEME, scanThemes} from './lib/services/themeFiles.js';
+import {KEY_PATTERN} from './lib/providers/commandCode.js';
 import {builtinCatalog} from './lib/ui/themeCatalog.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
@@ -150,57 +151,127 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         return new Adw.NavigationPage({title: _('Theme'), child: toolbar});
     }
 
-    /** The Command Code account: a key kept in the keyring, never shown again. */
-    _commandCodeGroup(settings, _) {
+    /** The accounts page: a key kept in the keyring, never shown again. */
+    _accountsPage(window, settings, _, handlerIds) {
         const provider = 'command-code';
+        const page = new Adw.PreferencesPage({title: _('Accounts'), icon_name: 'avatar-default-symbolic'});
         const group = new Adw.PreferencesGroup({
-            title: _('Accounts'),
-            description: _('Keys are kept in the system keyring, never in a file or in the settings.'),
+            title: 'Command Code',
+            description: _('The key is kept in the system keyring and sent only to api.commandcode.ai.'),
         });
-        const status = new Adw.ActionRow({title: 'Command Code', subtitle: _('Checking the keyring…')});
+        const status = new Adw.ActionRow({title: _('Status'), subtitle: _('Checking the keyring…')});
         const remove = new Gtk.Button({
             label: _('Remove key'),
+            tooltip_text: _('Remove the Command Code key'),
             valign: Gtk.Align.CENTER,
             css_classes: ['destructive-action'],
             visible: false,
         });
         status.add_suffix(remove);
         const entry = new Adw.PasswordEntryRow({title: _('API key'), show_apply_button: true});
+        const link = new Adw.ActionRow({
+            title: _('Where do I get a key?'),
+            subtitle: _('Open the Command Code site and create an API key.'),
+            activatable: true,
+        });
+        link.add_suffix(new Gtk.Image({icon_name: 'adw-external-link-symbolic'}));
+        link.connect('activated', () => Gio.AppInfo.launch_default_for_uri('https://commandcode.ai', null));
+
+        let hasKey = null;       // null until the keyring answered
+        let keyringDown = false;
+        const showStatus = () => {
+            if (keyringDown) {
+                status.subtitle = _('No keyring found. Unlock it in Passwords and Keys, or install a Secret Service provider.');
+                return;
+            }
+            if (!hasKey) {
+                status.subtitle = _('No key yet. Paste one below.');
+                return;
+            }
+            const result = settings.get_value('account-status').deepUnpack()[provider];
+            status.subtitle = {
+                ok: _('Key accepted.'),
+                rejected: _('The server rejected this key.'),
+                keyring: _('Key saved. The keyring is locked, so it was not checked.'),
+                unreachable: _('Key saved. Could not reach the server.'),
+                changed: _('Key saved. The service replied in an unexpected way.'),
+            }[result] ?? _('Key saved. Not checked yet.');
+        };
 
         // The running extension watches this number and asks the provider again.
-        const announce = () => settings.set_int('credentials-revision', (settings.get_int('credentials-revision') + 1) % 2147483647);
+        const announce = () => {
+            settings.set_int('credentials-revision', (settings.get_int('credentials-revision') + 1) % 2147483647);
+            Gio.Settings.sync();
+        };
         const refresh = () => lookupSecret(provider, API_KEY).then(key => {
-            status.subtitle = key ? _('A key is stored.') : _('No key yet. Paste one below.');
-            remove.visible = !!key;
+            hasKey = !!key;
+            keyringDown = false;
         }).catch(() => {
-            status.subtitle = _('The keyring is not available.');
-            remove.visible = false;
+            hasKey = false;
+            keyringDown = true;
+        }).finally(() => {
+            remove.visible = !!hasKey;
+            entry.sensitive = !keyringDown;
+            showStatus();
         });
+        handlerIds.push(settings.connect('changed::account-status', showStatus));
 
         entry.connect('apply', () => {
             const key = entry.text.trim();
-            if (!key)
+            if (!KEY_PATTERN.test(key)) {
+                entry.add_css_class('error');
+                window.add_toast(new Adw.Toast({title: _('That does not look like an API key.')}));
                 return;
+            }
+            entry.remove_css_class('error');
             entry.sensitive = false;
             storeSecret(provider, API_KEY, key, 'Command Code API key').then(() => {
                 entry.text = '';
-                announce();
+                window.add_toast(new Adw.Toast({title: _('Key saved. Checking…')}));
+                try {
+                    announce();
+                } catch (_error) {
+                    // The key is stored; the extension asks again on its next poll.
+                }
             }).catch(() => {
-                status.subtitle = _('The keyring did not accept the key.');
+                window.add_toast(new Adw.Toast({title: _('The keyring did not accept the key.')}));
             }).finally(() => {
                 entry.sensitive = true;
+                entry.grab_focus();
                 refresh();
             });
         });
+        entry.connect('changed', () => entry.remove_css_class('error'));
+
         remove.connect('clicked', () => {
-            clearSecret(provider, API_KEY).then(announce).catch(() => {
-                status.subtitle = _('The keyring is not available.');
-            }).finally(refresh);
+            const dialog = new Adw.AlertDialog({
+                heading: _('Remove the Command Code key?'),
+                body: _('It is deleted from the keyring. The key stays valid on the Command Code site.'),
+            });
+            dialog.add_response('cancel', _('Cancel'));
+            dialog.add_response('remove', _('Remove'));
+            dialog.set_response_appearance('remove', Adw.ResponseAppearance.DESTRUCTIVE);
+            dialog.set_default_response('cancel');
+            dialog.set_close_response('cancel');
+            dialog.connect('response', (_dialog, response) => {
+                if (response !== 'remove')
+                    return;
+                clearSecret(provider, API_KEY).then(announce).catch(() => {
+                    window.add_toast(new Adw.Toast({title: _('The keyring is not available.')}));
+                }).finally(refresh);
+            });
+            dialog.present(window);
         });
-        refresh();
+
+        refresh().then(() => {
+            if (!hasKey && !keyringDown)
+                entry.grab_focus();
+        });
         group.add(status);
         group.add(entry);
-        return group;
+        group.add(link);
+        page.add(group);
+        return page;
     }
 
     fillPreferencesWindow(window) {
@@ -243,7 +314,6 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         ], _('Compact mode'), _('Drops the percent sign and the window suffix.'), handlerIds);
         bar.add(compact);
 
-        page.add(this._commandCodeGroup(settings, _));
         page.add(bar);
 
         const look = new Adw.PreferencesGroup({title: _('Appearance')});
@@ -321,20 +391,31 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         popup.add(autoOpen);
         page.add(popup);
 
-        const development = new Adw.PreferencesGroup({
-            title: _('Development'),
-            description: _('Demo data lets you try every state without an account.'),
+        const advanced = new Adw.PreferencesGroup();
+        const expander = new Adw.ExpanderRow({
+            title: _('Advanced'),
+            subtitle: _('Demo data, to try every state without an account.'),
         });
-        development.add(choiceRow(settings, 'data-source', [
+        const source = choiceRow(settings, 'data-source', [
             ['live', _('Real providers')],
-            ['demo', _('Demo data')],
-        ], _('Data source'), _('Where the numbers come from.'), handlerIds));
-        development.add(choiceRow(settings, 'demo-scenario', [
+            ['demo', _('Demo data (made up)')],
+        ], _('Data source'), _('Demo data queries no account.'), handlerIds);
+        const scenario = choiceRow(settings, 'demo-scenario', [
             ['steady', _('Steady')],
             ['flaky', _('Flaky')],
-            ['drift', _('Drifting')],
-        ], _('Demo scenario'), _('Only used with demo data.'), handlerIds));
-        page.add(development);
+            ['drifting', _('Drifting')],
+        ].map(([value, label]) => [value === 'drifting' ? 'drift' : value, label]),
+        _('Demo scenario'), _('Steady: all fine. Flaky: errors come and go. Drifting: usage climbs.'), handlerIds);
+        const syncScenario = () => {
+            scenario.sensitive = settings.get_string('data-source') === 'demo';
+        };
+        syncScenario();
+        handlerIds.push(settings.connect('changed::data-source', syncScenario));
+        expander.add_row(source);
+        expander.add_row(scenario);
+        advanced.add(expander);
+        page.add(advanced);
+        window.add(this._accountsPage(window, settings, _, handlerIds));
         window.add(page);
     }
 }
