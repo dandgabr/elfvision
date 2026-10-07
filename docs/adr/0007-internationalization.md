@@ -20,19 +20,19 @@ formats. The repository language is English (ADR 0001).
   translate the shell itself.
 - **Source strings are English** (`msgid`); pt-BR is a catalog entry.
 - Rules:
-  - no sentence built by concatenation; use placeholders (`"resets in %s"`), because
-    word order changes between languages;
-  - plurals go through `ngettext`;
-  - `pgettext` when one word has several roles ("Week" as a label and in an alert);
-  - numbers, currency, weekday and clock go through `Intl` with the active language
-    (`US$ 12,40` in pt-BR, `$12.40` in English), respecting the 12 or 24-hour setting;
-  - time-unit abbreviations (`d h min`) are the same in both languages;
-  - layout does not depend on text length: names are ellipsized, buttons grow, and
-    nothing has a fixed width tied to a word;
-  - provider names and theme names are not translated.
+  - No sentence is built by concatenation. Use placeholders (`"resets in %s"`), because word order
+    changes between languages.
+  - Plurals go through `ngettext`.
+  - Use `pgettext` when one word has several roles ("Week" as a label and in a notification).
+  - Numbers, currency, weekday and clock go through `Intl` with the active language (`US$ 12,40` in
+    pt-BR, `$12.40` in English), and respect the 12 or 24-hour setting.
+  - Time-unit abbreviations (`d h min`) are the same in both languages.
+  - Layout does not depend on text length: names are ellipsized, buttons grow, and nothing has a fixed
+    width tied to a word.
+  - Provider names and theme names are not translated.
 - Files:
 
-```
+```text
 po/gnome-ai-quota.pot       catalog generated from the code
 po/pt_BR.po                 translation
 locale/<lang>/LC_MESSAGES/  compiled .mo files (not committed)

@@ -4,6 +4,12 @@ A guide for working on the code. For what the extension is and how to install
 it, read the [README](../README.md); for why it is built this way, the
 [ADRs](adr/README.md).
 
+**Contents:** [Setup](#setup) · [Layout](#layout) · [Architecture rules](#architecture-rules) · [Tests](#tests) ·
+[Running and checking](#running-and-checking-the-extension) · [Static analysis](#static-analysis) ·
+[Package](#package) · [Signing in to OAuth providers](#signing-in-to-oauth-providers) ·
+[Themes](#themes) · [Translations](#translations) · [Tools](#tools) · [Contributing](#contributing) ·
+[Conventions](#conventions). Pitfalls are in [pitfalls.md](pitfalls.md).
+
 ## Setup
 
 You need GNOME Shell 50, `gjs`, `glib-compile-schemas`, the gettext tools
@@ -22,22 +28,29 @@ changing `schemas/` or `po/`.
 
 ## Layout
 
-```
+```text
 extension.js        entry point (enable and disable)
 prefs.js            preferences window (GTK 4, libadwaita)
 lib/core/           pure JavaScript: contract, scheduler, errors, cache format, the parser
                     of each provider's reply, theme compiler and its CSS template,
-                    severity, pacing, selection, fitting, formatting, view models
+                    severity, pacing, selection, fitting, formatting, view models, the alert
+                    rules (alerts.js), their texts (alertText.js), safe text and the
+                    Restore defaults classification (defaults.js)
 lib/providers/     the registry, one module per provider, the demo providers
 lib/oauth/          PKCE, the sign-in's local server and flow, the token manager
-lib/services/       GLib, Gio and Soup glue: HTTP, keyring, timers, cache file, theme
-                    files, theme manager, quota controller
-lib/prefs/          the Accounts page and the theme picker text (GTK 4, libadwaita)
-lib/ui/             St widgets: meter, bar item, provider card, indicator, tooltip
+lib/services/       GLib, Gio and Soup glue: HTTP, keyring, timers, cache and alert files,
+                    theme files, theme manager, quota controller, alert service and the
+                    suspend watcher (the only code that talks to the system bus)
+lib/prefs/          the Accounts and Notifications pages, About and Restore defaults
+                    (GTK 4, libadwaita)
+lib/ui/             St widgets (St is the shell's widget toolkit): meter, bar item, provider card, indicator, tooltip, the
+                    notifier (the only code that makes notifications), legend and the
+                    not-tracked list
 themes/builtin/     the 20 built-in themes, one folder each with a theme.json
 themes/v1.txt       the style slugs that tools/gen-themes.py generates
 schemas/            GSettings schema
-icons/              symbolic SVG icons, one per provider id
+icons/              symbolic SVG icons, one per provider id, and the application icon
+.github/            CI workflows (gitleaks, static analysis), Dependabot, pinned scanners
 po/                 gettext template and translations
 tests/              unit tests (no GNOME Shell needed)
 tools/              build, translation, theme generation and test-shell scripts
@@ -47,16 +60,25 @@ tools/              build, translation, theme generation and test-shell scripts
 
 ```mermaid
 flowchart LR
-    ui["lib/ui<br/>St widgets"] --> core["lib/core<br/>contract, scheduler, errors, view models"]
-    prefs["lib/prefs<br/>Accounts page"] --> oauth["lib/oauth<br/>sign-in, tokens"]
-    providers["lib/providers<br/>one module each"] --> core
+    extension["extension.js"] --> ui["lib/ui<br/>St widgets, notifier"]
+    extension --> services
+    extension --> providers
+    extension --> core
+    prefsjs["prefs.js"] --> prefs["lib/prefs<br/>Accounts, Notifications, About"]
+    prefsjs --> services
+    ui --> core["lib/core<br/>contract, scheduler, view models, alert rules"]
+    ui --> providers["lib/providers<br/>registry, one module each"]
+    prefs --> core
+    prefs --> oauth["lib/oauth<br/>sign-in, tokens"]
+    prefs --> providers
+    prefs --> services["lib/services<br/>HTTP, keyring, files, controller, alert service"]
+    providers --> core
     providers --> oauth
-    providers --> services["lib/services<br/>HTTP, keyring, files, controller"]
+    providers --> services
     services --> core
-    oauth --> core
 ```
 
-The arrows say who may import whom. `tests/structure.test.js` checks the parts that matter:
+The arrows are the imports the code has today, and say who may import whom. `tests/structure.test.js` checks the parts that matter:
 the core imports nothing outside the core and no `gi://` module, St and the shell
 modules stay in `lib/ui`, `extension.js` and the theme manager, and GTK and Adwaita stay in
 `prefs.js` and `lib/prefs`.
@@ -89,11 +111,28 @@ that keep secrets out of the repository. Add a test with the code you change.
 `tmpDir()` gives a folder removed afterwards, and `gjs -m tests/run.js -- <text>` runs only the
 tests whose name contains `<text>`.
 
-`tools/check.sh` runs the tests together with everything else that needs no graphical session:
-script syntax, ShellCheck, the schemas, the translation template and catalogs (including that
-every placeholder survives translation) and whitespace. Run it before a commit.
+`tools/check.sh` runs these steps, in this order, and fails if any of them fails:
 
-## Three ways to run it
+1. The build: the compiled schema and the catalogs, which some tests read.
+2. The unit tests.
+3. The syntax of the shell scripts, and of every JavaScript module.
+4. **The extension enabled in a headless GNOME Shell.** It reads the extension's state and fails on an
+   error. It is skipped when `gnome-shell` is not installed.
+5. ShellCheck.
+6. The schemas.
+7. The translation template and the catalogs, including that every placeholder survives translation.
+8. Whitespace.
+
+Run it before a commit.
+
+The unit tests cannot import the interface modules (`lib/ui`, `extension.js`), because they need the
+shell. A mistake there (a name declared twice, one that is not defined) only shows when the extension is
+enabled, which is what the shell step of `check.sh` is for. Keep the logic in `lib/core`, where it can be
+tested, and the interface thin.
+
+## Running and checking the extension
+
+Three tools, each good for something different:
 
 | Way | Command | Good for |
 |---|---|---|
@@ -150,8 +189,9 @@ notification list). `steady` and `flaky` are the other scenarios.
 ### Demo scenarios
 
 With the `data-source` setting on `demo` (Preferences, General, Advanced), the `demo-scenario`
-setting chooses what the made-up providers do: `steady`, `flaky` or `drift` (see the README). In a session where the
-extension is installed, change it with:
+setting chooses what the made-up providers do: `steady` (everything fine), `flaky` (errors, a rate limit and
+a signed-out provider, every 15 seconds) or `drift` (usage climbs toward the limits every 10 seconds). In a
+session where the extension is installed, change it with:
 
 ```sh
 gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota demo-scenario flaky
@@ -160,6 +200,27 @@ gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota demo
 The headless shell keeps its settings in memory, out of reach of a `gsettings` call from
 outside, so set the key from a script with `Gio.Settings` instead; the nested shell takes
 `DEMO_SCENARIO` (see above).
+
+### Checking a change in a shell
+
+For the interface, run it and look. Methods:
+
+- The bar, the popup and the notifications: `DATA_SOURCE=demo DEMO_SCENARIO=drift
+  tools/nested-shell.sh` (see [Nested shell](#nested-shell)). Close the window to end it.
+- Scripted checks and screenshots: [`tools/headless-shell.sh`](#headless-shell) with a script. Notes:
+  - The `Eval` scope has `Main`, `Gio`, `GLib` and `Shell`, but not `Clutter`. Use `imports.gi.Clutter`.
+  - A fresh shell shows the Fedora welcome dialog and the overview. Close the dialogs in
+    `Main.layoutManager.modalDialogGroup` and call `Main.overview.hide()` first.
+  - A virtual pointer that starts at the top-left corner triggers the hot corner. Move it to the middle of
+    the screen first.
+- One preferences page alone: write a small `gjs -m` program. It builds the page with the settings
+  schema and `Gio.memory_settings_backend_new()`, and presents it in an `Adw.PreferencesWindow` inside
+  the headless shell. This shows the page without the rest of the window and makes each state easy to
+  capture.
+- The shell switches an extension off while the screen is locked (it declares no `unlock-dialog`
+  session mode), so `Main.screenShield.lock(false)` in a test makes `disable()` run.
+- When a change adds a setting, run `tools/build.sh` (or `tools/check.sh`) first: some tests read the
+  compiled schema, and an old one does not know the new key.
 
 ## Static analysis
 
@@ -170,7 +231,7 @@ GitHub Actions run these on every push to `main`, every pull request and once a 
 |---|---|---|
 | gitleaks | gitleaks, with `.gitleaks.toml` | secrets in the whole history |
 | CodeQL (GitHub's default setup) | CodeQL, extended query suite | the JavaScript, the Python tools and the workflows; results under Security, Code scanning |
-| sast | bandit | the Python tools |
+| sast (static application security testing) | bandit | the Python tools |
 | sast | Semgrep (`p/javascript`, `p/security-audit`, `p/secrets`) | the JavaScript and secrets |
 | sast | ShellCheck | the shell scripts and the hook |
 | sast | zizmor | the workflows themselves |
@@ -178,12 +239,12 @@ GitHub Actions run these on every push to `main`, every pull request and once a 
 CodeQL is not a workflow file here: the repository uses GitHub's own *default setup* (Settings, Code
 security, Code scanning), set to the extended suite for `javascript-typescript`, `python` and `actions`.
 GitHub does not accept results from a CodeQL workflow of our own while the default setup is on, so
-there is only one of the two. A finding fails the job in the other tools. Every action is pinned to a commit, workflows get the least
-permissions they need, and Dependabot (with a one-week cooldown) proposes new versions of the
+the repository uses only the default setup. In every tool except CodeQL, a finding fails the job.
+Every action is pinned to a commit, workflows get the least permissions they need, and Dependabot (with a one-week cooldown) proposes new versions of the
 actions and of the pinned scanners in `.github/requirements-sast.txt`.
 
-`tools/sast.sh` runs the same commands locally and skips a tool that is not installed
-(`pipx install bandit semgrep zizmor`). When a scanner flags something that is safe, prefer
+`tools/sast.sh` runs the same commands locally (every tool but CodeQL) and skips a tool that is not installed
+(`pipx install bandit semgrep zizmor`). When a scanner flags code that is safe, prefer
 changing the code so the reason is visible (the HTTP helper in `tools/import-client-ids.py`
 uses an opener that only speaks https, rather than an annotation); where an annotation is
 right, put the reason in a comment above it.
@@ -203,13 +264,9 @@ the id in the AI tool installed on your computer, then in that tool's open-sourc
 writes it to the file with mode 0600 without printing it. The nested shell copies that file in,
 so Connect works there too, and keeps the sign-in in its own throwaway keyring.
 
-Enable the pre-commit hook once per clone with `git config core.hooksPath .githooks`. It always
-runs `tools/check-secrets.py` (credential formats, hashes of known client ids, every value of your
-local file) and also gitleaks when it is installed. It refuses the commit when it finds something.
-
 ## Themes
 
-A theme is a `theme.json` (see the README for the format and ADR 0006 for the
+A theme is a `theme.json` (see [themes.md](themes.md) for the format and ADR 0006 for the
 tokens). All CSS lives in `lib/core/theme.template.css`. Colors, radii, borders,
 shadows and fonts are tokens that `lib/core/theme.js` substitutes at compile time,
 because St has no `var()`.
@@ -220,7 +277,7 @@ because St has no `var()`.
    and dashes, and must match the folder name.
 2. Give it both schemes with the eight required colors (`bg`, `surface`, `fg`,
    `muted`, `border`, `accent`, `warn`, `danger`).
-3. Add its group and description to `lib/ui/themeCatalog.js` so the picker can
+3. Add its group and description to `lib/prefs/themeCatalog.js` so the picker can
    translate them, then run `tools/i18n.sh all`.
 4. Run the tests. They validate and compile every built-in theme, and one of them
    asserts the count of twenty, so update it when the set changes.
@@ -279,6 +336,48 @@ entries. To add a language, add `po/<lang>.po` (`msgmerge` can create it from th
 template) and run `tools/i18n.sh compile`. The compiled `locale/` directory is not
 committed.
 
+## Tools
+
+| Script | What it does |
+|---|---|
+| `tools/build.sh` | Compiles the schema and the translations. Run it after changing `schemas/` or `po/`. |
+| `tools/check.sh` | The checks to run before a commit (see [Tests](#tests)). |
+| `tools/sast.sh` | The static analysis that CI runs, locally (see [Static analysis](#static-analysis)). |
+| `tools/pack.sh` | Builds the installable zip. |
+| `tools/headless-shell.sh`, `tools/nested-shell.sh` | Throwaway GNOME Shells (see [Running and checking](#running-and-checking-the-extension)). |
+| `tools/i18n.sh`, `tools/po-fill.py`, `tools/check-po.py` | Translation workflow and its checks (see [Translations](#translations)). |
+| `tools/gen-themes.py` | Generates the built-in themes from the style gallery (see [Themes](#themes)). |
+| `tools/import-client-ids.py` | Finds the public client id of each installed AI tool, for the sign-in (see [Signing in](#signing-in-to-oauth-providers)). |
+| `tools/check-secrets.py` | The secret check of the pre-commit hook and of the tests; `--all` checks every tracked file. |
+
+## Contributing
+
+### Making a change
+
+1. Branch from `main`: `feat/<topic>`, `fix/<topic>`, `docs/<topic>` or `ci/<topic>`.
+2. Keep one coherent piece per pull request.
+3. Enable the pre-commit hook once per clone with `git config core.hooksPath .githooks`. It always runs
+   `tools/check-secrets.py` (credential formats, hashes of known client ids, every value of your local
+   file), also runs gitleaks when it is installed, and refuses the commit when it finds something.
+4. Run `tools/check.sh` before committing, and `tools/sast.sh` when the change touches a script, a
+   workflow or the Python tools.
+5. For a change to the interface or to security, get a review before the pull request: a UI, a UX, a
+   frontend and a security reviewer each read the change, and the findings are fixed or written down.
+6. In the description, say what was checked and what only the owner can check (a lock screen, a real
+   account). CI must pass before the merge.
+
+### Adding a setting
+
+1. Add the key to `schemas/*.gschema.xml` with a summary, a description, a default and a range or
+   choices where the value is limited.
+2. Put it in `RESET_KEYS` or `KEPT_KEYS` in `lib/core/defaults.js` (what Restore defaults does with it).
+   A test fails until you do.
+3. Run `tools/build.sh`, because some tests read the compiled schema.
+4. Add the control in `prefs.js` or `lib/prefs`, with every text through `gettext`, then translate the new
+   strings (see [Translations](#translations)).
+5. Read the value where it is used, and re-check it there: dconf can be edited by hand.
+6. Add a test, and a row to the Settings table of the README.
+
 ## Conventions
 
 - English everywhere in the repository: code, identifiers, comments, documentation,
@@ -289,68 +388,3 @@ committed.
   (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`).
 - Clean up in `disable()` and avoid synchronous I/O in the shell process.
 - Never commit credentials. See the security note in the README.
-
-## Pitfalls
-
-Things that cost time and are not obvious from the St or GNOME Shell sources.
-
-**Stylesheet**
-
-- The compiler substitutes every double-brace token in the template, comments
-  included. Describe tokens in comments without the braces.
-- St has no `var()` and no percentage widths. Tokens are substituted at compile
-  time; the meter sizes its fill and pacing tick from its allocation
-  (`lib/ui/meter.js`).
-- A focus ring needs a border. An inset `box-shadow` does not draw on `St.Button`; a
-  transparent border that turns blue on `:focus` does.
-- A non-reactive popup item greys all its text. The popup sits in a
-  `PopupBaseMenuItem` with `reactive: false`, so St applies `:insensitive` and the
-  shell theme colors everything `#9b9b9d`. Set `color` on the popup root
-  (`.gaq-popup`). When a screenshot looks dim, measure pixels before blaming a stale
-  state.
-
-**Layout**
-
-- `BinLayout` centers children that do not expand. An `x_align` or `y_align` of start
-  or end is ignored unless the child or one of its descendants has the matching
-  `x_expand` or `y_expand`. Set the flag, or place children by hand as
-  `lib/ui/meter.js` does.
-- Negative margins break layout. A margin that makes the preferred width negative
-  wraps to 2^32 in St, which gives huge natural widths, allocations such as
-  `-12 x 32` and Cogl viewport criticals. Group widgets in a tighter box.
-- `St.ScrollView` only scrolls when it has a `max-height`. The popup computes it
-  from the monitor height each time the menu opens. `overlay_scrollbars: false`
-  keeps the scrollbar in its own column.
-- A layout chosen as "the richest that fits" flips whenever a neighbour's width
-  wobbles around the limit. Keep the current layout while it fits
-  (`chooseStickyLayout` in `lib/core/fit.js`).
-- A popup follows its source actor: `BoxPointer._reposition` re-reads the source
-  position on every allocation, so a neighbouring extension that changes width each
-  second moves the popup. Pin it with `boxPointer.setPosition(anchor)` to an
-  invisible actor while it is open (`_pinPopup` in `lib/ui/indicator.js`).
-
-**Lifecycle**
-
-- Use `connectObject` for signals on objects you do not own. A manual `disconnect`
-  in `destroy()` fails with criticals when the emitter (a panel box at shell
-  teardown) is already disposed. Read JS fields (`this._cleaned`) before GObject
-  properties (`this.mapped`) in callbacks that can run during destruction.
-- Remove a widget from its parent before `add_child` to another container, or
-  Clutter warns about an existing parent.
-- Do not call `get_preferred_width()` on a widget outside the stage; it logs St
-  criticals during shell teardown.
-- `destroy_all_children()` also destroys siblings you still reference (the `+N`
-  badge). Give rebuilt items their own box.
-- The popup must not close on inner clicks. Its content lives in one
-  `PopupBaseMenuItem` created with `reactive: false`, `can_focus: false` and
-  `activate: false`.
-- `St.BoxLayout` emits `child-added` and `child-removed`, not `actor-added`. A wrong
-  signal name makes the extension fail to load.
-
-**Tooling**
-
-- The `memory` GSettings backend is per process. Settings written in the headless
-  shell are invisible to any other process, including the preferences window, which
-  is why the nested shell uses the key file backend.
-- zsh does not split unquoted variables. When you build a list of arguments for
-  `tools/headless-shell.sh`, use an array and `"${args[@]}"`.

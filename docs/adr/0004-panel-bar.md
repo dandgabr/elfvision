@@ -1,7 +1,7 @@
 # 0004. Top-bar design
 
 Status: accepted. The bar, its states, selection and adaptive layout are
-implemented; notifications and motion are planned for M4.
+implemented, except motion (see "Not implemented").
 
 ## Context
 
@@ -35,12 +35,12 @@ tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M
   Claude/GPT pool, each with 5-hour and weekly windows): the bar shows the most
   critical metric. The suffix names the window and the pool (`G S`, `C/G 5h` in
   Portuguese; `G W` in English, the window letter being translated), about 18 px wider
-  for that item. The accessible name and the popup card name the pool in full. A bar
-  tooltip that lists every metric and marks the displayed one is planned for M4.
+  for that item. The accessible name and the popup card name the pool in full. The
+  tooltip of each item (ADR 0010) shows the displayed metric and when it resets; a tooltip that
+  lists every metric is not implemented.
 - **Money providers:** the number is the remaining balance (`$12.40`, `$124`,
   `$1.2K`) and the bar is the share of the budget spent. In headline mode, money
-  shows only when it is the worst case; a configured dollar floor counts as
-  "warning" for that choice.
+  shows only when it is the worst case.
 - **Adaptive layout.** The bar measures the room the panel leaves it and picks the
   richest layout that fits, so other extensions never clip it. Candidates, in order:
   full; compact with N providers; compact with N-1 down to 2; headline (the worst
@@ -51,24 +51,23 @@ tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M
   when monitors change. A number is never truncated with an ellipsis, and item
   widths are fixed (tabular digits) so the bar does not shake. The popup lists as
   "Hidden from the bar" whatever the bar does not show.
-- **Steady layout.** A neighbour that changes width every second, such as a system
+- **Steady layout.** A neighbor that changes width every second, such as a system
   monitor, would make the layout flip and the popup shake. The layout in use is
   therefore sticky: it is kept while it fits, and a richer one is adopted only with
   32 px to spare. Widths from the last full pass are reused when only the panel
   changes. The bar does not re-fit while the popup is open; the pending fit runs on
   close. While open, the popup is anchored to an invisible copy of the button's box,
-  so it stays put when neighbours resize.
+  so it stays put when neighbors resize.
 - **Settings:** `position` (`left`, `center`, `right`; default right), `bar-count`
   and `compact-mode` (`auto`, `always`, `never`). `never` keeps the `%` and the
   suffix and only drops providers. The button goes after the Activities button in
   the left box and first in the right box.
 
-Planned for M4:
+Notifications and the connection alert are decided in [ADR 0010](0010-alerts-and-polish.md).
 
-- **Notifications.** Default threshold 95%, once per window with 3 points of
-  hysteresis, configurable per quota kind (session, weekly, monthly, credits; any
-  subset), with an optional dollar floor for credits. A separate connection alert
-  covers not signed in, persistent errors and long-stale data.
+Not implemented:
+
+- **A dollar floor** for credits that would count as a warning in the choice of the worst item.
 - **Motion.** One 300 ms tween on the bar, a 150 ms cross-fade on the number, one
   pulse when crossing 80% (two at 95%), nothing looping, no timers at rest, and all
   durations zero when GNOME animations are off.

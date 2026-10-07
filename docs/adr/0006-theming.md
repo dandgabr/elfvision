@@ -30,7 +30,7 @@ skills), which is the source of 19 of the built-in themes.
 
 ### The theme file
 
-```
+```text
 id, name, description        id: lowercase letters, digits, dashes; equals the folder name
 schemes.light, schemes.dark  both required
   required colors            bg, surface, fg, muted, border, accent, warn, danger
@@ -111,7 +111,7 @@ The theme is chosen on a sub-page of Preferences: grouped rows, a one-line
 description, a four-color sketch (background, surface, accent, text, in the scheme in
 use) and a check mark on the current theme. The page rescans the folders each time it
 opens. The group names and descriptions of the built-in themes are translated from
-`lib/ui/themeCatalog.js`; a user theme shows its own `description` under "Your
+`lib/prefs/themeCatalog.js`; a user theme shows its own `description` under "Your
 themes".
 
 Related settings: `theme`, `color-scheme` (`system`, `light`, `dark`), `clock-format`
