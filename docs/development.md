@@ -76,6 +76,12 @@ directory is not committed.
 
 ## Pitfalls found so far
 
+- **BinLayout centers children that do not expand.** An `x_align` or `y_align` of
+  start or end is ignored unless the child (or one of its descendants) has the
+  matching `x_expand` or `y_expand`. A meter fill with `x_align: START` was drawn
+  from the middle outwards. Either set the expand flag or place children by hand,
+  as `lib/ui/meter.js` does.
+
 - **A popup follows its source actor.** `BoxPointer._reposition` re-reads the
   source's position on every allocation, so a neighbouring extension that changes
   width each second moves the popup. Pin it with `boxPointer.setPosition(anchor)`
