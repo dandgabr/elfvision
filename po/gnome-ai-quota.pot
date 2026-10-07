@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 11:11-0300\n"
+"POT-Creation-Date: 2026-10-07 14:32-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,71 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: lib/core/alertText.js:19
+msgid "A provider"
+msgstr ""
+
+#: lib/core/alertText.js:27
+msgid "Several quotas are almost used"
+msgstr ""
+
+#: lib/core/alertText.js:28
+msgid "Open the panel to see them."
+msgstr ""
+
+#: lib/core/alertText.js:31
+msgid "Quota alert"
+msgstr ""
+
+#: lib/core/alertText.js:42
+#, javascript-format
+msgid "Critical: %s at %s%%"
+msgstr ""
+
+#: lib/core/alertText.js:42
+#, javascript-format
+msgid "Warning: %s at %s%%"
+msgstr ""
+
+#: lib/core/alertText.js:45
+msgid "Credits"
+msgstr ""
+
+#: lib/core/alertText.js:47
+#, javascript-format
+msgid "%s: %s%% of the budget used."
+msgstr ""
+
+#: lib/core/alertText.js:48
+#, javascript-format
+msgid "%s: %s%% used."
+msgstr ""
+
+#: lib/core/alertText.js:51
+#, javascript-format
+msgid "Resets in %s."
+msgstr ""
+
+#: lib/core/alertText.js:60
+#, javascript-format
+msgid "%s: sign in again"
+msgstr ""
+
+#: lib/core/alertText.js:61
+msgid ""
+"The sign-in expired or was refused. Open the preferences to connect it again."
+msgstr ""
+
+#: lib/core/alertText.js:65
+#, javascript-format
+msgid "%s: no recent data"
+msgstr ""
+
+#: lib/core/alertText.js:66
+msgid ""
+"The last successful check was a while ago. The service may be unreachable."
+msgstr ""
 
 #: lib/core/viewmodel.js:40
 msgid "5 hours"
@@ -900,6 +965,14 @@ msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] ""
 msgstr[1] ""
+
+#: lib/ui/notifier.js:56
+msgid "Open"
+msgstr ""
+
+#: lib/ui/notifier.js:74
+msgid "AI quota"
+msgstr ""
 
 #: lib/ui/providerCard.js:137
 #, javascript-format

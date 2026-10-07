@@ -6,10 +6,13 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {accountStatus} from './lib/core/accountStatus.js';
 import {createProvider, createProviders, isConnected} from './lib/providers/index.js';
 import {availableProviders} from './lib/providers/registry.js';
+import {AlertService} from './lib/services/alertService.js';
+import {AlertStore} from './lib/services/alertStore.js';
 import {CacheStore} from './lib/services/cacheStore.js';
 import {QuotaController} from './lib/services/controller.js';
 import {ThemeManager} from './lib/services/themeManager.js';
 import GaqIndicator from './lib/ui/indicator.js';
+import {AlertNotifier} from './lib/ui/notifier.js';
 
 // Index inside the panel box. The left box starts with the Activities button,
 // so the indicator goes right after it.
@@ -99,6 +102,31 @@ export default class GnomeAiQuotaExtension extends Extension {
         }
         this._controller.start().catch(error =>
             console.error(`gnome-ai-quota: cannot start: ${error.message}`));
+        this._createAlerts(cacheDirectory);
+    }
+
+    /** Notifications for quotas that cross their threshold and for accounts that keep failing. */
+    _createAlerts(directory) {
+        this._notifier = new AlertNotifier({
+            extension: this,
+            settings: this._settings,
+            openPopup: () => this._indicator?.menu.open(),
+        });
+        this._alerts = new AlertService({
+            controller: this._controller,
+            store: new AlertStore(directory),
+            settings: this._settings,
+            notify: event => this._notifier.show(event),
+        });
+        this._alerts.start().catch(error =>
+            console.error(`gnome-ai-quota: cannot start the alerts: ${error?.message ?? error}`));
+    }
+
+    _destroyAlerts() {
+        this._alerts?.stop();
+        this._alerts = null;
+        this._notifier?.destroy();
+        this._notifier = null;
     }
 
     /**
@@ -143,6 +171,7 @@ export default class GnomeAiQuotaExtension extends Extension {
     }
 
     _destroyController() {
+        this._destroyAlerts();
         this._unsubscribeStatus?.();
         this._unsubscribeStatus = null;
         this._controller?.stop();

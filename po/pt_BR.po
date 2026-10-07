@@ -17,6 +17,64 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: lib/core/alertText.js:19
+msgid "A provider"
+msgstr "Um provedor"
+
+#: lib/core/alertText.js:27
+msgid "Several quotas are almost used"
+msgstr "Várias cotas estão quase no fim"
+
+#: lib/core/alertText.js:28
+msgid "Open the panel to see them."
+msgstr "Abra o painel para vê-las."
+
+#: lib/core/alertText.js:31
+msgid "Quota alert"
+msgstr "Alerta de cota"
+
+#: lib/core/alertText.js:42
+msgid "Critical: %s at %s%%"
+msgstr "Crítico: %s em %s%%"
+
+#: lib/core/alertText.js:42
+msgid "Warning: %s at %s%%"
+msgstr "Atenção: %s em %s%%"
+
+#: lib/core/alertText.js:45
+msgid "Credits"
+msgstr "Créditos"
+
+#: lib/core/alertText.js:47
+msgid "%s: %s%% of the budget used."
+msgstr "%s: %s%% do orçamento usado."
+
+#: lib/core/alertText.js:48
+msgid "%s: %s%% used."
+msgstr "%s: %s%% usado."
+
+#: lib/core/alertText.js:51
+msgid "Resets in %s."
+msgstr "Reinicia em %s."
+
+#: lib/core/alertText.js:60
+msgid "%s: sign in again"
+msgstr "%s: entre novamente"
+
+#: lib/core/alertText.js:61
+msgid ""
+"The sign-in expired or was refused. Open the preferences to connect it again."
+msgstr "O login expirou ou foi recusado. Abra as Preferências para conectar de novo."
+
+#: lib/core/alertText.js:65
+msgid "%s: no recent data"
+msgstr "%s: sem dados recentes"
+
+#: lib/core/alertText.js:66
+msgid ""
+"The last successful check was a while ago. The service may be unreachable."
+msgstr "A última consulta bem-sucedida foi há algum tempo. O serviço pode estar fora do ar."
+
 #: lib/core/viewmodel.js:40
 msgid "5 hours"
 msgstr "5 horas"
@@ -842,6 +900,14 @@ msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] "Oculto da barra (%d)"
 msgstr[1] "Ocultos da barra (%d)"
+
+#: lib/ui/notifier.js:56
+msgid "Open"
+msgstr "Abrir"
+
+#: lib/ui/notifier.js:74
+msgid "AI quota"
+msgstr "Cota de IA"
 
 #: lib/ui/providerCard.js:137
 msgid "Collapse %s"

@@ -83,7 +83,10 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 - Any dynamic value is escaped with `GLib.markup_escape_text`, length-capped and stripped of control
   and bidirectional-override characters, in notifications and the tooltip alike.
 - Notifications use a source of their own (`MessageTray.Source`), created lazily and destroyed in
-  `disable()`; one notification per key is updated instead of stacked.
+  `disable()`. The shell hides what a `USER`-scope notification says while the screen is locked,
+  so that is the scope used unless `notify-details-on-lock` is on (then `SYSTEM`); this replaces
+  the idea of a generic text for the lock screen. A new notification replaces the old one of the
+  same provider and kind instead of stacking.
 
 ### Bar, popup and prefs
 
@@ -120,7 +123,7 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 Each chunk is followed by the UI, UX, frontend and security reviews.
 
 1. `core/alerts.js` with tests, `alertStore`, `subscribeChanges` and cache seeding (done).
-2. The notifier and its wiring and teardown; wording review.
+2. The notifier and its wiring and teardown; wording review (done).
 3. `power.js`, resume handling and the connection alert.
 4. Indicator extraction, view diff and coalescing.
 5. Restore defaults and About.
@@ -130,7 +133,10 @@ Each chunk is followed by the UI, UX, frontend and security reviews.
 
 ## Open points
 
-- The lock-screen behaviour of notifications on Shell 50 and the exact `MessageTray` API names are
-  to be checked in the nested shell; nothing here was run against the installed Shell yet.
+- Checked in a headless Shell 50.5: `MessageTray.Source({title, iconName})`,
+  `Main.messageTray.add`, `Notification({source, title, body, gicon, urgency, privacyScope})`,
+  `addAction` and `source.addNotification` exist as used, and notifications arrive with the urgency,
+  scope and icon set. Not yet checked: that a `USER`-scope banner is really hidden on a locked
+  screen (it needs a real lock), and how banners and Do Not Disturb behave. Both need a manual test.
 - Whether "Disconnect all accounts and delete local data" is wanted as a separate action.
 - Whether the pt-BR text needs a reader other than the owner.
