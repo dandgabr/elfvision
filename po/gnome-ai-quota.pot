@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 00:09-0300\n"
+"POT-Creation-Date: 2026-10-07 00:29-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -363,11 +363,11 @@ msgid "Never compact"
 msgstr ""
 
 #: prefs.js:81
-msgid "Compact drops the percent sign and the window suffix."
+msgid "Compact mode"
 msgstr ""
 
 #: prefs.js:81
-msgid "Compact mode"
+msgid "Drops the percent sign and the window suffix."
 msgstr ""
 
 #: prefs.js:88
@@ -396,7 +396,7 @@ msgstr ""
 
 #: prefs.js:99
 #, javascript-format
-msgid "Unavailable: %s (using System)"
+msgid "%s (unavailable)"
 msgstr ""
 
 #: prefs.js:100
@@ -404,9 +404,7 @@ msgid "Theme"
 msgstr ""
 
 #: prefs.js:101
-msgid ""
-"Colors, fonts and shapes. Each theme has a light and a dark variant; the one "
-"it was not designed for is adapted."
+msgid "Each theme has a light and a dark variant."
 msgstr ""
 
 #: prefs.js:106
@@ -418,58 +416,58 @@ msgstr ""
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr ""
 
-#: prefs.js:111
+#: prefs.js:110
 msgid "Open folder"
 msgstr ""
 
-#: prefs.js:113
+#: prefs.js:112
 msgid "Open the themes folder"
 msgstr ""
 
-#: prefs.js:124
+#: prefs.js:123
 msgid "Some themes could not be loaded"
 msgstr ""
 
-#: prefs.js:135
+#: prefs.js:134
 msgid "Popup"
 msgstr ""
 
-#: prefs.js:137
+#: prefs.js:136
 msgid "24-hour clock"
 msgstr ""
 
-#: prefs.js:138
+#: prefs.js:137
 msgid "Show reset times on a 24-hour clock."
 msgstr ""
 
-#: prefs.js:143
+#: prefs.js:142
 msgid "1h 20min"
 msgstr ""
 
-#: prefs.js:144
+#: prefs.js:143
 msgid "1h20"
 msgstr ""
 
-#: prefs.js:145
+#: prefs.js:144
 msgid "How the countdown to a reset is written."
 msgstr ""
 
-#: prefs.js:145
+#: prefs.js:144
 msgid "Time until reset"
 msgstr ""
 
-#: prefs.js:148
+#: prefs.js:147
 msgid "Open cards that need attention"
 msgstr ""
 
-#: prefs.js:149
+#: prefs.js:148
 msgid "Cards in warning, critical or error states open on their own."
 msgstr ""
 
-#: prefs.js:156
+#: prefs.js:155
 msgid "Demo build"
 msgstr ""
 
-#: prefs.js:157
+#: prefs.js:156
 msgid "More settings arrive in later milestones. This build shows demo data."
 msgstr ""

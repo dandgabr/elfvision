@@ -78,7 +78,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
             ['auto', _('Automatic')],
             ['always', _('Always compact')],
             ['never', _('Never compact')],
-        ], _('Compact mode'), _('Compact drops the percent sign and the window suffix.'), handlerIds);
+        ], _('Compact mode'), _('Drops the percent sign and the window suffix.'), handlerIds);
         bar.add(compact);
 
         page.add(bar);
@@ -96,16 +96,15 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         const current = settings.get_string('theme');
         // A saved theme that no longer loads must not be shown as another one.
         if (!choices.some(([id]) => id === current))
-            choices.push([current, _('Unavailable: %s (using System)').format(current)]);
+            choices.push([current, _('%s (unavailable)').format(current)]);
         look.add(choiceRow(settings, 'theme', choices, _('Theme'),
-            _('Colors, fonts and shapes. Each theme has a light and a dark variant; the one it was not designed for is adapted.'),
+            _('Each theme has a light and a dark variant.'),
             handlerIds));
 
         const folder = GLib.build_filenamev([GLib.get_user_data_dir(), 'gnome-ai-quota', 'themes']);
         const folderRow = new Adw.ActionRow({
             title: _('Your themes'),
             subtitle: _('One folder per theme, with a theme.json inside: %s').format(folder),
-            subtitle_selectable: true,
         });
         const open = new Gtk.Button({
             label: _('Open folder'),
@@ -126,7 +125,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
             });
             for (const {id, problem} of rejected) {
                 // Show the reason, never the full path.
-                problems.add_row(new Adw.ActionRow({title: id, subtitle: problem.replace(/^\/\S+\//, '')}));
+                problems.add_row(new Adw.ActionRow({title: id, subtitle: problem.replace(/^.*theme\.json: /, '')}));
             }
             look.add(problems);
         }
