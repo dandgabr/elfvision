@@ -128,3 +128,56 @@ test('timers: a bad delay never fires at once or overflows, and a timer can be c
     await wait(80);
     assertEqual(soon, 1);
 });
+
+import {restoreDefaults} from '../lib/prefs/about.js';
+import {KEPT_KEYS, RESET_KEYS} from '../lib/core/defaults.js';
+
+test('restore defaults: looks, notifications and the data source go back; every account-related setting stays', () => {
+    const source = Gio.SettingsSchemaSource.new_from_directory(`${GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')))}/schemas`, null, false);
+    const settings = Gio.Settings.new_full(source.lookup('org.gnome.shell.extensions.gnome-ai-quota', false), Gio.memory_settings_backend_new(), null);
+    // Change one of each kind that is restored, including the enum ones.
+    settings.set_string('position', 'left');
+    settings.set_string('compact-mode', 'always');
+    settings.set_int('bar-count', 5);
+    settings.set_string('theme', 'terminal-tui');
+    settings.set_boolean('notifications-enabled', false);
+    settings.set_int('alert-week-percent', 50);
+    settings.set_boolean('alert-session-enabled', false);
+    settings.set_string('data-source', 'demo');
+    // ... and every one that is kept.
+    const kept = {
+        'credentials-revision': ['i', 7], 'credentials-touched': ['s', 'codex'], 'command-code-username': ['s', 'someone'],
+        'untracked-providers': ['as', ['codex']], 'terms-acknowledged': ['as', ['claude']], 'prefs-target': ['s', 'claude'],
+        'test-notification': ['i', 3], 'demo-scenario': ['s', 'flaky'],
+    };
+    for (const [key, [type, value]] of Object.entries(kept))
+        settings.set_value(key, new GLib.Variant(type, value));
+    settings.set_value('account-status', new GLib.Variant('a{ss}', {claude: 'rejected'}));
+
+    restoreDefaults(settings);
+
+    for (const key of RESET_KEYS)
+        assertTrue(settings.get_user_value(key) === null, `${key} was reset`);
+    assertEqual([settings.get_string('position'), settings.get_string('compact-mode'), settings.get_int('bar-count'), settings.get_string('theme'),
+        settings.get_boolean('notifications-enabled'), settings.get_int('alert-week-percent'), settings.get_boolean('alert-session-enabled'), settings.get_string('data-source')],
+    ['right', 'auto', 3, 'sistema-gnome', true, 95, true, 'live']);
+    for (const key of KEPT_KEYS)
+        assertTrue(settings.get_user_value(key) !== null, `${key} was kept`);
+    assertEqual([settings.get_strv('untracked-providers'), settings.get_strv('terms-acknowledged'), settings.get_string('command-code-username'),
+        settings.get_int('credentials-revision'), settings.get_value('account-status').deepUnpack()],
+    [['codex'], ['claude'], 'someone', 7, {claude: 'rejected'}]);
+});
+
+test('restore defaults: the shell is told once, not once for every key', () => {
+    const source = Gio.SettingsSchemaSource.new_from_directory(`${GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')))}/schemas`, null, false);
+    const settings = Gio.Settings.new_full(source.lookup('org.gnome.shell.extensions.gnome-ai-quota', false), Gio.memory_settings_backend_new(), null);
+    settings.set_string('position', 'left');
+    settings.set_string('theme', 'terminal-tui');
+    settings.set_string('color-scheme', 'dark');
+    const changes = [];
+    settings.connect('changed::position', () => changes.push(`position=${settings.get_string('position')}`));
+    settings.connect('changed::theme', () => changes.push(`theme=${settings.get_string('theme')}`));
+    restoreDefaults(settings);
+    // Each key that changed is announced once, with its final value; no key is announced as changed twice.
+    assertEqual(changes, ['position=right', 'theme=sistema-gnome']);
+});

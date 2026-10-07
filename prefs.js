@@ -5,7 +5,9 @@ import GLib from 'gi://GLib';
 import Gtk from 'gi://Gtk';
 
 import {DEFAULT_THEME, scanThemes} from './lib/services/themeFiles.js';
+import {buildAboutGroup} from './lib/prefs/about.js';
 import {buildAccountsPage} from './lib/prefs/accounts.js';
+import {buildNotificationsPage} from './lib/prefs/notifications.js';
 import {builtinCatalog} from './lib/prefs/themeCatalog.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
@@ -35,7 +37,8 @@ function choiceRow(settings, key, choices, title, subtitle, handlerIds) {
     sync();
     row.connect('notify::selected', () => {
         const choice = choices[row.selected];
-        if (choice)
+        // Only a change made here is written: following a reset must not give the key a user value.
+        if (choice && settings.get_string(key) !== choice[0])
             settings.set_string(key, choice[0]);
     });
     // Follow outside changes (dconf, another window) while this window is open.
@@ -288,7 +291,9 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         expander.add_row(scenario);
         advanced.add(expander);
         page.add(advanced);
+        page.add(buildAboutGroup({window, settings, gettext: _, version: this.metadata['version-name'] ?? '', extensionPath: this.path}));
         window.add(buildAccountsPage({window, settings, gettext: _, handlerIds, extensionPath: this.path}));
         window.add(page);
+        window.add(buildNotificationsPage({settings, gettext: _, handlerIds}));
     }
 }

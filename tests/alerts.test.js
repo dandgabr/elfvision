@@ -218,13 +218,16 @@ test('alerts: a time in the future in the state cannot silence alerts', () => {
 });
 
 test('alerts: what was seen long ago is forgotten, so a restart does not announce an old state', () => {
-    const old = {...emptyAlertState(), levels: {'claude|five': {fired: false, resetsAt: T0 + 3600_000, at: T0 - 5 * 3600_000}}};
+    const old = {...emptyAlertState(), levels: {'claude|five': {fired: false, resetsAt: T0 + 3600_000, at: T0 - 30 * 3600_000}}};
     assertEqual(run([[snap(97), T0]], {state: old}).events, []);                          // too old: a first sight
+    // A few hours (a long lock, a night) is not too old: below before and above now is a crossing.
+    const lunch = {...emptyAlertState(), levels: {'claude|five': {fired: false, resetsAt: T0 + 3600_000, at: T0 - 5 * 3600_000}}};
+    assertEqual(run([[snap(97), T0]], {state: lunch}).events.length, 1);
     const recent = {...emptyAlertState(), levels: {'claude|five': {fired: false, resetsAt: T0 + 3600_000, at: T0 - 5 * MIN}}};
     assertEqual(run([[snap(97), T0]], {state: recent}).events.length, 1);                  // recent: a real crossing
-    // A provider polled once an hour keeps its memory for three intervals.
-    const hourly = {...emptyAlertState(), levels: {'claude|five': {fired: false, resetsAt: null, at: T0 - 2 * 3600_000}}};
-    assertEqual(run([[snap(97), T0]], {state: hourly, intervalMs: 3600_000}).events.length, 1);
+    // A provider polled once a day keeps its memory for three intervals.
+    const daily = {...emptyAlertState(), levels: {'claude|five': {fired: false, resetsAt: null, at: T0 - 50 * 3600_000}}};
+    assertEqual(run([[snap(97), T0]], {state: daily, intervalMs: 24 * 3600_000}).events.length, 1);
 });
 
 test('alerts: a metric that is briefly missing keeps its memory, and a removed provider starts over', () => {

@@ -82,17 +82,21 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
   offer "Open", which opens the popup; neither does anything while the screen is locked. Never an account or
   user name, email, plan, error or HTTP text, path or token. Numbers are checked and clamped,
   enumerations looked up in a table, so nothing provider-controlled reaches the text.
-- On the lock screen the banner is generic ("A quota is almost used") unless the user turns on
-  `notify-details-on-lock` (off by default). How the Shell 50 handles it is not verified and gets a
-  manual test with the screen locked.
+- The extension declares no `unlock-dialog` session mode, so the shell switches it off while the
+  screen is locked (checked in a Shell 50.5: `disable()` runs on lock and the notifier is gone).
+  Nothing of the extension can therefore be on a lock screen: its notification source is destroyed
+  with it and no alert is raised while locked. There is no lock-screen setting. The notifications
+  still use the `USER` privacy scope, which the shell hides on a locked screen, as a second layer.
+  The cost: a notification that was not read when the screen locked is gone after unlocking
+  (the bar and popup still show the state), and a quota that crossed its threshold during the lock
+  is announced on the first look after unlocking, because what was last seen is remembered for 24
+  hours.
 - Every string that reaches a notification is stripped of control and bidirectional-override
   characters and length-capped (`alertText.js`), and notification markup is turned off, so what is
   left is shown as typed. The tooltip gets the same treatment when it is built.
 - Notifications use a source of their own (`MessageTray.Source`), created lazily and destroyed in
-  `disable()`. The shell hides what a `USER`-scope notification says while the screen is locked,
-  so that is the scope used unless `notify-details-on-lock` is on (then `SYSTEM`); this replaces
-  the idea of a generic text for the lock screen. A new notification replaces the old one of the
-  same provider and kind instead of stacking.
+  `disable()`. A new notification replaces the old one of the same provider and kind instead of
+  stacking. With Do Not Disturb on, banners are held and the notifications wait in the list.
 
 ### Bar, popup and prefs
 
@@ -103,13 +107,21 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 - **Not tracked:** a collapsed section under the hidden list; each row is the muted icon, the name
   and a Resume button, with no meter. The "Add account" line becomes its last row.
 - **About:** `Adw.AboutDialog` with the version from `metadata.json`, the licence and constant
-  `https://` links opened with `Gio.AppInfo.launch_default_for_uri`. No paths or user name.
+  `https://` links. No paths or user name.
 - **Restore defaults:** every schema key is classified as reset or kept, and a test fails for an
-  unclassified key. It resets appearance, bar, popup, notification and threshold settings
-  (the theme included, which the dialog says) and keeps accounts, tracking state, terms
-  acknowledgements, `account-status` and the credentials revision. Confirmation is an
-  `Adw.AlertDialog` that names what changes and says accounts stay connected; Cancel is the default.
-  After the reset it syncs the settings. It does not start the assistant again.
+  unclassified key. It resets appearance, bar, popup, notification and threshold settings, the theme
+  and the data source (someone stuck in demo data would take a restore that leaves it for a bug), and
+  keeps accounts, tracking state, terms acknowledgements, `account-status`, the credentials revision,
+  the demo scenario and the messages between the two processes. The dialog says "your accounts are
+  not changed" (not "stay connected": a rejected account stays rejected) and names what changes;
+  Cancel is the default. The reset is one batch (`delay` and `apply`), so the shell reacts once, and a
+  toast confirms it. It does not start the assistant again.
+- **Notifications page:** the master switch (it also silences the connection alert), a test button
+  (the preferences window raises the `test-notification` number and the shell shows one notification;
+  the assistant never sends one on its own), and for each kind of quota a switch and a threshold
+  shown in the row ("Notifies at 95% used" or "Off"). With the master switch off the rows are dimmed,
+  not blocked.
+- **About:** an own application icon in `icons/hicolor`.
 - **First-use assistant:** an `Adw.NavigationView` inside Preferences, never a window opened by the
   shell, gated by `first-run-done`, skippable and resumable: welcome, choose providers (the terms
   notice before any sign-in), connect each one (a failure does not block the next), choose the bar,
@@ -132,7 +144,7 @@ Each chunk is followed by the UI, UX, frontend and security reviews.
 2. The notifier and its wiring and teardown; wording review (done).
 3. `power.js`, resume handling and the connection alert (done).
 4. Indicator extraction, view diff and coalescing.
-5. Restore defaults and About.
+5. A Notifications page for the new settings, Restore defaults and About (done).
 6. Legend, "not tracked" and the tooltip audit.
 7. First-use assistant.
 8. Right-to-left prototype and a longer-text pseudo-locale pass.
@@ -142,7 +154,7 @@ Each chunk is followed by the UI, UX, frontend and security reviews.
 - Checked in a headless Shell 50.5: `MessageTray.Source({title, iconName})`,
   `Main.messageTray.add`, `Notification({source, title, body, gicon, urgency, privacyScope})`,
   `addAction` and `source.addNotification` exist as used, and notifications arrive with the urgency,
-  scope and icon set. Not yet checked: that a `USER`-scope banner is really hidden on a locked
-  screen (it needs a real lock), and how banners and Do Not Disturb behave. Both need a manual test.
+  scope and icon set. With Do Not Disturb on, neither a normal nor a high-urgency notification shows a
+  banner and both are kept in the list; with it off the banner shows.
 - Whether "Disconnect all accounts and delete local data" is wanted as a separate action.
 - Whether the pt-BR text needs a reader other than the owner.

@@ -171,3 +171,22 @@ test('structure: what the alert code subscribes to, it also lets go of', () => {
         }
     }
 });
+
+import {KEPT_KEYS, RESET_KEYS, keysToReset} from '../lib/core/defaults.js';
+
+test('defaults: every setting is either restored or kept, and none is both', () => {
+    const directory = Gio.File.new_for_path(`${root}/schemas`);
+    const enumerator = directory.enumerate_children('standard::name', Gio.FileQueryInfoFlags.NONE, null);
+    let xml = '';
+    for (let info = enumerator.next_file(null); info !== null; info = enumerator.next_file(null)) {
+        if (info.get_name().endsWith('.gschema.xml'))
+            xml += text(`schemas/${info.get_name()}`);   // every schema file, not only the last
+    }
+    const keys = [...xml.matchAll(/<key name="([^"]+)"/g)].map(match => match[1]);
+    assertTrue(keys.length > 20, 'the schema was read');
+    assertEqual(keys.filter(key => !RESET_KEYS.includes(key) && !KEPT_KEYS.includes(key)), []);
+    assertEqual([...RESET_KEYS, ...KEPT_KEYS].filter(key => !keys.includes(key)), []);   // no stale names
+    assertEqual(RESET_KEYS.filter(key => KEPT_KEYS.includes(key)), []);
+    assertEqual(new Set([...RESET_KEYS, ...KEPT_KEYS]).size, RESET_KEYS.length + KEPT_KEYS.length);
+    assertEqual(keysToReset(['theme', 'account-status', 'nope']), ['theme']);
+});
