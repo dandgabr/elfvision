@@ -8,6 +8,8 @@ import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
 import {MAX_CACHE_BYTES} from '../lib/core/cache.js';
 import {normalizeSnapshot} from '../lib/core/contract.js';
 import {startLoopback} from '../lib/oauth/loopback.js';
+import {MAX_ALERT_STATE_BYTES, emptyAlertState} from '../lib/core/alerts.js';
+import {AlertStore} from '../lib/services/alertStore.js';
 import {CacheStore} from '../lib/services/cacheStore.js';
 import {glibTimers} from '../lib/services/timers.js';
 
@@ -81,6 +83,23 @@ test('cache: a huge file and a corrupt one are ignored, and the last write is th
     await slow;
     await wait(100);
     assertEqual((await store.load()).snapshots.map(s => s.id), ['new']);
+});
+
+test('alert store: the state comes back, privately; a missing, huge or corrupt file is an empty state', async () => {
+    const directory = `${tmpDir()}/state`;
+    const store = new AlertStore(directory);
+    assertEqual(await store.load(), {state: emptyAlertState(), problems: []});
+    const state = {...emptyAlertState(), levels: {'claude|five': {fired: true, resetsAt: 123, at: 456}}};
+    store.save(state);
+    assertEqual((await store.load()).state, state);
+    const mode = path => Gio.File.new_for_path(path).query_info('unix::mode', Gio.FileQueryInfoFlags.NONE, null).get_attribute_uint32('unix::mode') & 0o777;
+    assertEqual([mode(directory), mode(`${directory}/alerts.json`)], [0o700, 0o600]);
+
+    GLib.file_set_contents(`${directory}/alerts.json`, 'x'.repeat(MAX_ALERT_STATE_BYTES + 10));
+    const huge = await store.load();
+    assertEqual([huge.state, huge.problems.length], [emptyAlertState(), 1]);
+    GLib.file_set_contents(`${directory}/alerts.json`, '{not json');
+    assertEqual((await store.load()).state, emptyAlertState());
 });
 
 test('timers: a bad delay never fires at once or overflows, and a timer can be cleared', async () => {

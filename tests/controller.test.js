@@ -57,3 +57,35 @@ test('controller: nothing is claimed until the providers are known, and the cach
     second.stop();
     assertEqual(saved[saved.length - 1], []);
 });
+
+test('controller: changes are reported with the previous snapshot, which the cache provides after a restart', async () => {
+    const earlier = {...cached('a'), metrics: [{id: 'm', kind: 'percent', window: 'week', windowSecs: 604800, percentUsed: 42}]};
+    const controller = new QuotaController({providers: [provider('a')], cache: cache([earlier])});
+    const changes = [];
+    controller.subscribeChanges(change => changes.push([change.id, change.previous?.metrics[0]?.percentUsed ?? null, change.next?.state ?? null]));
+    await controller.start();
+    controller.markSynced();
+    await controller.refresh();
+    assertEqual(changes, [['a', 42, 'ok']]);            // the cached value is what the first poll is compared with
+
+    controller.removeProvider('a');
+    assertEqual(changes[1], ['a', 10, null]);            // removal: no next snapshot
+    controller.addProvider(provider('b'));
+    await controller.refresh();
+    assertEqual(changes[2], ['b', null, 'ok']);          // never seen before: no previous
+    controller.stop();
+});
+
+test('controller: a change listener that fails does not stop the others or the polling', async () => {
+    const controller = new QuotaController({providers: [provider('a')], cache: cache()});
+    const seen = [];
+    controller.subscribeChanges(() => { throw new Error('boom'); });
+    const stop = controller.subscribeChanges(change => seen.push(change.id));
+    await controller.start();
+    await controller.refresh();
+    assertEqual(seen, ['a']);
+    stop();
+    await controller.refresh();
+    assertEqual(seen, ['a']);
+    controller.stop();
+});

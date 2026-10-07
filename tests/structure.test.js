@@ -57,6 +57,11 @@ test('structure: GTK and Adwaita stay in the preferences window', () => {
     assertEqual(offenders(outside, PREFS_SIDE), []);
 });
 
+test('structure: the system bus is reached from the services only', () => {
+    const outside = [...sources('lib'), 'extension.js', 'prefs.js'].filter(path => !path.startsWith('lib/services/'));
+    assertEqual(outside.filter(path => /\bGio\.DBus\b|\bDBusProxy\b/.test(text(path))), []);
+});
+
 test('registry: ordered, unique, and only complete providers are available', () => {
     assertEqual(PROVIDERS.map(p => p.id), ['command-code', 'codex', 'claude', 'antigravity']);
     assertEqual(new Set(PROVIDERS.map(p => p.id)).size, PROVIDERS.length);

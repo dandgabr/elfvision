@@ -55,9 +55,12 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 
 ### Connection alert
 
-- Reasons that alert: `auth_required` (no key, expired, rejected) after two failed polls or ten
-  minutes, whichever is later, with one message ("Sign in again"); and a network error or rate limit
-  that leaves the data stale for more than three poll intervals, at least fifteen minutes.
+- Reasons that alert: `auth_required` because the sign-in expired, was rejected or refused, ten
+  minutes after it was first seen, with one message ("Sign in again"); and a network error, rate
+  limit, unreadable reply or stale data that lasts for three poll intervals and at least fifteen
+  minutes. It is measured in time, not in polls: a rejected sign-in is not polled again, so counting
+  failed polls would never reach two. A provider that was never set up (`no_key`, `no_config`) is not
+  an outage.
 - One notification per outage; re-armed only by a success. No "connected again" notice.
 - Never for a locked keyring (it clears itself; the popup says so), a paused provider or one that
   was never connected.
@@ -113,7 +116,7 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 
 Each chunk is followed by the UI, UX, frontend and security reviews.
 
-1. `core/alerts.js` with tests, `alertStore`, `subscribeChanges` and cache seeding.
+1. `core/alerts.js` with tests, `alertStore`, `subscribeChanges` and cache seeding (done).
 2. The notifier and its wiring and teardown; wording review.
 3. `power.js`, resume handling and the connection alert.
 4. Indicator extraction, view diff and coalescing.
