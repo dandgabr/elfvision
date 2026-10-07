@@ -20,6 +20,7 @@
 .popup-menu-boxpointer.gaq-menu {
     -arrow-background-color: {{p:bg}};
     -arrow-border-color: {{p:bg}};
+    -arrow-border-radius: {{menu-radius}};
 }
 
 .popup-menu-boxpointer.gaq-menu .popup-menu-content {
@@ -171,6 +172,20 @@
 
 .gaq-meter-bar .gaq-meter-fill {
     border-radius: 2px;
+    background-color: {{b:accent}};
+}
+
+/* The top bar sits on the dark panel, so its meter uses the dark scheme. */
+.gaq-meter-bar .gaq-meter-fill.gaq-warning {
+    background-color: {{b:warn}};
+}
+
+.gaq-meter-bar .gaq-meter-fill.gaq-critical {
+    background-color: {{b:danger}};
+}
+
+.gaq-meter-bar .gaq-meter-fill.gaq-error {
+    background-color: {{b:error}};
 }
 
 .gaq-meter-fill.gaq-warning {
@@ -189,7 +204,7 @@
     width: 2px;
     height: 12px;
     background-color: {{p:fg}};
-    box-shadow: 0 0 0 1px {{p:bg@0.7}};
+    box-shadow: 0 0 0 1px {{p:bg@0.9}};
 }
 
 /* ---------- popup ---------- */
@@ -383,7 +398,7 @@
 .gaq-button {
     height: 28px;
     padding: 0 12px;
-    border: 2px solid transparent;
+    border: 2px solid {{p:border}};
     border-radius: {{radius-sm}};
     font-size: 12px;
     font-weight: 600;

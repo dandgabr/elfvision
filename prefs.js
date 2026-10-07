@@ -1,7 +1,9 @@
 import Adw from 'gi://Adw';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 import Gtk from 'gi://Gtk';
 
-import {listThemes} from './lib/services/themeFiles.js';
+import {DEFAULT_THEME, scanThemes} from './lib/services/themeFiles.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 /**
@@ -81,20 +83,53 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
 
         page.add(bar);
 
-        const look = new Adw.PreferencesGroup({
-            title: _('Appearance'),
-            description: _('The theme styles the popup and the top bar. Your own themes go in ~/.local/share/gnome-ai-quota/themes.'),
-        });
-        const themes = choiceRow(settings, 'theme',
-            listThemes(this.path).map(({id, name}) => [id, name]),
-            _('Theme'), _('How the popup looks. Every theme has a light and a dark variant.'), handlerIds);
-        look.add(themes);
+        const look = new Adw.PreferencesGroup({title: _('Appearance')});
         const scheme = choiceRow(settings, 'color-scheme', [
             ['system', _('Follow the system')],
             ['light', _('Light')],
             ['dark', _('Dark')],
-        ], _('Light or dark'), _('Follow the GNOME setting, or force one.'), handlerIds);
+        ], _('Light or dark'), _('Applies to the popup. The top bar always stays dark.'), handlerIds);
         look.add(scheme);
+
+        const {themes, rejected} = scanThemes(this.path);
+        const choices = themes.map(({id, name}) => [id, id === DEFAULT_THEME ? _('System (GNOME)') : name]);
+        const current = settings.get_string('theme');
+        // A saved theme that no longer loads must not be shown as another one.
+        if (!choices.some(([id]) => id === current))
+            choices.push([current, _('Unavailable: %s (using System)').format(current)]);
+        look.add(choiceRow(settings, 'theme', choices, _('Theme'),
+            _('Colors, fonts and shapes. Each theme has a light and a dark variant; the one it was not designed for is adapted.'),
+            handlerIds));
+
+        const folder = GLib.build_filenamev([GLib.get_user_data_dir(), 'gnome-ai-quota', 'themes']);
+        const folderRow = new Adw.ActionRow({
+            title: _('Your themes'),
+            subtitle: _('One folder per theme, with a theme.json inside: %s').format(folder),
+            subtitle_selectable: true,
+        });
+        const open = new Gtk.Button({
+            label: _('Open folder'),
+            valign: Gtk.Align.CENTER,
+            tooltip_text: _('Open the themes folder'),
+        });
+        open.connect('clicked', () => {
+            GLib.mkdir_with_parents(folder, 0o755);
+            Gio.AppInfo.launch_default_for_uri(`file://${folder}`, null);
+        });
+        folderRow.add_suffix(open);
+        look.add(folderRow);
+
+        if (rejected.length > 0) {
+            const problems = new Adw.ExpanderRow({
+                title: _('Some themes could not be loaded'),
+                icon_name: 'dialog-warning-symbolic',
+            });
+            for (const {id, problem} of rejected) {
+                // Show the reason, never the full path.
+                problems.add_row(new Adw.ActionRow({title: id, subtitle: problem.replace(/^\/\S+\//, '')}));
+            }
+            look.add(problems);
+        }
         page.add(look);
 
         const popup = new Adw.PreferencesGroup({title: _('Popup')});
@@ -107,7 +142,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         const reset = choiceRow(settings, 'reset-format', [
             ['long', _('1h 20min')],
             ['short', _('1h20')],
-        ], _('Time until reset'), _('How long until a quota resets is written.'), handlerIds);
+        ], _('Time until reset'), _('How the countdown to a reset is written.'), handlerIds);
         popup.add(reset);
         const autoOpen = new Adw.SwitchRow({
             title: _('Open cards that need attention'),

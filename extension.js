@@ -15,9 +15,15 @@ export default class GnomeAiQuotaExtension extends Extension {
         this._settings = this.getSettings();
         // The stylesheet must exist before the first widget is measured.
         this._themes = new ThemeManager({extensionPath: this.path, settings: this._settings});
-        this._themes.enable();
-        this._createController();
-        this._createIndicator();
+        try {
+            this._themes.enable();
+            this._createController();
+            this._createIndicator();
+        } catch (error) {
+            // The shell does not call disable() after a failed enable().
+            this.disable();
+            throw error;
+        }
         // Moving to another panel box needs a new button; a new demo scenario
         // needs new providers. Both rebuild the parts that depend on them.
         this._positionChangedId = this._settings.connect('changed::position', () => {
@@ -33,8 +39,10 @@ export default class GnomeAiQuotaExtension extends Extension {
     }
 
     disable() {
-        this._settings?.disconnect(this._positionChangedId);
-        this._settings?.disconnect(this._scenarioChangedId);
+        if (this._positionChangedId)
+            this._settings?.disconnect(this._positionChangedId);
+        if (this._scenarioChangedId)
+            this._settings?.disconnect(this._scenarioChangedId);
         this._positionChangedId = 0;
         this._scenarioChangedId = 0;
         this._destroyIndicator();

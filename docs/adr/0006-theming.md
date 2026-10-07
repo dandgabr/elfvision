@@ -79,6 +79,9 @@ and later), exposed to CSS as `-st-accent-color`. Light or dark follows
 - Hostile input is handled in `validateTheme`: colors must be hex (or `system-accent`),
   sizes are clamped, font names are reduced to one safe family, a shadow must be a single
   simple shape, ids are restricted to `[a-z0-9-]`, and files over 64 KiB are ignored.
+- `surface-2`, `accent-fg`, `ok` and `error` are optional and derived when missing (an `error` distinct from warn and danger, picked by the background's brightness).
+- Theme files are read only if they are regular files, at most 64 KiB, and their `id` matches the folder; the top-bar meter uses the dark scheme like the rest of the bar.
+- Deferred from the review: the generator should keep the accent at least 35 degrees of hue from warn and danger (cyberpunk), derive `error` per theme, and the preferences should grow a theme sub-page with groups, descriptions and color swatches; a `font-scale` for serif themes.
 - An optional `error` color (used for failing providers) falls back to `warn`.
 - The theme and the light/dark choice are set in Preferences; the 12/24-hour clock, the
   reset format (`1h 20min` or `1h20`) and opening cards that need attention are

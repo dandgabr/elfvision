@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 00:04-0300\n"
+"POT-Creation-Date: 2026-10-07 00:09-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -308,142 +308,168 @@ msgstr ""
 msgid "Try again"
 msgstr ""
 
-#: prefs.js:52 prefs.js:85
+#: prefs.js:54 prefs.js:86
 msgid "Appearance"
 msgstr ""
 
-#: prefs.js:57
+#: prefs.js:59
 msgid "Top bar"
 msgstr ""
 
-#: prefs.js:58
+#: prefs.js:60
 msgid ""
 "The bar shrinks, then shows fewer providers, when other extensions leave it "
 "little room."
 msgstr ""
 
-#: prefs.js:61
+#: prefs.js:63
 msgid "Left"
 msgstr ""
 
-#: prefs.js:62
+#: prefs.js:64
 msgid "Center"
 msgstr ""
 
-#: prefs.js:63
+#: prefs.js:65
 msgid "Right"
 msgstr ""
 
-#: prefs.js:64
+#: prefs.js:66
 msgid "Position"
 msgstr ""
 
-#: prefs.js:64
+#: prefs.js:66
 msgid "Where the quota items sit on the top bar."
 msgstr ""
 
-#: prefs.js:68
+#: prefs.js:70
 msgid "Providers on the bar"
 msgstr ""
 
-#: prefs.js:69
+#: prefs.js:71
 msgid "The most providers shown, from 1 to 5."
 msgstr ""
 
-#: prefs.js:76
+#: prefs.js:78
 msgid "Automatic"
 msgstr ""
 
-#: prefs.js:77
+#: prefs.js:79
 msgid "Always compact"
 msgstr ""
 
-#: prefs.js:78
+#: prefs.js:80
 msgid "Never compact"
 msgstr ""
 
-#: prefs.js:79
+#: prefs.js:81
 msgid "Compact drops the percent sign and the window suffix."
 msgstr ""
 
-#: prefs.js:79
+#: prefs.js:81
 msgid "Compact mode"
 msgstr ""
 
-#: prefs.js:86
-msgid ""
-"The theme styles the popup and the top bar. Your own themes go in ~/.local/"
-"share/gnome-ai-quota/themes."
-msgstr ""
-
-#: prefs.js:90
-msgid "How the popup looks. Every theme has a light and a dark variant."
-msgstr ""
-
-#: prefs.js:90
-msgid "Theme"
-msgstr ""
-
-#: prefs.js:93
+#: prefs.js:88
 msgid "Follow the system"
 msgstr ""
 
-#: prefs.js:94
+#: prefs.js:89
 msgid "Light"
 msgstr ""
 
-#: prefs.js:95
+#: prefs.js:90
 msgid "Dark"
 msgstr ""
 
-#: prefs.js:96
-msgid "Follow the GNOME setting, or force one."
+#: prefs.js:91
+msgid "Applies to the popup. The top bar always stays dark."
 msgstr ""
 
-#: prefs.js:96
+#: prefs.js:91
 msgid "Light or dark"
 msgstr ""
 
+#: prefs.js:95
+msgid "System (GNOME)"
+msgstr ""
+
+#: prefs.js:99
+#, javascript-format
+msgid "Unavailable: %s (using System)"
+msgstr ""
+
 #: prefs.js:100
-msgid "Popup"
+msgid "Theme"
 msgstr ""
 
-#: prefs.js:102
-msgid "24-hour clock"
+#: prefs.js:101
+msgid ""
+"Colors, fonts and shapes. Each theme has a light and a dark variant; the one "
+"it was not designed for is adapted."
 msgstr ""
 
-#: prefs.js:103
-msgid "Show reset times on a 24-hour clock."
+#: prefs.js:106
+msgid "Your themes"
 msgstr ""
 
-#: prefs.js:108
-msgid "1h 20min"
+#: prefs.js:107
+#, javascript-format
+msgid "One folder per theme, with a theme.json inside: %s"
 msgstr ""
 
-#: prefs.js:109
-msgid "1h20"
-msgstr ""
-
-#: prefs.js:110
-msgid "How long until a quota resets is written."
-msgstr ""
-
-#: prefs.js:110
-msgid "Time until reset"
+#: prefs.js:111
+msgid "Open folder"
 msgstr ""
 
 #: prefs.js:113
+msgid "Open the themes folder"
+msgstr ""
+
+#: prefs.js:124
+msgid "Some themes could not be loaded"
+msgstr ""
+
+#: prefs.js:135
+msgid "Popup"
+msgstr ""
+
+#: prefs.js:137
+msgid "24-hour clock"
+msgstr ""
+
+#: prefs.js:138
+msgid "Show reset times on a 24-hour clock."
+msgstr ""
+
+#: prefs.js:143
+msgid "1h 20min"
+msgstr ""
+
+#: prefs.js:144
+msgid "1h20"
+msgstr ""
+
+#: prefs.js:145
+msgid "How the countdown to a reset is written."
+msgstr ""
+
+#: prefs.js:145
+msgid "Time until reset"
+msgstr ""
+
+#: prefs.js:148
 msgid "Open cards that need attention"
 msgstr ""
 
-#: prefs.js:114
+#: prefs.js:149
 msgid "Cards in warning, critical or error states open on their own."
 msgstr ""
 
-#: prefs.js:121
+#: prefs.js:156
 msgid "Demo build"
 msgstr ""
 
-#: prefs.js:122
+#: prefs.js:157
 msgid "More settings arrive in later milestones. This build shows demo data."
 msgstr ""

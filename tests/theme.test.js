@@ -97,7 +97,7 @@ test('themes: fonts, sizes and shadows are sanitized', () => {
         radius: {card: 9999, control: -4},
         schemes: {...good.schemes, dark: {...good.schemes.dark, shadow: '0 0 0 1px red; background:url(x)'}}};
     const {theme} = validateTheme(hostile);
-    assertEqual([theme.fonts.body, theme.fonts.display], [null, 'Space Grotesk']);
+    assertEqual([theme.fonts.body, theme.fonts.display?.name], [null, 'Space Grotesk']);
     assertEqual([theme.radius.card, theme.radius.control], [40, 0]);
     assertEqual(theme.schemes.dark.shadow, 'none');
     const css = compileTheme(TEMPLATE, theme, {scheme: 'dark'});
@@ -119,4 +119,76 @@ test('themes: scheme choice honors the preference, then the system', () => {
     assertEqual([pickScheme('light', true), pickScheme('dark', false)], ['light', 'dark']);
     assertEqual([pickScheme('system', true), pickScheme('system', false)], ['dark', 'light']);
     assertEqual(pickScheme('anything', true), 'dark');
+});
+
+// ---- theme files (hostile input from the filesystem)
+
+import Gio from 'gi://Gio';
+import {loadTheme as loadThemeFile, scanThemes} from '../lib/services/themeFiles.js';
+
+function sandbox() {
+    const path = GLib.Dir.make_tmp('gaq-theme-test-XXXXXX');
+    GLib.mkdir_with_parents(`${path}/themes/builtin`, 0o755);
+    return path;
+}
+const writeTheme = (sandboxPath, id, text) => {
+    GLib.mkdir_with_parents(`${sandboxPath}/themes/builtin/${id}`, 0o755);
+    GLib.file_set_contents(`${sandboxPath}/themes/builtin/${id}/theme.json`, text);
+};
+const goodJson = id => read('themes/builtin/linear-saas/theme.json').replace('"linear-saas"', `"${id}"`);
+
+test('theme files: a good theme loads, a mismatched id and bad ids do not', () => {
+    const dir = sandbox();
+    writeTheme(dir, 'mine', goodJson('mine'));
+    writeTheme(dir, 'liar', goodJson('someone-else'));
+    assertEqual(loadThemeFile(dir, 'mine').theme?.id, 'mine');
+    const liar = loadThemeFile(dir, 'liar');
+    assertEqual(liar.theme, null);
+    assertTrue(liar.problems.some(p => p.includes('does not match')), JSON.stringify(liar.problems));
+    for (const id of ['../../etc', 'a\n', 'ABC', 'a/b', '', '-x'])
+        assertEqual([id, loadThemeFile(dir, id).theme], [id, null]);
+});
+
+test('theme files: symlinks to endless files, pipes and huge files are refused without blocking', () => {
+    const dir = sandbox();
+    GLib.mkdir_with_parents(`${dir}/themes/builtin/zero`, 0o755);
+    Gio.File.new_for_path(`${dir}/themes/builtin/zero/theme.json`).make_symbolic_link('/dev/zero', null);
+    GLib.mkdir_with_parents(`${dir}/themes/builtin/pipe`, 0o755);
+    GLib.spawn_command_line_sync(`mkfifo ${dir}/themes/builtin/pipe/theme.json`);
+    writeTheme(dir, 'huge', ' '.repeat(70 * 1024));
+    for (const id of ['zero', 'pipe', 'huge'])
+        assertEqual([id, loadThemeFile(dir, id).theme], [id, null]);
+});
+
+test('theme files: scanThemes lists good themes first and reports rejected folders', () => {
+    const dir = sandbox();
+    writeTheme(dir, 'sistema-gnome', goodJson('sistema-gnome'));
+    writeTheme(dir, 'aaa', goodJson('aaa'));
+    writeTheme(dir, 'broken', '{not json');
+    const {themes, rejected} = scanThemes(dir);
+    assertEqual(themes.map(t => t.id).filter(id => ['sistema-gnome', 'aaa'].includes(id)), ['sistema-gnome', 'aaa']);
+    assertTrue(rejected.some(r => r.id === 'broken'), JSON.stringify(rejected));
+});
+
+test('themes: hostile numbers, shadows and optional tokens', () => {
+    const good = JSON.parse(read('themes/builtin/linear-saas/theme.json'));
+    for (const shadow of ['0 0 0 #12345', '0 4 8 #000', '0 0 0 1px #000 inset', '0 0 0 rgba(0,0,0,1.2.3)'])
+        assertEqual([shadow, validateTheme({...good, schemes: {...good.schemes, dark: {...good.schemes.dark, shadow}}}).theme.schemes.dark.shadow], [shadow, 'none']);
+    const ok = validateTheme({...good, schemes: {...good.schemes, dark: {...good.schemes.dark, shadow: '4px 4px 0 #000'}}});
+    assertEqual(ok.theme.schemes.dark.shadow, '4px 4px 0 #000');
+    const tiny = validateTheme({...good, radius: {card: 1e-7, control: 'Infinity'}}).theme;
+    assertEqual([tiny.radius.card, tiny.radius.control], [0, 8]);
+    const slim = JSON.parse(JSON.stringify(good));
+    for (const sc of ['light', 'dark'])
+        for (const token of ['surface-2', 'accent-fg', 'ok', 'error'])
+            delete slim.schemes[sc][token];
+    const result = validateTheme(slim);
+    assertEqual(result.problems, []);
+    assertTrue(!compileTheme(TEMPLATE, result.theme, {scheme: 'dark'}).includes('{{'));
+});
+
+test('themes: a font keeps its generic family', () => {
+    const good = JSON.parse(read('themes/builtin/linear-saas/theme.json'));
+    const mono = validateTheme({...good, fonts: {body: "'JetBrains Mono', ui-monospace, monospace"}}).theme;
+    assertTrue(compileTheme(TEMPLATE, mono, {scheme: 'dark'}).includes('font-family: "JetBrains Mono", monospace;'));
 });
