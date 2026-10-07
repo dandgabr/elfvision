@@ -76,6 +76,8 @@ const git = (...args) => {
 test('secrets: no value of the local configuration appears in the repository or its history', () => {
     const {providers} = readLocalConfig();
     const values = Object.values(providers).flatMap(p => [p.clientId, p.clientSecret]).filter(v => v && v.length >= 8);
+    if (values.length === 0)
+        console.log('    (no local configuration here: the check has nothing to compare)');
     for (const value of values) {
         assertEqual(git('grep', '-F', '-l', '--', value), '', 'a local value is in a tracked file');
         assertEqual(git('log', '--all', '-S', value, '--oneline'), '', 'a local value is in the history');
@@ -89,7 +91,8 @@ test('secrets: no tracked file holds a token whose hash is on the known-ids list
     for (const file of git('ls-files', '-z').split('\0').filter(Boolean)) {
         if (/\.(png|svg|mo|gresource|compiled)$/.test(file))
             continue;
-        for (const word of new Set((text(file).match(/[A-Za-z0-9._~+/-]{20,}/g) ?? []))) {
+        // Every run of letters and digits that could be an id, wherever it sits: after a dot, in a path, in a URL.
+        for (const word of new Set((text(file).match(/[A-Za-z0-9_-]{20,}/g) ?? []))) {
             const checksum = new GLib.Checksum(GLib.ChecksumType.SHA256);
             checksum.update(new TextEncoder().encode(word));
             assertTrue(!known.has(checksum.get_string()), `${file} holds a known client id`);

@@ -198,7 +198,7 @@ test('oauth sign-in: a forged request does not end it, and the page reflects not
     sign.token.stop();
 });
 
-test('oauth sign-in: denied, cancelled, timeout and five bad requests each end it with a code', async () => {
+test('oauth sign-in: denied, cancelled and timeout each end it with a code; forged requests do not', async () => {
     const http = createHttp({allowedHosts: [], allowLoopbackHttp: true});
     const denied = login({reply: {body: {}}, browser: p => visit(http, p.redirect_uri, `error=access_denied&state=${encodeURIComponent(p.state)}`)});
     assertEqual((await rejection(denied.done)).code, 'denied');
@@ -213,9 +213,22 @@ test('oauth sign-in: denied, cancelled, timeout and five bad requests each end i
     assertEqual((await rejection(slow.done)).code, 'timeout');
     slow.token.stop();
 
-    const flood = login({reply: {body: {}}, browser: async p => { for (let i = 0; i < 5; i++) await http.get(`${p.redirect_uri}?state=x${i}`); }});
-    assertEqual((await rejection(flood.done)).code, 'malformed');
+    // a page that floods the port cannot end the sign-in
+    const flood = login({reply: {body: {access_token: 'acc', refresh_token: 'ref'}}, browser: async p => {
+        for (let i = 0; i < 12; i++)
+            await http.get(`${p.redirect_uri}?state=x${i}`);
+        await visit(http, p.redirect_uri, `code=OK&state=${encodeURIComponent(p.state)}`);
+    }});
+    assertEqual((await flood.done).access, 'acc');
     flood.token.stop();
+
+    // cancelling after the code arrived stops the exchange
+    const late = login({reply: {body: {access_token: 'acc', refresh_token: 'ref'}}, browser: async p => {
+        await visit(http, p.redirect_uri, `code=OK&state=${encodeURIComponent(p.state)}`);
+    }});
+    late.cancel();
+    assertEqual((await rejection(late.done)).code, 'cancelled');
+    late.token.stop();
 });
 
 test('oauth sign-in: a token error, a missing refresh token and a busy port are reported plainly', async () => {
@@ -244,4 +257,12 @@ test('oauth protocol: a refresh is a form, or JSON when the provider wants it', 
     const json = refreshRequest({refreshEncoding: 'json'}, {...fields, clientSecret: undefined});
     assertEqual([JSON.parse(json.body), json.contentType], [{grant_type: 'refresh_token', refresh_token: 'r1', client_id: 'c1'}, 'application/json']);
     assertEqual(failureOf(() => parseTokenReply({status: 400, json: {error: 'refresh_token_reused'}}, 0)).code, 'refresh_token_reused');
+});
+
+test('oauth protocol: an error wrapped as {code} is read, and a spec cannot override the PKCE fields', () => {
+    assertEqual(failureOf(() => parseTokenReply({status: 401, json: {error: {code: 'refresh_token_expired', message: 'x'}}}, 0)).code, 'refresh_token_expired');
+    assertEqual(failureOf(() => parseTokenReply({status: 400, json: {error: {code: 5}}}, 0)).code, 'unknown');
+    const url = buildAuthUrl({...SPEC, extraAuthParams: {state: 'evil', code_challenge: 'evil', audience: 'x'}},
+        {clientId: 'c', redirectUri: 'http://localhost:1/cb', challenge: 'good', state: 'good'});
+    assertEqual([queryOf(url).state, queryOf(url).code_challenge, queryOf(url).audience], ['good', 'good', 'x']);
 });

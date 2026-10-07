@@ -30,6 +30,7 @@ export GSETTINGS_BACKEND=memory
 SCRIPTS="$(printf '%s\n' "$@")"
 export DATA_SOURCE="${DATA_SOURCE:-demo}" UUID="$uuid" SCRIPTS LOGFILE="$log" ROOT="$root" SKIP_ENABLE="${SKIP_ENABLE:-}"
 
+unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK
 dbus-run-session -- bash -c '
     # A throwaway, unlocked keyring, so the provider keys of a test never touch yours.
     gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1 || true

@@ -36,6 +36,8 @@ if [ -n "${DATA_SOURCE:-}" ]; then
 fi
 export GSETTINGS_BACKEND=keyfile GTK_A11Y=none UUID="$uuid" OPEN_PREFS="${1:-}"
 
+# The sign-in of a test goes to a throwaway keyring, never to your real one.
+unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK
 dbus-run-session -- bash -c '
     # A throwaway, unlocked keyring, so the provider keys of a test never touch yours.
     gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1 || true

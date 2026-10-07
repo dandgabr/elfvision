@@ -40,3 +40,20 @@ test('controller: sync keeps what runs, removes what is not wanted and creates t
     controller.stop();
     await flush();
 });
+
+test('controller: nothing is claimed until the providers are known, and the cache keeps values meanwhile', async () => {
+    const saved = [];
+    const store = {load: async () => ({snapshots: [cached('a'), cached('b')], problems: []}), save: snapshots => saved.push(snapshots.map(s => s.id))};
+    const controller = new QuotaController({providers: [], cache: store});
+    await controller.start();
+    assertEqual(controller.synced, false);
+    controller.stop();                                  // stopped before the first sync finished
+    assertEqual(saved[saved.length - 1], ['a', 'b']);   // nothing was wiped from the cache
+
+    const second = new QuotaController({providers: [], cache: store});
+    await second.start();
+    second.markSynced();
+    assertEqual(second.synced, true);
+    second.stop();
+    assertEqual(saved[saved.length - 1], []);
+});

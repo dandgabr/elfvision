@@ -42,6 +42,16 @@ Planned providers:
 Providers billed by money, such as OpenRouter, fit the same data model as a `money`
 metric and come after these four.
 
+## First use
+
+1. Open Preferences and go to **Accounts**.
+2. **Command Code:** paste an API key (the page links to where keys are created).
+3. **Codex:** run `python3 -I tools/import-client-ids.py` once (it finds the public client id of
+   your installed Codex and stores it in `~/.config/gnome-ai-quota/providers.local.json`, private
+   to you), then press **Connect** and sign in in the browser.
+
+Nothing appears on the bar until an account is connected.
+
 ## Requirements
 
 - GNOME Shell 50 (developed on Fedora 44).

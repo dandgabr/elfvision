@@ -47,7 +47,7 @@ test('tokens: the secret round trips and anything malformed is nothing', () => {
     const tokens = {gen: 'g', access: 'a', refresh: 'r', expiresAt: 5, scope: 's'};
     assertEqual(decodeSecret(encodeSecret(tokens)), tokens);
     for (const bad of [null, '', 'x', '{}', '{"v":2}', JSON.stringify({v: 1, gen: 'g', access: 'a b', refresh: 'r', expiresAt: 1}),
-        JSON.stringify({v: 1, gen: 'g', access: 'a', refresh: 'r', expiresAt: 'soon'}), 'x'.repeat(9000)])
+        JSON.stringify({v: 1, gen: 'g', access: 'a', refresh: 'r', expiresAt: 'soon'}), 'x'.repeat(13000)])
         assertEqual([bad === null ? null : String(bad).slice(0, 12), decodeSecret(bad)], [bad === null ? null : String(bad).slice(0, 12), null]);
 });
 
@@ -139,4 +139,42 @@ test('tokens: invalidate forces a renewal even for a token that looks valid', as
     assertEqual(await manager.accessToken(), 'a2');
     assertEqual(state.refreshCalls, ['r1']);
     assertTrue(await manager.accessToken() === 'a2');
+});
+
+test('tokens: the renewed pair survives a keyring that fails right after the renewal', async () => {
+    const {manager, state} = setup({now: 10 * HOUR, replies: [reply('a2', 'r2', 20 * HOUR)]});
+    const realLoad = state.stored;
+    let failures = 1;
+    const flaky = createTokenManager({
+        now: () => state.now,
+        load: async () => { if (state.loadCalls++ === 1 && failures-- > 0) throw new Error('locked'); return state.stored ? {...state.stored} : null; },
+        save: async tokens => { state.saves.push(tokens); state.stored = {...tokens}; },
+        refreshCall: async refresh => { state.refreshCalls.push(refresh); return reply('a2', 'r2', 20 * HOUR); },
+    });
+    state.loadCalls = 0;
+    assertTrue(realLoad !== null);
+    assertEqual((await failure(flaky.accessToken())).code, 'network');       // the pair is kept in memory
+    assertEqual(await flaky.accessToken(), 'a2');                              // written now, no second refresh
+    assertEqual([state.refreshCalls, state.stored.refresh], [['r1'], 'r2']);
+    assertTrue(manager !== null);
+});
+
+test('tokens: a pair waiting to be written is not written after a disconnect or a new sign-in', async () => {
+    for (const change of [state => { state.stored = null; }, state => { state.stored = {gen: 'g9', access: 'z', refresh: 'rz', expiresAt: 30 * HOUR, scope: ''}; }]) {
+        const {manager, state} = setup({now: 10 * HOUR, replies: [reply('a2', 'r2', 20 * HOUR)]});
+        state.saveFails = 1;
+        assertEqual(await manager.accessToken(), 'a2');       // the first write failed: pending
+        change(state);
+        const before = state.stored;
+        const outcome = await failure(manager.accessToken());
+        assertEqual(state.saves.length, 0, 'nothing is written after the sign-in changed');
+        assertEqual(state.stored, before);
+        assertTrue(outcome === null || outcome.code === 'not_connected');
+    }
+});
+
+test('tokens: a 401 from the token endpoint and a wrapped error code both mean expired, once', async () => {
+    const {manager, state} = setup({now: 10 * HOUR, replies: [new OAuthError('unknown', 401)]});
+    assertEqual([(await failure(manager.accessToken())).code, state.refreshCalls.length], ['expired', 1]);
+    assertEqual(failure(Promise.reject(new TokenError('keyring'))) instanceof Promise, true);
 });

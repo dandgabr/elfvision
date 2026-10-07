@@ -31,6 +31,7 @@ PROVIDERS = {
         'binary_pattern': rb'app_[A-Za-z0-9]{24}',
         'public_url': 'https://raw.githubusercontent.com/openai/codex/main/codex-rs/login/src/auth/manager.rs',
         'public_pattern': r'CLIENT_ID:\s*&str\s*=\s*"([^"]+)"',
+        'id_pattern': r'^app_[A-Za-z0-9]{24}$',
     },
 }
 
@@ -43,7 +44,11 @@ def candidate_binaries(command):
         return []
     real = pathlib.Path(path).resolve()
     found = [real]
-    package = real.parent.parent if real.parent.name == 'bin' else real.parent
+    # Only inside the tool's own package (the folder with its package.json), never a wide
+    # folder such as /usr or the home directory.
+    package = next((folder for folder in real.parents if (folder / 'package.json').is_file()), None)
+    if package is None:
+        return found
     for root, _dirs, files in os.walk(package):
         for name in files:
             file = pathlib.Path(root) / name
@@ -88,7 +93,10 @@ def from_public_source(spec):
     except OSError:
         return None, None
     match = re.search(spec['public_pattern'], text)
-    return (match.group(1), 'the open-source code') if match else (None, None)
+    # Whatever the page says, only a value shaped like this provider's ids is accepted.
+    if match and re.fullmatch(spec['id_pattern'], match.group(1)):
+        return match.group(1), 'the open-source code'
+    return None, None
 
 
 def main():
@@ -127,12 +135,14 @@ def main():
 
     if changed:
         CONFIG.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
-        # Create the file private from the start, then write.
-        descriptor = os.open(CONFIG, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        os.chmod(CONFIG.parent, 0o700)
+        # Write a private temporary file next to it, then replace: a crash never leaves half a file.
+        temporary = CONFIG.with_name(CONFIG.name + '.tmp')
+        descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
         with os.fdopen(descriptor, 'w') as out:
             json.dump(data, out, indent=2)
             out.write('\n')
-        os.chmod(CONFIG, stat.S_IRUSR | stat.S_IWUSR)
+        os.replace(temporary, CONFIG)
         print(f'written to {CONFIG}')
 
 

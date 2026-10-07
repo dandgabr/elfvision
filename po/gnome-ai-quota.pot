@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 09:29-0300\n"
+"POT-Creation-Date: 2026-10-07 09:36-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -275,7 +275,7 @@ msgstr ""
 msgid "Replace key"
 msgstr ""
 
-#: lib/core/viewmodel.js:313 lib/prefs/oauthGroup.js:106
+#: lib/core/viewmodel.js:313 lib/prefs/oauthGroup.js:86
 msgid "Reconnect"
 msgstr ""
 
@@ -362,276 +362,296 @@ msgid_plural "%s · %d with problems"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/prefs/accounts.js:24
+#: lib/prefs/accounts.js:25
 msgid "Accounts"
 msgstr ""
 
-#: lib/prefs/accounts.js:56
+#: lib/prefs/accounts.js:57
 #, javascript-format
 msgid "The key is kept in the system keyring and sent only to %s."
 msgstr ""
 
-#: lib/prefs/accounts.js:58 lib/prefs/oauthGroup.js:60
+#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:61
 msgid "Checking the keyring…"
 msgstr ""
 
-#: lib/prefs/accounts.js:58 lib/prefs/oauthGroup.js:60
+#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:61
 msgid "Status"
 msgstr ""
 
-#: lib/prefs/accounts.js:60
+#: lib/prefs/accounts.js:61
 msgid "Remove key"
 msgstr ""
 
-#: lib/prefs/accounts.js:61
+#: lib/prefs/accounts.js:62
 #, javascript-format
 msgid "Remove the %s key"
 msgstr ""
 
-#: lib/prefs/accounts.js:67
+#: lib/prefs/accounts.js:68
 msgid "API key"
 msgstr ""
 
-#: lib/prefs/accounts.js:81 lib/prefs/oauthGroup.js:88
+#: lib/prefs/accounts.js:82 lib/prefs/oauthGroup.js:112
 msgid ""
 "No keyring found. Unlock it in Passwords and Keys, or install a Secret "
 "Service provider."
 msgstr ""
 
-#: lib/prefs/accounts.js:85
+#: lib/prefs/accounts.js:86
 msgid "No key yet. Paste one below."
 msgstr ""
 
-#: lib/prefs/accounts.js:90
+#: lib/prefs/accounts.js:91
 msgid "Key accepted."
 msgstr ""
 
-#: lib/prefs/accounts.js:91
+#: lib/prefs/accounts.js:92
 msgid "The server rejected this key."
 msgstr ""
 
-#: lib/prefs/accounts.js:92
+#: lib/prefs/accounts.js:93
 msgid "Key saved. The keyring is locked, so it was not checked."
 msgstr ""
 
-#: lib/prefs/accounts.js:93
+#: lib/prefs/accounts.js:94
 msgid "Key saved. Could not reach the server."
 msgstr ""
 
-#: lib/prefs/accounts.js:94
+#: lib/prefs/accounts.js:95
 msgid "Key saved. The service replied in an unexpected way."
 msgstr ""
 
-#: lib/prefs/accounts.js:95
+#: lib/prefs/accounts.js:96
 msgid "Key saved. Not checked yet."
 msgstr ""
 
-#: lib/prefs/accounts.js:122
+#: lib/prefs/accounts.js:118
 msgid "That does not look like an API key."
 msgstr ""
 
-#: lib/prefs/accounts.js:129
+#: lib/prefs/accounts.js:125
 msgid "Key saved. Checking…"
 msgstr ""
 
-#: lib/prefs/accounts.js:136
+#: lib/prefs/accounts.js:132
 msgid "The keyring did not accept the key."
 msgstr ""
 
-#: lib/prefs/accounts.js:147
+#: lib/prefs/accounts.js:143
 #, javascript-format
 msgid "Remove the %s key?"
 msgstr ""
 
-#: lib/prefs/accounts.js:148
+#: lib/prefs/accounts.js:144
 #, javascript-format
 msgid "It is deleted from the keyring. The key stays valid on the %s site."
 msgstr ""
 
-#: lib/prefs/accounts.js:150 lib/prefs/oauthGroup.js:62
-#: lib/prefs/oauthGroup.js:210 lib/prefs/oauthGroup.js:235
+#: lib/prefs/accounts.js:146 lib/prefs/oauthGroup.js:63
+#: lib/prefs/oauthGroup.js:245 lib/prefs/oauthGroup.js:274
 msgid "Cancel"
 msgstr ""
 
-#: lib/prefs/accounts.js:151
+#: lib/prefs/accounts.js:147
 msgid "Remove"
 msgstr ""
 
-#: lib/prefs/accounts.js:159 lib/prefs/oauthGroup.js:244
+#: lib/prefs/accounts.js:155 lib/prefs/oauthGroup.js:293
 msgid "The keyring is not available."
 msgstr ""
 
-#: lib/prefs/accounts.js:175
+#: lib/prefs/accounts.js:171
 msgid "Track in the bar"
 msgstr ""
 
-#: lib/prefs/accounts.js:176
+#: lib/prefs/accounts.js:172
 msgid "Off pauses collection and hides it. Your credentials stay."
 msgstr ""
 
-#: lib/prefs/accounts.js:194
+#: lib/prefs/accounts.js:190
 #, javascript-format
 msgid "Your %s username"
 msgstr ""
 
-#: lib/prefs/accounts.js:197
+#: lib/prefs/accounts.js:193
 msgid "Where do I get a key?"
 msgstr ""
 
-#: lib/prefs/accounts.js:198
+#: lib/prefs/accounts.js:194
 #, javascript-format
 msgid "Opens your keys page. Enter your %s username above first."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:26
+#: lib/prefs/oauthGroup.js:27
 #, javascript-format
-msgid "Port %d is in use by another program. Close it and try again."
+msgid ""
+"The sign-in did not start: port %d is in use by another program. Close it "
+"and try again."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:28
+#: lib/prefs/oauthGroup.js:29
 msgid "Sign-in timed out. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:30
+#: lib/prefs/oauthGroup.js:31
 msgid "Sign-in was cancelled. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:34
+#: lib/prefs/oauthGroup.js:35
 msgid "The sign-in reply was not valid. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:36
+#: lib/prefs/oauthGroup.js:37
 msgid "The sign-in address was not allowed. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:39
+#: lib/prefs/oauthGroup.js:40
 msgid "The provider did not accept the sign-in. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:40
+#: lib/prefs/oauthGroup.js:41
 msgid "Sign-in failed. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:57
+#: lib/prefs/oauthGroup.js:58
 #, javascript-format
 msgid "Unofficial access: %s may not allow this and could limit your account."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:61
-msgid "Connect"
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:63
+#: lib/prefs/oauthGroup.js:64
 msgid "Copy link"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:64 lib/prefs/oauthGroup.js:236
+#: lib/prefs/oauthGroup.js:65
+msgid "Copy path"
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:66 lib/prefs/oauthGroup.js:275
 msgid "Disconnect"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:67
+#: lib/prefs/oauthGroup.js:86
+msgid "Connect"
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:89
 #, javascript-format
 msgid "Connect %s"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:68
+#: lib/prefs/oauthGroup.js:89
 #, javascript-format
-msgid "Disconnect %s"
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:91
-msgid "Not connected."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:92
-#, javascript-format
-msgid "The client id for %s is missing. Add it to %s, then connect."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:96
-msgid "Connected."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:97
-msgid "The sign-in expired. Reconnect to keep seeing this quota."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:98
-msgid "The provider refused access. Check your account on its site."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:99
-msgid "Connected. The keyring is locked, so it was not checked."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:100
-msgid "Connected. Could not reach the server."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:101
-msgid "Connected. The service replied in an unexpected way."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:102
-msgid "Connected, but the client id is missing from the local configuration."
+msgid "Reconnect %s"
 msgstr ""
 
 #: lib/prefs/oauthGroup.js:103
+msgid "Set up the client id and the keyring first."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:115
+msgid "Not connected."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:116
+#, javascript-format
+msgid ""
+"The client id for %s is missing. Run python3 -I tools/import-client-ids.py, "
+"or add it to %s."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:120
+msgid "Connected."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:121
+msgid "The sign-in expired. Reconnect to keep seeing this quota."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:122
+msgid "The provider refused access. Check your account on its site."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:123
+msgid "Connected. The keyring is locked, so it was not checked."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:124
+msgid "Connected. Could not reach the server."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:125
+msgid "Connected. The service replied in an unexpected way."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:126
+msgid "Connected, but the client id is missing from the local configuration."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:127
 msgid "Connected. Not checked yet."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:144
+#: lib/prefs/oauthGroup.js:170
 msgid "You can close this tab and go back to Preferences."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:145
+#: lib/prefs/oauthGroup.js:171
 msgid "Sign-in did not finish. You can close this tab."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:156
+#: lib/prefs/oauthGroup.js:182
 msgid "Couldn't open the browser. Copy the link and open it yourself."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:180
-#, javascript-format
-msgid "Waiting for the browser… %d:%02d"
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:191
-#, javascript-format
-msgid "%s connected."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:193
-msgid "The keyring did not accept the sign-in."
 msgstr ""
 
 #: lib/prefs/oauthGroup.js:207
 #, javascript-format
-msgid "Use of %s may break its terms"
+msgid "Finish signing in in your browser. %d:%02d left."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:208
+#: lib/prefs/oauthGroup.js:223
 #, javascript-format
-msgid ""
-"This extension signs in the way the %s app does, which its terms may not "
-"allow. %s could limit or suspend your account. Use it at your own risk."
+msgid "%s connected."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:211
+#: lib/prefs/oauthGroup.js:225
+msgid "The keyring did not accept the sign-in."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:229
+msgid "Sign-in cancelled. Nothing was saved."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:242
+#, javascript-format
+msgid "Using %s this way may break its terms"
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:243
+msgid ""
+"This extension signs in the way the official app does, which the terms may "
+"not allow. Your account could be limited or suspended. Use it at your own "
+"risk."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:246
 msgid "I understand, connect"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:226
+#: lib/prefs/oauthGroup.js:261
 msgid "Link copied."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:232
+#: lib/prefs/oauthGroup.js:266
+msgid "Path copied."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:271
 #, javascript-format
 msgid "Disconnect %s?"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:233
+#: lib/prefs/oauthGroup.js:272
 #, javascript-format
 msgid ""
 "The sign-in is deleted from the keyring and the extension stops reading this "
@@ -639,54 +659,67 @@ msgid ""
 "revoke it there."
 msgstr ""
 
-#: lib/ui/indicator.js:153
-msgid "Nothing connected yet."
+#: lib/prefs/oauthGroup.js:290
+#, javascript-format
+msgid "%s disconnected."
 msgstr ""
 
-#: lib/ui/indicator.js:155
-msgid "Add an account in Preferences to see your quotas here."
-msgstr ""
-
-#: lib/ui/indicator.js:158
+#: lib/ui/indicator.js:157
 msgid "Add account"
 msgstr ""
 
-#: lib/ui/indicator.js:181
+#: lib/ui/indicator.js:185
 msgid "Refresh"
 msgstr ""
 
-#: lib/ui/indicator.js:182
+#: lib/ui/indicator.js:186
 msgid "Preferences"
 msgstr ""
 
-#: lib/ui/indicator.js:215
+#: lib/ui/indicator.js:219
 msgid "Refreshing…"
 msgstr ""
 
-#: lib/ui/indicator.js:315
+#: lib/ui/indicator.js:319
 msgid "Waiting for the first update…"
 msgstr ""
 
-#: lib/ui/indicator.js:444
+#: lib/ui/indicator.js:322
+msgid "Nothing connected yet."
+msgstr ""
+
+#: lib/ui/indicator.js:322
+msgid "Nothing is being tracked."
+msgstr ""
+
+#: lib/ui/indicator.js:324
+msgid "Turn tracking back on in Preferences."
+msgstr ""
+
+#: lib/ui/indicator.js:325
+msgid "Add an account in Preferences to see your quotas here."
+msgstr ""
+
+#: lib/ui/indicator.js:454
 msgid "Nothing connected yet"
 msgstr ""
 
-#: lib/ui/indicator.js:450
+#: lib/ui/indicator.js:460
 msgid "Waiting for the first update"
 msgstr ""
 
-#: lib/ui/indicator.js:473
+#: lib/ui/indicator.js:483
 #, javascript-format
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/indicator.js:488
+#: lib/ui/indicator.js:498
 msgid "On the bar"
 msgstr ""
 
-#: lib/ui/indicator.js:491
+#: lib/ui/indicator.js:501
 #, javascript-format
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"

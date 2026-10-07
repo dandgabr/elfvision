@@ -43,7 +43,7 @@ once, here, after a review by UI, UX, frontend and security consultants.
 ### Tokens and the refresh race
 
 - One secret per provider in the keyring, `provider` and `kind=oauth` attributes,
-  JSON `{v, gen, access, refresh, expires_at}`, at most 8 KiB. The `id_token` and any
+  JSON `{v, gen, access, refresh, expiresAt, scope}`, at most 12 KiB. The `id_token` and any
   identity claim are never stored.
 - Only the shell refreshes, one refresh at a time per provider. It reads the secret,
   remembers the refresh token it used, calls the token endpoint, reads the secret
@@ -53,13 +53,18 @@ once, here, after a review by UI, UX, frontend and security consultants.
   retried; without a successful write the provider needs reconnecting. The keyring
   has no compare-and-swap, so a window of milliseconds remains, and its worst case is
   one more click on Connect.
-- `invalid_grant` or a 401 from the refresh becomes `auth_required` with the reason
+- A refresh error may come as `{"error": "..."}` or `{"error": {"code": "..."}}`; Codex adds
+  `refresh_token_expired`, `refresh_token_reused` and `refresh_token_invalidated`.
+- `invalid_grant`, those codes or a 401 from the refresh become `auth_required` with the reason
   `expired`; there is no retry loop. A network error or a 5xx follows the normal
   backoff and never marks the sign-in as lost. A 403 from the usage endpoint is
   `refused`.
-- Disconnect order: mark the provider disconnected, revoke at the server when an
-  endpoint exists (5 s, best effort), delete the secret, raise the revision. The
-  mark comes first so a late refresh cannot write the token back.
+- Disconnect order: read the refresh token, delete the secret, raise the revision, then
+  ask the server to revoke it when an endpoint exists (5 s, best effort, never blocking).
+  The delete comes first so a late refresh in the shell cannot write the token back: the
+  token manager writes a renewed pair only if the keyring still holds the sign-in it started
+  from. A renewed pair that cannot be written yet is kept in memory, and dropped if the
+  sign-in changed or was deleted meanwhile.
 
 ### Sign-in flow
 
@@ -111,7 +116,8 @@ id being in the repository.
 - States, each with an icon and text, never color alone: not connected, connecting
   (spinner, countdown, Cancel, Copy link), connected, sign-in expired (Reconnect),
   refused or rejected, keyring unavailable (a banner for the whole page).
-- Only the plan is shown for a connected account. An email, even masked, is not read
+- Only the plan is shown for a connected account, and for now only in the popup card. The
+  "connecting" state lives in the preferences process, so the popup cannot show it. An email, even masked, is not read
   from the token, stored or shown.
 - Terms notice: a permanent line in the group description for the three OAuth
   providers, and a confirmation dialog before the first sign-in of each one (Cancel is
@@ -140,8 +146,10 @@ id being in the repository.
   running; the extension decides the set from the registry, the stored credentials
   and an `untracked-providers` setting, and reacts to `credentials-revision` and to
   a `credentials-touched` setting that names the provider that changed.
-- The nested and headless shells use a throwaway keyring, so they never hold or
-  refresh real tokens.
+- The nested and headless shells use a throwaway keyring (and never talk to the real
+  keyring daemon), so a sign-in made there is lost with the window.
+- Until the extension has asked the keyring which accounts are connected, an empty list
+  means "not known yet": the empty state is not shown, and the cache keeps the values it had.
 
 ## Implementation order
 

@@ -45,7 +45,11 @@ export default class GnomeAiQuotaExtension extends Extension {
                 console.error(`gnome-ai-quota: cannot rebuild: ${error.message}`);
             }
         };
-        this._scenarioChangedId = this._settings.connect('changed::demo-scenario', rebuild);
+        // A new demo scenario only matters for demo data: real providers must not be restarted.
+        this._scenarioChangedId = this._settings.connect('changed::demo-scenario', () => {
+            if (this._settings.get_string('data-source') === 'demo')
+                rebuild();
+        });
         this._sourceChangedId = this._settings.connect('changed::data-source', rebuild);
         // The preferences window runs in another process; it raises this number
         // after it stores or removes a credential.
@@ -83,6 +87,8 @@ export default class GnomeAiQuotaExtension extends Extension {
         // Demo and real data must never share a cache: they use the same ids.
         const cacheDirectory = GLib.build_filenamev([GLib.get_user_cache_dir(), 'gnome-ai-quota', ...(source === 'demo' ? ['demo', this._settings.get_string('demo-scenario')] : [])]);
         this._controller = new QuotaController({providers, cache: new CacheStore(cacheDirectory), order: availableProviders().map(meta => meta.id)});
+        if (source === 'demo')
+            this._controller.markSynced();
         if (source === 'live') {
             this._unsubscribeStatus = this._controller.subscribe(() => this._publishStatus());
             this._syncProviders();
@@ -100,16 +106,24 @@ export default class GnomeAiQuotaExtension extends Extension {
         if (!controller || this._settings.get_string('data-source') !== 'live')
             return;
         const generation = (this._syncGeneration = (this._syncGeneration ?? 0) + 1);
-        const untracked = this._settings.get_strv('untracked-providers');
-        const wanted = [];
-        for (const meta of availableProviders()) {
-            if (!untracked.includes(meta.id) && await isConnected(meta))
-                wanted.push(meta.id);
+        try {
+            const untracked = this._settings.get_strv('untracked-providers');
+            const wanted = [];
+            for (const meta of availableProviders()) {
+                if (!untracked.includes(meta.id) && await isConnected(meta))
+                    wanted.push(meta.id);
+            }
+            // A newer sync, a rebuild or a disable happened while the keyring was asked.
+            if (generation !== this._syncGeneration || controller !== this._controller)
+                return;
+            controller.sync(wanted, createProvider);
+        } catch (error) {
+            console.error(`gnome-ai-quota: cannot sync the providers: ${error.message}`);
+        } finally {
+            // Even after a failure the list is as known as it will get: do not claim "nothing".
+            if (controller === this._controller)
+                controller.markSynced();
         }
-        // A newer sync, a rebuild or a disable happened while the keyring was asked.
-        if (generation !== this._syncGeneration || controller !== this._controller)
-            return;
-        controller.sync(wanted, createProvider);
     }
 
     /** Tell the preferences window how each real account is doing. */
