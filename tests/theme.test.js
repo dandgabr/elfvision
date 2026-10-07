@@ -1,7 +1,7 @@
 import GLib from 'gi://GLib';
 
 import {assertEqual, assertTrue, test} from './harness.js';
-import {compileTheme, pickScheme, systemAccent, validateTheme} from '../lib/core/theme.js';
+import {compileTheme, pickScheme, swatches, systemAccent, validateTheme} from '../lib/core/theme.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
 const read = path => new TextDecoder().decode(GLib.file_get_contents(`${root}/${path}`)[1]);
@@ -209,5 +209,21 @@ test('themes: every generated theme has its own error color and a visible accent
             const tokens = theme.schemes[scheme];
             assertTrue(tokens.error !== tokens.warn && tokens.error !== tokens.danger, `${id}/${scheme} error`);
         }
+    }
+});
+
+test('themes: serif and monospace themes get larger small text, with a description kept', () => {
+    const serif = loadTheme('web-brutalism').theme;
+    const sans = loadTheme('linear-saas').theme;
+    assertTrue(compileTheme(TEMPLATE, serif, {scheme: 'light'}).includes('font-size: 12px;'));
+    assertTrue(!compileTheme(TEMPLATE, sans, {scheme: 'light'}).includes('{{fs-small}}'));
+    assertTrue(loadTheme('sistema-gnome').theme.description.length > 0);
+});
+
+test('themes: swatches give four hex colors per scheme, even for the system accent', () => {
+    for (const id of builtinIds()) {
+        const {light, dark} = swatches(loadTheme(id).theme);
+        for (const colors of [light, dark])
+            assertTrue(colors.length === 4 && colors.every(c => /^#[0-9a-f]{6}$/i.test(c) || /^#[0-9a-f]{3}$/i.test(c)), `${id}: ${colors}`);
     }
 });

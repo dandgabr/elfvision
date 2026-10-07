@@ -1,9 +1,11 @@
 import Adw from 'gi://Adw';
+import Gdk from 'gi://Gdk';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Gtk from 'gi://Gtk';
 
 import {DEFAULT_THEME, scanThemes} from './lib/services/themeFiles.js';
+import {builtinCatalog} from './lib/ui/themeCatalog.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 /**
@@ -40,7 +42,112 @@ function choiceRow(settings, key, choices, title, subtitle, handlerIds) {
     return row;
 }
 
+/** A strip of four colors that sketches a theme. */
+function swatchStrip(colors, label) {
+    const area = new Gtk.DrawingArea({content_width: 76, content_height: 28, valign: Gtk.Align.CENTER});
+    const outline = (cr, width, height, inset) => {
+        const radius = 6 - inset;
+        cr.newSubPath();
+        cr.arc(width - 6, 6, radius, -Math.PI / 2, 0);
+        cr.arc(width - 6, height - 6, radius, 0, Math.PI / 2);
+        cr.arc(6, height - 6, radius, Math.PI / 2, Math.PI);
+        cr.arc(6, 6, radius, Math.PI, 3 * Math.PI / 2);
+        cr.closePath();
+    };
+    area.set_draw_func((drawing, cr, width, height) => {
+        outline(cr, width, height, 0);
+        cr.clip();
+        colors.forEach((hex, index) => {
+            const color = new Gdk.RGBA();
+            color.parse(hex);
+            cr.setSourceRGBA(color.red, color.green, color.blue, 1);
+            cr.rectangle(index * width / colors.length, 0, width / colors.length + 1, height);
+            cr.fill();
+        });
+        // A thin edge keeps a light strip visible on a light window.
+        cr.resetClip();
+        outline(cr, width, height, 0.5);
+        cr.setSourceRGBA(0, 0, 0, 0.22);
+        cr.setLineWidth(1);
+        cr.stroke();
+        cr.$dispose();
+    });
+    area.update_property([Gtk.AccessibleProperty.LABEL], [label]);
+    return area;
+}
+
+/** An expander that lists theme folders that could not be loaded, or null. */
+function rejectedRow(rejected, _) {
+    if (rejected.length === 0)
+        return null;
+    const row = new Adw.ExpanderRow({
+        title: _('Some themes could not be loaded'),
+        icon_name: 'dialog-warning-symbolic',
+    });
+    for (const {id, problem} of rejected) {
+        // Show the reason, never the full path.
+        row.add_row(new Adw.ActionRow({
+            title: GLib.markup_escape_text(id, -1),
+            subtitle: GLib.markup_escape_text(problem.replace(/^.*theme\.json: /, ''), -1),
+        }));
+    }
+    return row;
+}
+
 export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
+    /** The theme picker: grouped rows with a color sketch of each theme. */
+    _themePage(window, settings, _) {
+        const {themes, rejected} = scanThemes(this.path);
+        const catalog = builtinCatalog(_);
+        const dark = (() => {
+            const choice = settings.get_string('color-scheme');
+            return choice === 'dark' || (choice === 'system' && Adw.StyleManager.get_default().dark);
+        })();
+        const current = settings.get_string('theme');
+
+        const titles = [_('System'), ...catalog.groups, _('Your themes')];
+        const groups = new Map(titles.map(title => [title, new Adw.PreferencesGroup({title})]));
+        const used = new Set();
+        for (const theme of themes) {
+            const info = theme.builtin ? catalog.byId[theme.id] : null;
+            const system = theme.id === DEFAULT_THEME;
+            const groupTitle = system ? titles[0] : (info?.group ?? titles[titles.length - 1]);
+            const name = system ? _('System (GNOME)') : theme.name;
+            const row = new Adw.ActionRow({
+                title: GLib.markup_escape_text(name, -1),
+                subtitle: GLib.markup_escape_text(system
+                    ? _('Follows the GNOME accent color and the light or dark setting.')
+                    : (info?.description ?? theme.description), -1),
+                activatable: true,
+            });
+            row.add_prefix(swatchStrip(theme.swatches[dark ? 'dark' : 'light'], name));
+            if (theme.id === current)
+                row.add_suffix(new Gtk.Image({icon_name: 'object-select-symbolic', valign: Gtk.Align.CENTER}));
+            row.connect('activated', () => {
+                settings.set_string('theme', theme.id);
+                window.pop_subpage();
+            });
+            groups.get(groupTitle)?.add(row);
+            used.add(groupTitle);
+        }
+
+        const content = new Adw.PreferencesPage();
+        const problems = rejectedRow(rejected, _);
+        if (problems) {
+            const warning = new Adw.PreferencesGroup();
+            warning.add(problems);
+            content.add(warning);
+        }
+        for (const title of titles) {
+            if (used.has(title))
+                content.add(groups.get(title));
+        }
+        const toolbar = new Adw.ToolbarView();
+        toolbar.add_top_bar(new Adw.HeaderBar());
+        toolbar.set_content(content);
+        return new Adw.NavigationPage({title: _('Theme'), child: toolbar});
+    }
+
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
         const _ = this.gettext.bind(this);
@@ -91,15 +198,30 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         ], _('Light or dark'), _('Applies to the popup. The top bar always stays dark.'), handlerIds);
         look.add(scheme);
 
-        const {themes, rejected} = scanThemes(this.path);
-        const choices = themes.map(({id, name}) => [id, id === DEFAULT_THEME ? _('System (GNOME)') : name]);
-        const current = settings.get_string('theme');
-        // A saved theme that no longer loads must not be shown as another one.
-        if (!choices.some(([id]) => id === current))
-            choices.push([current, _('%s (unavailable)').format(current)]);
-        look.add(choiceRow(settings, 'theme', choices, _('Theme'),
-            _('Each theme has a light and a dark variant.'),
-            handlerIds));
+        const themeName = (themes, id) => {
+            if (id === DEFAULT_THEME)
+                return _('System (GNOME)');
+            return themes.find(theme => theme.id === id)?.name ?? _('%s (unavailable)').format(id);
+        };
+        const {themes: firstScan, rejected: firstRejected} = scanThemes(this.path);
+        const themeRow = new Adw.ActionRow({
+            title: _('Theme'),
+            subtitle: _('Each theme has a light and a dark variant.'),
+            activatable: true,
+        });
+        const themeLabel = new Gtk.Label({
+            label: themeName(firstScan, settings.get_string('theme')),
+            css_classes: ['dim-label'],
+            ellipsize: 3,
+            valign: Gtk.Align.CENTER,
+        });
+        themeRow.add_suffix(themeLabel);
+        themeRow.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
+        themeRow.connect('activated', () => window.push_subpage(this._themePage(window, settings, _)));
+        handlerIds.push(settings.connect('changed::theme', () => {
+            themeLabel.label = themeName(scanThemes(this.path).themes, settings.get_string('theme'));
+        }));
+        look.add(themeRow);
 
         const folder = GLib.build_filenamev([GLib.get_user_data_dir(), 'gnome-ai-quota', 'themes']);
         const folderRow = new Adw.ActionRow({
@@ -118,25 +240,17 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         folderRow.add_suffix(open);
         look.add(folderRow);
 
-        if (rejected.length > 0) {
-            const problems = new Adw.ExpanderRow({
-                title: _('Some themes could not be loaded'),
-                icon_name: 'dialog-warning-symbolic',
-            });
-            for (const {id, problem} of rejected) {
-                // Show the reason, never the full path.
-                problems.add_row(new Adw.ActionRow({title: id, subtitle: problem.replace(/^.*theme\.json: /, '')}));
-            }
+        const problems = rejectedRow(firstRejected, _);
+        if (problems)
             look.add(problems);
-        }
         page.add(look);
 
         const popup = new Adw.PreferencesGroup({title: _('Popup')});
-        const clock = new Adw.SwitchRow({
-            title: _('24-hour clock'),
-            subtitle: _('Show reset times on a 24-hour clock.'),
-        });
-        settings.bind('clock-24h', clock, 'active', 0);
+        const clock = choiceRow(settings, 'clock-format', [
+            ['system', _('Follow the system')],
+            ['12h', _('12 hours')],
+            ['24h', _('24 hours')],
+        ], _('Clock'), _('How reset times are written.'), handlerIds);
         popup.add(clock);
         const reset = choiceRow(settings, 'reset-format', [
             ['long', _('1h 20min')],

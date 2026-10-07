@@ -226,12 +226,12 @@
 }
 
 .gaq-summary {
-    font-size: 11px;
+    font-size: {{fs-small}};
     color: {{p:muted}};
 }
 
 .gaq-section {
-    font-size: 11px;
+    font-size: {{fs-small}};
     font-weight: 700;
     letter-spacing: 1px;
     color: {{p:muted}};
@@ -271,7 +271,7 @@
 }
 
 .gaq-card-plan {
-    font-size: 11px;
+    font-size: {{fs-small}};
     color: {{p:muted}};
 }
 
@@ -303,7 +303,7 @@
 }
 
 .gaq-hero-small {
-    font-size: 11px;
+    font-size: {{fs-small}};
     color: {{p:muted}};
     padding-bottom: 2px;
 }
@@ -317,7 +317,7 @@
 }
 
 .gaq-pill {
-    font-size: 11px;
+    font-size: {{fs-small}};
     font-weight: 700;
     padding: 1px 8px;
     border-radius: {{pill-radius}};
@@ -380,12 +380,12 @@
 }
 
 .gaq-detail {
-    font-size: 11px;
+    font-size: {{fs-small}};
     color: {{p:muted}};
 }
 
 .gaq-pace {
-    font-size: 11px;
+    font-size: {{fs-small}};
     color: {{p:muted}};
 }
 
@@ -426,7 +426,7 @@
     border: 1px solid {{p:border}};
     background-color: {{p:bg}};
     color: {{p:fg}};
-    font-size: 11px;
+    font-size: {{fs-small}};
 }
 
 /* ---------- failure states ---------- */

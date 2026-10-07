@@ -44,10 +44,15 @@
       <summary>Light or dark</summary>
       <description>system follows the GNOME light or dark preference; light and dark force one.</description>
     </key>
-    <key name="clock-24h" type="b">
-      <default>true</default>
-      <summary>24-hour clock</summary>
-      <description>Show reset times on a 24-hour clock. When off, a 12-hour clock is used.</description>
+    <key name="clock-format" type="s">
+      <choices>
+        <choice value="system"/>
+        <choice value="12h"/>
+        <choice value="24h"/>
+      </choices>
+      <default>'system'</default>
+      <summary>Clock</summary>
+      <description>system follows the GNOME clock setting; 12h and 24h force one for reset times.</description>
     </key>
     <key name="reset-format" type="s">
       <choices>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 00:29-0300\n"
+"POT-Creation-Date: 2026-10-07 01:08-0300\n"
 "PO-Revision-Date: 2026-10-06 21:45-0300\n"
 "Last-Translator: gnome-ai-quota authors\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -233,37 +233,37 @@ msgid_plural "%s · %d with problems"
 msgstr[0] "%s · %d com problema"
 msgstr[1] "%s · %d com problemas"
 
-#: lib/ui/indicator.js:156
+#: lib/ui/indicator.js:159
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: lib/ui/indicator.js:157
+#: lib/ui/indicator.js:160
 msgid "Preferences"
 msgstr "Preferências"
 
-#: lib/ui/indicator.js:190
+#: lib/ui/indicator.js:193
 msgid "Refreshing…"
 msgstr "Atualizando…"
 
-#: lib/ui/indicator.js:278
+#: lib/ui/indicator.js:289
 msgid "Waiting for the first update…"
 msgstr "Aguardando a primeira atualização…"
 
-#: lib/ui/indicator.js:396
+#: lib/ui/indicator.js:407
 msgid "Waiting for the first update"
 msgstr "Aguardando a primeira atualização"
 
-#: lib/ui/indicator.js:419
+#: lib/ui/indicator.js:430
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] "mais %d provedor (abra para ver)"
 msgstr[1] "mais %d provedores (abra para ver)"
 
-#: lib/ui/indicator.js:434
+#: lib/ui/indicator.js:445
 msgid "On the bar"
 msgstr "Na barra"
 
-#: lib/ui/indicator.js:436
+#: lib/ui/indicator.js:447
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] "Oculto da barra (%d)"
@@ -281,164 +281,284 @@ msgstr "Expandir %s"
 msgid "Try again"
 msgstr "Tentar de novo"
 
-#: prefs.js:54 prefs.js:86
+#: lib/ui/themeCatalog.js:10
+msgid "Clean and functional"
+msgstr "Limpo e funcional"
+
+#: lib/ui/themeCatalog.js:11
+msgid "Typography and editorial"
+msgstr "Tipografia e editorial"
+
+#: lib/ui/themeCatalog.js:12
+msgid "Surface and materials"
+msgstr "Superfície e materiais"
+
+#: lib/ui/themeCatalog.js:13
+msgid "Immersive and motion"
+msgstr "Imersivo e movimento"
+
+#: lib/ui/themeCatalog.js:14
+msgid "Punks and science fiction"
+msgstr "Punks e ficção científica"
+
+#: lib/ui/themeCatalog.js:15
+msgid "Historical and retro"
+msgstr "Histórico e retrô"
+
+#: lib/ui/themeCatalog.js:16
+msgid "Brutalist and rebellious"
+msgstr "Brutalista e rebelde"
+
+#: lib/ui/themeCatalog.js:20
+msgid "Solid colors, no shadows or gradients."
+msgstr "Cores sólidas, sem sombras nem gradientes."
+
+#: lib/ui/themeCatalog.js:21
+msgid "Everything in modular cards."
+msgstr "Tudo em cartões modulares."
+
+#: lib/ui/themeCatalog.js:22
+msgid "A grid of asymmetric blocks."
+msgstr "Uma grade de blocos assimétricos."
+
+#: lib/ui/themeCatalog.js:23
+msgid "Refined dark product UI with subtle borders."
+msgstr "Interface escura e refinada de produto, com bordas sutis."
+
+#: lib/ui/themeCatalog.js:24
+msgid "A daily newspaper page, in columns with serif type."
+msgstr "Uma página de jornal diário, em colunas e com tipo serifado."
+
+#: lib/ui/themeCatalog.js:25
+msgid "Large variable type, the glyph as the image."
+msgstr "Tipografia variável em grande escala, a letra como imagem."
+
+#: lib/ui/themeCatalog.js:26
+msgid "Strokes drawn by hand."
+msgstr "Traços feitos à mão."
+
+#: lib/ui/themeCatalog.js:27
+msgid "Soft mesh gradients."
+msgstr "Gradientes de malha suaves."
+
+#: lib/ui/themeCatalog.js:28
+msgid "Pearly, prismatic foil."
+msgstr "Folha perolada e prismática."
+
+#: lib/ui/themeCatalog.js:29
+msgid "Isometric projection."
+msgstr "Projeção isométrica."
+
+#: lib/ui/themeCatalog.js:30
+msgid "An interface composed from intent."
+msgstr "Uma interface composta a partir da intenção."
+
+#: lib/ui/themeCatalog.js:31
+msgid "Neon noir and tactical HUD."
+msgstr "Neon noir e HUD tático."
+
+#: lib/ui/themeCatalog.js:32
+msgid "Night, silver and digital mysticism."
+msgstr "Noite, prata e misticismo digital."
+
+#: lib/ui/themeCatalog.js:33
+msgid "Micro scale, particles and precision."
+msgstr "Microescala, partículas e precisão."
+
+#: lib/ui/themeCatalog.js:34
+msgid "A green, sunlit future on linen tones."
+msgstr "Um futuro verde e ensolarado em tons de linho."
+
+#: lib/ui/themeCatalog.js:35
+msgid "Black lines and primary colors."
+msgstr "Linhas pretas e cores primárias."
+
+#: lib/ui/themeCatalog.js:36
+msgid "Mid-twentieth century, earthy tones."
+msgstr "Meados do século XX, tons terrosos."
+
+#: lib/ui/themeCatalog.js:37
+msgid "A text terminal interface."
+msgstr "Uma interface de terminal em texto."
+
+#: lib/ui/themeCatalog.js:38
+msgid "Raw HTML and dense tables."
+msgstr "HTML cru e tabelas densas."
+
+#: prefs.js:75
+msgid "Some themes could not be loaded"
+msgstr "Alguns temas não puderam ser carregados"
+
+#: prefs.js:99
+msgid "System"
+msgstr "Sistema"
+
+#: prefs.js:99 prefs.js:219
+msgid "Your themes"
+msgstr "Seus temas"
+
+#: prefs.js:106 prefs.js:194
+msgid "System (GNOME)"
+msgstr "Sistema (GNOME)"
+
+#: prefs.js:110
+msgid "Follows the GNOME accent color and the light or dark setting."
+msgstr "Segue a cor de destaque do GNOME e a configuração de claro ou escuro."
+
+#: prefs.js:139 prefs.js:199
+msgid "Theme"
+msgstr "Tema"
+
+#: prefs.js:152 prefs.js:184
 msgid "Appearance"
 msgstr "Aparência"
 
-#: prefs.js:59
+#: prefs.js:157
 msgid "Top bar"
 msgstr "Barra superior"
 
-#: prefs.js:60
+#: prefs.js:158
 msgid ""
 "The bar shrinks, then shows fewer providers, when other extensions leave it "
 "little room."
 msgstr "A barra encolhe e depois mostra menos provedores quando outras extensões deixam pouco espaço."
 
-#: prefs.js:63
+#: prefs.js:161
 msgid "Left"
 msgstr "Esquerda"
 
-#: prefs.js:64
+#: prefs.js:162
 msgid "Center"
 msgstr "Centro"
 
-#: prefs.js:65
+#: prefs.js:163
 msgid "Right"
 msgstr "Direita"
 
-#: prefs.js:66
+#: prefs.js:164
 msgid "Position"
 msgstr "Posição"
 
-#: prefs.js:66
+#: prefs.js:164
 msgid "Where the quota items sit on the top bar."
 msgstr "Onde os itens de cota ficam na barra superior."
 
-#: prefs.js:70
+#: prefs.js:168
 msgid "Providers on the bar"
 msgstr "Provedores na barra"
 
-#: prefs.js:71
+#: prefs.js:169
 msgid "The most providers shown, from 1 to 5."
 msgstr "O máximo de provedores exibidos, de 1 a 5. Os mais críticos aparecem primeiro."
 
-#: prefs.js:78
+#: prefs.js:176
 msgid "Automatic"
 msgstr "Automático"
 
-#: prefs.js:79
+#: prefs.js:177
 msgid "Always compact"
 msgstr "Sempre compactar"
 
-#: prefs.js:80
+#: prefs.js:178
 msgid "Never compact"
 msgstr "Nunca compactar"
 
-#: prefs.js:81
+#: prefs.js:179
 msgid "Compact mode"
 msgstr "Modo compacto"
 
-#: prefs.js:81
+#: prefs.js:179
 msgid "Drops the percent sign and the window suffix."
 msgstr "Remove o sinal de % e o sufixo da janela."
 
-#: prefs.js:88
+#: prefs.js:186 prefs.js:241
 msgid "Follow the system"
 msgstr "Seguir o sistema"
 
-#: prefs.js:89
+#: prefs.js:187
 msgid "Light"
 msgstr "Claro"
 
-#: prefs.js:90
+#: prefs.js:188
 msgid "Dark"
 msgstr "Escuro"
 
-#: prefs.js:91
+#: prefs.js:189
 msgid "Applies to the popup. The top bar always stays dark."
 msgstr "Vale para o popup. A barra superior continua escura."
 
-#: prefs.js:91
+#: prefs.js:189
 msgid "Light or dark"
 msgstr "Claro ou escuro"
 
-#: prefs.js:95
-msgid "System (GNOME)"
-msgstr "Sistema (GNOME)"
-
-#: prefs.js:99
+#: prefs.js:195
 msgid "%s (unavailable)"
 msgstr "%s (indisponível)"
 
-#: prefs.js:100
-msgid "Theme"
-msgstr "Tema"
-
-#: prefs.js:101
+#: prefs.js:200
 msgid "Each theme has a light and a dark variant."
 msgstr "Todo tema tem variante clara e escura."
 
-#: prefs.js:106
-msgid "Your themes"
-msgstr "Seus temas"
-
-#: prefs.js:107
+#: prefs.js:220
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr "Uma pasta por tema, com um theme.json dentro: %s"
 
-#: prefs.js:110
+#: prefs.js:223
 msgid "Open folder"
 msgstr "Abrir pasta"
 
-#: prefs.js:112
+#: prefs.js:225
 msgid "Open the themes folder"
 msgstr "Abrir a pasta de temas"
 
-#: prefs.js:123
-msgid "Some themes could not be loaded"
-msgstr "Alguns temas não puderam ser carregados"
-
-#: prefs.js:134
+#: prefs.js:239
 msgid "Popup"
 msgstr "Popup"
 
-#: prefs.js:136
-msgid "24-hour clock"
-msgstr "Relógio de 24 horas"
+#: prefs.js:242
+msgid "12 hours"
+msgstr "12 horas"
 
-#: prefs.js:137
-msgid "Show reset times on a 24-hour clock."
-msgstr "Mostra os horários de reinício em 24 horas."
+#: prefs.js:243
+msgid "24 hours"
+msgstr "24 horas"
 
-#: prefs.js:142
+#: prefs.js:244
+msgid "Clock"
+msgstr "Relógio"
+
+#: prefs.js:244
+msgid "How reset times are written."
+msgstr "Como os horários de reinício são escritos."
+
+#: prefs.js:247
 msgid "1h 20min"
 msgstr "1h 20min"
 
-#: prefs.js:143
+#: prefs.js:248
 msgid "1h20"
 msgstr "1h20"
 
-#: prefs.js:144
+#: prefs.js:249
 msgid "How the countdown to a reset is written."
 msgstr "Como a contagem até o reinício é escrita."
 
-#: prefs.js:144
+#: prefs.js:249
 msgid "Time until reset"
 msgstr "Tempo até o reinício"
 
-#: prefs.js:147
+#: prefs.js:252
 msgid "Open cards that need attention"
 msgstr "Abrir cartões que pedem atenção"
 
-#: prefs.js:148
+#: prefs.js:253
 msgid "Cards in warning, critical or error states open on their own."
 msgstr "Cartões em atenção, críticos ou com erro abrem sozinhos."
 
-#: prefs.js:155
+#: prefs.js:260
 msgid "Demo build"
 msgstr "Versão de demonstração"
 
-#: prefs.js:156
+#: prefs.js:261
 msgid "More settings arrive in later milestones. This build shows demo data."
 msgstr "Mais configurações chegam em marcos futuros. Esta versão mostra dados de demonstração."
