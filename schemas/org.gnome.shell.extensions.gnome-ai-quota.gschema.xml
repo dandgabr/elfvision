@@ -167,11 +167,6 @@
       <summary>Notify about connection problems</summary>
       <description>Tell you once when an account has been rejected, or its data has been missing, for a while. Providers you stopped tracking never notify.</description>
     </key>
-    <key name="notify-details-on-lock" type="b">
-      <default>false</default>
-      <summary>Show details on the lock screen</summary>
-      <description>By default the text of a notification (provider and percentage) is hidden while the screen is locked. Turn this on to show it there.</description>
-    </key>
     <key name="demo-scenario" type="s">
       <choices>
         <choice value="steady"/>
