@@ -282,7 +282,7 @@ test('failures: each code gets its own pill, message and retry line', () => {
 test('failures: a signed-out provider has no retry and no value', () => {
     const view = cardView(failed('auth_required'), {nowMs: NOW});
     assertEqual([view.pill.text, view.heroText, view.retryText, view.canRetry, view.message],
-        ['⊘ Signed out', '–', null, false, 'Open Preferences to connect this account.']);
+        ['⊘ Not connected', '–', null, false, 'Open Preferences to connect this account.']);
 });
 
 test('failures: the last value is marked approximate and drawn neutral', () => {
@@ -303,7 +303,7 @@ test('failures: the first fetch failing without data explains itself', () => {
 
 test('summary and footer tell signed-out apart from failing, and do not hide problems', () => {
     const list = [byId(demo(), 'claude'), failed('auth_required'), failed('network')];
-    assertEqual(summaryText(list), '1 critical · 1 signed out · 1 with a problem');
+    assertEqual(summaryText(list), '1 critical · 1 not connected · 1 with a problem');
     assertEqual(problemCount(list), 2);
     assertEqual(footerText(null, 0), 'Not updated yet');
     assertEqual(footerText(130000, 0), 'Updated 2 min ago');
@@ -313,6 +313,7 @@ test('summary and footer tell signed-out apart from failing, and do not hide pro
 
 // ---- Command Code
 
+import {normalizeSnapshot} from '../lib/core/contract.js';
 import {parseCredits} from '../lib/core/commandCode.js';
 import {ProviderError, errorForStatus} from '../lib/providers/errors.js';
 import {createCommandCodeProvider} from '../lib/providers/commandCode.js';
@@ -388,7 +389,10 @@ test('command code provider: sends the key as a bearer token to one https endpoi
 test('command code provider: no key, a locked keyring and bad replies are explicit failures', async () => {
     const ctx = {isCancelled: () => false};
     assertEqual((await failureOf(commandCode({key: null}).provider.fetch(ctx))).code, 'auth_required');
-    assertEqual((await failureOf(commandCode({keyError: true}).provider.fetch(ctx))).code, 'auth_required');
+    const locked = await failureOf(commandCode({keyError: true}).provider.fetch(ctx));
+    assertEqual([locked.code, locked.reason], ['network', 'keyring']);
+    assertEqual((await failureOf(commandCode({key: null}).provider.fetch(ctx))).reason, 'no_key');
+    assertEqual((await failureOf(commandCode({reply: {status: 401, json: null}}).provider.fetch(ctx))).reason, 'rejected');
     assertEqual((await failureOf(commandCode({reply: {status: 401, json: null}}).provider.fetch(ctx))).code, 'auth_required');
     assertEqual((await failureOf(commandCode({reply: {status: 200, json: {nothing: true}}}).provider.fetch(ctx))).code, 'provider_changed');
     const limited = await failureOf(commandCode({reply: {status: 429, retryAfter: '30', json: null}}).provider.fetch(ctx));
@@ -397,4 +401,43 @@ test('command code provider: no key, a locked keyring and bad replies are explic
     const rejected = await failureOf(commandCode({reply: {status: 401, json: null}}).provider.fetch(ctx));
     assertTrue(!rejected.message.includes('secret-key'));
     assertTrue(rejected instanceof ProviderError);
+});
+
+test('command code provider: a key that could not be a header value is never sent', async () => {
+    const ctx = {isCancelled: () => false};
+    for (const key of ['k\r\nX-Evil: 1', 'a'.repeat(2000000), '   ', 'has space inside', 'short', 'ünïcode-key-1234']) {
+        const {provider, calls} = commandCode({key});
+        const error = await failureOf(provider.fetch(ctx));
+        assertEqual([error.code, error.reason, calls.length], ['auth_required', 'rejected', 0]);
+    }
+});
+
+test('credential failures keep their reason through the scheduler and say the right thing', async () => {
+    const view = reason => {
+        const snapshot = {id: 'p', name: 'P', plan: '', state: 'auth_required', source: {kind: 'stale'}, metrics: [], ...(reason ? {reason} : {})};
+        return cardView(snapshot, {nowMs: 0});
+    };
+    assertEqual([view('no_key').pill.text, view('no_key').configureText], ['⊘ No key', 'Add key']);
+    assertEqual([view('rejected').pill.text, view('rejected').configureText], ['⊘ Key rejected', 'Replace key']);
+    assertEqual([view(null).pill.text, view(null).configureText], ['⊘ Not connected', 'Open Preferences']);
+    const locked = cardView({id: 'p', name: 'P', plan: '', state: 'network', reason: 'keyring', source: {kind: 'stale'}, metrics: []}, {nowMs: 0});
+    assertEqual([locked.pill.text, locked.canRetry], ['⚠ Keyring locked', true]);
+    assertEqual(normalizeSnapshot({id: 'p', state: 'ok', reason: 'bogus'}).snapshot.reason, undefined);
+    assertEqual(normalizeSnapshot({id: 'p', state: 'auth_required', reason: 'rejected'}).snapshot.reason, 'rejected');
+});
+
+import {accountStatus} from '../lib/core/accountStatus.js';
+
+test('account status: one word per situation, shared by the extension and the preferences', () => {
+    const status = (state, reason) => accountStatus({state, ...(reason ? {reason} : {})});
+    assertEqual(status('ok'), 'ok');
+    assertEqual([status('auth_required', 'no_key'), status('auth_required', 'rejected'), status('auth_required')], ['no_key', 'rejected', 'rejected']);
+    assertEqual([status('network', 'keyring'), status('network'), status('rate_limited')], ['keyring', 'unreachable', 'unreachable']);
+    assertEqual([status('parse_error'), status('provider_changed')], ['changed', 'changed']);
+});
+
+test('a demo provider that needs an account does not offer to open Preferences', () => {
+    const snapshot = {id: 'p', name: 'P', plan: '', state: 'auth_required', source: {kind: 'stale'}, metrics: []};
+    assertEqual(cardView(snapshot, {nowMs: 0, configurable: false}).canConfigure, false);
+    assertEqual(cardView(snapshot, {nowMs: 0}).canConfigure, true);
 });

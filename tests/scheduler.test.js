@@ -489,9 +489,9 @@ test('scheduler: the fetch is told when it was abandoned after a timeout', async
     await clock.advance(SECOND + 1);
     assertEqual(context.isCancelled(), false);
     await clock.advance(6 * SECOND);
-    assertEqual(context.isCancelled(), false, 'the failed attempt is still the current one');
+    assertEqual(context.isCancelled(), true, 'the fetch is told nobody is waiting');
     await clock.advance(40 * SECOND);
-    assertEqual(context.isCancelled(), false);
+    assertEqual(context.isCancelled(), true);
     scheduler.remove('codex');
     assertEqual(context.isCancelled(), true);
 });

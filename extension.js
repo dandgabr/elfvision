@@ -3,6 +3,7 @@ import GLib from 'gi://GLib';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
+import {accountStatus} from './lib/core/accountStatus.js';
 import {LIVE_PROVIDER_IDS, createProviders} from './lib/providers/index.js';
 import {CacheStore} from './lib/services/cacheStore.js';
 import {QuotaController} from './lib/services/controller.js';
@@ -36,8 +37,12 @@ export default class GnomeAiQuotaExtension extends Extension {
         const rebuild = () => {
             this._destroyIndicator();
             this._destroyController();
-            this._createController();
-            this._createIndicator();
+            try {
+                this._createController();
+                this._createIndicator();
+            } catch (error) {
+                console.error(`gnome-ai-quota: cannot rebuild: ${error.message}`);
+            }
         };
         this._scenarioChangedId = this._settings.connect('changed::demo-scenario', rebuild);
         this._sourceChangedId = this._settings.connect('changed::data-source', rebuild);
@@ -71,18 +76,39 @@ export default class GnomeAiQuotaExtension extends Extension {
         const source = this._settings.get_string('data-source');
         const providers = createProviders({source, scenario: this._settings.get_string('demo-scenario')});
         // Demo and real data must never share a cache: they use the same ids.
-        const cacheDirectory = GLib.build_filenamev([GLib.get_user_cache_dir(), 'gnome-ai-quota', ...(source === 'demo' ? ['demo'] : [])]);
+        const cacheDirectory = GLib.build_filenamev([GLib.get_user_cache_dir(), 'gnome-ai-quota', ...(source === 'demo' ? ['demo', this._settings.get_string('demo-scenario')] : [])]);
         this._controller = new QuotaController({providers, cache: new CacheStore(cacheDirectory)});
+        if (source === 'live') {
+            this._unsubscribeStatus = this._controller.subscribe(() => this._publishStatus());
+        }
         this._controller.start().catch(error =>
             console.error(`gnome-ai-quota: cannot start: ${error.message}`));
     }
 
+    /** Tell the preferences window how each real account is doing. */
+    _publishStatus() {
+        const next = {};
+        for (const snapshot of this._controller?.snapshots() ?? []) {
+            if (LIVE_PROVIDER_IDS.includes(snapshot.id))
+                next[snapshot.id] = accountStatus(snapshot);
+        }
+        const current = this._settings?.get_value('account-status').deepUnpack() ?? {};
+        const same = Object.keys(next).length === Object.keys(current).length
+            && Object.entries(next).every(([id, status]) => current[id] === status);
+        if (!same)
+            this._settings.set_value('account-status', new GLib.Variant('a{ss}', next));
+    }
+
     _destroyController() {
+        this._unsubscribeStatus?.();
+        this._unsubscribeStatus = null;
         this._controller?.stop();
         this._controller = null;
     }
 
     _createIndicator() {
+        if (!this._controller)
+            return;
         const position = this._settings.get_string('position');
         this._indicator = new GaqIndicator(this, this._settings, position, this._controller);
         Main.panel.addToStatusArea(this.uuid, this._indicator, BOX_INDEX[position], position);

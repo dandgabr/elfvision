@@ -67,3 +67,81 @@ test('http: redirects are not followed', async () => {
     assertEqual(server.seen.map(s => s.path), ['/old']);
     server.stop();
 });
+
+/** A raw TCP server that sends `head` at once, then `drip` one byte at a time. */
+function rawServer(head, {drip = false} = {}) {
+    const listener = new Gio.SocketListener();
+    const port = listener.add_any_inet_port(null);
+    let closedAt = 0;
+    const accept = () => listener.accept_async(null, (_listener, result) => {
+        let connection;
+        try {
+            [connection] = listener.accept_finish(result);
+        } catch (_error) {
+            return;
+        }
+        const out = connection.get_output_stream();
+        try {
+            out.write_all(new TextEncoder().encode(head), null);
+            out.flush(null);
+        } catch (_error) {
+            return;
+        }
+        if (!drip) {
+            connection.close(null);
+            return;
+        }
+        GLib.timeout_add(GLib.PRIORITY_DEFAULT, 400, () => {
+            try {
+                out.write_all(new TextEncoder().encode('x'), null);
+                out.flush(null);
+                return GLib.SOURCE_CONTINUE;
+            } catch (_error) {
+                closedAt = GLib.get_monotonic_time();
+                return GLib.SOURCE_REMOVE;
+            }
+        });
+    });
+    accept();
+    return {port, closedAt: () => closedAt, stop: () => listener.close()};
+}
+
+test('http: a status Soup has no name for (429) is read, with its Retry-After', async () => {
+    const server = rawServer('HTTP/1.1 429 Too Many Requests\r\nRetry-After: 7\r\nContent-Length: 0\r\nConnection: close\r\n\r\n');
+    const http = createHttp({allowedHosts: [], allowLoopbackHttp: true});
+    const reply = await http.get(`http://127.0.0.1:${server.port}/x`);
+    assertEqual([reply.status, reply.retryAfter], [429, '7']);
+    server.stop();
+});
+
+test('http: a server that drips bytes is cut at the total deadline, and by the scheduler giving up', async () => {
+    const dripHead = 'HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: 1000\r\n\r\n';
+    let server = rawServer(dripHead, {drip: true});
+    const http = createHttp({allowedHosts: [], allowLoopbackHttp: true, timeoutSecs: 2});
+    let started = GLib.get_monotonic_time();
+    const error = await failureOf(http.get(`http://127.0.0.1:${server.port}/x`));
+    const seconds = (GLib.get_monotonic_time() - started) / 1e6;
+    assertEqual(error.code, 'network');
+    assertTrue(seconds < 4, `took ${seconds} s`);
+    server.stop();
+
+    server = rawServer(dripHead, {drip: true});
+    let cancelled = false;
+    started = GLib.get_monotonic_time();
+    const slow = http.get(`http://127.0.0.1:${server.port}/x`, {context: {isCancelled: () => cancelled}});
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, () => { cancelled = true; return GLib.SOURCE_REMOVE; });
+    assertEqual((await failureOf(slow)).code, 'network');
+    assertTrue((GLib.get_monotonic_time() - started) / 1e6 < 2.5, 'cancelled by the context');
+    server.stop();
+});
+
+test('http: dispose cancels what is in flight; another port on the allowed host is refused', async () => {
+    const server = rawServer('HTTP/1.1 200 OK\r\nContent-Length: 1000\r\n\r\n', {drip: true});
+    const http = createHttp({allowedHosts: ['127.0.0.1'], allowLoopbackHttp: true, timeoutSecs: 20});
+    const pending = http.get(`http://127.0.0.1:${server.port}/x`);
+    GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, () => { http.dispose(); return GLib.SOURCE_REMOVE; });
+    assertEqual((await failureOf(pending)).code, 'network');
+    server.stop();
+    const strict = createHttp({allowedHosts: ['api.example.com']});
+    assertEqual((await failureOf(strict.get('https://api.example.com:8443/x'))).code, 'provider_changed');
+});

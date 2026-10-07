@@ -83,6 +83,11 @@
       <summary>Credentials revision</summary>
       <description>The preferences window raises this number whenever a credential is stored or removed, so the running extension asks the providers again. It holds no secret.</description>
     </key>
+    <key name="account-status" type="a{ss}">
+      <default>{}</default>
+      <summary>Account status</summary>
+      <description>The running extension writes, for each real provider, how its account is doing (ok, no_key, rejected, keyring, unreachable or changed), so the preferences window can show it next to the credential. It holds no secret.</description>
+    </key>
     <key name="demo-scenario" type="s">
       <choices>
         <choice value="steady"/>
