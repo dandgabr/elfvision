@@ -466,3 +466,85 @@ test('sign-in failures: expired, refused and missing setup each get their own wo
     assertEqual([view('no_config').pill.text, view('no_config').configureText], ['⊘ Setup needed', 'Open Preferences']);
     assertEqual(['expired', 'refused', 'no_config'].map(reason => accountStatus({state: 'auth_required', reason})), ['expired', 'refused', 'no_config']);
 });
+
+// ---- Codex usage
+
+import {parseUsage} from '../lib/core/codex.js';
+
+test('codex: both windows are read, with their length, reset in seconds and plan', () => {
+    const {metrics, plan} = parseUsage({
+        plan_type: 'plus',
+        rate_limit: {
+            primary_window: {used_percent: 12.5, limit_window_seconds: 18000, reset_at: 1790000000},
+            secondary_window: {used_percent: 40, limit_window_seconds: 604800, reset_at: 1790500000},
+        },
+    });
+    assertEqual(plan, 'Plus');
+    assertEqual(metrics.map(m => [m.id, m.window, m.windowSecs, m.percentUsed, m.resetsAt]),
+        [['primary', 'session', 18000, 12.5, 1790000000000], ['secondary', 'week', 604800, 40, 1790500000000]]);
+});
+
+test('codex: a null window is absent, a odd length is unlabeled, and nothing usable is a change', () => {
+    const one = parseUsage({rate_limit: {primary_window: {used_percent: 3, limit_window_seconds: 2592000}, secondary_window: null}});
+    assertEqual([one.metrics.length, one.metrics[0].window, one.plan], [1, 'month', undefined]);
+    assertEqual(parseUsage({rate_limit: {primary_window: {used_percent: 150, limit_window_seconds: 999}}}).metrics.map(m => [m.window, m.percentUsed]), [['none', 100]]);
+    assertEqual(parseUsage({plan_type: '<b>x</b>', rate_limit: {primary_window: {used_percent: 1}}}).plan, undefined);
+    for (const body of [null, 'x', {}, {rate_limit: {}}, {rate_limit: {primary_window: {used_percent: 'a'}}}]) {
+        let code = '';
+        try {
+            parseUsage(body);
+        } catch (error) {
+            code = error.code;
+        }
+        assertEqual([JSON.stringify(body), code], [JSON.stringify(body), 'provider_changed']);
+    }
+});
+
+import {createCodexProvider} from '../lib/providers/codex.js';
+import {TokenError} from '../lib/oauth/tokenManager.js';
+
+const USAGE = {plan_type: 'pro', rate_limit: {primary_window: {used_percent: 20, limit_window_seconds: 18000, reset_at: 1790000000}}};
+
+function codex({replies, tokenError = null}) {
+    const calls = {urls: [], auth: [], invalidated: 0, tokenCalls: 0};
+    const provider = createCodexProvider({
+        http: {get: async (url, options) => { calls.urls.push(url); calls.auth.push(options.headers.Authorization); return replies.shift(); }},
+        tokens: {
+            accessToken: async () => { calls.tokenCalls++; if (tokenError) throw tokenError; return `tok${calls.tokenCalls}`; },
+            invalidate: () => { calls.invalidated++; },
+        },
+    });
+    return {provider, calls};
+}
+
+test('codex provider: asks the usage endpoint with the access token and reads the plan', async () => {
+    const {provider, calls} = codex({replies: [{status: 200, json: USAGE}]});
+    const body = await provider.fetch({isCancelled: () => false});
+    assertEqual([calls.urls, calls.auth], [['https://chatgpt.com/backend-api/wham/usage'], ['Bearer tok1']]);
+    assertEqual([body.plan, body.metrics.length], ['Pro', 1]);
+});
+
+test('codex provider: a refused token is renewed once; a second refusal means the sign-in expired', async () => {
+    const {provider, calls} = codex({replies: [{status: 401, json: null}, {status: 200, json: USAGE}]});
+    assertEqual((await provider.fetch({isCancelled: () => false})).metrics.length, 1);
+    assertEqual([calls.invalidated, calls.auth], [1, ['Bearer tok1', 'Bearer tok2']]);
+    const twice = codex({replies: [{status: 401, json: null}, {status: 401, json: null}]});
+    const error = await failureOf(twice.provider.fetch({isCancelled: () => false}));
+    assertEqual([error.code, error.reason], ['auth_required', 'expired']);
+});
+
+test('codex provider: 403, rate limits, odd replies and every token failure are told apart', async () => {
+    const ctx = {isCancelled: () => false};
+    const refused = await failureOf(codex({replies: [{status: 403, json: null}]}).provider.fetch(ctx));
+    assertEqual([refused.code, refused.reason], ['auth_required', 'refused']);
+    const limited = await failureOf(codex({replies: [{status: 429, retryAfter: '12', json: null}]}).provider.fetch(ctx));
+    assertEqual([limited.code, limited.retryAfterMs], ['rate_limited', 12000]);
+    assertEqual((await failureOf(codex({replies: [{status: 200, json: {}}]}).provider.fetch(ctx))).code, 'provider_changed');
+    const cases = {network: ['network', undefined], no_config: ['auth_required', 'no_config'], expired: ['auth_required', 'expired'],
+        reconnect: ['auth_required', 'expired'], not_connected: ['auth_required', undefined], disconnected: ['auth_required', undefined]};
+    for (const [code, expected] of Object.entries(cases)) {
+        const error = await failureOf(codex({replies: [], tokenError: new TokenError(code)}).provider.fetch(ctx));
+        assertEqual([code, error.code, error.reason], [code, ...expected]);
+    }
+    assertEqual((await failureOf(codex({replies: [], tokenError: new Error('boom')}).provider.fetch(ctx))).code, 'network');
+});

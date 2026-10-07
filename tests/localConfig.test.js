@@ -14,7 +14,8 @@ test('local config: a good entry gets its defaults; optional fields are kept', (
         antigravity: entry({redirectHost: '127.0.0.1', clientSecret: 'sec-ret-1', userAgent: 'some agent/1.0 (x)'}),
     }));
     assertEqual(problems, []);
-    assertEqual(providers.codex, {clientId: 'abc-123_XYZ', redirectPort: 1455, redirectHost: 'localhost'});
+    assertEqual(providers.codex, {clientId: 'abc-123_XYZ', redirectPort: 1455});
+    assertEqual(parseLocalConfig(config({codex: {clientId: 'only-the-id'}})).providers.codex, {clientId: 'only-the-id'});
     assertEqual([providers.antigravity.clientSecret, providers.antigravity.userAgent, providers.antigravity.redirectHost], ['sec-ret-1', 'some agent/1.0 (x)', '127.0.0.1']);
 });
 

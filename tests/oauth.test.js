@@ -235,3 +235,13 @@ test('oauth sign-in: a token error, a missing refresh token and a busy port are 
     first.cancel();
     await rejection(first.result);
 });
+
+import {refreshRequest} from '../lib/oauth/protocol.js';
+
+test('oauth protocol: a refresh is a form, or JSON when the provider wants it', () => {
+    const fields = {clientId: 'c1', refresh: 'r1'};
+    assertEqual(refreshRequest({}, fields), {body: 'grant_type=refresh_token&refresh_token=r1&client_id=c1', contentType: 'application/x-www-form-urlencoded'});
+    const json = refreshRequest({refreshEncoding: 'json'}, {...fields, clientSecret: undefined});
+    assertEqual([JSON.parse(json.body), json.contentType], [{grant_type: 'refresh_token', refresh_token: 'r1', client_id: 'c1'}, 'application/json']);
+    assertEqual(failureOf(() => parseTokenReply({status: 400, json: {error: 'refresh_token_reused'}}, 0)).code, 'refresh_token_reused');
+});
