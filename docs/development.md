@@ -36,6 +36,13 @@ The extension needs `schemas/gschemas.compiled` and `locale/` to run from a
 checkout. Neither is committed. Run the build after cloning and after changing
 `schemas/` or `po/`.
 
+## Trying it in a window
+
+`tools/nested-shell.sh` opens a throwaway GNOME Shell in a window on your desktop
+(needs `sudo dnf install mutter-devkit`), with the extension enabled and settings in
+memory, so your real top bar and session stay untouched. `tools/nested-shell.sh prefs`
+also opens the preferences window. Closing the window ends it.
+
 ## Themes
 
 All CSS lives in `lib/core/theme.template.css`; colors, radii, borders, shadows and
