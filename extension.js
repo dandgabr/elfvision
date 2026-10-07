@@ -33,7 +33,11 @@ export default class GnomeAiQuotaExtension extends Extension {
         // needs new providers. Both rebuild the parts that depend on them.
         this._positionChangedId = this._settings.connect('changed::position', () => {
             this._destroyIndicator();
-            this._createIndicator();
+            try {
+                this._createIndicator();
+            } catch (error) {
+                console.error(`gnome-ai-quota: cannot move the indicator: ${error.message}\n${error.stack ?? ''}`);
+            }
         });
         const rebuild = () => {
             this._destroyIndicator();
