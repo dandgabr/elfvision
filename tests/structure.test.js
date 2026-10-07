@@ -4,7 +4,7 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
-import {assertEqual, assertTrue, test} from './harness.js';
+import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
 import {PROVIDERS, LIVE_PROVIDER_IDS, providerMeta} from '../lib/providers/registry.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
@@ -36,8 +36,14 @@ const SHELL_SIDE = ['gi://St', 'gi://Shell', 'gi://Clutter', 'gi://Meta', 'resou
 const PREFS_SIDE = ['gi://Adw', 'gi://Gtk', 'gi://Gdk'];
 
 test('structure: the pure core and the registry import no gi:// module', () => {
-    const pure = [...sources('lib/core'), 'lib/providers/registry.js', 'lib/providers/errors.js', 'lib/oauth/pkce.js', 'lib/oauth/callback.js', 'lib/oauth/protocol.js', 'lib/oauth/secret.js', 'lib/oauth/tokenManager.js'];
+    const pure = [...sources('lib/core'), 'lib/providers/registry.js', 'lib/oauth/pkce.js', 'lib/oauth/callback.js', 'lib/oauth/protocol.js', 'lib/oauth/secret.js', 'lib/oauth/tokenManager.js'];
     assertEqual(offenders(pure, ['gi://']), []);
+});
+
+test('structure: the core depends on nothing outside the core', () => {
+    const outside = sources('lib/core').flatMap(path =>
+        imports(path).filter(spec => spec.startsWith('.') && !spec.startsWith('./')).map(spec => `${path}: ${spec}`));
+    assertEqual(outside, []);
 });
 
 test('structure: shell toolkit modules stay on the shell side', () => {
@@ -98,4 +104,54 @@ test('secrets: no tracked file holds a token whose hash is on the known-ids list
             assertTrue(!known.has(checksum.get_string()), `${file} holds a known client id`);
         }
     }
+});
+
+// ---- the secret check itself: it must find what it is meant to find (positive controls)
+
+const CHECKER = `${root}/tools/check-secrets.py`;
+
+function run(cwd, argv, env = []) {
+    const [, stdout, stderr, status] = GLib.spawn_sync(cwd, argv, [...GLib.get_environ(), ...env], GLib.SpawnFlags.SEARCH_PATH, null);
+    return {out: decoder.decode(stdout ?? new Uint8Array()), err: decoder.decode(stderr ?? new Uint8Array()), ok: status === 0};
+}
+
+/** A scratch repository with `files` staged, and the checker run in it with no local config. */
+function checkStaged(files, {knownHashes = ''} = {}) {
+    const repo = tmpDir();
+    run(repo, ['git', 'init', '-q']);
+    GLib.mkdir_with_parents(`${repo}/tests`, 0o755);
+    GLib.file_set_contents(`${repo}/tests/known-ids.sha256`, knownHashes);
+    for (const [name, content] of Object.entries(files))
+        GLib.file_set_contents(`${repo}/${name}`, content);
+    run(repo, ['git', 'add', '-A']);
+    return run(repo, ['python3', '-I', CHECKER], [`XDG_CONFIG_HOME=${repo}/none`]);
+}
+
+test('secret check: a clean change passes', () => {
+    assertEqual(checkStaged({'notes.md': 'nothing to see here, just words and a path/to/file.js\n'}).ok, true);
+});
+
+test('secret check: credential formats are found, and the finding does not print the secret', () => {
+    const secret = `GOCSPX-${'a1B2c3D4'.repeat(4)}`;
+    const jwt = `eyJ${'a'.repeat(20)}.eyJ${'b'.repeat(20)}.${'c'.repeat(20)}`;
+    // Built here, so this file does not itself contain what the checker looks for.
+    const key = `-----BEGIN ${'RSA PRIVATE'} KEY-----\n`;
+    for (const [content, kind] of [[secret, 'a Google client secret'], [jwt, 'a JSON web token'], [key, 'a private key'], [`sk-${'x'.repeat(30)}`, 'an API token']]) {
+        const result = checkStaged({'config.txt': `value = ${content}\n`});
+        assertEqual(result.ok, false);
+        assertTrue(result.err.includes(kind), result.err);
+        assertTrue(!result.err.includes(content.slice(0, 20)), 'the secret was printed');
+    }
+});
+
+test('secret check: a word whose hash is on the known list is found, wherever it sits', () => {
+    const id = 'app_FakeIdForTheTest12345678';
+    const checksum = new GLib.Checksum(GLib.ChecksumType.SHA256);
+    checksum.update(new TextEncoder().encode(id));
+    const hashes = `${checksum.get_string()}\n`;
+    for (const content of [`id=${id}`, `see ${id}.`, `https://x.test/path/${id}/more`]) {
+        const result = checkStaged({'doc.md': `${content}\n`}, {knownHashes: hashes});
+        assertEqual([content, result.ok, result.err.includes('known client id')], [content, false, true]);
+    }
+    assertEqual(checkStaged({'doc.md': 'app_SomethingElseEntirely12345\n'}, {knownHashes: hashes}).ok, true);
 });

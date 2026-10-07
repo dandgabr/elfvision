@@ -7,8 +7,8 @@ says so; a decision that is replaced gets a new record.
 | # | Decision | Status |
 |---|---|---|
 | [0001](0001-stack-and-repository-conventions.md) | GJS only, English everywhere, AGPL-3.0 | accepted |
-| [0002](0002-provider-modules-and-authentication.md) | Provider modules, own authentication, data contract, scheduler and cache | accepted, demo providers implemented |
-| [0003](0003-security-model.md) | Keyring storage, OAuth in preferences, terms-of-service risk | accepted, not implemented yet |
+| [0002](0002-provider-modules-and-authentication.md) | Provider modules, own authentication, data contract, scheduler and cache | accepted, implemented |
+| [0003](0003-security-model.md) | Keyring storage, OAuth in preferences, terms-of-service risk | accepted, implemented |
 | [0004](0004-panel-bar.md) | Top-bar items, states, selection and adaptive layout | accepted, notifications and motion planned |
 | [0005](0005-popup.md) | Popup structure, defaults and failure states | accepted, tracking controls planned |
 | [0006](0006-theming.md) | 20 themes as data, light and dark, token compiler | accepted, implemented |

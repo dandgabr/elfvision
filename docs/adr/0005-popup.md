@@ -1,7 +1,7 @@
 # 0005. Popup design and defaults
 
-Status: accepted. The one-column popup, failure states and the settings below are
-implemented. Items marked planned arrive with real providers (M2 to M4).
+Status: accepted. The one-column popup, failure states, empty states and the settings below are
+implemented. Items marked planned arrive in M4.
 
 ## Context
 
@@ -61,8 +61,10 @@ changed* and *Signed out*.
 - A provider that can recover by retrying gets a **Try again** button. A
   rate-limited one does not. A signed-out one has an inert header and no value.
 - The summary line tells signed-out providers apart from failing ones.
-- Until real accounts exist (M3), the signed-out message says that connecting
-  accounts arrives in a later version.
+- A card that needs a credential says why (no key, key rejected, sign-in expired, access
+  refused, setup needed, keyring locked) and has a button named for the state that opens
+  the Accounts page on that provider. With nothing connected, the popup has an empty state
+  and an Add account button; a provider that was never connected has no card.
 
 ## Consequences
 

@@ -1,29 +1,17 @@
 #!/usr/bin/env bash
 # Stops a commit that carries a secret. Enable it once per clone:
 #   git config core.hooksPath .githooks
+#
+# The built-in check always runs and needs only git and Python. gitleaks, when installed,
+# runs as well with the rules in .gitleaks.toml.
 set -euo pipefail
 
-if command -v gitleaks >/dev/null 2>&1; then
-    gitleaks protect --staged --redact --no-banner
-else
-    echo "pre-commit: gitleaks is not installed, so staged files were not scanned for secrets." >&2
-    echo "            Install it (https://github.com/gitleaks/gitleaks) to enable the check." >&2
-fi
+root="$(git rev-parse --show-toplevel)"
+cd "$root"
 
-# A client id or secret from the local configuration must never be staged.
-config="${XDG_CONFIG_HOME:-$HOME/.config}/gnome-ai-quota/providers.local.json"
-if [ -r "$config" ] && command -v python3 >/dev/null 2>&1; then
-    python3 -I - "$config" <<'PY'
-import json, subprocess, sys
-try:
-    data = json.load(open(sys.argv[1]))
-except Exception:
-    sys.exit(0)
-values = {v for entry in data.get("providers", {}).values() for k, v in entry.items()
-          if k in ("clientId", "clientSecret") and isinstance(v, str) and len(v) >= 8}
-staged = subprocess.run(["git", "diff", "--cached", "-U0"], capture_output=True, text=True).stdout
-if any(value in staged for value in values):
-    print("pre-commit: a value from providers.local.json is in the staged changes.", file=sys.stderr)
-    sys.exit(1)
-PY
+python3 -I tools/check-secrets.py
+
+if command -v gitleaks >/dev/null 2>&1; then
+    gitleaks git --staged --redact --no-banner --config .gitleaks.toml 2>/dev/null \
+        || gitleaks protect --staged --redact --no-banner --config .gitleaks.toml
 fi

@@ -1,7 +1,7 @@
 # 0002. Provider modules, own authentication, harness isolation
 
-Status: accepted. The contract, scheduler and cache are implemented. The Command Code
-module is real (M2); Codex, Claude and Antigravity arrive in M3.
+Status: accepted and implemented. All four providers are real (Command Code in M2, Codex,
+Claude and Antigravity in M3); the registry, the sign-in and the token handling are in ADR 0009.
 
 ## Context
 
@@ -15,10 +15,12 @@ has a command that prints quota. The extension therefore needs its own access.
 1. **Total isolation from the AI tools.** The extension does not read, write or
    observe any of their files: no `auth.json` or `.credentials.json`, no keyring
    entries, no session logs, no `settings.json` edits, no `statusLine` hook.
-2. **Each provider is an isolated module** with its own authentication, endpoint and
-   response parser, exposing `authKinds()`, `login()`, `refresh()`,
-   `fetch() -> ProviderSnapshot` and `logout()`. The demo providers in
-   `lib/providers/demo.js` implement the fetch side today.
+2. **Each provider is an isolated module** with its own endpoint and response parser,
+   listed in the registry (`lib/providers/registry.js`) with its kind of access. The shell
+   side is `{id, name, plan, intervalMs, fetch(context), dispose()}` and returns a raw
+   snapshot that the contract cleans; signing in, renewing and disconnecting are done by the
+   sign-in flow, the token manager and the Accounts page (ADR 0009). The demo providers in
+   `lib/providers/demo.js` follow the same shape.
 3. **The extension manages authentication.** An API key where the provider has one,
    otherwise OAuth 2 with PKCE performed by the extension, producing a token that is
    separate from the other tools' tokens and has its own refresh.
@@ -47,10 +49,11 @@ These endpoints are unofficial and may change without notice.
 5. **Money metrics** (`kind: money`) are first-class: the balance is the value, the
    bar is the share of the configured budget already spent, there is no window or
    reset, and a dollar floor can be configured.
-6. **Providers the user no longer uses.** *Do not track* pauses collection and
-   hides the provider while the account stays connected. *Remove connector* deletes
-   the stored credential and hides the provider. An untracked provider never raises
-   an alert or takes a bar slot. Neither action exists in the UI yet.
+6. **Providers the user no longer uses.** *Track* (a switch per account) off pauses
+   collection and hides the provider while the credential stays saved. *Disconnect* or
+   *Remove key* deletes the stored credential (the separate *Remove connector* of the first
+   design did the same and was dropped). A provider that is not tracked never raises an alert
+   or takes a bar slot. A provider that was never connected is not shown at all.
 
 ## Scheduler and cache
 

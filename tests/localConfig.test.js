@@ -1,7 +1,7 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
-import {assertEqual, assertTrue, test} from './harness.js';
+import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
 import {parseLocalConfig} from '../lib/core/localConfig.js';
 import {readLocalConfig} from '../lib/services/localConfig.js';
 
@@ -43,7 +43,7 @@ test('local config: not JSON, wrong version and oversized files give nothing', (
 });
 
 test('local config: the file is read only when just its owner can read it', () => {
-    const directory = GLib.Dir.make_tmp('gaq-config-XXXXXX');
+    const directory = tmpDir();
     const path = `${directory}/providers.local.json`;
     assertEqual(readLocalConfig(path).missing, true);
     GLib.file_set_contents(path, config({codex: entry()}));

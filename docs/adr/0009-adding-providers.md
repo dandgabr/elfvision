@@ -16,19 +16,20 @@ once, here, after a review by UI, UX, frontend and security consultants.
 
 - `lib/providers/registry.js` is pure JavaScript (no `gi://`) and lists every
   provider in its fixed display order: Command Code, Codex, Claude, Antigravity.
-  Each entry has `id`, `name`, `authKinds` (`api-key` or `oauth-pkce`), the allowed
-  hosts for the API and for sign-in, a terms notice, the icon, the poll interval
-  and, for OAuth, a pure spec (authorize and token URLs, scopes, extra parameters,
+  Each entry has `id`, `name`, `auth` (`api-key` or `oauth-pkce`), the allowed hosts for
+  the API, whether it is `available`, a terms notice and, for OAuth, a pure spec (authorize and token URLs, scopes, extra parameters,
   how to build the token request and read its reply). Client ids are not in the
   registry.
-- A provider is a module (`runtime.js`, shell side only) plus a pure parser in
-  `lib/core/` and tests. Adding one needs no change to the Accounts page, which is
+- A provider is a module in `lib/providers/` (shell side) plus a pure parser in `lib/core/`
+  and tests; the poll interval and the icon (`icons/<id>-symbolic.svg`) belong to the module
+  and to the id. Adding one needs no change to the Accounts page, which is
   generated from the registry.
 - The `login()`, `refresh()`, `fetch()` and `logout()` of ADR 0002 map to: the
   sign-in flow (preferences process), the token manager (shell), the runtime
   module (shell) and a credential delete (preferences).
 - Import rules, checked by a test that scans the sources: `St`, `Shell`, `Clutter`
-  and `resource:///org/gnome/shell` only in `lib/ui/` and `extension.js`; `Gtk` and
+  and `resource:///org/gnome/shell` only in `lib/ui/`, `extension.js` and the theme manager
+  (`lib/services/themeManager.js`, which loads a stylesheet into the shell's theme); `Gtk` and
   `Adw` only in `prefs.js` and `lib/prefs/`; `lib/core`, the PKCE module and the
   registry import no `gi://` at all.
 
@@ -110,8 +111,7 @@ Where the ids come from: a helper the user runs once looks for the client id eac
 local AI tool uses (the id only, never a token or any credential file's contents) and
 writes it to this file; when none is found, the public id of that tool's open-source
 client is used; and the file can always be edited to use another. The extension itself
-never reads those tools' files while it runs (ADR 0002). The helper arrives with the
-OAuth step of each provider.
+never reads those tools' files while it runs (ADR 0002). The helper is `tools/import-client-ids.py`.
 
 Keeping client ids out of the repository: a local test searches the repository for
 every value of the local file; the gitleaks hook gets rules for the known formats;
@@ -208,10 +208,8 @@ id being in the repository.
 
 Only a real call or a primary source settles these, and none is guessed in code:
 
-- Redirect host, port and path each client id accepts.
-- Authorization, token and revocation endpoints, scopes, whether a client secret is
-  needed, whether the refresh token rotates on every use, the unit of `expires_in`.
-- Whether Claude's token endpoint needs the `anthropic-beta` header or a specific
-  User-Agent, and whether Antigravity's usage call needs scopes beyond sign-in.
+- Whether Antigravity's quota call works with a smaller scope than `cloud-platform`.
+- The revocation request of each provider: the format is the standard one (RFC 7009) and the
+  call is best effort.
 - The current terms of each provider (ADR 0003).
-- Whether libsoup limits the request size before the handler runs (to be tested).
+- Whether libsoup limits the size of a request before the sign-in's local server sees it.

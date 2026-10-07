@@ -28,12 +28,15 @@ export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME=
 export GSETTINGS_BACKEND=memory
 # One script path per line, so names with spaces survive.
 SCRIPTS="$(printf '%s\n' "$@")"
-export DATA_SOURCE="${DATA_SOURCE:-demo}" UUID="$uuid" SCRIPTS LOGFILE="$log" ROOT="$root" SKIP_ENABLE="${SKIP_ENABLE:-}"
+export WORK="$work" DATA_SOURCE="${DATA_SOURCE:-demo}" UUID="$uuid" SCRIPTS LOGFILE="$log" ROOT="$root" SKIP_ENABLE="${SKIP_ENABLE:-}"
 
 unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK
 dbus-run-session -- bash -c '
     # A throwaway, unlocked keyring, so the provider keys of a test never touch yours.
-    gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1 || true
+    # Its own private runtime folder: it must not touch the control socket of your real keyring.
+    keyring_run="$WORK/keyring-run"
+    mkdir -m 700 "$keyring_run"
+    XDG_RUNTIME_DIR="$keyring_run" gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1 || true
     # Only the in-memory session collection exists; make it the default one so
     # libsecret does not ask to create a keyring.
     gdbus call --session --dest org.freedesktop.secrets --object-path /org/freedesktop/secrets \
