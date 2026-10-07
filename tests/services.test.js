@@ -128,3 +128,37 @@ test('timers: a bad delay never fires at once or overflows, and a timer can be c
     await wait(80);
     assertEqual(soon, 1);
 });
+
+import {restoreDefaults} from '../lib/prefs/about.js';
+import {KEPT_KEYS, RESET_KEYS} from '../lib/core/defaults.js';
+
+test('restore defaults: looks and notifications go back, accounts and tracking stay', () => {
+    const source = Gio.SettingsSchemaSource.new_from_directory(`${GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')))}/schemas`, null, false);
+    const settings = Gio.Settings.new_full(source.lookup('org.gnome.shell.extensions.gnome-ai-quota', false), Gio.memory_settings_backend_new(), null);
+    // Change one of each kind.
+    settings.set_string('position', 'left');
+    settings.set_int('bar-count', 5);
+    settings.set_string('theme', 'terminal-tui');
+    settings.set_boolean('notifications-enabled', false);
+    settings.set_int('alert-week-percent', 50);
+    settings.set_boolean('alert-session-enabled', false);
+    settings.set_strv('untracked-providers', ['codex']);
+    settings.set_strv('terms-acknowledged', ['claude']);
+    settings.set_string('command-code-username', 'someone');
+    settings.set_int('credentials-revision', 7);
+    settings.set_string('data-source', 'demo');
+
+    restoreDefaults(settings);
+
+    for (const key of RESET_KEYS)
+        assertTrue(settings.get_user_value(key) === null, `${key} was reset`);
+    assertEqual([settings.get_string('position'), settings.get_int('bar-count'), settings.get_string('theme'),
+        settings.get_boolean('notifications-enabled'), settings.get_int('alert-week-percent'), settings.get_boolean('alert-session-enabled')],
+    ['right', 3, 'sistema-gnome', true, 95, true]);
+    // What belongs to the accounts is untouched.
+    assertEqual([settings.get_strv('untracked-providers'), settings.get_strv('terms-acknowledged'),
+        settings.get_string('command-code-username'), settings.get_int('credentials-revision'), settings.get_string('data-source')],
+    [['codex'], ['claude'], 'someone', 7, 'demo']);
+    for (const key of KEPT_KEYS.filter(k => ['untracked-providers', 'terms-acknowledged', 'command-code-username', 'credentials-revision', 'data-source'].includes(k)))
+        assertTrue(settings.get_user_value(key) !== null, `${key} was kept`);
+});

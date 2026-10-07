@@ -136,7 +136,7 @@ Each chunk is followed by the UI, UX, frontend and security reviews.
 2. The notifier and its wiring and teardown; wording review (done).
 3. `power.js`, resume handling and the connection alert (done).
 4. Indicator extraction, view diff and coalescing.
-5. Restore defaults and About.
+5. A Notifications page for the new settings, Restore defaults and About (done).
 6. Legend, "not tracked" and the tooltip audit.
 7. First-use assistant.
 8. Right-to-left prototype and a longer-text pseudo-locale pass.
