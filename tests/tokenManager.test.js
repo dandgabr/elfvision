@@ -178,3 +178,17 @@ test('tokens: a 401 from the token endpoint and a wrapped error code both mean e
     assertEqual([(await failure(manager.accessToken())).code, state.refreshCalls.length], ['expired', 1]);
     assertEqual(failure(Promise.reject(new TokenError('keyring'))) instanceof Promise, true);
 });
+
+test('tokens: invalidate during a running renewal does not force a second one', async () => {
+    let release;
+    const gate = new Promise(resolve => { release = resolve; });
+    const {manager, state} = setup({now: 10 * HOUR, replies: [async () => { await gate; return reply('a2', 'r2', 20 * HOUR); }]});
+    const first = manager.accessToken();
+    await flush();
+    manager.invalidate();                  // the renewal that is running already gives a new token
+    release();
+    assertEqual(await first, 'a2');
+    state.now = 10 * HOUR + 1;
+    assertEqual(await manager.accessToken(), 'a2');
+    assertEqual(state.refreshCalls.length, 1);
+});

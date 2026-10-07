@@ -33,9 +33,10 @@ tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M
   still win slots over failures.
 - **Providers with several metrics** (Antigravity has a Gemini pool and a
   Claude/GPT pool, each with 5-hour and weekly windows): the bar shows the most
-  critical metric. The suffix names the window and the pool (`G S`, `C/G 5h`), about
-  18 px wider for that item. The tooltip lists every metric and marks the displayed
-  one.
+  critical metric. The suffix names the window and the pool (`G S`, `C/G 5h` in
+  Portuguese; `G W` in English, the window letter being translated), about 18 px wider
+  for that item. The accessible name and the popup card name the pool in full. A bar
+  tooltip that lists every metric and marks the displayed one is planned for M4.
 - **Money providers:** the number is the remaining balance (`$12.40`, `$124`,
   `$1.2K`) and the bar is the share of the budget spent. In headline mode, money
   shows only when it is the worst case; a configured dollar floor counts as

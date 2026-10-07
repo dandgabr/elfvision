@@ -622,14 +622,14 @@ test('antigravity: buckets become two pools with a five-hour and a weekly window
 test('antigravity: unknown pools and windows, repeated buckets and bad fractions are skipped', () => {
     const {metrics} = parseQuota({groups: [{buckets: [
         {bucketId: 'gemini-a', window: '5h', remainingFraction: 0.5},
-        {bucketId: 'gemini-b', window: '5h', remainingFraction: 0.1},      // same pool and window: first wins
+        {bucketId: 'gemini-b', window: '5h', remainingFraction: 0.1},      // same pool and window: the fullest wins
         {bucketId: 'other-x', window: '5h', remainingFraction: 0.5},
         {bucketId: 'gemini-a', window: 'monthly', remainingFraction: 0.5},
         {bucketId: '3p-a', window: 'weekly', remainingFraction: 'x'},
-        {bucketId: '3p-a', window: 'weekly', remainingFraction: 7},        // more than all left: clamped
+        {bucketId: '3p-a', window: 'weekly', remainingFraction: 7},        // more than all left: not a fraction
         null, {window: '5h'},
     ]}]});
-    assertEqual(metrics.map(m => [m.id, m.percentUsed]), [['gemini-5h', 50], ['claude-gpt-weekly', 0]]);
+    assertEqual(metrics.map(m => [m.id, m.percentUsed]), [['gemini-5h', 90]]);
     for (const body of [null, {}, {groups: []}, {groups: [{buckets: []}]}, {groups: 'x'}]) {
         let code = '';
         try {
@@ -655,4 +655,61 @@ test('antigravity provider: a POST with an empty JSON body and a User-Agent that
     assertEqual([seen[0].options.headers['User-Agent'], seen[0].options.headers.Authorization], [DEFAULT_USER_AGENT, 'Bearer tok']);
     assertEqual(seen[1].options.headers['User-Agent'], 'antigravity/9.9 mine');
     assertTrue(DEFAULT_USER_AGENT.includes('antigravity') && DEFAULT_USER_AGENT.includes('gnome-ai-quota'));
+});
+
+test('antigravity: names from the server cannot reach into the parser, and a zero that was left out counts', () => {
+    const bucket = extra => ({groups: [{buckets: [{bucketId: 'gemini-a', window: '5h', remainingFraction: 0.5, ...extra}]}]});
+    for (const window of ['constructor', '__proto__', 'toString', 'hasOwnProperty']) {
+        let code = '';
+        try {
+            parseQuota(bucket({window}));
+        } catch (error) {
+            code = error.code;
+        }
+        assertEqual([window, code], [window, 'provider_changed']);
+    }
+    for (const remainingFraction of [5, -0.5, '1e3', 'abc', null])
+        assertEqual(failureOf2(() => parseQuota(bucket({remainingFraction}))), 'provider_changed');
+    // No `remainingFraction` at all, but a reset time: protocol-buffer JSON leaves a zero out.
+    const exhausted = {groups: [{buckets: [{bucketId: '3p-x', window: 'weekly', resetTime: '2026-10-12T05:00:00Z'}]}]};
+    assertEqual(parseQuota(exhausted).metrics.map(m => m.percentUsed), [100]);
+    assertEqual(failureOf2(() => parseQuota({groups: [{buckets: [{bucketId: '3p-x', window: 'weekly'}]}]})), 'provider_changed');
+});
+
+function failureOf2(fn) {
+    try {
+        fn();
+    } catch (error) {
+        return error.code;
+    }
+    return '';
+}
+
+test('oauth usage: a token that is refused even after a renewal is not renewed again at every poll', async () => {
+    let invalidated = 0;
+    const seen = [];
+    const provider = createClaudeProvider({
+        http: {request: async () => { seen.push(1); return {status: 401, json: null}; }},
+        tokens: {accessToken: async () => 'tok', invalidate: () => { invalidated++; }},
+    });
+    const ctx = {isCancelled: () => false};
+    for (let poll = 0; poll < 3; poll++) {
+        const error = await failureOf(provider.fetch(ctx));
+        assertEqual([error.code, error.reason], ['auth_required', 'expired']);
+    }
+    assertEqual([invalidated, seen.length], [1, 4]);       // one renewal; later polls ask once
+});
+
+test('a number that belongs to a pool says which pool, for the eye and for a screen reader', () => {
+    const snapshot = {id: 'antigravity', name: 'Antigravity', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: 1}, metrics: parseQuota(QUOTA).metrics};
+    const ctx = {nowMs: 1, locale: 'en'};
+    const bar = barView(snapshot, ctx);
+    assertTrue(bar.accessibleName.includes('Claude and GPT') || bar.accessibleName.includes('Gemini'), bar.accessibleName);
+    const card = cardView(snapshot, ctx);
+    assertTrue(/% · (Gemini|Claude and GPT) · /.test(card.heroSmall), card.heroSmall);
+    assertEqual(card.groups.map(g => g.title), ['Gemini', 'Claude and GPT']);
+    assertEqual(card.groups[1].rows.map(r => r.poolTitle), ['Claude and GPT', 'Claude and GPT']);
+    // a provider without pools reads as before
+    const plain = barView({id: 'c', name: 'C', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: 1}, metrics: [{id: 'w', kind: 'percent', window: 'week', windowSecs: 604800, percentUsed: 12}]}, ctx);
+    assertEqual(plain.accessibleName, 'C: 12% of week used');
 });

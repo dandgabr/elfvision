@@ -274,10 +274,13 @@ test('manual sign-in: the pasted address or a bare code is read; a foreign state
     assertEqual(parseManualInput(`http://127.0.0.1:1455/auth/callback?code=ac_ABC.123&state=${state}`, {state}), {code: 'ac_ABC.123'});
     assertEqual(parseManualInput(`  http://localhost:1455/auth/callback?code=ac_XYZ&state=${state}#frag  `, {state}), {code: 'ac_XYZ'});
     assertEqual(parseManualInput('code=only-query_1&state=' + state, {state}), {code: 'only-query_1'});
-    assertEqual(parseManualInput('http://127.0.0.1:1455/auth/callback?code=no-state-here', {state}), {code: 'no-state-here'});
+    assertEqual(parseManualInput(`ac_CODE-from_page.1#${state}`, {state}), {code: 'ac_CODE-from_page.1'});
     assertEqual(parseManualInput('ac_TKegMQzab4MyZb8VmdMU9Qrln9sL2OJotRbYSGxampleXX', {state}), {code: 'ac_TKegMQzab4MyZb8VmdMU9Qrln9sL2OJotRbYSGxampleXX'});
     const codeOf = text => failureOf(() => parseManualInput(text, {state})).code;
     assertEqual(codeOf('http://127.0.0.1:1455/auth/callback?code=ac_ABC&state=forged'), 'state_mismatch');
+    assertEqual(codeOf('http://127.0.0.1:1455/auth/callback?code=no-state-here'), 'state_mismatch');
+    assertEqual(codeOf('ac_CODE-from_page.1#forged'), 'state_mismatch');
+    assertEqual(codeOf('ac_CODE-from_page.1#a#b'), 'malformed');
     assertEqual(codeOf(`http://127.0.0.1:1455/auth/callback?error=access_denied&state=${state}`), 'denied');
     assertEqual(codeOf('http://127.0.0.1:1455/auth/callback?state=' + state), 'no_code');
     for (const bad of ['', '   ', 'short', 'has space inside the code', '<script>alert(1)</script>', 'x'.repeat(3000), 'code=1&code=2'])
@@ -300,7 +303,7 @@ test('oauth sign-in: pasting the address finishes it when the browser cannot rea
     const bare = login({reply: {body: {access_token: 'acc2', refresh_token: 'ref2'}}});
     bare.submit('ac_BARE-CODE_12345');
     assertEqual((await bare.done).access, 'acc2');
-    assertEqual(failureOf(() => bare.submit('ac_ANOTHER-CODE_1')).code, 'malformed');
+    assertEqual(failureOf(() => bare.submit('ac_ANOTHER-CODE_1')).code, 'closed');
     bare.token.stop();
 });
 

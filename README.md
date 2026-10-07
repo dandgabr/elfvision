@@ -21,23 +21,24 @@ Preferences button.
 
 ## Status
 
-Milestones M0, M1 and M2 are done and M3 is under way (see [Roadmap](#roadmap)).
-**Command Code** (an API key pasted on the Accounts page of Preferences) and **Codex**
-(a sign-in in the browser, started from the same page) are the real providers; Claude
-and Antigravity follow. A provider you have not connected is not shown on the bar. An Advanced option switches to demo data (three scenarios of made-up
-providers that exercise every state). The extension is for personal use and is not published to
-extensions.gnome.org, because three of the planned providers authenticate with
-another application's OAuth client, which those providers' terms may not allow (see
-[ADR 0003](docs/adr/0003-security-model.md)).
+Milestones M0 to M3 are done (see [Roadmap](#roadmap)). Four providers are real: **Command
+Code** (an API key pasted on the Accounts page of Preferences) and **Codex**, **Claude** and
+**Antigravity** (a sign-in in the browser, started from the same page). A provider you have
+not connected is not shown on the bar. An Advanced option switches to demo data (three
+scenarios of made-up providers that exercise every state).
+
+The extension is for personal use and is not published to extensions.gnome.org: the three
+sign-in providers are reached with another application's OAuth client, which their terms may
+not allow (see [ADR 0003](docs/adr/0003-security-model.md)).
 
 Planned providers:
 
 | Provider | Authentication | Milestone |
 |---|---|---|
 | Command Code | API key in the keyring | M2 |
-| Codex | OAuth 2 with PKCE | M3, available |
-| Claude | OAuth 2 with PKCE | M3, available |
-| Antigravity | OAuth 2 with PKCE (Google) | M3, available (high risk: see the notice) |
+| Codex | OAuth 2 with PKCE | M3, done |
+| Claude | OAuth 2 with PKCE | M3, done |
+| Antigravity | OAuth 2 with PKCE (Google) | M3, done (high risk: see the notice) |
 
 Providers billed by money, such as OpenRouter, fit the same data model as a `money`
 metric and come after these four.
@@ -46,9 +47,16 @@ metric and come after these four.
 
 1. Open Preferences and go to **Accounts**.
 2. **Command Code:** paste an API key (the page links to where keys are created).
-3. **Codex**, **Claude** and **Antigravity:** run `python3 -I tools/import-client-ids.py` once (it finds the public
-   client id of each installed tool and stores it in `~/.config/gnome-ai-quota/providers.local.json`, private
-   to you), then press **Connect** and sign in in the browser.
+3. **Codex**, **Claude** and **Antigravity:** from the folder you cloned, run
+   `python3 -I tools/import-client-ids.py` (add `codex`, `claude` or `antigravity` to do just one). It
+   reads only the tools installed on this computer, finds the public client id each one signs in
+   with and stores it in `~/.config/gnome-ai-quota/providers.local.json`, private to you. Run it
+   again after installing another tool. Then press **Connect** and sign in in the browser. If the
+   browser cannot return to this computer, paste the address it ended on (or the code the page shows)
+   into the field the page offers.
+
+   **Antigravity is not allowed by its terms** and Google could suspend your whole Google
+   account; the page asks you to confirm before it connects.
 
 Nothing appears on the bar until an account is connected.
 
@@ -192,7 +200,7 @@ design are in [docs/adr](docs/adr/README.md).
 | M0 | Skeleton: panel button, bar, popup with demo cards | done |
 | M1 | Data layer (contract, scheduler, cache), themes, appearance settings | done, in PR #1 |
 | M2 | Command Code with an API key stored in libsecret | done |
-| M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | done, pending review |
+| M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | done |
 | M4 | Notifications, connection alerts, polish | planned |
 
 Details in [ADR 0008](docs/adr/0008-mvp-roadmap.md).

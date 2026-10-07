@@ -1,7 +1,7 @@
 # 0009. How providers are added (M3)
 
-Status: accepted for M3. Open points are listed at the end and need a real call
-or a decision from the owner before the code that depends on them.
+Status: accepted and implemented (M3). Open points are listed at the end; each needs a real
+call or a decision from the owner.
 
 ## Context
 
@@ -53,6 +53,9 @@ once, here, after a review by UI, UX, frontend and security consultants.
   retried; without a successful write the provider needs reconnecting. The keyring
   has no compare-and-swap, so a window of milliseconds remains, and its worst case is
   one more click on Connect.
+- A usage endpoint that refuses even a freshly renewed token (a 401 twice) is not asked to renew
+  again at every poll for half an hour: renewing spends a refresh token, and some providers
+  rotate them.
 - A refresh error may come as `{"error": "..."}` or `{"error": {"code": "..."}}`; Codex adds
   `refresh_token_expired`, `refresh_token_reused` and `refresh_token_invalidated`.
 - `invalid_grant`, those codes or a 401 from the refresh become `auth_required` with the reason
@@ -71,7 +74,8 @@ once, here, after a review by UI, UX, frontend and security consultants.
 - PKCE: 32 random bytes from `/dev/urandom` (a short read fails the sign-in), a
   43-character verifier, `S256` through `GLib.Checksum`, and a separate 43-character
   `state`, used once. The module is tested with the RFC 7636 appendix B vector.
-- Loopback server: bound to `127.0.0.1` only, on the port the client id requires,
+- Loopback server: bound to `127.0.0.1` and, when the machine has it, `::1` on the same port (a
+  `localhost` return address may resolve to either), on the port the client id requires,
   GET on the exact path only, `Host` checked, query at most 2 KiB, closed after the
   first valid callback, after five bad ones, on cancel, on timeout and when the
   preferences window closes. A wrong `state` gets a plain 400 and does not end the
@@ -82,8 +86,10 @@ once, here, after a review by UI, UX, frontend and security consultants.
 - While it waits, the Accounts page also takes what the user pastes: the whole address the
   browser ended on, or only the code. This covers a browser that cannot reach the local
   server (another sandbox, a closed port, a timeout seen too late). An address carries the
-  `state`, which is checked when present; a bare code has none, which is safe because the
-  code is only good together with this sign-in's PKCE verifier.
+  `state` (the `code#state` some pages show works too), which is required and checked; a bare
+  code has none, which is safe because the code is only good together with this sign-in's PKCE
+  verifier. The field appears after twenty seconds, or at once when the browser cannot be opened,
+  so it does not confuse a sign-in that is going to finish by itself.
 - The browser opens through `Gio.AppInfo.launch_default_for_uri` on a URL built from
   constants. If it does not open, the page offers a Copy link button.
 - Token requests need a POST: the HTTP client grows a `request()` next to `get()`,
@@ -169,19 +175,22 @@ id being in the repository.
   header `anthropic-beta: oauth-2025-04-20`. Only the `user:profile` scope is asked; the program
   itself asks more, to run the model.
 
-- **Antigravity** (read from the installed program): a Google desktop-app client. Authorize at
+- **Antigravity** (read from the installed program): a Google desktop-app client. Its `cloud-platform` scope is broad (the refresh token reaches
+  the account's Google Cloud data), which the confirmation says. Authorize at
   `accounts.google.com/o/oauth2/auth` with `access_type=offline` and `prompt=consent` (without
   them Google gives no refresh token), token and revoke at `oauth2.googleapis.com`, a form
   exchange that carries the client secret Google's desktop clients need (not confidential, and
   kept out of the repository like the id), return address `http://127.0.0.1:<free port>/oauth-callback`,
   only the `cloud-platform` scope. The quota endpoint is a POST of `{}` to
   `daily-cloudcode-pa.googleapis.com/v1internal:retrieveUserQuotaSummary` with a User-Agent
-  that contains `antigravity` (the endpoint checks only that); the extension sends
+  that contains `antigravity` (the endpoint checks only that; the HTTP client sets the User-Agent
+  per request, because a session-wide one would override it); the extension sends
   `antigravity/1.0 gnome-ai-quota`, or the one in the local file. The reply has two pools, Gemini
   (`gemini-` buckets) and Claude and GPT (`3p-` buckets), each with a five-hour and a weekly
   window. Its terms forbid this use outright and Google may act on the whole Google account, so
   the notice is stronger than the others. The helper picks the id and secret by asking Google's
-  token address with a made-up code: `invalid_grant` means they belong together.
+  token address with a made-up code: `invalid_grant` means they belong together. Only a single
+  such pair is accepted; several would be other Google clients inside the program.
 
 ## Implementation order
 

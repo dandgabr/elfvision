@@ -124,6 +124,7 @@ def google_pair(spec):
     ids = {m.decode() for m in re.findall(rb'[0-9]{12,13}-[a-z0-9]{30,34}\.apps\.googleusercontent\.com', data)}
     # Strings sit side by side in the program: a secret is the first 35 characters.
     secrets = {m.decode()[:35] for m in re.findall(rb'GOCSPX-[A-Za-z0-9_-]{20,}', data)}
+    pairs = []
     for client_id in sorted(ids):
         for secret in sorted(secrets):
             body = urllib.parse.urlencode({
@@ -140,9 +141,14 @@ def google_pair(spec):
                 except ValueError:
                     verdict = None
                 if verdict == 'invalid_grant':
-                    return {'clientId': client_id, 'clientSecret': secret}, 'the installed program, checked with Google'
+                    pairs.append({'clientId': client_id, 'clientSecret': secret})
             except OSError:
+                print(f'{spec["command"]}: could not reach Google to check the candidates (no network?)')
                 return None, None
+    # Only one pair is certain. Several would mean other Google clients in the program (a
+    # cloud SDK, say), and the consent screen would then name the wrong application.
+    if len(pairs) == 1:
+        return pairs[0], 'the installed program, checked with Google'
     return None, None
 
 
@@ -181,8 +187,11 @@ def main():
 
     changed = False
     for name in args.providers:
-        entry = data['providers'].setdefault(name, {})
-        if entry.get('clientId') and not args.force:
+        entry = data['providers'].get(name)
+        if not isinstance(entry, dict):
+            entry = {}
+        needs_secret = PROVIDERS[name].get('custom') == 'google_pair'
+        if entry.get('clientId') and (entry.get('clientSecret') or not needs_secret) and not args.force:
             print(f'{name}: already set, kept')
             continue
         spec = PROVIDERS[name]
@@ -199,6 +208,7 @@ def main():
             print(f'{name}: not found; add its clientId to {CONFIG} by hand')
             continue
         entry['clientId'] = client_id
+        data['providers'][name] = entry
         changed = True
         print(f'{name}: set from {source}')
 
@@ -207,6 +217,7 @@ def main():
         os.chmod(CONFIG.parent, 0o700)
         # Write a private temporary file next to it, then replace: a crash never leaves half a file.
         temporary = CONFIG.with_name(CONFIG.name + '.tmp')
+        temporary.unlink(missing_ok=True)      # left by an earlier crash
         descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
         with os.fdopen(descriptor, 'w') as out:
             json.dump(data, out, indent=2)
