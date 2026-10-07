@@ -21,10 +21,10 @@ Preferences button.
 
 ## Status
 
-Milestones M0, M1 and M2 are done (see [Roadmap](#roadmap)). **Command Code is the
-only real provider**: paste its API key on the Accounts page of Preferences and the
-bar shows your five-hour and weekly usage and the monthly balance. The other providers
-come in M3. An Advanced option switches to demo data (three scenarios of made-up
+Milestones M0, M1 and M2 are done and M3 is under way (see [Roadmap](#roadmap)).
+**Command Code** (an API key pasted on the Accounts page of Preferences) and **Codex**
+(a sign-in in the browser, started from the same page) are the real providers; Claude
+and Antigravity follow. A provider you have not connected is not shown on the bar. An Advanced option switches to demo data (three scenarios of made-up
 providers that exercise every state). The extension is for personal use and is not published to
 extensions.gnome.org, because three of the planned providers authenticate with
 another application's OAuth client, which those providers' terms may not allow (see
@@ -35,7 +35,7 @@ Planned providers:
 | Provider | Authentication | Milestone |
 |---|---|---|
 | Command Code | API key in the keyring | M2 |
-| Codex | OAuth 2 with PKCE | M3 |
+| Codex | OAuth 2 with PKCE | M3, available |
 | Claude | OAuth 2 with PKCE | M3 |
 | Antigravity | OAuth 2 with PKCE (Google) | M3 |
 

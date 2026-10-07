@@ -108,6 +108,11 @@
       <summary>Account to show in preferences</summary>
       <description>The extension writes a provider id here before it opens the preferences window, which then shows that account and clears the value.</description>
     </key>
+    <key name="terms-acknowledged" type="as">
+      <default>[]</default>
+      <summary>Providers whose terms notice was accepted</summary>
+      <description>Ids of the providers whose possible terms-of-use conflict the user confirmed before the first sign-in, so the notice is not shown again.</description>
+    </key>
     <key name="demo-scenario" type="s">
       <choices>
         <choice value="steady"/>

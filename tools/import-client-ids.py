@@ -1,0 +1,139 @@
+"""Write the OAuth client ids the extension needs to your local configuration.
+
+    python3 -I tools/import-client-ids.py [--force] [codex ...]
+
+For each provider this looks first for the client id the AI tool installed on this
+computer uses (a public identifier embedded in its program; no token or credential
+file is read), then in that tool's open-source code, and writes the result to
+~/.config/gnome-ai-quota/providers.local.json (directory 0700, file 0600).
+
+The ids are never printed, never go into the repository and are not read by the
+extension from the AI tools while it runs (docs/adr/0002, 0009). To use another id,
+edit the file by hand. An existing id is kept unless --force is given.
+"""
+import argparse
+import json
+import os
+import pathlib
+import re
+import shutil
+import stat
+import sys
+import urllib.request
+
+CONFIG = pathlib.Path(os.environ.get('XDG_CONFIG_HOME', pathlib.Path.home() / '.config')) / 'gnome-ai-quota' / 'providers.local.json'
+
+# For each provider: the command of the local tool, the pattern of its client id in the
+# program, and where its open-source code defines it (a raw file and a pattern).
+PROVIDERS = {
+    'codex': {
+        'command': 'codex',
+        'binary_pattern': rb'app_[A-Za-z0-9]{24}',
+        'public_url': 'https://raw.githubusercontent.com/openai/codex/main/codex-rs/login/src/auth/manager.rs',
+        'public_pattern': r'CLIENT_ID:\s*&str\s*=\s*"([^"]+)"',
+    },
+}
+
+
+def candidate_binaries(command):
+    """The tool's program files: the command itself and, for a script, the large
+    executables of the package it belongs to."""
+    path = shutil.which(command)
+    if not path:
+        return []
+    real = pathlib.Path(path).resolve()
+    found = [real]
+    package = real.parent.parent if real.parent.name == 'bin' else real.parent
+    for root, _dirs, files in os.walk(package):
+        for name in files:
+            file = pathlib.Path(root) / name
+            try:
+                if file.is_file() and file.stat().st_size > 1_000_000 and os.access(file, os.X_OK):
+                    found.append(file)
+            except OSError:
+                pass
+    return found
+
+
+def looks_like_an_id(text):
+    """A client id mixes upper case, lower case and digits; plain words that happen to
+    start the same way do not."""
+    body = text[4:]
+    return bool(re.search(r'[a-z]', body) and re.search(r'[A-Z]', body) and re.search(r'[0-9]', body))
+
+
+def from_binary(spec):
+    """The id in the tool's own program (the file named like its command), when exactly
+    one candidate there looks like an id. Anything less certain falls through to the
+    open-source code."""
+    pattern = re.compile(spec['binary_pattern'])
+    for file in candidate_binaries(spec['command']):
+        if file.name != spec['command']:
+            continue
+        try:
+            data = file.read_bytes()
+        except OSError:
+            continue
+        ids = {match.decode() for match in pattern.findall(data)}
+        ids = {value for value in ids if looks_like_an_id(value)}
+        if len(ids) == 1:
+            return ids.pop(), 'the installed program'
+    return None, None
+
+
+def from_public_source(spec):
+    try:
+        with urllib.request.urlopen(spec['public_url'], timeout=20) as reply:  # noqa: S310 (fixed https url)
+            text = reply.read(2_000_000).decode('utf-8', 'replace')
+    except OSError:
+        return None, None
+    match = re.search(spec['public_pattern'], text)
+    return (match.group(1), 'the open-source code') if match else (None, None)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('providers', nargs='*', default=list(PROVIDERS))
+    parser.add_argument('--force', action='store_true', help='replace an id that is already set')
+    args = parser.parse_args()
+
+    unknown = [name for name in args.providers if name not in PROVIDERS]
+    if unknown:
+        sys.exit(f'unknown provider: {", ".join(unknown)}')
+
+    data = {'version': 1, 'providers': {}}
+    if CONFIG.exists():
+        try:
+            data = json.loads(CONFIG.read_text())
+        except (OSError, ValueError):
+            sys.exit(f'{CONFIG} exists but cannot be read; fix or remove it first')
+        data.setdefault('providers', {})
+
+    changed = False
+    for name in args.providers:
+        entry = data['providers'].setdefault(name, {})
+        if entry.get('clientId') and not args.force:
+            print(f'{name}: already set, kept')
+            continue
+        client_id, source = from_binary(PROVIDERS[name])
+        if not client_id:
+            client_id, source = from_public_source(PROVIDERS[name])
+        if not client_id:
+            print(f'{name}: not found; add its clientId to {CONFIG} by hand')
+            continue
+        entry['clientId'] = client_id
+        changed = True
+        print(f'{name}: set from {source}')
+
+    if changed:
+        CONFIG.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+        # Create the file private from the start, then write.
+        descriptor = os.open(CONFIG, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(descriptor, 'w') as out:
+            json.dump(data, out, indent=2)
+            out.write('\n')
+        os.chmod(CONFIG, stat.S_IRUSR | stat.S_IWUSR)
+        print(f'written to {CONFIG}')
+
+
+main()

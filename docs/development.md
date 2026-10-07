@@ -130,6 +130,17 @@ gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota demo
 The throwaway shells keep their settings out of reach of a `gsettings` call from
 outside, so set the key from a headless script with `Gio.Settings` instead.
 
+## Signing in to OAuth providers
+
+The sign-in needs the provider's client id in `~/.config/gnome-ai-quota/providers.local.json`
+(see `providers.example.json`). Run `python3 -I tools/import-client-ids.py` once: it looks for
+the id in the AI tool installed on your computer, then in that tool's open-source code, and
+writes it to the file with mode 0600 without printing it. The nested shell copies that file in,
+so Connect works there too, and keeps the sign-in in its own throwaway keyring.
+
+Enable the pre-commit hook once per clone with `git config core.hooksPath .githooks`; it runs
+gitleaks when installed and refuses staged values of the local file.
+
 ## Themes
 
 A theme is a `theme.json` (see the README for the format and ADR 0006 for the
