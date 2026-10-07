@@ -18,7 +18,8 @@
       "ok": "#14663a",
       "warn": "#7a4a00",
       "danger": "#a82020",
-      "shadow": "none"
+      "shadow": "none",
+      "error": "#8b4a9a"
     },
     "dark": {
       "bg": "#100f0c",
@@ -32,12 +33,17 @@
       "ok": "#86d29f",
       "warn": "#f6bf82",
       "danger": "#fc8d82",
-      "shadow": "0 1px 2px rgba(0,0,0,.45)"
+      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "error": "#e59ff6"
     }
   },
   "adjusted": {
-    "light": [],
-    "dark": []
+    "light": [
+      "error"
+    ],
+    "dark": [
+      "error"
+    ]
   },
   "audit": {
     "light": {
@@ -47,7 +53,8 @@
       "accent-fg": 17.9,
       "ok": 6.4,
       "warn": 6.8,
-      "danger": 6.6
+      "danger": 6.6,
+      "error": 5.4
     },
     "dark": {
       "fg": 15.2,
@@ -56,7 +63,8 @@
       "accent-fg": 7.2,
       "ok": 9.8,
       "warn": 10.6,
-      "danger": 7.8
+      "danger": 7.8,
+      "error": 8.9
     }
   },
   "fonts": {

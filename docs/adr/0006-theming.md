@@ -81,7 +81,7 @@ and later), exposed to CSS as `-st-accent-color`. Light or dark follows
   simple shape, ids are restricted to `[a-z0-9-]`, and files over 64 KiB are ignored.
 - `surface-2`, `accent-fg`, `ok` and `error` are optional and derived when missing (an `error` distinct from warn and danger, picked by the background's brightness).
 - Theme files are read only if they are regular files, at most 64 KiB, and their `id` matches the folder; the top-bar meter uses the dark scheme like the rest of the bar.
-- Deferred from the review: the generator should keep the accent at least 35 degrees of hue from warn and danger (cyberpunk), derive `error` per theme, and the preferences should grow a theme sub-page with groups, descriptions and color swatches; a `font-scale` for serif themes.
+- Color fixes from the review (generator): the accent is kept at least 35 degrees of hue from warn and danger (cyberpunk now uses cyan, with magenta left to the states); every scheme gets its own `error` color, orange when it fits and violet otherwise, at 4.5:1 on the surface; a hairline border is raised to at least 1.4:1 against the card. The system theme's meter fills use blue when the GNOME accent is yellow, orange, red or pink, and the yellow accent was darkened. Still deferred: a theme sub-page with previews, a `font-scale` for serif themes, a system-following clock.
 - An optional `error` color (used for failing providers) falls back to `warn`.
 - The theme and the light/dark choice are set in Preferences; the 12/24-hour clock, the
   reset format (`1h 20min` or `1h20`) and opening cards that need attention are

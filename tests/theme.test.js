@@ -192,3 +192,22 @@ test('themes: a font keeps its generic family', () => {
     const mono = validateTheme({...good, fonts: {body: "'JetBrains Mono', ui-monospace, monospace"}}).theme;
     assertTrue(compileTheme(TEMPLATE, mono, {scheme: 'dark'}).includes('font-family: "JetBrains Mono", monospace;'));
 });
+
+test('themes: a warning-like system accent does not color the meter fills', () => {
+    const {theme} = loadTheme('sistema-gnome');
+    for (const name of ['yellow', 'orange', 'red', 'pink']) {
+        const css = compileTheme(TEMPLATE, theme, {scheme: 'light', accentName: name});
+        assertTrue(css.includes('background-color: #3584e4;'), `${name} fill`);
+    }
+    assertTrue(compileTheme(TEMPLATE, theme, {scheme: 'light', accentName: 'green'}).includes('background-color: #3a944a;'));
+});
+
+test('themes: every generated theme has its own error color and a visible accent', () => {
+    for (const id of builtinIds().filter(x => x !== 'sistema-gnome')) {
+        const {theme} = loadTheme(id);
+        for (const scheme of ['light', 'dark']) {
+            const tokens = theme.schemes[scheme];
+            assertTrue(tokens.error !== tokens.warn && tokens.error !== tokens.danger, `${id}/${scheme} error`);
+        }
+    }
+});

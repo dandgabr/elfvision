@@ -12,13 +12,14 @@
       "surface-2": "#202333",
       "fg": "#f4f6ff",
       "muted": "#bcc3e6",
-      "border": "#2f3240",
+      "border": "#353846",
       "accent": "#8ff0d0",
       "accent-fg": "#06121a",
       "ok": "#8ff0b8",
       "warn": "#ffd88a",
       "danger": "#ffa3a3",
-      "shadow": "0 10px 40px rgba(0,0,0,.35)"
+      "shadow": "0 10px 40px rgba(0,0,0,.35)",
+      "error": "#fea668"
     },
     "light": {
       "bg": "#f4f7ff",
@@ -32,12 +33,18 @@
       "ok": "#057d4c",
       "warn": "#866203",
       "danger": "#9e4c4e",
-      "shadow": "0 1px 3px rgba(0,0,0,.14)"
+      "shadow": "0 1px 3px rgba(0,0,0,.14)",
+      "error": "#9c5312"
     }
   },
   "adjusted": {
-    "dark": [],
-    "light": []
+    "dark": [
+      "error",
+      "border"
+    ],
+    "light": [
+      "error"
+    ]
   },
   "audit": {
     "dark": {
@@ -47,7 +54,8 @@
       "accent-fg": 14.0,
       "ok": 12.3,
       "warn": 12.4,
-      "danger": 8.9
+      "danger": 8.9,
+      "error": 8.8
     },
     "light": {
       "fg": 17.5,
@@ -56,7 +64,8 @@
       "accent-fg": 5.3,
       "ok": 5.1,
       "warn": 5.5,
-      "danger": 5.7
+      "danger": 5.7,
+      "error": 5.6
     }
   },
   "fonts": {

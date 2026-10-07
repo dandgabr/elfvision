@@ -185,6 +185,54 @@ def recolor_shadow(shadow, color):
     return re.sub(r'#[0-9a-fA-F]{3,8}|rgba?\([^)]*\)', color, shadow)
 
 
+def hue_gap(a, b):
+    """Smallest angle between two hues, in degrees."""
+    d = abs(a - b) % 360
+    return min(d, 360 - d)
+
+
+MIN_ACCENT_GAP = 35   # degrees of hue between the accent and warn or danger
+MIN_STATE_GAP = 25    # the same, for the error color
+MIN_BORDER_RATIO = 1.4
+
+
+def refine(scheme):
+    """Keep the accent apart from the state colors, add an error color, and keep
+    the card border visible. Returns the list of changed keys."""
+    changed = []
+    sf = parse(scheme['surface'])
+    toward = +1 if luminance(sf) < .4 else -1
+    warn_h = to_oklch(parse(scheme['warn']))[2]
+    danger_h = to_oklch(parse(scheme['danger']))[2]
+
+    # An accent too close to warn or danger makes a normal bar look like a problem.
+    l_ac, c_ac, h_ac = to_oklch(parse(scheme['accent']))
+    if min(hue_gap(h_ac, warn_h), hue_gap(h_ac, danger_h)) < MIN_ACCENT_GAP and c_ac > .03:
+        best = max((230, 255, 200, 285, 160),
+                   key=lambda h: min(hue_gap(h, warn_h), hue_gap(h, danger_h)))
+        scheme['accent'] = to_hex(tune(l_ac, max(c_ac, .12), best, sf, 3, toward))
+        changed.append('accent')
+
+    # error: a hue away from warn and danger, readable on the surface.
+    ok_h = to_oklch(parse(scheme['ok']))[2]
+    def state_gap(h):
+        return min(hue_gap(h, warn_h), hue_gap(h, danger_h))
+    # Orange reads as "trouble but not a quota problem"; fall back to violet or teal.
+    candidates = (55, 320, 290, 200)
+    best_h = next((h for h in candidates if state_gap(h) >= MIN_STATE_GAP), max(candidates, key=state_gap))
+    lightness = .80 if toward > 0 else .52
+    scheme['error'] = to_hex(tune(lightness, .14, best_h, sf, 4.5, toward))
+    changed.append('error')
+
+    # A hairline border the eye can find.
+    bd = parse(scheme['border'])
+    if contrast(bd, sf) < MIN_BORDER_RATIO and contrast(bd, sf) < 4:
+        lightness, chroma, hue = to_oklch(bd)
+        scheme['border'] = to_hex(tune(lightness, chroma, hue, sf, MIN_BORDER_RATIO, toward))
+        changed.append('border')
+    return changed
+
+
 # ---------------------------------------------------------------- build
 
 def token(tokens, key, fallback):
@@ -232,7 +280,7 @@ def build_theme(slug, tokens, meta):
                 changed.append(key)
 
         for key, target in (('fg', 7), ('muted', 4.5), ('ok', 4.5), ('warn', 4.5),
-                            ('danger', 4.5), ('accent', 3)):
+                            ('danger', 4.5), ('accent', 3)) + ((('error', 4.5),) if 'error' in scheme else ()):
             check(key, target)
         acc, acf = parse(scheme['accent']), parse(scheme['accent-fg'])
         if contrast(acc, acf) < 4.5:
@@ -246,7 +294,7 @@ def build_theme(slug, tokens, meta):
     scheme_native = pack(bg, surface, surface2, fg, muted, border,
                          over(accent, bg), over(accent_fg, over(accent, bg)),
                          over(ok, bg), over(warn, bg), over(danger, bg), shadow_native)
-    fixed_native = fix_contrast(scheme_native)
+    fixed_native = refine(scheme_native) + fix_contrast(scheme_native)
 
     # Derived scheme: the opposite of the native one, built in OKLCH.
     hue = h_bg if c_bg > .012 else h_ac
@@ -281,7 +329,7 @@ def build_theme(slug, tokens, meta):
         d_shadow = '0 1px 2px rgba(0,0,0,.45)' if native == 'light' else '0 1px 3px rgba(0,0,0,.14)'
     scheme_derived = pack(d_bg, d_sf, d_sf2, d_fg, d_muted, d_border, d_accent, d_accent_fg,
                           d_ok, d_warn, d_danger, d_shadow)
-    fixed_derived = fix_contrast(scheme_derived)
+    fixed_derived = refine(scheme_derived) + fix_contrast(scheme_derived)
 
     other = 'dark' if native == 'light' else 'light'
     schemes = {native: scheme_native, other: scheme_derived}
@@ -297,6 +345,7 @@ def build_theme(slug, tokens, meta):
             'ok': round(contrast(parse(scheme['ok']), s), 1),
             'warn': round(contrast(parse(scheme['warn']), s), 1),
             'danger': round(contrast(parse(scheme['danger']), s), 1),
+            'error': round(contrast(parse(scheme['error']), s), 1),
         }
 
     imports = tokens.get('_imports') or []
@@ -324,7 +373,7 @@ def build_theme(slug, tokens, meta):
 
 
 def failures(theme):
-    limits = {'fg': 7, 'muted': 4.5, 'accent': 3, 'accent-fg': 4.5, 'ok': 4.5, 'warn': 4.5, 'danger': 4.5}
+    limits = {'fg': 7, 'muted': 4.5, 'accent': 3, 'accent-fg': 4.5, 'ok': 4.5, 'warn': 4.5, 'danger': 4.5, 'error': 4.5}
     return [(theme['id'], scheme, key, value)
             for scheme, ratios in theme['audit'].items()
             for key, value in ratios.items() if value < limits[key]]
