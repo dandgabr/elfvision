@@ -6,7 +6,7 @@ import Gtk from 'gi://Gtk';
 
 import {DEFAULT_THEME, scanThemes} from './lib/services/themeFiles.js';
 import {buildAccountsPage} from './lib/prefs/accounts.js';
-import {builtinCatalog} from './lib/ui/themeCatalog.js';
+import {builtinCatalog} from './lib/prefs/themeCatalog.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 /**

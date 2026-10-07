@@ -2,7 +2,7 @@ import {assertEqual, assertTrue, flush, test} from './harness.js';
 import {EXPIRE_AFTER_MS, applyFreshness, normalizeSnapshot, redact} from '../lib/core/contract.js';
 import {CACHE_VERSION, MAX_CACHE_BYTES, MAX_METRICS, MAX_SNAPSHOTS, MAX_TEXT, parseCache, serializeCache} from '../lib/core/cache.js';
 import {PollScheduler} from '../lib/core/scheduler.js';
-import {ProviderError} from '../lib/providers/errors.js';
+import {ProviderError} from '../lib/core/errors.js';
 import {createDemoProviders} from '../lib/providers/demo.js';
 
 const SECOND = 1000;

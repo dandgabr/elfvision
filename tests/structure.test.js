@@ -36,8 +36,14 @@ const SHELL_SIDE = ['gi://St', 'gi://Shell', 'gi://Clutter', 'gi://Meta', 'resou
 const PREFS_SIDE = ['gi://Adw', 'gi://Gtk', 'gi://Gdk'];
 
 test('structure: the pure core and the registry import no gi:// module', () => {
-    const pure = [...sources('lib/core'), 'lib/providers/registry.js', 'lib/providers/errors.js', 'lib/oauth/pkce.js', 'lib/oauth/callback.js', 'lib/oauth/protocol.js', 'lib/oauth/secret.js', 'lib/oauth/tokenManager.js'];
+    const pure = [...sources('lib/core'), 'lib/providers/registry.js', 'lib/oauth/pkce.js', 'lib/oauth/callback.js', 'lib/oauth/protocol.js', 'lib/oauth/secret.js', 'lib/oauth/tokenManager.js'];
     assertEqual(offenders(pure, ['gi://']), []);
+});
+
+test('structure: the core depends on nothing outside the core', () => {
+    const outside = sources('lib/core').flatMap(path =>
+        imports(path).filter(spec => spec.startsWith('.') && !spec.startsWith('./')).map(spec => `${path}: ${spec}`));
+    assertEqual(outside, []);
 });
 
 test('structure: shell toolkit modules stay on the shell side', () => {

@@ -315,7 +315,7 @@ test('summary and footer tell signed-out apart from failing, and do not hide pro
 
 import {normalizeSnapshot} from '../lib/core/contract.js';
 import {parseCredits} from '../lib/core/commandCode.js';
-import {ProviderError, errorForStatus} from '../lib/providers/errors.js';
+import {ProviderError, errorForStatus} from '../lib/core/errors.js';
 import {createCommandCodeProvider} from '../lib/providers/commandCode.js';
 
 const CREDITS = {
