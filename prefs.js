@@ -64,10 +64,11 @@ function swatchStrip(colors, label) {
             cr.rectangle(index * width / colors.length, 0, width / colors.length + 1, height);
             cr.fill();
         });
-        // A thin edge keeps a light strip visible on a light window.
+        // A thin edge keeps a strip close to the window color visible, light or dark.
         cr.resetClip();
         outline(cr, width, height, 0.5);
-        cr.setSourceRGBA(0, 0, 0, 0.22);
+        const edge = Adw.StyleManager.get_default().dark ? 1 : 0;
+        cr.setSourceRGBA(edge, edge, edge, edge ? 0.4 : 0.22);
         cr.setLineWidth(1);
         cr.stroke();
         cr.$dispose();
