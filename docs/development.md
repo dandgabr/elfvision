@@ -135,6 +135,18 @@ the window ends the session. It stores settings in a key file instead of memory,
 because the preferences window is a second process and must see the same values as
 the shell.
 
+The nested shell has its own, empty keyring, so no account is connected and the live data source
+has nothing to show. To see the bar, the popup or the notifications working, start it with made-up
+data:
+
+```sh
+DATA_SOURCE=demo DEMO_SCENARIO=drift tools/nested-shell.sh
+```
+
+`drift` climbs toward the limits every ten seconds, so the first notifications arrive within a
+minute (a notification banner appears at the top of the nested window, and stays in its
+notification list). `steady` and `flaky` are the other scenarios.
+
 ### Demo scenarios
 
 With the `data-source` setting on `demo` (Preferences, General, Advanced), the `demo-scenario`
@@ -145,8 +157,9 @@ extension is installed, change it with:
 gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota demo-scenario flaky
 ```
 
-The throwaway shells keep their settings out of reach of a `gsettings` call from
-outside, so set the key from a headless script with `Gio.Settings` instead.
+The headless shell keeps its settings in memory, out of reach of a `gsettings` call from
+outside, so set the key from a script with `Gio.Settings` instead; the nested shell takes
+`DEMO_SCENARIO` (see above).
 
 ## Static analysis
 
