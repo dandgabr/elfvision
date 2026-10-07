@@ -1,0 +1,74 @@
+{
+  "id": "cyberpunk",
+  "name": "Cyberpunk & Tactical HUD",
+  "group": "Punks e ficção científica",
+  "description": "Neon-noir, chuva, alta tecnologia decadente e painéis de HUD.",
+  "nativeScheme": "dark",
+  "difficulty": "hard",
+  "schemes": {
+    "dark": {
+      "bg": "#07060f",
+      "surface": "#12101f",
+      "surface-2": "#1a1033",
+      "fg": "#e9e6ff",
+      "muted": "#b4aedb",
+      "border": "#3b2a6b",
+      "accent": "#ff2a8a",
+      "accent-fg": "#07060f",
+      "ok": "#3dffb0",
+      "warn": "#f5e642",
+      "danger": "#ff6b8b",
+      "shadow": "0 0 18px rgba(255,42,138,.25)"
+    },
+    "light": {
+      "bg": "#f6f6fe",
+      "surface": "#fdfdff",
+      "surface-2": "#f0eff7",
+      "fg": "#18171e",
+      "muted": "#575760",
+      "border": "#d7d7de",
+      "accent": "#bb1563",
+      "accent-fg": "#ffffff",
+      "ok": "#167c53",
+      "warn": "#746b00",
+      "danger": "#b42f53",
+      "shadow": "0 1px 3px rgba(0,0,0,.14)"
+    }
+  },
+  "adjusted": {
+    "dark": [],
+    "light": []
+  },
+  "audit": {
+    "dark": {
+      "fg": 15.4,
+      "muted": 8.9,
+      "accent": 5.3,
+      "accent-fg": 5.7,
+      "ok": 14.4,
+      "warn": 14.5,
+      "danger": 6.9
+    },
+    "light": {
+      "fg": 17.5,
+      "muted": 7.0,
+      "accent": 6.1,
+      "accent-fg": 6.2,
+      "ok": 5.1,
+      "warn": 5.4,
+      "danger": 6.0
+    }
+  },
+  "fonts": {
+    "body": "'Rajdhani',system-ui,sans-serif",
+    "display": "'Orbitron','Rajdhani',sans-serif",
+    "mono": "'Share Tech Mono',monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@600;800&family=Share+Tech+Mono&display=swap"
+  },
+  "radius": {
+    "card": "0",
+    "control": "0"
+  },
+  "border": "hairline",
+  "hardShadow": false
+}

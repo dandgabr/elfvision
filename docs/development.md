@@ -6,11 +6,14 @@
 extension.js        entry point (enable and disable)
 prefs.js            preferences window (GTK 4, libadwaita)
 metadata.json       uuid gnome-ai-quota@dandgabr.github.io, shell 50
-stylesheet.css      the default theme (sistema-gnome), classes prefixed gaq-
-lib/core/           pure JavaScript: contract, scheduler, cache format, severity,
+themes/builtin/     the 20 v1 themes (theme.json each); user themes go in
+                    ~/.local/share/gnome-ai-quota/themes
+lib/core/           pure JavaScript: contract, scheduler, cache format, theme
+                    compiler and its CSS template, severity,
                     pacing, selection, fitting, formatting, view models, fixtures
 lib/providers/      provider errors and the demo providers (real ones come in M2+)
-lib/services/       GLib and Gio glue: timers, cache file, the quota controller
+lib/services/       GLib and Gio glue: timers, cache file, theme files and manager,
+                    the quota controller
 lib/ui/             St widgets: meter, bar item, provider card, indicator
 icons/              symbolic SVG icons, one per provider id
 po/                 gettext template and translations
@@ -32,6 +35,21 @@ tools/build.sh   # compile the GSettings schema and the translations
 The extension needs `schemas/gschemas.compiled` and `locale/` to run from a
 checkout. Neither is committed. Run the build after cloning and after changing
 `schemas/` or `po/`.
+
+## Themes
+
+All CSS lives in `lib/core/theme.template.css`; colors, radii, borders, shadows and
+fonts are tokens replaced at compile time (St has no `var()`). To try a theme without
+the preferences window:
+
+```sh
+gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota theme linear-saas
+gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota color-scheme dark
+```
+
+Regenerate the built-in themes from the style gallery with
+`python3 -I tools/gen-themes.py --styles <estilos-visuais clone> --out themes/builtin --only themes/v1.txt`
+(`sistema-gnome` is hand written and is not touched).
 
 ## Demo scenarios
 
@@ -86,6 +104,12 @@ Source strings are English. Every user-visible string goes through
 directory is not committed.
 
 ## Pitfalls found so far
+
+- **Placeholders in the template's own comments get replaced.** The compiler
+  substitutes every double-brace token, comments included; describe tokens without
+  the braces.
+- **zsh does not split unquoted variables.** When building a list of script
+  arguments for `tools/headless-shell.sh` use an array and `"${args[@]}"`.
 
 - **A non-reactive item greys all its text.** The popup lives in a
   `PopupBaseMenuItem` with `reactive: false`; St then applies `:insensitive`, and

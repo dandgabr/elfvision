@@ -1,3 +1,43 @@
+/* gnome-ai-quota stylesheet template. It is compiled into a real stylesheet by
+ * lib/core/theme.js and loaded by lib/services/themeManager.js; see
+ * docs/adr/0006-theming.md.
+ *
+ * St has no var(), so values come from theme tokens at compile time. A token is
+ * written between double braces:
+ *   p:NAME        a color of the popup scheme (light or dark, follows the system)
+ *   b:NAME        a color of the dark scheme; the top bar always sits on the dark panel
+ *   p:NAME@0.3    the same color with an alpha
+ *   radius, radius-sm, pill-radius, menu-radius, bw, shadow   shape tokens
+ *   font-body-decl, font-display-decl     font-family lines, or nothing
+ * (Do not write a real token inside this comment: the compiler would replace it.)
+ *
+ * Every state is a class: gaq-ok, gaq-warning, gaq-critical, gaq-stale, gaq-auth,
+ * gaq-error. Class names are prefixed with gaq- so nothing leaks into the shell
+ * theme. */
+
+/* ---------- menu surface ---------- */
+
+.popup-menu-boxpointer.gaq-menu {
+    -arrow-background-color: {{p:bg}};
+    -arrow-border-color: {{p:bg}};
+}
+
+.popup-menu-boxpointer.gaq-menu .popup-menu-content {
+    background-color: {{p:bg}};
+    border-radius: {{menu-radius}};
+}
+
+.gaq-bar,
+.gaq-popup,
+.gaq-tooltip {
+    {{font-body-decl}}
+}
+
+.gaq-hero,
+.gaq-card-name {
+    {{font-display-decl}}
+}
+
 /* gnome-ai-quota, theme "sistema-gnome" (dark, follows the shell popup).
  * St has no var(), so every state is a class: gaq-ok, gaq-warning,
  * gaq-critical, gaq-stale, gaq-auth, gaq-error. Class names are prefixed
@@ -18,7 +58,7 @@
     spacing: 3px;
     padding: 1px 5px;
     border: 1px solid transparent;
-    border-radius: 99px;
+    border-radius: {{pill-radius}};
 }
 
 .gaq-icon {
@@ -39,13 +79,13 @@
 .gaq-percent {
     font-size: 11px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.7);
+    color: {{b:fg@0.7}};
 }
 
 .gaq-suffix {
     font-size: 11px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.65);
+    color: {{b:fg@0.65}};
 }
 
 .gaq-glyph {
@@ -65,53 +105,53 @@
     font-size: 11px;
     font-weight: 700;
     padding: 1px 6px;
-    border-radius: 99px;
-    background-color: rgba(255, 255, 255, 0.14);
+    border-radius: {{pill-radius}};
+    background-color: {{b:fg@0.14}};
 }
 
 .gaq-item.gaq-warning .gaq-number,
 .gaq-item.gaq-warning .gaq-glyph {
     font-weight: 800;
-    color: #f5c211;
+    color: {{b:warn}};
 }
 
 .gaq-item.gaq-critical .gaq-number,
 .gaq-item.gaq-critical .gaq-glyph {
     font-weight: 800;
-    color: #ff7b63;
+    color: {{b:danger}};
 }
 
 .gaq-item.gaq-critical .gaq-row {
-    background-color: rgba(255, 123, 99, 0.22);
-    border-color: #ff7b63;
+    background-color: {{b:danger@0.22}};
+    border-color: {{b:danger}};
 }
 
 .gaq-item.gaq-stale .gaq-number {
     font-style: italic;
-    color: rgba(255, 255, 255, 0.6);
+    color: {{b:fg@0.6}};
 }
 
 .gaq-item.gaq-stale .gaq-icon,
 .gaq-item.gaq-auth .gaq-icon,
 .gaq-item.gaq-error .gaq-icon,
 .gaq-item.gaq-error .gaq-number {
-    color: rgba(255, 255, 255, 0.55);
+    color: {{b:fg@0.55}};
 }
 
 .gaq-item.gaq-auth .gaq-number {
-    color: rgba(255, 255, 255, 0.6);
+    color: {{b:fg@0.6}};
 }
 
 .gaq-item.gaq-error .gaq-glyph-icon {
-    color: #ffa348;
+    color: {{b:error}};
 }
 
 /* ---------- meter (shared by the bar and the popup) ---------- */
 
 .gaq-meter {
     height: 8px;
-    border-radius: 99px;
-    background-color: rgba(255, 255, 255, 0.18);
+    border-radius: {{pill-radius}};
+    background-color: {{p:muted@0.3}};
 }
 
 .gaq-meter-thin {
@@ -121,12 +161,12 @@
 .gaq-meter-bar {
     height: 3px;
     border-radius: 2px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: {{b:fg@0.2}};
 }
 
 .gaq-meter-fill {
-    border-radius: 99px;
-    background-color: #62a0ea;
+    border-radius: {{pill-radius}};
+    background-color: {{p:accent}};
 }
 
 .gaq-meter-bar .gaq-meter-fill {
@@ -134,22 +174,22 @@
 }
 
 .gaq-meter-fill.gaq-warning {
-    background-color: #f5c211;
+    background-color: {{p:warn}};
 }
 
 .gaq-meter-fill.gaq-critical {
-    background-color: #ff7b63;
+    background-color: {{p:danger}};
 }
 
 .gaq-meter-fill.gaq-error {
-    background-color: #ffa348;
+    background-color: {{p:error}};
 }
 
 .gaq-meter-tick {
     width: 2px;
     height: 12px;
-    background-color: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+    background-color: {{p:fg}};
+    box-shadow: 0 0 0 1px {{p:bg@0.7}};
 }
 
 /* ---------- popup ---------- */
@@ -159,7 +199,7 @@
     spacing: 12px;
     /* The popup item is not reactive, so the theme paints inherited text in its
      * insensitive grey (#9b9b9d). Set the text color explicitly. */
-    color: rgba(255, 255, 255, 0.92);
+    color: {{p:fg}};
 }
 
 .gaq-content {
@@ -172,32 +212,33 @@
 
 .gaq-summary {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.62);
+    color: {{p:muted}};
 }
 
 .gaq-section {
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.62);
+    color: {{p:muted}};
     padding: 6px 0 0 0;
 }
 
 .gaq-card {
-    background-color: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
+    background-color: {{p:surface}};
+    border: {{bw}} solid {{p:border}};
+    border-radius: {{radius}};
+    box-shadow: {{shadow}};
     padding: 14px 16px;
     spacing: 8px;
 }
 
 .gaq-card.gaq-critical {
-    border-color: #ff7b63;
+    border-color: {{p:danger}};
 }
 
 .gaq-card.gaq-stale .gaq-hero {
     font-style: italic;
-    color: rgba(255, 255, 255, 0.7);
+    color: {{p:muted}};
 }
 
 .gaq-card-header {
@@ -216,21 +257,21 @@
 
 .gaq-card-plan {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.62);
+    color: {{p:muted}};
 }
 
 .gaq-card-toggle {
     padding: 0;
     border: 2px solid transparent;
-    border-radius: 10px;
+    border-radius: {{radius-sm}};
 }
 
 .gaq-card-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: {{p:fg@0.06}};
 }
 
 .gaq-card-toggle:focus {
-    border-color: #78aeed;
+    border-color: {{p:accent}};
 }
 
 .gaq-chevron-icon {
@@ -248,41 +289,41 @@
 
 .gaq-hero-small {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.62);
+    color: {{p:muted}};
     padding-bottom: 2px;
 }
 
 .gaq-card.gaq-warning .gaq-hero {
-    color: #f5c211;
+    color: {{p:warn}};
 }
 
 .gaq-card.gaq-critical .gaq-hero {
-    color: #ff7b63;
+    color: {{p:danger}};
 }
 
 .gaq-pill {
     font-size: 11px;
     font-weight: 700;
     padding: 1px 8px;
-    border-radius: 99px;
-    border: 1px solid rgba(255, 255, 255, 0.62);
-    color: rgba(255, 255, 255, 0.62);
+    border-radius: {{pill-radius}};
+    border: 1px solid {{p:muted}};
+    color: {{p:muted}};
 }
 
 .gaq-pill-warning {
-    color: #f5c211;
-    border-color: #f5c211;
+    color: {{p:warn}};
+    border-color: {{p:warn}};
 }
 
 .gaq-pill-critical {
-    color: #ffa392;
-    border-color: #ff7b63;
-    background-color: rgba(255, 123, 99, 0.16);
+    color: {{p:danger}};
+    border-color: {{p:danger}};
+    background-color: {{p:danger@0.16}};
 }
 
 .gaq-pill-error {
-    color: #ffa348;
-    border-color: #ffa348;
+    color: {{p:error}};
+    border-color: {{p:error}};
 }
 
 .gaq-card-body {
@@ -293,12 +334,12 @@
     spacing: 4px;
     padding: 0 2px;
     border: 2px solid transparent;
-    border-radius: 8px;
+    border-radius: {{radius-sm}};
 }
 
 .gaq-window:focus {
-    background-color: rgba(255, 255, 255, 0.06);
-    border-color: #78aeed;
+    background-color: {{p:fg@0.06}};
+    border-color: {{p:accent}};
 }
 
 .gaq-pool {
@@ -307,7 +348,7 @@
 
 .gaq-muted {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.62);
+    color: {{p:muted}};
 }
 
 .gaq-strong {
@@ -316,98 +357,98 @@
 }
 
 .gaq-strong.gaq-warning {
-    color: #f5c211;
+    color: {{p:warn}};
 }
 
 .gaq-strong.gaq-critical {
-    color: #ff7b63;
+    color: {{p:danger}};
 }
 
 .gaq-detail {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.62);
+    color: {{p:muted}};
 }
 
 .gaq-pace {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.62);
+    color: {{p:muted}};
 }
 
 .gaq-footer {
     spacing: 8px;
     padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid {{p:border}};
 }
 
 .gaq-button {
     height: 28px;
     padding: 0 12px;
     border: 2px solid transparent;
-    border-radius: 8px;
+    border-radius: {{radius-sm}};
     font-size: 12px;
     font-weight: 600;
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: {{p:fg@0.08}};
 }
 
 .gaq-button:hover {
-    background-color: rgba(255, 255, 255, 0.14);
+    background-color: {{p:fg@0.14}};
 }
 
 .gaq-button:focus {
-    background-color: rgba(255, 255, 255, 0.14);
-    border-color: #78aeed;
+    background-color: {{p:fg@0.14}};
+    border-color: {{p:accent}};
 }
 
 .gaq-button:active {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: {{p:fg@0.2}};
 }
 
 /* ---------- tooltip ---------- */
 
 .gaq-tooltip {
     padding: 4px 8px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    background-color: rgba(30, 30, 33, 0.97);
-    color: rgba(255, 255, 255, 0.92);
+    border-radius: {{radius-sm}};
+    border: 1px solid {{p:border}};
+    background-color: {{p:bg}};
+    color: {{p:fg}};
     font-size: 11px;
 }
 
 /* ---------- failure states ---------- */
 
 .gaq-card.gaq-error {
-    border-color: rgba(255, 163, 72, 0.5);
+    border-color: {{p:error@0.6}};
 }
 
 .gaq-card.gaq-error .gaq-hero {
     font-style: italic;
-    color: rgba(255, 255, 255, 0.7);
+    color: {{p:muted}};
 }
 
 .gaq-card.gaq-auth .gaq-hero {
-    color: rgba(255, 255, 255, 0.4);
+    color: {{p:muted@0.7}};
 }
 
 .gaq-meter-fill.gaq-stale {
-    background-color: rgba(255, 255, 255, 0.4);
+    background-color: {{p:muted@0.7}};
 }
 
 .gaq-strong.gaq-stale {
-    color: rgba(255, 255, 255, 0.7);
+    color: {{p:muted}};
 }
 
 .gaq-pill-muted {
-    color: rgba(255, 255, 255, 0.62);
-    border-color: rgba(255, 255, 255, 0.35);
+    color: {{p:muted}};
+    border-color: {{p:muted@0.6}};
 }
 
 .gaq-message {
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.78);
+    color: {{p:fg@0.85}};
 }
 
 .gaq-item.gaq-auth .gaq-glyph-icon {
-    color: rgba(255, 255, 255, 0.8);
+    color: {{b:fg@0.8}};
 }
 
 .gaq-item.gaq-error .gaq-number {
@@ -416,5 +457,5 @@
 
 .gaq-placeholder {
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.4);
+    color: {{p:muted@0.7}};
 }

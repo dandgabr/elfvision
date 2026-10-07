@@ -1,0 +1,74 @@
+{
+  "id": "bento-grid",
+  "name": "Bento Grid",
+  "group": "Limpo e funcional",
+  "description": "Grade de blocos assimétricos estilo bento.",
+  "nativeScheme": "light",
+  "difficulty": "medium",
+  "schemes": {
+    "light": {
+      "bg": "#f2f0ec",
+      "surface": "#ffffff",
+      "surface-2": "#e9e6df",
+      "fg": "#16161a",
+      "muted": "#555560",
+      "border": "#e3e2de",
+      "accent": "#5b3df5",
+      "accent-fg": "#ffffff",
+      "ok": "#15753e",
+      "warn": "#955500",
+      "danger": "#c42b2b",
+      "shadow": "0 1px 0 rgba(255,255,255,.8) inset,0 1px 2px rgba(0,0,0,.04)"
+    },
+    "dark": {
+      "bg": "#0f0f12",
+      "surface": "#19191c",
+      "surface-2": "#232427",
+      "fg": "#edeef4",
+      "muted": "#a9aab4",
+      "border": "#303134",
+      "accent": "#8d90fe",
+      "accent-fg": "#0d0d12",
+      "ok": "#7ed497",
+      "warn": "#fdbb7e",
+      "danger": "#fc8d82",
+      "shadow": "0 1px 2px rgba(0,0,0,.45)"
+    }
+  },
+  "adjusted": {
+    "light": [],
+    "dark": []
+  },
+  "audit": {
+    "light": {
+      "fg": 18.0,
+      "muted": 7.4,
+      "accent": 6.1,
+      "accent-fg": 6.1,
+      "ok": 5.8,
+      "warn": 5.9,
+      "danger": 5.6
+    },
+    "dark": {
+      "fg": 15.2,
+      "muted": 7.6,
+      "accent": 6.3,
+      "accent-fg": 7.0,
+      "ok": 9.8,
+      "warn": 10.5,
+      "danger": 7.7
+    }
+  },
+  "fonts": {
+    "body": "'Plus Jakarta Sans',sans-serif",
+    "display": "'Plus Jakarta Sans',sans-serif",
+    "mono": "ui-monospace,'JetBrains Mono',monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap"
+  },
+  "radius": {
+    "card": "28px",
+    "control": "14px"
+  },
+  "border": "hairline",
+  "hardShadow": false
+}

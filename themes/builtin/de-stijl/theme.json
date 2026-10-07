@@ -1,0 +1,74 @@
+{
+  "id": "de-stijl",
+  "name": "De Stijl",
+  "group": "Movimentos históricos e retrô",
+  "description": "Linhas pretas e cores primárias.",
+  "nativeScheme": "light",
+  "difficulty": "medium",
+  "schemes": {
+    "light": {
+      "bg": "#fafafa",
+      "surface": "#fafafa",
+      "surface-2": "#e6e6e6",
+      "fg": "#111111",
+      "muted": "#333333",
+      "border": "#111111",
+      "accent": "#0b3d91",
+      "accent-fg": "#ffffff",
+      "ok": "#0b6b34",
+      "warn": "#7a5200",
+      "danger": "#a80d25",
+      "shadow": "none"
+    },
+    "dark": {
+      "bg": "#0e0f12",
+      "surface": "#181a1c",
+      "surface-2": "#222427",
+      "fg": "#ebeff4",
+      "muted": "#a6abb4",
+      "border": "#888a8e",
+      "accent": "#679dfa",
+      "accent-fg": "#0d0d12",
+      "ok": "#81d496",
+      "warn": "#efc280",
+      "danger": "#fc8c89",
+      "shadow": "0 1px 2px rgba(0,0,0,.45)"
+    }
+  },
+  "adjusted": {
+    "light": [],
+    "dark": []
+  },
+  "audit": {
+    "light": {
+      "fg": 18.1,
+      "muted": 12.1,
+      "accent": 9.6,
+      "accent-fg": 10.0,
+      "ok": 6.4,
+      "warn": 6.6,
+      "danger": 7.3
+    },
+    "dark": {
+      "fg": 15.1,
+      "muted": 7.6,
+      "accent": 6.5,
+      "accent-fg": 7.2,
+      "ok": 9.8,
+      "warn": 10.6,
+      "danger": 7.7
+    }
+  },
+  "fonts": {
+    "body": "\"Archivo\",system-ui,sans-serif",
+    "display": "\"Archivo Black\",\"Archivo\",sans-serif",
+    "mono": "ui-monospace,monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=Archivo+Black&display=swap"
+  },
+  "radius": {
+    "card": "0",
+    "control": "0"
+  },
+  "border": "strong",
+  "hardShadow": false
+}

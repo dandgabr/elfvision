@@ -1,0 +1,74 @@
+{
+  "id": "holographic-foil-iridescent",
+  "name": "Holographic Foil",
+  "group": "Superfície e materiais",
+  "description": "Reflexos perolizados, arco-íris prismático e cromo.",
+  "nativeScheme": "dark",
+  "difficulty": "hard",
+  "schemes": {
+    "dark": {
+      "bg": "#0b0c10",
+      "surface": "#1c1d21",
+      "surface-2": "#28292d",
+      "fg": "#ffffff",
+      "muted": "#a0a5b8",
+      "border": "#4f5053",
+      "accent": "#8ec5fc",
+      "accent-fg": "#0f1016",
+      "ok": "#6ee7b7",
+      "warn": "#fde047",
+      "danger": "#fca5a5",
+      "shadow": "0 8px 32px rgba(142, 197, 252, 0.22)"
+    },
+    "light": {
+      "bg": "#f5f7f9",
+      "surface": "#fcfdff",
+      "surface-2": "#eef0f3",
+      "fg": "#14191e",
+      "muted": "#525960",
+      "border": "#d5d8db",
+      "accent": "#386d9e",
+      "accent-fg": "#ffffff",
+      "ok": "#127b5a",
+      "warn": "#796901",
+      "danger": "#9c4e50",
+      "shadow": "0 1px 3px rgba(0,0,0,.14)"
+    }
+  },
+  "adjusted": {
+    "dark": [],
+    "light": []
+  },
+  "audit": {
+    "dark": {
+      "fg": 16.8,
+      "muted": 6.9,
+      "accent": 9.3,
+      "accent-fg": 10.4,
+      "ok": 11.0,
+      "warn": 12.8,
+      "danger": 8.9
+    },
+    "light": {
+      "fg": 17.4,
+      "muted": 7.0,
+      "accent": 5.4,
+      "accent-fg": 5.5,
+      "ok": 5.1,
+      "warn": 5.4,
+      "danger": 5.7
+    }
+  },
+  "fonts": {
+    "body": "'Plus Jakarta Sans', sans-serif",
+    "display": "'Plus Jakarta Sans', sans-serif",
+    "mono": "ui-monospace,'JetBrains Mono',monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap"
+  },
+  "radius": {
+    "card": "20px",
+    "control": "12px"
+  },
+  "border": "hairline",
+  "hardShadow": false
+}

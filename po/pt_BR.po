@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-06 23:34-0300\n"
+"POT-Creation-Date: 2026-10-07 00:04-0300\n"
 "PO-Revision-Date: 2026-10-06 21:45-0300\n"
 "Last-Translator: gnome-ai-quota authors\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -233,120 +233,190 @@ msgid_plural "%s · %d with problems"
 msgstr[0] "%s · %d com problema"
 msgstr[1] "%s · %d com problemas"
 
-#: lib/ui/indicator.js:152
+#: lib/ui/indicator.js:156
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: lib/ui/indicator.js:153
+#: lib/ui/indicator.js:157
 msgid "Preferences"
 msgstr "Preferências"
 
-#: lib/ui/indicator.js:186
+#: lib/ui/indicator.js:190
 msgid "Refreshing…"
 msgstr "Atualizando…"
 
-#: lib/ui/indicator.js:269
+#: lib/ui/indicator.js:278
 msgid "Waiting for the first update…"
 msgstr "Aguardando a primeira atualização…"
 
-#: lib/ui/indicator.js:387
+#: lib/ui/indicator.js:396
 msgid "Waiting for the first update"
 msgstr "Aguardando a primeira atualização"
 
-#: lib/ui/indicator.js:410
+#: lib/ui/indicator.js:419
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] "mais %d provedor (abra para ver)"
 msgstr[1] "mais %d provedores (abra para ver)"
 
-#: lib/ui/indicator.js:425
+#: lib/ui/indicator.js:434
 msgid "On the bar"
 msgstr "Na barra"
 
-#: lib/ui/indicator.js:427
+#: lib/ui/indicator.js:436
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] "Oculto da barra (%d)"
 msgstr[1] "Ocultos da barra (%d)"
 
-#: lib/ui/providerCard.js:122
+#: lib/ui/providerCard.js:130
 msgid "Collapse %s"
 msgstr "Recolher %s"
 
-#: lib/ui/providerCard.js:122
+#: lib/ui/providerCard.js:130
 msgid "Expand %s"
 msgstr "Expandir %s"
 
-#: lib/ui/providerCard.js:170
+#: lib/ui/providerCard.js:178
 msgid "Try again"
 msgstr "Tentar de novo"
 
-#: prefs.js:42
+#: prefs.js:52 prefs.js:85
 msgid "Appearance"
 msgstr "Aparência"
 
-#: prefs.js:47
+#: prefs.js:57
 msgid "Top bar"
 msgstr "Barra superior"
 
-#: prefs.js:48
+#: prefs.js:58
 msgid ""
 "The bar shrinks, then shows fewer providers, when other extensions leave it "
 "little room."
 msgstr "A barra encolhe e depois mostra menos provedores quando outras extensões deixam pouco espaço."
 
-#: prefs.js:51
+#: prefs.js:61
 msgid "Left"
 msgstr "Esquerda"
 
-#: prefs.js:52
+#: prefs.js:62
 msgid "Center"
 msgstr "Centro"
 
-#: prefs.js:53
+#: prefs.js:63
 msgid "Right"
 msgstr "Direita"
 
-#: prefs.js:54
+#: prefs.js:64
 msgid "Position"
 msgstr "Posição"
 
-#: prefs.js:54
+#: prefs.js:64
 msgid "Where the quota items sit on the top bar."
 msgstr "Onde os itens de cota ficam na barra superior."
 
-#: prefs.js:58
+#: prefs.js:68
 msgid "Providers on the bar"
 msgstr "Provedores na barra"
 
-#: prefs.js:59
+#: prefs.js:69
 msgid "The most providers shown, from 1 to 5."
 msgstr "O máximo de provedores exibidos, de 1 a 5. Os mais críticos aparecem primeiro."
 
-#: prefs.js:66
+#: prefs.js:76
 msgid "Automatic"
 msgstr "Automático"
 
-#: prefs.js:67
+#: prefs.js:77
 msgid "Always compact"
 msgstr "Sempre compactar"
 
-#: prefs.js:68
+#: prefs.js:78
 msgid "Never compact"
 msgstr "Nunca compactar"
 
-#: prefs.js:69
+#: prefs.js:79
 msgid "Compact drops the percent sign and the window suffix."
 msgstr "O modo compacto remove o sinal de porcentagem e o sufixo da janela."
 
-#: prefs.js:69
+#: prefs.js:79
 msgid "Compact mode"
 msgstr "Modo compacto"
 
-#: prefs.js:82
+#: prefs.js:86
+msgid ""
+"The theme styles the popup and the top bar. Your own themes go in ~/.local/"
+"share/gnome-ai-quota/themes."
+msgstr "O tema define o visual do popup e da barra superior. Seus próprios temas ficam em ~/.local/share/gnome-ai-quota/themes."
+
+#: prefs.js:90
+msgid "How the popup looks. Every theme has a light and a dark variant."
+msgstr "Como o popup se parece. Todo tema tem uma variante clara e uma escura."
+
+#: prefs.js:90
+msgid "Theme"
+msgstr "Tema"
+
+#: prefs.js:93
+msgid "Follow the system"
+msgstr "Seguir o sistema"
+
+#: prefs.js:94
+msgid "Light"
+msgstr "Claro"
+
+#: prefs.js:95
+msgid "Dark"
+msgstr "Escuro"
+
+#: prefs.js:96
+msgid "Follow the GNOME setting, or force one."
+msgstr "Segue a configuração do GNOME, ou força uma."
+
+#: prefs.js:96
+msgid "Light or dark"
+msgstr "Claro ou escuro"
+
+#: prefs.js:100
+msgid "Popup"
+msgstr "Popup"
+
+#: prefs.js:102
+msgid "24-hour clock"
+msgstr "Relógio de 24 horas"
+
+#: prefs.js:103
+msgid "Show reset times on a 24-hour clock."
+msgstr "Mostra os horários de reinício em 24 horas."
+
+#: prefs.js:108
+msgid "1h 20min"
+msgstr "1h 20min"
+
+#: prefs.js:109
+msgid "1h20"
+msgstr "1h20"
+
+#: prefs.js:110
+msgid "How long until a quota resets is written."
+msgstr "Como o tempo até a cota reiniciar é escrito."
+
+#: prefs.js:110
+msgid "Time until reset"
+msgstr "Tempo até o reinício"
+
+#: prefs.js:113
+msgid "Open cards that need attention"
+msgstr "Abrir cartões que pedem atenção"
+
+#: prefs.js:114
+msgid "Cards in warning, critical or error states open on their own."
+msgstr "Cartões em atenção, críticos ou com erro abrem sozinhos."
+
+#: prefs.js:121
 msgid "Demo build"
 msgstr "Versão de demonstração"
 
-#: prefs.js:83
+#: prefs.js:122
 msgid "More settings arrive in later milestones. This build shows demo data."
 msgstr "Mais configurações chegam em marcos futuros. Esta versão mostra dados de demonstração."

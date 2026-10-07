@@ -1,0 +1,74 @@
+{
+  "id": "aurora-mesh-gradient",
+  "name": "Aurora / Mesh Gradient",
+  "group": "Superfície e materiais",
+  "description": "Gradientes de malha em movimento suave.",
+  "nativeScheme": "dark",
+  "difficulty": "hard",
+  "schemes": {
+    "dark": {
+      "bg": "#070b1c",
+      "surface": "#181c2c",
+      "surface-2": "#202333",
+      "fg": "#f4f6ff",
+      "muted": "#bcc3e6",
+      "border": "#2f3240",
+      "accent": "#8ff0d0",
+      "accent-fg": "#06121a",
+      "ok": "#8ff0b8",
+      "warn": "#ffd88a",
+      "danger": "#ffa3a3",
+      "shadow": "0 10px 40px rgba(0,0,0,.35)"
+    },
+    "light": {
+      "bg": "#f4f7ff",
+      "surface": "#fdfdff",
+      "surface-2": "#ecf0fb",
+      "fg": "#16181e",
+      "muted": "#555861",
+      "border": "#d5d7df",
+      "accent": "#167a61",
+      "accent-fg": "#ffffff",
+      "ok": "#057d4c",
+      "warn": "#866203",
+      "danger": "#9e4c4e",
+      "shadow": "0 1px 3px rgba(0,0,0,.14)"
+    }
+  },
+  "adjusted": {
+    "dark": [],
+    "light": []
+  },
+  "audit": {
+    "dark": {
+      "fg": 15.7,
+      "muted": 9.7,
+      "accent": 12.5,
+      "accent-fg": 14.0,
+      "ok": 12.3,
+      "warn": 12.4,
+      "danger": 8.9
+    },
+    "light": {
+      "fg": 17.5,
+      "muted": 7.0,
+      "accent": 5.2,
+      "accent-fg": 5.3,
+      "ok": 5.1,
+      "warn": 5.5,
+      "danger": 5.7
+    }
+  },
+  "fonts": {
+    "body": "'Sora',sans-serif",
+    "display": "'Sora',sans-serif",
+    "mono": "ui-monospace,'JetBrains Mono',monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap"
+  },
+  "radius": {
+    "card": "20px",
+    "control": "12px"
+  },
+  "border": "hairline",
+  "hardShadow": false
+}

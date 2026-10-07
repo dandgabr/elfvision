@@ -29,6 +29,40 @@
       <summary>Compact mode</summary>
       <description>auto: shrink the bar only when space runs out. always: always compact. never: never drop the percent sign and window suffix (providers may still be hidden).</description>
     </key>
+    <key name="theme" type="s">
+      <default>'sistema-gnome'</default>
+      <summary>Theme</summary>
+      <description>The id of the theme: a folder with a theme.json in themes/builtin of the extension or in ~/.local/share/gnome-ai-quota/themes. The default follows GNOME.</description>
+    </key>
+    <key name="color-scheme" type="s">
+      <choices>
+        <choice value="system"/>
+        <choice value="light"/>
+        <choice value="dark"/>
+      </choices>
+      <default>'system'</default>
+      <summary>Light or dark</summary>
+      <description>system follows the GNOME light or dark preference; light and dark force one.</description>
+    </key>
+    <key name="clock-24h" type="b">
+      <default>true</default>
+      <summary>24-hour clock</summary>
+      <description>Show reset times on a 24-hour clock. When off, a 12-hour clock is used.</description>
+    </key>
+    <key name="reset-format" type="s">
+      <choices>
+        <choice value="long"/>
+        <choice value="short"/>
+      </choices>
+      <default>'long'</default>
+      <summary>Time until reset</summary>
+      <description>long reads "resets in 1h 20min"; short reads "resets in 1h20".</description>
+    </key>
+    <key name="auto-open" type="b">
+      <default>true</default>
+      <summary>Open cards that need attention</summary>
+      <description>Cards in warning, critical or error states open on their own; the choice you make by hand is kept until the state changes.</description>
+    </key>
     <key name="demo-scenario" type="s">
       <choices>
         <choice value="steady"/>

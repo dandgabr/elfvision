@@ -3,6 +3,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import {createDemoProviders} from './lib/providers/demo.js';
 import {QuotaController} from './lib/services/controller.js';
+import {ThemeManager} from './lib/services/themeManager.js';
 import GaqIndicator from './lib/ui/indicator.js';
 
 // Index inside the panel box. The left box starts with the Activities button,
@@ -12,6 +13,9 @@ const BOX_INDEX = {left: 1, center: 0, right: 0};
 export default class GnomeAiQuotaExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
+        // The stylesheet must exist before the first widget is measured.
+        this._themes = new ThemeManager({extensionPath: this.path, settings: this._settings});
+        this._themes.enable();
         this._createController();
         this._createIndicator();
         // Moving to another panel box needs a new button; a new demo scenario
@@ -35,6 +39,8 @@ export default class GnomeAiQuotaExtension extends Extension {
         this._scenarioChangedId = 0;
         this._destroyIndicator();
         this._destroyController();
+        this._themes?.disable();
+        this._themes = null;
         this._settings = null;
     }
 

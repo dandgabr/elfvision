@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-06 23:34-0300\n"
+"POT-Creation-Date: 2026-10-07 00:04-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -256,124 +256,194 @@ msgid_plural "%s · %d with problems"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/indicator.js:152
+#: lib/ui/indicator.js:156
 msgid "Refresh"
 msgstr ""
 
-#: lib/ui/indicator.js:153
+#: lib/ui/indicator.js:157
 msgid "Preferences"
 msgstr ""
 
-#: lib/ui/indicator.js:186
+#: lib/ui/indicator.js:190
 msgid "Refreshing…"
 msgstr ""
 
-#: lib/ui/indicator.js:269
+#: lib/ui/indicator.js:278
 msgid "Waiting for the first update…"
 msgstr ""
 
-#: lib/ui/indicator.js:387
+#: lib/ui/indicator.js:396
 msgid "Waiting for the first update"
 msgstr ""
 
-#: lib/ui/indicator.js:410
+#: lib/ui/indicator.js:419
 #, javascript-format
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/indicator.js:425
+#: lib/ui/indicator.js:434
 msgid "On the bar"
 msgstr ""
 
-#: lib/ui/indicator.js:427
+#: lib/ui/indicator.js:436
 #, javascript-format
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/providerCard.js:122
+#: lib/ui/providerCard.js:130
 #, javascript-format
 msgid "Collapse %s"
 msgstr ""
 
-#: lib/ui/providerCard.js:122
+#: lib/ui/providerCard.js:130
 #, javascript-format
 msgid "Expand %s"
 msgstr ""
 
-#: lib/ui/providerCard.js:170
+#: lib/ui/providerCard.js:178
 msgid "Try again"
 msgstr ""
 
-#: prefs.js:42
+#: prefs.js:52 prefs.js:85
 msgid "Appearance"
 msgstr ""
 
-#: prefs.js:47
+#: prefs.js:57
 msgid "Top bar"
 msgstr ""
 
-#: prefs.js:48
+#: prefs.js:58
 msgid ""
 "The bar shrinks, then shows fewer providers, when other extensions leave it "
 "little room."
 msgstr ""
 
-#: prefs.js:51
+#: prefs.js:61
 msgid "Left"
 msgstr ""
 
-#: prefs.js:52
+#: prefs.js:62
 msgid "Center"
 msgstr ""
 
-#: prefs.js:53
+#: prefs.js:63
 msgid "Right"
 msgstr ""
 
-#: prefs.js:54
+#: prefs.js:64
 msgid "Position"
 msgstr ""
 
-#: prefs.js:54
+#: prefs.js:64
 msgid "Where the quota items sit on the top bar."
 msgstr ""
 
-#: prefs.js:58
+#: prefs.js:68
 msgid "Providers on the bar"
 msgstr ""
 
-#: prefs.js:59
+#: prefs.js:69
 msgid "The most providers shown, from 1 to 5."
 msgstr ""
 
-#: prefs.js:66
+#: prefs.js:76
 msgid "Automatic"
 msgstr ""
 
-#: prefs.js:67
+#: prefs.js:77
 msgid "Always compact"
 msgstr ""
 
-#: prefs.js:68
+#: prefs.js:78
 msgid "Never compact"
 msgstr ""
 
-#: prefs.js:69
+#: prefs.js:79
 msgid "Compact drops the percent sign and the window suffix."
 msgstr ""
 
-#: prefs.js:69
+#: prefs.js:79
 msgid "Compact mode"
 msgstr ""
 
-#: prefs.js:82
+#: prefs.js:86
+msgid ""
+"The theme styles the popup and the top bar. Your own themes go in ~/.local/"
+"share/gnome-ai-quota/themes."
+msgstr ""
+
+#: prefs.js:90
+msgid "How the popup looks. Every theme has a light and a dark variant."
+msgstr ""
+
+#: prefs.js:90
+msgid "Theme"
+msgstr ""
+
+#: prefs.js:93
+msgid "Follow the system"
+msgstr ""
+
+#: prefs.js:94
+msgid "Light"
+msgstr ""
+
+#: prefs.js:95
+msgid "Dark"
+msgstr ""
+
+#: prefs.js:96
+msgid "Follow the GNOME setting, or force one."
+msgstr ""
+
+#: prefs.js:96
+msgid "Light or dark"
+msgstr ""
+
+#: prefs.js:100
+msgid "Popup"
+msgstr ""
+
+#: prefs.js:102
+msgid "24-hour clock"
+msgstr ""
+
+#: prefs.js:103
+msgid "Show reset times on a 24-hour clock."
+msgstr ""
+
+#: prefs.js:108
+msgid "1h 20min"
+msgstr ""
+
+#: prefs.js:109
+msgid "1h20"
+msgstr ""
+
+#: prefs.js:110
+msgid "How long until a quota resets is written."
+msgstr ""
+
+#: prefs.js:110
+msgid "Time until reset"
+msgstr ""
+
+#: prefs.js:113
+msgid "Open cards that need attention"
+msgstr ""
+
+#: prefs.js:114
+msgid "Cards in warning, critical or error states open on their own."
+msgstr ""
+
+#: prefs.js:121
 msgid "Demo build"
 msgstr ""
 
-#: prefs.js:83
+#: prefs.js:122
 msgid "More settings arrive in later milestones. This build shows demo data."
 msgstr ""

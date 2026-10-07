@@ -1,6 +1,7 @@
 import Adw from 'gi://Adw';
 import Gtk from 'gi://Gtk';
 
+import {listThemes} from './lib/services/themeFiles.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 /**
@@ -11,9 +12,11 @@ import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/ex
  * @param {Array<[string, string]>} choices - [value, label] pairs
  * @param {string} title
  * @param {string} subtitle
- * @returns {{row: Adw.ComboRow, sync: Function}} the row and a function that re-reads the setting
+ * @param {number[]} handlerIds - receives the id of the `changed` handler, so the
+ *   caller can disconnect it when the window closes
+ * @returns {Adw.ComboRow}
  */
-function choiceRow(settings, key, choices, title, subtitle) {
+function choiceRow(settings, key, choices, title, subtitle, handlerIds) {
     const row = new Adw.ComboRow({
         title,
         subtitle,
@@ -30,13 +33,20 @@ function choiceRow(settings, key, choices, title, subtitle) {
         if (choice)
             settings.set_string(key, choice[0]);
     });
-    return {row, sync};
+    // Follow outside changes (dconf, another window) while this window is open.
+    handlerIds.push(settings.connect(`changed::${key}`, sync));
+    return row;
 }
 
 export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
         const _ = this.gettext.bind(this);
+        const handlerIds = [];
+        window.connect('close-request', () => {
+            handlerIds.forEach(id => settings.disconnect(id));
+            return false;
+        });
 
         const page = new Adw.PreferencesPage({
             title: _('Appearance'),
@@ -51,8 +61,8 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
             ['left', _('Left')],
             ['center', _('Center')],
             ['right', _('Right')],
-        ], _('Position'), _('Where the quota items sit on the top bar.'));
-        bar.add(position.row);
+        ], _('Position'), _('Where the quota items sit on the top bar.'), handlerIds);
+        bar.add(position);
 
         const count = new Adw.SpinRow({
             title: _('Providers on the bar'),
@@ -66,17 +76,46 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
             ['auto', _('Automatic')],
             ['always', _('Always compact')],
             ['never', _('Never compact')],
-        ], _('Compact mode'), _('Compact drops the percent sign and the window suffix.'));
-        bar.add(compact.row);
+        ], _('Compact mode'), _('Compact drops the percent sign and the window suffix.'), handlerIds);
+        bar.add(compact);
 
-        // Follow outside changes (dconf, another window) while this window is open.
-        const ids = ['position', 'compact-mode'].map((key, i) =>
-            settings.connect(`changed::${key}`, [position, compact][i].sync));
-        window.connect('close-request', () => {
-            ids.forEach(id => settings.disconnect(id));
-            return false;
-        });
         page.add(bar);
+
+        const look = new Adw.PreferencesGroup({
+            title: _('Appearance'),
+            description: _('The theme styles the popup and the top bar. Your own themes go in ~/.local/share/gnome-ai-quota/themes.'),
+        });
+        const themes = choiceRow(settings, 'theme',
+            listThemes(this.path).map(({id, name}) => [id, name]),
+            _('Theme'), _('How the popup looks. Every theme has a light and a dark variant.'), handlerIds);
+        look.add(themes);
+        const scheme = choiceRow(settings, 'color-scheme', [
+            ['system', _('Follow the system')],
+            ['light', _('Light')],
+            ['dark', _('Dark')],
+        ], _('Light or dark'), _('Follow the GNOME setting, or force one.'), handlerIds);
+        look.add(scheme);
+        page.add(look);
+
+        const popup = new Adw.PreferencesGroup({title: _('Popup')});
+        const clock = new Adw.SwitchRow({
+            title: _('24-hour clock'),
+            subtitle: _('Show reset times on a 24-hour clock.'),
+        });
+        settings.bind('clock-24h', clock, 'active', 0);
+        popup.add(clock);
+        const reset = choiceRow(settings, 'reset-format', [
+            ['long', _('1h 20min')],
+            ['short', _('1h20')],
+        ], _('Time until reset'), _('How long until a quota resets is written.'), handlerIds);
+        popup.add(reset);
+        const autoOpen = new Adw.SwitchRow({
+            title: _('Open cards that need attention'),
+            subtitle: _('Cards in warning, critical or error states open on their own.'),
+        });
+        settings.bind('auto-open', autoOpen, 'active', 0);
+        popup.add(autoOpen);
+        page.add(popup);
 
         const demo = new Adw.PreferencesGroup({
             title: _('Demo build'),
