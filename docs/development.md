@@ -148,6 +148,30 @@ gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota demo
 The throwaway shells keep their settings out of reach of a `gsettings` call from
 outside, so set the key from a headless script with `Gio.Settings` instead.
 
+## Static analysis
+
+GitHub Actions run these on every push to `main`, every pull request and once a week
+(`.github/workflows`):
+
+| Workflow | Tool | Looks at |
+|---|---|---|
+| gitleaks | gitleaks, with `.gitleaks.toml` | secrets in the whole history |
+| codeql | CodeQL, `security-extended` | the JavaScript, the Python tools and the workflows; results under Security, Code scanning |
+| sast | bandit | the Python tools |
+| sast | Semgrep (`p/javascript`, `p/security-audit`, `p/secrets`) | the JavaScript and secrets |
+| sast | ShellCheck | the shell scripts and the hook |
+| sast | zizmor | the workflows themselves |
+
+A finding fails the job. Every action is pinned to a commit, workflows get the least
+permissions they need, and Dependabot (with a one-week cooldown) proposes new versions of the
+actions and of the pinned scanners in `.github/requirements-sast.txt`.
+
+`tools/sast.sh` runs the same commands locally and skips a tool that is not installed
+(`pipx install bandit semgrep zizmor`). When a scanner flags something that is safe, prefer
+changing the code so the reason is visible (the HTTP helper in `tools/import-client-ids.py`
+uses an opener that only speaks https, rather than an annotation); where an annotation is
+right, put the reason in a comment above it.
+
 ## Package
 
 `tools/pack.sh` builds `dist/<uuid>.shell-extension.zip` with everything the extension needs

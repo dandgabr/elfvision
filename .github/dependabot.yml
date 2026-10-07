@@ -1,0 +1,24 @@
+# Keeps the pinned actions and the pinned scanners up to date. Each update arrives as a pull
+# request, which the scans below then check like any other change.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    # A release must be a week old before it is proposed: a newly published, compromised
+    # version is usually caught within days.
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "ci"
+  - package-ecosystem: pip
+    directory: /.github
+    schedule:
+      interval: weekly
+    # A release must be a week old before it is proposed: a newly published, compromised
+    # version is usually caught within days.
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: "ci"

@@ -226,7 +226,8 @@ over HTTPS, without following redirects.
 Credentials stay out of the repository. A check that needs only git and Python
 (`tools/check-secrets.py`, run by the pre-commit hook: `git config core.hooksPath .githooks`)
 refuses a commit with a credential format, a known client id or a value from your local
-configuration; gitleaks runs as well when installed. `.gitignore` excludes `*.local.json`,
+configuration; gitleaks runs as well when installed. GitHub Actions also scan every change
+with gitleaks, CodeQL, bandit, Semgrep, ShellCheck and zizmor. `.gitignore` excludes `*.local.json`,
 `providers.json`, `credentials*.json`, `auth.json`, `.env` files, `*.pem`, `*.key`
 and a `secrets/` directory. The full model, including the terms-of-service risk of
 the OAuth providers, is in [ADR 0003](docs/adr/0003-security-model.md).

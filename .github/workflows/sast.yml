@@ -1,0 +1,91 @@
+# Static analysis that needs no build: bandit for the Python tools, Semgrep for the JavaScript
+# (and secrets, and general security rules), ShellCheck for the shell scripts and zizmor for
+# these workflows. A finding fails the job. To run them locally, see docs/development.md.
+name: sast
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "23 6 * * 3"
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: sast-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bandit:
+    name: bandit (Python)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - name: Install bandit
+        run: python -m pip install "$(grep '^bandit==' .github/requirements-sast.txt)"
+      - name: Run bandit
+        run: bandit --recursive tools
+
+  semgrep:
+    name: semgrep (JavaScript, secrets, security audit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - name: Install semgrep
+        run: python -m pip install "$(grep '^semgrep==' .github/requirements-sast.txt)"
+      - name: Run semgrep
+        run: >
+          semgrep scan
+          --config p/javascript --config p/security-audit --config p/secrets
+          --metrics=off --error --exclude tests .
+
+  shellcheck:
+    name: shellcheck (shell)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Run shellcheck
+        run: shellcheck --severity=warning tools/*.sh .githooks/pre-commit
+
+  zizmor:
+    name: zizmor (workflows)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - name: Install zizmor
+        run: python -m pip install "$(grep '^zizmor==' .github/requirements-sast.txt)"
+      - name: Run zizmor
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: zizmor --format=plain .github

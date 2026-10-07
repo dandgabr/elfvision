@@ -109,6 +109,23 @@ def from_binary(spec):
     return None, None
 
 
+def _https_only_opener():
+    """An opener that speaks https and nothing else: no file:, ftp: or custom scheme exists in
+    it, so an address cannot be turned into a local file read. (urlopen would accept them.)"""
+    opener = urllib.request.OpenerDirector()
+    for handler in (urllib.request.HTTPSHandler(), urllib.request.HTTPErrorProcessor(),
+                    urllib.request.HTTPDefaultErrorHandler()):
+        opener.add_handler(handler)
+    return opener
+
+
+def open_https(target, timeout):
+    url = target.full_url if isinstance(target, urllib.request.Request) else target
+    if not url.startswith('https://'):
+        raise ValueError('only https addresses are opened')
+    return _https_only_opener().open(target, timeout=timeout)
+
+
 def google_pair(spec):
     """The id and secret of the Google client the installed program signs in with.
 
@@ -135,7 +152,7 @@ def google_pair(spec):
             request = urllib.request.Request('https://oauth2.googleapis.com/token', data=body,
                                              headers={'Content-Type': 'application/x-www-form-urlencoded'})
             try:
-                urllib.request.urlopen(request, timeout=15)  # noqa: S310 (fixed https url)
+                open_https(request, timeout=15)
             except urllib.error.HTTPError as error:
                 try:
                     verdict = json.loads(error.read().decode()).get('error')
@@ -157,7 +174,7 @@ def from_public_source(spec):
     if 'public_url' not in spec:
         return None, None
     try:
-        with urllib.request.urlopen(spec['public_url'], timeout=20) as reply:  # noqa: S310 (fixed https url)
+        with open_https(spec['public_url'], timeout=20) as reply:
             text = reply.read(2_000_000).decode('utf-8', 'replace')
     except OSError:
         return None, None

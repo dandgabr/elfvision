@@ -17,7 +17,8 @@ import json
 import os
 import pathlib
 import re
-import subprocess
+# subprocess only ever runs git, with arguments written in this file.
+import subprocess  # nosec B404
 import sys
 
 PATTERNS = {
@@ -30,7 +31,8 @@ WORD = re.compile(r'[A-Za-z0-9_-]{20,}')
 
 
 def git(*args):
-    return subprocess.run(['git', *args], capture_output=True, text=True, check=False).stdout
+    # A fixed command and no shell.
+    return subprocess.run(['git', *args], capture_output=True, text=True, check=False).stdout  # nosec B603 B607
 
 
 def known_hashes():

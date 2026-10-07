@@ -55,7 +55,8 @@ be re-checked against the providers' current terms before each provider ships:
   A pre-commit hook runs `tools/check-secrets.py` (credential formats, the hashes of known
   client ids in `tests/known-ids.sha256`, every value of the local file), which needs only git
   and Python and always runs, and gitleaks too when it is installed (`.gitleaks.toml`). Tests
-  plant secrets and check that both are found. `providers.example.json` has placeholders only.
+  plant secrets and check that both are found. CI repeats the secret scan over the whole
+  history and adds static analysis (CodeQL, bandit, Semgrep, ShellCheck, zizmor). `providers.example.json` has placeholders only.
 
 ## Consequences
 
