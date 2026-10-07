@@ -25,14 +25,15 @@ changing `schemas/` or `po/`.
 ```
 extension.js        entry point (enable and disable)
 prefs.js            preferences window (GTK 4, libadwaita)
-lib/core/           pure JavaScript: contract, scheduler, cache format, theme compiler
-                    and its CSS template, severity, pacing, selection, fitting,
-                    formatting, view models, fixtures
-lib/services/       GLib and Gio glue: timers, cache file, theme files, theme manager,
-                    quota controller
-lib/ui/             St widgets: meter, bar item, provider card, indicator, tooltip,
-                    theme catalog text
-lib/providers/      provider errors and the demo providers
+lib/core/           pure JavaScript: contract, scheduler, errors, cache format, the parser
+                    of each provider's reply, theme compiler and its CSS template,
+                    severity, pacing, selection, fitting, formatting, view models
+lib/providers/     the registry, one module per provider, the demo providers
+lib/oauth/          PKCE, the sign-in's local server and flow, the token manager
+lib/services/       GLib, Gio and Soup glue: HTTP, keyring, timers, cache file, theme
+                    files, theme manager, quota controller
+lib/prefs/          the Accounts page and the theme picker text (GTK 4, libadwaita)
+lib/ui/             St widgets: meter, bar item, provider card, indicator, tooltip
 themes/builtin/     the 20 built-in themes, one folder each with a theme.json
 themes/v1.txt       the style slugs that tools/gen-themes.py generates
 schemas/            GSettings schema
@@ -46,11 +47,19 @@ tools/              build, translation, theme generation and test-shell scripts
 
 ```mermaid
 flowchart LR
-    providers["lib/providers<br/>fetch and parse"] --> services["lib/services<br/>timers, files, controller"]
-    services --> core["lib/core<br/>contract, scheduler, view models"]
-    core --> ui["lib/ui<br/>St widgets"]
-    services --> ui
+    ui["lib/ui<br/>St widgets"] --> core["lib/core<br/>contract, scheduler, errors, view models"]
+    prefs["lib/prefs<br/>Accounts page"] --> oauth["lib/oauth<br/>sign-in, tokens"]
+    providers["lib/providers<br/>one module each"] --> core
+    providers --> oauth
+    providers --> services["lib/services<br/>HTTP, keyring, files, controller"]
+    services --> core
+    oauth --> core
 ```
+
+The arrows say who may import whom. `tests/structure.test.js` checks the parts that matter:
+the core imports nothing outside the core and no `gi://` module, St and the shell
+modules stay in `lib/ui`, `extension.js` and the theme manager, and GTK and Adwaita stay in
+`prefs.js` and `lib/prefs`.
 
 - `lib/core` is pure. It imports no `gi://` or `resource://` module, so it runs under
   plain `gjs` and the tests cover it. Everything the UI shows is computed there
@@ -61,8 +70,9 @@ flowchart LR
 - `lib/ui` only draws. It takes view models and emits callbacks, and keeps no
   business logic.
 - `lib/providers` holds one module per provider, behind the contract in
-  `lib/core/contract.js`. A broken provider affects only its own card. Today only the
-  demo providers exist.
+  `lib/core/contract.js`. A broken provider affects only its own card. Providers are
+  listed in `lib/providers/registry.js`, which the Accounts page is generated from; adding
+  one is described in [ADR 0009](adr/0009-adding-providers.md).
 - `prefs.js` runs in a separate process from the shell and uses GTK 4 and
   libadwaita. Never import GTK or Adw in code that the shell loads.
 
@@ -72,8 +82,16 @@ flowchart LR
 gjs -m tests/run.js
 ```
 
-The suite covers `lib/core` and the theme compiler. Add a test with the code
-you change in `lib/core`; `tests/harness.js` is a minimal test runner.
+The suite covers the core, the theme compiler, the sign-in (PKCE, the local server, the flow and
+the token manager, against local servers), the HTTP client, the cache on disk and the checks
+that keep secrets out of the repository. Add a test with the code you change.
+`tests/harness.js` is a minimal runner: a test that does not finish in 15 seconds fails,
+`tmpDir()` gives a folder removed afterwards, and `gjs -m tests/run.js -- <text>` runs only the
+tests whose name contains `<text>`.
+
+`tools/check.sh` runs the tests together with everything else that needs no graphical session:
+script syntax, ShellCheck, the schemas, the translation template and catalogs (including that
+every placeholder survives translation) and whitespace. Run it before a commit.
 
 ## Three ways to run it
 
@@ -119,8 +137,8 @@ the shell.
 
 ### Demo scenarios
 
-Until real providers exist, the `demo-scenario` setting chooses what the demo
-providers do: `steady`, `flaky` or `drift` (see the README). In a session where the
+With the `data-source` setting on `demo` (Preferences, General, Advanced), the `demo-scenario`
+setting chooses what the made-up providers do: `steady`, `flaky` or `drift` (see the README). In a session where the
 extension is installed, change it with:
 
 ```sh
@@ -130,6 +148,13 @@ gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota demo
 The throwaway shells keep their settings out of reach of a `gsettings` call from
 outside, so set the key from a headless script with `Gio.Settings` instead.
 
+## Package
+
+`tools/pack.sh` builds `dist/<uuid>.shell-extension.zip` with everything the extension needs
+(code, icons, themes, schema and translations) and nothing else (no tests, tools or docs).
+Install it with `gnome-extensions install --force`, then log out and in. `gnome-extensions
+install` compiles the schema; unpacking the zip by hand does not.
+
 ## Signing in to OAuth providers
 
 The sign-in needs the provider's client id in `~/.config/gnome-ai-quota/providers.local.json`
@@ -138,8 +163,9 @@ the id in the AI tool installed on your computer, then in that tool's open-sourc
 writes it to the file with mode 0600 without printing it. The nested shell copies that file in,
 so Connect works there too, and keeps the sign-in in its own throwaway keyring.
 
-Enable the pre-commit hook once per clone with `git config core.hooksPath .githooks`; it runs
-gitleaks when installed and refuses staged values of the local file.
+Enable the pre-commit hook once per clone with `git config core.hooksPath .githooks`. It always
+runs `tools/check-secrets.py` (credential formats, hashes of known client ids, every value of your
+local file) and also gitleaks when it is installed. It refuses the commit when it finds something.
 
 ## Themes
 

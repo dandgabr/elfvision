@@ -58,31 +58,42 @@ metric and come after these four.
    **Antigravity is not allowed by its terms** and Google could suspend your whole Google
    account; the page asks you to confirm before it connects.
 
-Nothing appears on the bar until an account is connected.
+Until an account is connected the bar shows only the extension's icon, and the popup says so and
+has an **Add account** button.
 
 ## Requirements
 
-- GNOME Shell 50 (developed on Fedora 44).
-- To build: `glib-compile-schemas` (glib2 development tools) and `msgfmt` (gettext).
-- To run the tests: `gjs`.
+- GNOME Shell 50 (developed on Fedora 44) and a Secret Service for the keys and sign-ins
+  (GNOME Keyring or any other that provides `org.freedesktop.secrets`).
+- To build: `glib-compile-schemas` and `msgfmt`
+  (`sudo dnf install glib2-devel gettext`), and `python3`.
+- To run the tests: `gjs`; `shellcheck` is used by `tools/check.sh` when installed.
 - To try it in a window: `mutter-devkit` (`sudo dnf install mutter-devkit`).
-- `python3`, used by the helper scripts.
 
-## Install from a clone
+## Install
+
+There is no release package yet: install from a clone, as a package built from it or as a link.
 
 ```sh
 git clone https://github.com/dandgabr/gnome-ai-quota.git
 cd gnome-ai-quota
-tools/build.sh
-mkdir -p ~/.local/share/gnome-shell/extensions
-ln -s "$PWD" ~/.local/share/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io
-gnome-extensions enable gnome-ai-quota@dandgabr.github.io
+tools/pack.sh                                   # builds dist/gnome-ai-quota@dandgabr.github.io.shell-extension.zip
+gnome-extensions install --force dist/gnome-ai-quota@dandgabr.github.io.shell-extension.zip
 ```
 
-`tools/build.sh` compiles the GSettings schema and the translations; run it again
-after changing `schemas/` or `po/`. On Wayland, a newly linked extension is only
-found after you log out and back in. After that, `gnome-extensions enable` works
-without a new login, and code changes need one.
+Then **log out and back in**: on Wayland the shell only finds a newly installed extension at
+login. After that, `gnome-extensions enable gnome-ai-quota@dandgabr.github.io` turns it on.
+Installing a new build also needs a new login.
+
+To work on the code, link the folder instead of installing a package:
+
+```sh
+tools/build.sh                                   # compiles the schema and the translations
+mkdir -p ~/.local/share/gnome-shell/extensions
+ln -s "$PWD" ~/.local/share/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io
+```
+
+`tools/build.sh` must run again after changing `schemas/` or `po/`.
 
 ## Try it without touching your session
 
@@ -101,27 +112,20 @@ tools/headless-shell.sh        # no window: boot, print the extension state and 
 
 Open them from the popup (Preferences) or with `gnome-extensions prefs`.
 
-| Section | Option | What it does |
+| Page and group | Option | What it does |
 |---|---|---|
-| Top bar | Position | Left, center or right box of the panel. Default: right. |
-| Top bar | Providers on the bar | The most providers shown, 1 to 5. Default: 3. |
-| Top bar | Compact mode | Automatic (shrink only when space runs out), always compact, or never compact (drop providers, keep `%` and suffix). |
-| Appearance | Light or dark | Follow the system, or force light or dark for the popup. The top bar is always dark. |
-| Appearance | Theme | Opens the theme picker. Default: System (GNOME). |
-| Appearance | Your themes | Opens the folder for your own themes. |
-| Popup | Clock | Follow the GNOME clock setting, or force 12 or 24 hours for reset times. |
-| Popup | Time until reset | `1h 20min` or `1h20`. |
-| Popup | Open cards that need attention | Cards in warning, critical or error state open on their own. A card you open or close by hand keeps that choice until its state changes. |
-
-The `demo-scenario` key has no page in Preferences. Set it with `gsettings`:
-
-```sh
-gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota demo-scenario flaky
-```
-
-`steady` keeps everything healthy, `flaky` cycles through a network error, a rate
-limit, a signed-out provider and a bad reply every 15 seconds, and `drift` raises
-usage toward the limits every 10 seconds.
+| Accounts, each provider | Status, key or Connect | The key field (Command Code) or Connect, Cancel and Disconnect (the others), with what the last check said. |
+| Accounts, each provider | Track | Off stops fetching and hides the provider from the bar and the popup. Your credentials stay saved. |
+| General, Top bar | Position | Left, center or right box of the panel. Default: right. |
+| General, Top bar | Providers on the bar | Up to this many, 1 to 5, most critical first. Default: 3. |
+| General, Top bar | Compact mode | Automatic (shrink only when space runs out), always compact, or never compact (hide providers instead). |
+| General, Colors and theme | Light or dark | Follow the system, or force light or dark for the popup. The top bar is always dark. |
+| General, Colors and theme | Theme | Opens the theme picker. Default: System (GNOME). |
+| General, Colors and theme | Your themes | Opens the folder for your own themes. |
+| General, Popup | Clock | Follow the GNOME clock setting, or force 12 or 24 hours for reset times. |
+| General, Popup | Time until reset | `1h 20min` or `1h20`. |
+| General, Popup | Open cards that need attention | Cards in warning, critical or error state open on their own. A card you open or close by hand keeps that choice until its state changes. |
+| General, Advanced | Data source, Demo scenario | Demo data shows made-up providers (`steady`, `flaky` or `drift`) so every state can be seen without an account. The popup says when the data is made up. |
 
 ## Themes
 
@@ -169,24 +173,28 @@ system language. To add a language, see
 extension.js     entry point (enable and disable)
 prefs.js         preferences window (GTK 4, libadwaita)
 metadata.json    uuid, name, supported shell version
-lib/core/        pure JavaScript: data contract, scheduler, cache format, theme compiler, view models
-lib/services/    GLib and Gio glue: timers, cache file, theme files, the quota controller
+lib/core/        pure JavaScript: data contract, scheduler, cache format, errors, parsers of each
+                 provider's reply, theme compiler, view models
+lib/providers/   the provider registry, one module per provider and the demo providers
+lib/oauth/       PKCE, the local server of the sign-in, the sign-in flow, the token manager
+lib/services/    GLib, Gio and Soup glue: HTTP, keyring, timers, cache file, theme files, controller
+lib/prefs/       the Accounts page and the theme picker text (GTK 4, libadwaita)
 lib/ui/          St widgets: bar item, meter, provider card, indicator, tooltip
-lib/providers/   provider errors and the demo providers
 themes/builtin/  the 20 built-in themes
 schemas/         GSettings schema
 icons/           one symbolic icon per provider
 po/              gettext template and translations
-tests/           unit tests for lib/core and the theme compiler
-tools/           build, translation, theme generation and test-shell scripts
+tests/           unit tests that run under gjs, with no GNOME Shell
+tools/           build, package, check, translation, theme generation, client id helper, test shells
 docs/            development guide and architecture decision records
 ```
 
 ## Development and tests
 
 ```sh
-tools/build.sh
-gjs -m tests/run.js
+tools/check.sh      # tests, script syntax, ShellCheck, schemas and translations in one go
+tools/build.sh      # compile the schema and translations
+gjs -m tests/run.js # only the tests (add -- <text> to run the ones whose name contains it)
 ```
 
 [docs/development.md](docs/development.md) covers the architecture rules, adding a
@@ -198,7 +206,7 @@ design are in [docs/adr](docs/adr/README.md).
 | Milestone | Content | Status |
 |---|---|---|
 | M0 | Skeleton: panel button, bar, popup with demo cards | done |
-| M1 | Data layer (contract, scheduler, cache), themes, appearance settings | done, in PR #1 |
+| M1 | Data layer (contract, scheduler, cache), themes, appearance settings | done |
 | M2 | Command Code with an API key stored in libsecret | done |
 | M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | done |
 | M4 | Notifications, connection alerts, polish | planned |
@@ -207,13 +215,18 @@ Details in [ADR 0008](docs/adr/0008-mvp-roadmap.md).
 
 ## Security
 
-The extension does not read or change files, tokens or settings of any AI tool
-(Claude Code, Codex CLI and others). It keeps its own credentials. Secrets are stored
+While it runs, the extension does not read or change files, tokens or settings of any AI tool
+(Claude Code, Codex CLI and others). It keeps its own credentials. The one exception is
+`tools/import-client-ids.py`, which you run yourself: it reads the installed program of a tool
+only to find the public client id that tool signs in with, never a token. Secrets are stored
 in the desktop keyring through libsecret, never in GSettings, files or logs, and there
 is no plaintext fallback. The Command Code key is sent only to `api.commandcode.ai`
 over HTTPS, without following redirects.
 
-Credentials stay out of the repository: `.gitignore` excludes `*.local.json`,
+Credentials stay out of the repository. A check that needs only git and Python
+(`tools/check-secrets.py`, run by the pre-commit hook: `git config core.hooksPath .githooks`)
+refuses a commit with a credential format, a known client id or a value from your local
+configuration; gitleaks runs as well when installed. `.gitignore` excludes `*.local.json`,
 `providers.json`, `credentials*.json`, `auth.json`, `.env` files, `*.pem`, `*.key`
 and a `secrets/` directory. The full model, including the terms-of-service risk of
 the OAuth providers, is in [ADR 0003](docs/adr/0003-security-model.md).

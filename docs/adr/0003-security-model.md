@@ -1,7 +1,7 @@
 # 0003. Security model and terms-of-service risk
 
-Status: accepted. Nothing in this record is implemented yet: the build holds no
-credentials. It binds M2 to M4.
+Status: accepted and implemented (M2 and M3). The notifications and alerts of M4 will follow
+the same rules.
 
 ## Context
 
@@ -27,12 +27,13 @@ be re-checked against the providers' current terms before each provider ships:
   identifies the extension as that application; this is accepted for personal use
   and documented here.
 - **Secrets are stored in libsecret** (`gi://Secret`) under a dedicated schema with
-  the attributes `provider` and `account`. Nothing goes into GSettings, files or
-  logs. If the keyring is locked or missing, the provider becomes `auth_required`
-  with the reason; there is no plaintext fallback.
+  the attributes `provider` and `kind` (`api-key` or `oauth-token`). Nothing goes into
+  GSettings, files or logs. The shell never asks the user to unlock the keyring: a locked or
+  missing one is a failure with the reason `keyring`, reported as a network-type state so that
+  polling resumes by itself once it is unlocked. There is no plaintext fallback.
 - **OAuth login runs in the preferences process** (`prefs.js`), not in the shell,
   through a temporary loopback `Soup.Server` bound to `127.0.0.1`: single use,
-  about 120 seconds, exact path check. The extension only reads and refreshes
+  about 300 seconds, exact path check. The extension only reads and refreshes
   tokens.
 - **PKCE** uses a 32-byte verifier from `/dev/urandom` (never `Math.random`), the
   `S256` method through `GLib.Checksum`, and a validated random `state`. The redirect
@@ -51,8 +52,10 @@ be re-checked against the providers' current terms before each provider ships:
   runtime. The repository carries only a `providers.example.json` with placeholders.
   `.gitignore` already excludes `*.local.json`, `providers.json`,
   `credentials*.json`, `auth.json`, `.env` files, `*.pem`, `*.key` and `secrets/`.
-  A gitleaks pre-commit hook and a test that fails when a known client id appears in
-  source will back this up. Neither exists yet, nor does `providers.example.json`.
+  A pre-commit hook runs `tools/check-secrets.py` (credential formats, the hashes of known
+  client ids in `tests/known-ids.sha256`, every value of the local file), which needs only git
+  and Python and always runs, and gitleaks too when it is installed (`.gitleaks.toml`). Tests
+  plant secrets and check that both are found. `providers.example.json` has placeholders only.
 
 ## Consequences
 

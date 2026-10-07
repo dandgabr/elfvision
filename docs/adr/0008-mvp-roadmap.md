@@ -9,37 +9,21 @@ Each milestone is tried in the nested shell (`tools/nested-shell.sh`).
 | Milestone | Content | Status |
 |---|---|---|
 | M0 | Skeleton: `metadata.json` for shell 50, panel button, bar with the pacing tick, popup with demo cards. No network. | done |
-| M1 | Data layer: the `ProviderSnapshot` contract, scheduler (interval, jitter, backoff, stale), severity and pacing, disk cache, deterministic demo providers, unit tests under `gjs`. Theme loader with the 20 themes. Appearance settings and the theme picker. | done, in PR #1 |
+| M1 | Data layer: the `ProviderSnapshot` contract, scheduler (interval, jitter, backoff, stale), severity and pacing, disk cache, deterministic demo providers, unit tests under `gjs`. Theme loader with the 20 themes. Appearance settings and the theme picker. | done |
 | M2 | Command Code: the first real provider, with an API key stored in libsecret and a minimal key field in Preferences. Closes the loop end to end. | done |
 | M3 | OAuth in Preferences: a reusable loopback server and PKCE, single-flight refresh. Providers in order: Codex, Claude, Antigravity. Structure in ADR 0009. | done |
-| M4 | Notifications with dedupe and hysteresis, the connection alert, `auth_required` and stale states in the UI, `providers.local.json`, the gitleaks pre-commit hook, tracking controls. | planned |
+| M4 | Notifications with dedupe and hysteresis, the connection alert, a legend for the symbols, the bar tooltip, a section for providers that are not tracked, an About page and restoring defaults, a language choice, a first-use assistant. | planned |
 
 Provider order: Command Code, Codex, Claude, Antigravity.
 
-## Planned layout
+## Next: M4
 
-Directories that exist today are described in the README. M2 to M4 add:
-
-```
-lib/providers/   command-code.js codex.js claude.js antigravity.js
-lib/oauth/       pkce.js loopback.js
-providers.example.json
-```
-
-## Before M2
-
-- Add `providers.example.json` with placeholders and the gitleaks pre-commit hook
-  (ADR 0003).
-- Re-check each provider's terms and endpoints against primary sources before
-  relying on them.
-
-## Before M3
-
-- Decide how a new provider is added: the shape of a provider module, how the Accounts
-  page grows beyond one account (one group per provider, or a list), and how a login
-  flow, a key entry and their states look. This goes through a design review (UI, UX
-  and frontend) before any code, because Command Code's page is a template the other
-  three will copy.
+Three things come first, because they decide the shape of the rest: where an alert is raised (the
+controller should report the previous and the new snapshot of a provider, so an alert service can
+keep its own state and dedupe by provider, metric and reset time), what the connection alert
+means for a provider that is paused, and where the notification text is reviewed for the same
+terms the rest of the interface uses. As with the provider structure (ADR 0009), a design review
+(UI, UX and frontend) comes before the code.
 
 ## Open items
 
