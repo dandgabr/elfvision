@@ -19,8 +19,7 @@ notification text is reviewed.
 The language is the one of the GNOME Shell session. The extension uses the shell's own gettext
 (`Extension.gettext`), so it follows the session locale; a language without a catalog shows the
 English msgids. There is no language setting, no language step in the assistant and no process-wide
-`setlocale` or `LANGUAGE` change (that would translate the shell itself). ADR 0007 is rewritten
-accordingly. Catalogs: English (the msgids) and pt-BR.
+`setlocale` or `LANGUAGE` change (that would translate the shell itself). Catalogs: English (the msgids) and pt-BR.
 
 ### Where alerts are raised
 
@@ -39,7 +38,7 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 
 - Fire only when a metric crosses from below the threshold to at or above it. Default threshold 95%
   (the critical level); per quota type (session, weekly, monthly, credits) the user can turn it off
-  or change it, as decided in the bar round.
+  or change it.
 - Dedupe by provider, metric and level. Re-arm when usage falls 3 points below the threshold
   (hysteresis) or when the reset time moves forward by more than five minutes (never key on the raw
   reset time: APIs wobble by seconds).
@@ -56,8 +55,9 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 - The alert state (`provider`, `metric`, `level`, `resetsAt`) is kept in
   `~/.cache/gnome-ai-quota/alerts.json`, written like the snapshot cache (private folder, atomic
   replace), validated on load (size in bytes, key shapes, ranges; timestamps in the future are
-  dropped). A corrupt or missing file means nothing was alerted yet. What was seen about a metric
-  is forgotten after 24 hours (or three poll intervals), so a file from before a long pause cannot
+  dropped). A corrupt or missing file means nothing was alerted yet.
+- What was seen about a metric
+  is forgotten after 24 hours or three poll intervals, whichever is longer, so a file from before a long pause cannot
   announce a state that already existed; a shorter pause (a lock, a night) still catches a crossing. The alert service re-evaluates every provider once a
   minute, because a rejected sign-in produces one snapshot and is never polled again.
 
@@ -85,6 +85,9 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
   offer "Open", which opens the popup; neither does anything while the screen is locked. Never an account or
   user name, email, plan, error or HTTP text, path or token. Numbers are checked and clamped,
   enumerations looked up in a table, so nothing provider-controlled reaches the text.
+- Verified in a Shell 50.5: `MessageTray.Source`, `Notification`, `addAction` and `source.addNotification`
+  behave as used, and with Do Not Disturb on neither a normal nor a high-urgency notification shows a
+  banner while both stay in the list.
 - The extension declares no `unlock-dialog` session mode, so the shell switches it off while the
   screen is locked (checked in a Shell 50.5: `disable()` runs on lock and the notifier is gone).
   Nothing of the extension can therefore be on a lock screen: its notification source is destroyed
@@ -116,7 +119,7 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
   setting, which the extension already follows). The "Add account" line stays separate and quiet below
   it: it means "never connected", which is not the same as paused. The section opens by itself when
   nothing else is on the popup, until the user opens or closes it by hand.
-- **About:** `Adw.AboutDialog` with the version from `metadata.json`, the licence, constant
+- **About:** `Adw.AboutDialog` with the version from `metadata.json`, the license, constant
   `https://` links and an own application icon in `icons/hicolor`. No paths or user name.
 - **Restore defaults:** every schema key is classified as reset or kept, and a test fails for an
   unclassified key. It resets appearance, bar, popup, notification and threshold settings, the theme
@@ -132,7 +135,7 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
   shown in the row ("Notifies at 95% used" or "Off"). With the master switch off the rows are dimmed,
   not blocked.
 - **First-use assistant:** an `Adw.NavigationView` inside Preferences, never a window opened by the
-  shell, gated by `first-run-done`, skippable and resumable: welcome, choose providers (the terms
+  shell, gated by a setting to be added, skippable and resumable: welcome, choose providers (the terms
   notice before any sign-in), connect each one (a failure does not block the next), choose the bar,
   notifications (the default and the 5-hour window offered). The popup keeps its empty state with
   "Add account". It never reads other tools' credential files or the environment, never turns on a
@@ -141,26 +144,9 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 ### Structure and checks
 
 - A bar item or a card whose view did not change is not redrawn, and one whose draw failed is drawn
-  again. The indicator's own logic (654 lines) stays in `lib/ui` for now.
+  again. The indicator's own logic stays in `lib/ui` for now.
 - `structure.test.js` also checks that `alerts.js` imports no `gi://`, that `MessageTray` appears
   only in `lib/ui/` and that `Gio.DBus` appears only in `lib/services/`.
-
-## How it was built
-
-Each part was reviewed (UI, UX, frontend, security, QA as it applied) before it was merged.
-
-1. The alert reducer, its stored state and the controller's change reports (PR 8).
-2. The notifier and its wiring, with the settings in the schema and the pt-BR texts (PR 8).
-3. Suspend and resume, and the connection alert (PR 8).
-4. The Notifications page, Restore defaults and About (PR 9).
-5. The legend, the bar tooltip and the "not tracked" list (PR 10).
-
-Checks added on the way, because the unit tests cannot import the interface modules:
-`tools/check.sh` builds first, checks the syntax of every JavaScript module and enables the
-extension in a headless shell and reads its state (it fails on a name declared twice or not defined).
-The verification that notifications work was done in a Shell 50.5: `MessageTray.Source`, `Notification`,
-`addAction` and `source.addNotification` behave as used, and with Do Not Disturb on neither a normal nor
-a high-urgency notification shows a banner while both stay in the list.
 
 ## Pending
 
@@ -178,11 +164,9 @@ Work that was decided here and is not done:
 - **ESLint** (`no-undef` and the like) in CI: today the shell step of `tools/check.sh` covers it
   locally, and CI does not run the shell.
 
-Known limits and open questions:
+Open questions:
 
-- The extension is off while the screen is locked (no `unlock-dialog` mode): no alert is raised
-  then, and a notification that was not read before locking is gone after unlocking.
 - Whether "Disconnect all accounts and delete local data" is wanted as a separate action.
 - Whether the pt-BR text needs a reader other than the owner.
-- A warning and a critical level share one threshold per kind of quota; the text says which level was
+- A warning and a critical level share one threshold per kind of quota. The text says which level was
   reached, but a second threshold is not offered.

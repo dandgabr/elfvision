@@ -83,7 +83,7 @@ once, here, after a review by UI, UX, frontend and security consultants.
   sign-in. The reply page is static, reflects nothing and carries `no-store`,
   `no-referrer`, `nosniff` and a strict CSP.
 - The sign-in times out after 300 seconds (a browser seen for the first time, a password
-  manager and a second factor take a while); this replaces the 120 seconds of ADR 0003.
+  manager and a second factor can take a minute or two); this replaces the 120 seconds of ADR 0003.
 - While it waits, the Accounts page also takes what the user pastes: the whole address the
   browser ended on, or only the code. This covers a browser that cannot reach the local
   server (another sandbox, a closed port, a timeout seen too late). An address carries the

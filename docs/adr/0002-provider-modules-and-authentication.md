@@ -48,7 +48,7 @@ These endpoints are unofficial and may change without notice.
      interval, and its values are hidden after 24 hours without a successful fetch.
 5. **Money metrics** (`kind: money`) are first-class: the balance is the value, the
    bar is the share of the configured budget already spent, there is no window or
-   reset, and a dollar floor can be configured.
+   reset. A dollar floor for the alerts is not implemented.
 6. **Providers the user no longer uses.** *Track* (a switch per account) off pauses
    collection and hides the provider while the credential stays saved. *Disconnect* or
    *Remove key* deletes the stored credential (the separate *Remove connector* of the first
@@ -64,7 +64,7 @@ Implemented in `lib/core/scheduler.js`, `lib/core/contract.js` and
   provider, with a 30 s timeout. A fetch receives a context with `isCancelled()`,
   true once the scheduler gave up on it (timeout, provider removed).
 - An interval below 5 s is raised; a missing or invalid one falls back to 5 min.
-- Backoff on failure is 30 s, 1 min, 2 min and so on, capped at 1 h. A server's retry
+- Backoff on failure doubles from 30 s (30 s, 1 min, 2 min, and so on), capped at 1 h. A server's retry
   hint is honored but never longer than the cap. Every failure snapshot records
   `nextRetryAt`, so the UI can say when the next attempt happens.
 - `auth_required` pauses the provider. A manual refresh, `credentialsChanged` or a

@@ -1,8 +1,7 @@
 # 0005. Popup design and defaults
 
 Status: accepted. The one-column popup, failure states, empty states and the settings below are
-implemented, and M4 added the legend, the "Not tracked" section and the bar tooltip (ADR 0010). What
-is marked planned is still not built.
+implemented, except what is marked planned.
 
 ## Context
 

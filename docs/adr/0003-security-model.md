@@ -6,7 +6,7 @@ file. CI repeats the secret scan and adds static analysis (see the development g
 
 ## Context
 
-The extension will handle OAuth tokens and API keys for several providers and runs
+The extension handles OAuth tokens and API keys for several providers and runs
 inside the GNOME Shell process. As of October 2026, from public sources that have to
 be re-checked against the providers' current terms before each provider ships:
 
@@ -22,7 +22,7 @@ be re-checked against the providers' current terms before each provider ships:
 
 - **Personal use only. The project is not published to extensions.gnome.org.**
   The Claude, Codex and Antigravity modules authenticate with the public client id
-  of the respective CLI. This carries a terms-of-service risk, including account
+  of each provider's CLI. This carries a terms-of-service risk, including account
   suspension. Each such module is flagged `tosRisk`, is opt-in and shows a warning
   on first connection. Using another application's client id or User-Agent
   identifies the extension as that application; this is accepted for personal use
@@ -31,7 +31,7 @@ be re-checked against the providers' current terms before each provider ships:
   the attributes `provider` and `kind` (`api-key` or `oauth-token`). Nothing goes into
   GSettings, files or logs. The shell never asks the user to unlock the keyring: a locked or
   missing one is a failure with the reason `keyring`, reported as a network-type state so that
-  polling resumes by itself once it is unlocked. There is no plaintext fallback.
+  polling resumes by itself once the keyring is unlocked. There is no plaintext fallback.
 - **OAuth login runs in the preferences process** (`prefs.js`), not in the shell,
   through a temporary loopback `Soup.Server` bound to `127.0.0.1`: single use,
   about 300 seconds, exact path check. The extension only reads and refreshes
@@ -43,21 +43,21 @@ be re-checked against the providers' current terms before each provider ships:
 - **Refresh** is single-flight per provider. The new refresh token is stored before
   it is used, because tokens rotate. A refresh error becomes `auth_required`, never a
   retry loop.
-- **Network.** HTTPS only, a host allowlist per module, no cross-host redirects,
-  timeouts and response size limits, polling at 5 minutes or slower with jitter, no
-  logging of headers or bodies, token redaction in errors.
-- **Parsing.** `JSON.parse` inside a try block, type and range validation, values
-  clamped to 0 to 100, unknown fields ignored.
+- **Network.** Requests use HTTPS only, with a host allowlist per module, no cross-host redirects, timeouts
+  and response size limits. Polling runs at 5 minutes or slower, with jitter. Headers and bodies are
+  never logged, and tokens are redacted in errors.
+- **Parsing.** `JSON.parse` runs inside a try block, types and ranges are validated, values are clamped
+  to 0 to 100 and unknown fields are ignored.
 - **Secrets stay out of the repository.** Client ids, secrets and User-Agent strings
   live in `~/.config/gnome-ai-quota/providers.local.json` (mode 0600), loaded at
   runtime. The repository carries only a `providers.example.json` with placeholders.
-  `.gitignore` already excludes `*.local.json`, `providers.json`,
+  `.gitignore` excludes `*.local.json`, `providers.json`,
   `credentials*.json`, `auth.json`, `.env` files, `*.pem`, `*.key` and `secrets/`.
   A pre-commit hook runs `tools/check-secrets.py` (credential formats, the hashes of known
   client ids in `tests/known-ids.sha256`, every value of the local file), which needs only git
   and Python and always runs, and gitleaks too when it is installed (`.gitleaks.toml`). Tests
-  plant secrets and check that both are found. CI repeats the secret scan over the whole
-  history and adds static analysis (CodeQL, bandit, Semgrep, ShellCheck, zizmor). `providers.example.json` has placeholders only.
+  plant secrets and check that the pre-commit hook and gitleaks both find them. CI repeats the secret
+  scan over the whole history and adds static analysis (CodeQL, bandit, Semgrep, ShellCheck, zizmor).
 
 ## Consequences
 
