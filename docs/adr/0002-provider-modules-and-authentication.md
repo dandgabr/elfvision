@@ -58,6 +58,26 @@ These endpoints are unofficial and may change. They are documented in the
    deletes the stored credential and hides the provider. An untracked provider never
    raises an alert or takes a bar slot.
 
+## Scheduler and cache (amended 2026-10-06)
+
+Implemented in `lib/core/scheduler.js`, `lib/core/contract.js` and
+`lib/core/cache.js`.
+
+- One fetch at a time per provider, 30 s timeout. A fetch receives a context with
+  `isCancelled()`, true once the scheduler gave up on it (timeout, provider removed).
+- Poll intervals below 5 s are raised; a missing or invalid one falls back to 5 min.
+  Backoff on failure is 30 s, 1 min, 2 min, ... capped at 1 h; a server's retry hint
+  is honored but never longer than the cap. Every failure snapshot records
+  `nextRetryAt`, so the UI can say when the next attempt happens.
+- `auth_required` pauses the provider. A manual refresh, `credentialsChanged`, or a
+  successful fetch resumes the schedule; new credentials during a fetch in flight
+  cause one more fetch.
+- A reply whose every metric is unusable is a `parse_error` and keeps the last good
+  data. Error messages are redacted (URLs, token-like strings) before they are kept.
+- The cache (`~/.cache/gnome-ai-quota/snapshots.json`, mode 0600) is capped at 256 KiB,
+  32 snapshots, 16 metrics each and 64 characters per text, and is only written back
+  after it was read, so stopping during the load cannot wipe it.
+
 ## Consequences
 
 - No behavior depends on a CLI renewing its token.

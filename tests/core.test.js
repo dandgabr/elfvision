@@ -5,7 +5,7 @@ import {aheadOfPace, expectedPercent} from '../lib/core/pacing.js';
 import {selectForBar} from '../lib/core/selection.js';
 import {demoSnapshots} from '../lib/core/fixtures.js';
 import {candidateLayouts, chooseLayout, chooseStickyLayout, sideWidth} from '../lib/core/fit.js';
-import {barView, cardView, fmt, summaryText, updatedText} from '../lib/core/viewmodel.js';
+import {barView, cardView, fmt, footerText, problemCount, summaryText, updatedText} from '../lib/core/viewmodel.js';
 
 const NOW = Date.UTC(2026, 9, 6, 19, 46);
 const demo = () => demoSnapshots(NOW);
@@ -60,7 +60,8 @@ test('durations use short units', () => {
     assertEqual(formatDuration(120 * min), '2h');
     assertEqual(formatDuration((2 * 1440 + 130) * min), '2d 2h');
     assertEqual(formatDuration((1440 + 23 * 60 + 40) * min), '2d');
-    assertEqual(formatDuration(-5 * min), '0min');
+    assertEqual(formatDuration(-5 * min), '0s');
+    assertEqual([formatDuration(12000), formatDuration(59000), formatDuration(60000)], ['12s', '59s', '1min']);
 });
 
 test('clock honors 12 and 24 hour settings', () => {
@@ -208,7 +209,7 @@ test('robustness: a provider without metrics does not break the card or the bar'
     const card = cardView(empty, {nowMs: NOW});
     assertEqual([card.groups.length, card.message, card.heroSmall], [0, 'No quota data yet.', '']);
     assertEqual(barView(empty).accessibleName, 'X');
-    assertEqual(cardView({...empty, state: 'network'}, {nowMs: NOW}).message, 'No quota data yet.');
+    assertEqual(cardView({...empty, state: 'network'}, {nowMs: NOW}).message, "Couldn't get the data yet.");
 });
 
 test('robustness: a window without a reset time still renders', () => {
@@ -260,4 +261,52 @@ test('view model: the weekday appears when the reset is on another calendar day'
         {nowMs: noon, locale: 'en'}).groups[0].rows[0];
     assertEqual(rowFor(2).absoluteText, '14:00');
     assertTrue(rowFor(20).absoluteText.startsWith('Wed'), rowFor(20).absoluteText);
+});
+
+const failed = (state, extra = {}) => ({...byId(demo(), 'codex'), state,
+    source: {kind: 'stale', fetchedAt: NOW - 12 * 60000}, ...extra});
+
+test('failures: each code gets its own pill, message and retry line', () => {
+    const ctx = {nowMs: NOW, locale: 'en'};
+    const network = cardView(failed('network', {nextRetryAt: NOW + 90000}), ctx);
+    assertEqual([network.pill.text, network.message, network.retryText, network.canRetry],
+        ['⚠ No connection', "Can't reach the service. Showing the last value, from 12min ago.", 'Retrying in 2min.', true]);
+    const limited = cardView(failed('rate_limited', {nextRetryAt: NOW + 20 * 60000}), ctx);
+    assertEqual([limited.pill.text, limited.message, limited.retryText, limited.canRetry],
+        ['⚠ Rate limited', 'Too many requests.', 'Retrying in 20min.', false]);
+    assertEqual(cardView(failed('parse_error'), ctx).message, 'The service replied in an unexpected way. Showing the last value.');
+    assertEqual(cardView(failed('provider_changed'), ctx).pill.text, '⚠ Service changed');
+    assertEqual(cardView(failed('network'), ctx).retryText, 'Retrying soon.');
+});
+
+test('failures: a signed-out provider has no retry and no value', () => {
+    const view = cardView(failed('auth_required'), {nowMs: NOW});
+    assertEqual([view.pill.text, view.heroText, view.retryText, view.canRetry, view.message],
+        ['⊘ Signed out', '–', null, false, 'Account connection arrives in a later version.']);
+});
+
+test('failures: the last value is marked approximate and drawn neutral', () => {
+    const view = cardView(failed('network'), {nowMs: NOW});
+    assertEqual(view.heroText, '~82');
+    assertEqual(view.groups[0].rows.map(r => [r.cssClass, r.mark]), [['gaq-stale', ''], ['gaq-stale', '']]);
+    assertEqual(barView(failed('network')).number, '~82');
+    assertEqual(barView(failed('network')).accessibleName, 'Codex: no connection');
+    assertEqual(barView(failed('rate_limited')).accessibleName, 'Codex: rate limited');
+    assertEqual(barView(failed('parse_error')).accessibleName, 'Codex: service problem');
+});
+
+test('failures: the first fetch failing without data explains itself', () => {
+    const first = cardView({id: 'x', name: 'X', state: 'network', source: {kind: 'stale'}, metrics: [], nextRetryAt: NOW + 30000},
+        {nowMs: NOW});
+    assertEqual([first.message, first.retryText, first.heroText], ["Couldn't get the data yet.", 'Retrying in 30s.', '–']);
+});
+
+test('summary and footer tell signed-out apart from failing, and do not hide problems', () => {
+    const list = [byId(demo(), 'claude'), failed('auth_required'), failed('network')];
+    assertEqual(summaryText(list), '1 critical · 1 signed out · 1 with a problem');
+    assertEqual(problemCount(list), 2);
+    assertEqual(footerText(null, 0), 'Not updated yet');
+    assertEqual(footerText(130000, 0), 'Updated 2 min ago');
+    assertEqual(footerText(130000, 1), 'Updated 2 min ago · 1 with a problem');
+    assertEqual(footerText(130000, 3), 'Updated 2 min ago · 3 with problems');
 });

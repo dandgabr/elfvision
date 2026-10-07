@@ -54,7 +54,7 @@
 }
 
 .gaq-glyph-icon {
-    icon-size: 12px;
+    icon-size: 14px;
 }
 
 .gaq-meter-bar {
@@ -371,4 +371,50 @@
     background-color: rgba(30, 30, 33, 0.97);
     color: rgba(255, 255, 255, 0.92);
     font-size: 11px;
+}
+
+/* ---------- failure states ---------- */
+
+.gaq-card.gaq-error {
+    border-color: rgba(255, 163, 72, 0.5);
+}
+
+.gaq-card.gaq-error .gaq-hero {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.gaq-card.gaq-auth .gaq-hero {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.gaq-meter-fill.gaq-stale {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.gaq-strong.gaq-stale {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.gaq-pill-muted {
+    color: rgba(255, 255, 255, 0.62);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.gaq-message {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.gaq-item.gaq-auth .gaq-glyph-icon {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.gaq-item.gaq-error .gaq-number {
+    font-style: italic;
+}
+
+.gaq-placeholder {
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.4);
 }

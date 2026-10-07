@@ -44,6 +44,20 @@ Structure:
 - Keyboard: Tab and arrows move between headers and buttons, Enter expands, Esc
   closes. Color is never the only channel (glyphs, pills, italics, dashed borders).
 
+## Failure states (amended 2026-10-06)
+
+Each snapshot state has its own pill, message and retry line, never a generic
+"connection problem": *No connection*, *Rate limited*, *Unexpected reply*,
+*Service changed* and *Signed out*. A failing provider keeps its last value,
+marked `~`, in italic and muted, with neutral meters, an orange border and the age
+of the value in the message; the retry line says when the next attempt happens.
+Providers that can recover by trying again get a **Try again** button; a
+rate-limited one does not, and a signed-out one has an inert header and no value.
+The footer says how many providers are in trouble next to the update time, and the
+summary line tells signed-out providers apart from failing ones. Until real
+accounts exist (M3) the signed-out message says that connecting accounts arrives
+in a later version.
+
 ## Consequences
 
 - Implementation: one non-reactive `PopupBaseMenuItem` (`reactive: false`,

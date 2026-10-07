@@ -1,6 +1,6 @@
 import {assertEqual, assertTrue, flush, test} from './harness.js';
-import {EXPIRE_AFTER_MS, applyFreshness, normalizeSnapshot} from '../lib/core/contract.js';
-import {CACHE_VERSION, parseCache, serializeCache} from '../lib/core/cache.js';
+import {EXPIRE_AFTER_MS, applyFreshness, normalizeSnapshot, redact} from '../lib/core/contract.js';
+import {CACHE_VERSION, MAX_CACHE_BYTES, MAX_METRICS, MAX_SNAPSHOTS, MAX_TEXT, parseCache, serializeCache} from '../lib/core/cache.js';
 import {PollScheduler} from '../lib/core/scheduler.js';
 import {ProviderError} from '../lib/providers/errors.js';
 import {createDemoProviders} from '../lib/providers/demo.js';
@@ -349,4 +349,149 @@ test('demo: the drift scenario climbs toward the limit', async () => {
     const third = (await codex.fetch()).metrics[0].percentUsed;
     assertTrue(third > first, `${third} should be above ${first}`);
     assertEqual(createDemoProviders('nonsense').length, 5, 'an unknown scenario falls back to steady');
+});
+
+// ------------------------------------------- review fixes (M1, part 1)
+
+test('contract: redact removes URLs and token-like strings', () => {
+    assertEqual(redact('GET https://api.example.com/v1?key=abc123 failed'), 'GET <url> failed');
+    assertEqual(redact('bad token sk-ant-api03-AAAAAAAAAAAAAAAAAAAAAAAAAAAA end'), 'bad token <redacted> end');
+    assertTrue(redact('x'.repeat(500)).length <= 200);
+});
+
+test('cache: limits protect against oversized or hostile files', () => {
+    assertEqual(parseCache('x'.repeat(MAX_CACHE_BYTES + 1)).problems, ['cache is too large']);
+    const many = Array.from({length: MAX_SNAPSHOTS + 10}, (_, i) => ({id: `p${i}`, name: 'n'.repeat(500),
+        metrics: Array.from({length: MAX_METRICS + 5}, (_m, j) => ({id: `m${j}`, kind: 'percent', percentUsed: 1}))}));
+    const result = parseCache(JSON.stringify({version: CACHE_VERSION, snapshots: many}));
+    assertEqual(result.snapshots.length, MAX_SNAPSHOTS);
+    assertEqual(result.snapshots[0].metrics.length, MAX_METRICS);
+    assertEqual(result.snapshots[0].name.length, MAX_TEXT);
+});
+
+test('scheduler: a manual refresh of a signed-out provider resumes its schedule', async () => {
+    const claude = scripted('claude', [new ProviderError('auth_required'), body(20)], 5 * MINUTE);
+    const {clock, scheduler, emitted} = setup([claude]);
+    scheduler.start();
+    await clock.advance(SECOND + 1);
+    assertEqual(emitted[0].state, 'auth_required');
+    await scheduler.refresh('claude');
+    assertEqual(emitted[1].state, 'ok');
+    assertEqual(clock.pending, 1, 'the next poll is scheduled again');
+    await clock.advance(6 * MINUTE);
+    assertEqual(claude.calls, 3);
+});
+
+test('scheduler: removing a provider during a fetch leaves no timer and no emission', async () => {
+    let release;
+    const codex = {id: 'codex', name: 'Codex', intervalMs: MINUTE, fetch: () => new Promise(r => (release = () => r(body(5))))};
+    const {clock, scheduler, emitted} = setup([codex]);
+    scheduler.start();
+    await clock.advance(SECOND + 1);
+    scheduler.remove('codex');
+    release();
+    await clock.advance(10 * MINUTE);
+    assertEqual([emitted.length, clock.pending], [0, 0]);
+    scheduler.add(scripted('codex', [body(1)]));   // the id can be reused
+    assertEqual(scheduler.snapshots(), []);
+});
+
+test('scheduler: new credentials during a fetch in flight cause one more fetch', async () => {
+    const releases = [];
+    const claude = {id: 'claude', name: 'Claude', intervalMs: 5 * MINUTE, calls: 0,
+        fetch() {
+            claude.calls++;
+            return new Promise(resolve => releases.push(() => resolve(body(7))));
+        }};
+    const {clock, scheduler} = setup([claude]);
+    const first = scheduler.refresh('claude');
+    await flush();
+    scheduler.credentialsChanged('claude');
+    releases[0]();
+    await first;
+    await flush();
+    assertEqual(claude.calls, 2, 'the fetch that used the old credential is followed by a new one');
+    releases[1]();
+    await clock.advance(0);
+});
+
+test('scheduler: a bad interval cannot make a tight loop, a huge retry hint is capped', async () => {
+    const zero = scripted('zero', [body(1)], 0);
+    const nan = scripted('nan', [body(1)], NaN);
+    const slow = scripted('slow', [new ProviderError('rate_limited', 'x', {retryAfterMs: 1e12}), body(1)]);
+    const {clock, scheduler} = setup([zero, nan, slow], {backoffMaxMs: 10 * MINUTE});
+    scheduler.start();
+    await clock.advance(SECOND + 1);
+    await clock.advance(4 * SECOND);
+    assertEqual(zero.calls, 1, 'an interval of 0 is raised to the minimum');
+    await clock.advance(2 * SECOND);
+    assertEqual(zero.calls, 2);
+    assertEqual(nan.calls, 1, 'NaN falls back to the default interval');
+    await clock.advance(11 * MINUTE);
+    assertEqual(slow.calls, 2, 'the hint of 1e12 ms was cut to the 10-minute cap');
+});
+
+test('scheduler: a seed never overwrites data the provider already has', async () => {
+    const codex = scripted('codex', [body(40)]);
+    const {clock, scheduler} = setup([codex]);
+    scheduler.seed(normalizeSnapshot({id: 'codex', name: 'old name', plan: 'old', metrics: []}).snapshot);
+    assertEqual(scheduler.snapshots()[0].name, 'CODEX', 'the provider owns its name');
+    scheduler.start();
+    await clock.advance(SECOND + 1);
+    const fresh = scheduler.snapshots()[0].metrics[0].percentUsed;
+    scheduler.seed(normalizeSnapshot({id: 'codex', name: 'x', metrics: [{id: 'a', kind: 'percent', percentUsed: 99}]}).snapshot);
+    assertEqual(scheduler.snapshots()[0].metrics[0].percentUsed, fresh);
+});
+
+test('scheduler: a listener that throws is reported and does not count as a failed fetch', async () => {
+    const codex = scripted('codex', [body(40)]);
+    const clock = new FakeClock();
+    const problems = [];
+    const scheduler = new PollScheduler({timers: clock, random: () => 0.5, onProblem: m => problems.push(m),
+        onSnapshot: () => { throw new Error('boom'); }});
+    scheduler.add(codex);
+    scheduler.start();
+    await clock.advance(SECOND + 1);
+    assertEqual(scheduler.snapshots()[0].state, 'ok');
+    assertTrue(problems.some(m => m.includes('boom')), problems.join('|'));
+});
+
+test('scheduler: a reply with only unusable metrics keeps the last good data', async () => {
+    const codex = scripted('codex', [body(61), {metrics: [{id: 'x'}, {id: 'y', kind: 'percent'}]}], 5 * SECOND);
+    const {clock, scheduler, emitted} = setup([codex]);
+    scheduler.start();
+    await clock.advance(SECOND + 1);
+    await clock.advance(10 * SECOND);
+    assertEqual([emitted[1].state, emitted[1].metrics[0].percentUsed], ['parse_error', 61]);
+});
+
+test('scheduler: unknown error codes become network errors; retry time and redaction are recorded', async () => {
+    const odd = Object.assign(new Error('GET https://x.test/?token=abcdefghijklmnopqrstuvwxyz failed'), {code: 'ENOENT'});
+    const codex = scripted('codex', [odd]);
+    const {clock, scheduler, emitted} = setup([codex]);
+    scheduler.start();
+    await clock.advance(SECOND + 1);
+    assertEqual(emitted[0].state, 'network');
+    assertEqual(emitted[0].error, 'GET <url> failed');
+    assertEqual(emitted[0].nextRetryAt, 1_000_000 + SECOND + 30 * SECOND, 'fetch time plus the first backoff');
+    const claude = scripted('claude', [new ProviderError('auth_required')]);
+    const second = setup([claude]);
+    second.scheduler.start();
+    await second.clock.advance(SECOND + 1);
+    assertEqual(second.emitted[0].nextRetryAt, undefined, 'a signed-out provider is not retried');
+});
+
+test('scheduler: the fetch is told when it was abandoned after a timeout', async () => {
+    let context;
+    const codex = {id: 'codex', name: 'Codex', intervalMs: MINUTE, fetch: c => { context = c; return new Promise(() => {}); }};
+    const {clock, scheduler} = setup([codex], {timeoutMs: 5 * SECOND});
+    scheduler.start();
+    await clock.advance(SECOND + 1);
+    assertEqual(context.isCancelled(), false);
+    await clock.advance(6 * SECOND);
+    assertEqual(context.isCancelled(), false, 'the failed attempt is still the current one');
+    await clock.advance(40 * SECOND);
+    assertEqual(context.isCancelled(), false);
+    scheduler.remove('codex');
+    assertEqual(context.isCancelled(), true);
 });
