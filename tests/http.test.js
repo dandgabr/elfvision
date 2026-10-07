@@ -145,3 +145,24 @@ test('http: dispose cancels what is in flight; another port on the allowed host 
     const strict = createHttp({allowedHosts: ['api.example.com']});
     assertEqual((await failureOf(strict.get('https://api.example.com:8443/x'))).code, 'provider_changed');
 });
+
+test('http: a POST carries its body and type, and a header that is not allowed is refused', async () => {
+    const server = new Soup.Server();
+    const seen = [];
+    server.add_handler('/post', (_server, message) => {
+        seen.push({method: message.get_method(), type: message.get_request_headers().get_content_type()[0],
+            agent: message.get_request_headers().get_one('User-Agent'), body: new TextDecoder().decode(message.get_request_body().flatten().get_data())});
+        message.set_status(200, null);
+        message.set_response('application/json', Soup.MemoryUse.COPY, '{"ok":true}');
+    });
+    server.listen_local(0, Soup.ServerListenOptions.IPV4_ONLY);
+    const base = `http://127.0.0.1:${server.get_uris()[0].get_port()}`;
+    const http = createHttp({allowedHosts: [], allowLoopbackHttp: true});
+    const reply = await http.request(`${base}/post`, {method: 'POST', body: '{"a":1}', contentType: 'application/json', headers: {'User-Agent': 'antigravity/1.0 test'}});
+    assertEqual([reply.status, reply.json], [200, {ok: true}]);
+    assertEqual(seen[0], {method: 'POST', type: 'application/json', agent: 'antigravity/1.0 test', body: '{"a":1}'});
+    for (const headers of [{'X-A': 'a\r\nHost: evil'}, {'Bad Name': 'x'}, {Host: 'evil'}, {'content-length': '1'}, {'X-Long': 'x'.repeat(5000)}])
+        assertEqual([Object.keys(headers)[0], (await failureOf(http.request(`${base}/post`, {headers}))).code], [Object.keys(headers)[0], 'provider_changed']);
+    assertEqual(seen.length, 1);
+    server.disconnect();
+});

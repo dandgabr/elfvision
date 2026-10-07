@@ -4,7 +4,8 @@ import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import {accountStatus} from './lib/core/accountStatus.js';
-import {LIVE_PROVIDER_IDS, createProviders} from './lib/providers/index.js';
+import {createProvider, createProviders, isConnected} from './lib/providers/index.js';
+import {availableProviders} from './lib/providers/registry.js';
 import {CacheStore} from './lib/services/cacheStore.js';
 import {QuotaController} from './lib/services/controller.js';
 import {ThemeManager} from './lib/services/themeManager.js';
@@ -44,25 +45,33 @@ export default class GnomeAiQuotaExtension extends Extension {
                 console.error(`gnome-ai-quota: cannot rebuild: ${error.message}`);
             }
         };
-        this._scenarioChangedId = this._settings.connect('changed::demo-scenario', rebuild);
+        // A new demo scenario only matters for demo data: real providers must not be restarted.
+        this._scenarioChangedId = this._settings.connect('changed::demo-scenario', () => {
+            if (this._settings.get_string('data-source') === 'demo')
+                rebuild();
+        });
         this._sourceChangedId = this._settings.connect('changed::data-source', rebuild);
         // The preferences window runs in another process; it raises this number
         // after it stores or removes a credential.
-        this._credentialsChangedId = this._settings.connect('changed::credentials-revision', () => {
-            for (const id of LIVE_PROVIDER_IDS)
-                this._controller?.credentialsChanged(id);
+        this._credentialsChangedId = this._settings.connect('changed::credentials-revision', async () => {
+            const touched = this._settings.get_string('credentials-touched');
+            await this._syncProviders();
+            // Only the provider that changed is asked again; unknown ids ask nobody.
+            this._controller?.credentialsChanged(touched);
         });
+        this._untrackedChangedId = this._settings.connect('changed::untracked-providers', () => this._syncProviders());
     }
 
     disable() {
         if (this._positionChangedId)
             this._settings?.disconnect(this._positionChangedId);
-        for (const id of [this._scenarioChangedId, this._sourceChangedId, this._credentialsChangedId]) {
+        for (const id of [this._scenarioChangedId, this._sourceChangedId, this._credentialsChangedId, this._untrackedChangedId]) {
             if (id)
                 this._settings?.disconnect(id);
         }
         this._sourceChangedId = 0;
         this._credentialsChangedId = 0;
+        this._untrackedChangedId = 0;
         this._positionChangedId = 0;
         this._scenarioChangedId = 0;
         this._destroyIndicator();
@@ -77,19 +86,51 @@ export default class GnomeAiQuotaExtension extends Extension {
         const providers = createProviders({source, scenario: this._settings.get_string('demo-scenario')});
         // Demo and real data must never share a cache: they use the same ids.
         const cacheDirectory = GLib.build_filenamev([GLib.get_user_cache_dir(), 'gnome-ai-quota', ...(source === 'demo' ? ['demo', this._settings.get_string('demo-scenario')] : [])]);
-        this._controller = new QuotaController({providers, cache: new CacheStore(cacheDirectory)});
+        this._controller = new QuotaController({providers, cache: new CacheStore(cacheDirectory), order: availableProviders().map(meta => meta.id)});
+        if (source === 'demo')
+            this._controller.markSynced();
         if (source === 'live') {
             this._unsubscribeStatus = this._controller.subscribe(() => this._publishStatus());
+            this._syncProviders();
         }
         this._controller.start().catch(error =>
             console.error(`gnome-ai-quota: cannot start: ${error.message}`));
+    }
+
+    /**
+     * Run the providers that are connected and tracked, and only those. A provider that was
+     * never connected is neither polled nor shown.
+     */
+    async _syncProviders() {
+        const controller = this._controller;
+        if (!controller || this._settings.get_string('data-source') !== 'live')
+            return;
+        const generation = (this._syncGeneration = (this._syncGeneration ?? 0) + 1);
+        try {
+            const untracked = this._settings.get_strv('untracked-providers');
+            const wanted = [];
+            for (const meta of availableProviders()) {
+                if (!untracked.includes(meta.id) && await isConnected(meta))
+                    wanted.push(meta.id);
+            }
+            // A newer sync, a rebuild or a disable happened while the keyring was asked.
+            if (generation !== this._syncGeneration || controller !== this._controller)
+                return;
+            controller.sync(wanted, createProvider);
+        } catch (error) {
+            console.error(`gnome-ai-quota: cannot sync the providers: ${error.message}`);
+        } finally {
+            // Even after a failure the list is as known as it will get: do not claim "nothing".
+            if (controller === this._controller)
+                controller.markSynced();
+        }
     }
 
     /** Tell the preferences window how each real account is doing. */
     _publishStatus() {
         const next = {};
         for (const snapshot of this._controller?.snapshots() ?? []) {
-            if (LIVE_PROVIDER_IDS.includes(snapshot.id))
+            if (availableProviders().some(meta => meta.id === snapshot.id))
                 next[snapshot.id] = accountStatus(snapshot);
         }
         const current = this._settings?.get_value('account-status').deepUnpack() ?? {};

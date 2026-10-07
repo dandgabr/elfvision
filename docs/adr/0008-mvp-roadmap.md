@@ -11,7 +11,7 @@ Each milestone is tried in the nested shell (`tools/nested-shell.sh`).
 | M0 | Skeleton: `metadata.json` for shell 50, panel button, bar with the pacing tick, popup with demo cards. No network. | done |
 | M1 | Data layer: the `ProviderSnapshot` contract, scheduler (interval, jitter, backoff, stale), severity and pacing, disk cache, deterministic demo providers, unit tests under `gjs`. Theme loader with the 20 themes. Appearance settings and the theme picker. | done, in PR #1 |
 | M2 | Command Code: the first real provider, with an API key stored in libsecret and a minimal key field in Preferences. Closes the loop end to end. | done |
-| M3 | OAuth in Preferences: a reusable loopback server and PKCE, single-flight refresh. Providers in order: Codex, Claude, Antigravity. | planned |
+| M3 | OAuth in Preferences: a reusable loopback server and PKCE, single-flight refresh. Providers in order: Codex, Claude, Antigravity. Structure in ADR 0009. | done |
 | M4 | Notifications with dedupe and hysteresis, the connection alert, `auth_required` and stale states in the UI, `providers.local.json`, the gitleaks pre-commit hook, tracking controls. | planned |
 
 Provider order: Command Code, Codex, Claude, Antigravity.

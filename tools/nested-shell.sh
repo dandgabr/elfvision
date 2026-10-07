@@ -19,6 +19,13 @@ trap 'rm -rf "$work"' EXIT
 mkdir -p "$work/data/gnome-shell/extensions"
 ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 
+# The client ids of your real configuration, copied (read only, private) so Connect works here.
+real_config="${XDG_CONFIG_HOME:-$HOME/.config}/gnome-ai-quota/providers.local.json"
+if [ -r "$real_config" ]; then
+    mkdir -p -m 700 "$work/config/gnome-ai-quota"
+    install -m 600 "$real_config" "$work/config/gnome-ai-quota/providers.local.json"
+fi
+
 export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
 # A file backend, not "memory": the preferences window is another process and
 # must share the settings with the shell.
@@ -29,6 +36,8 @@ if [ -n "${DATA_SOURCE:-}" ]; then
 fi
 export GSETTINGS_BACKEND=keyfile GTK_A11Y=none UUID="$uuid" OPEN_PREFS="${1:-}"
 
+# The sign-in of a test goes to a throwaway keyring, never to your real one.
+unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK
 dbus-run-session -- bash -c '
     # A throwaway, unlocked keyring, so the provider keys of a test never touch yours.
     gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1 || true

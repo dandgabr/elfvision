@@ -14,3 +14,4 @@ says so; a decision that is replaced gets a new record.
 | [0006](0006-theming.md) | 20 themes as data, light and dark, token compiler | accepted, implemented |
 | [0007](0007-internationalization.md) | English and pt-BR with gettext | accepted, language override planned |
 | [0008](0008-mvp-roadmap.md) | Milestones M0 to M4 and open items | accepted |
+| [0009](0009-adding-providers.md) | How providers are added (M3) | accepted, open points listed |

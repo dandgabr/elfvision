@@ -456,3 +456,260 @@ test('a balance beside percent windows is a plain labeled line without a meter',
     assertEqual([rows[1].valueText, rows[1].noMeter, rows[1].percentText], ['$41.50 left', true, '']);
     assertEqual(view.hero ?? view.heroText, view.heroText);
 });
+
+test('sign-in failures: expired, refused and missing setup each get their own words', () => {
+    const view = reason => cardView({id: 'codex', name: 'Codex', plan: '', state: 'auth_required', reason, source: {kind: 'stale'}, metrics: []}, {nowMs: 0});
+    const expired = view('expired');
+    assertEqual([expired.pill.text, expired.configureText, expired.message],
+        ['⊘ Sign-in expired', 'Reconnect', 'Your Codex sign-in expired or was revoked. Connect again to keep seeing this quota.']);
+    assertEqual([view('refused').pill.text, view('refused').message], ['⊘ Access refused', 'Codex refused access. Check your account on its site.']);
+    assertEqual([view('no_config').pill.text, view('no_config').configureText], ['⊘ Setup needed', 'Open Preferences']);
+    assertEqual(['expired', 'refused', 'no_config'].map(reason => accountStatus({state: 'auth_required', reason})), ['expired', 'refused', 'no_config']);
+});
+
+// ---- Codex usage
+
+import {parseUsage} from '../lib/core/codex.js';
+
+test('codex: both windows are read, with their length, reset in seconds and plan', () => {
+    const {metrics, plan} = parseUsage({
+        plan_type: 'plus',
+        rate_limit: {
+            primary_window: {used_percent: 12.5, limit_window_seconds: 18000, reset_at: 1790000000},
+            secondary_window: {used_percent: 40, limit_window_seconds: 604800, reset_at: 1790500000},
+        },
+    });
+    assertEqual(plan, 'Plus');
+    assertEqual(metrics.map(m => [m.id, m.window, m.windowSecs, m.percentUsed, m.resetsAt]),
+        [['primary', 'session', 18000, 12.5, 1790000000000], ['secondary', 'week', 604800, 40, 1790500000000]]);
+});
+
+test('codex: a null window is absent, a odd length is unlabeled, and nothing usable is a change', () => {
+    const one = parseUsage({rate_limit: {primary_window: {used_percent: 3, limit_window_seconds: 2592000}, secondary_window: null}});
+    assertEqual([one.metrics.length, one.metrics[0].window, one.plan], [1, 'month', undefined]);
+    assertEqual(parseUsage({rate_limit: {primary_window: {used_percent: 150, limit_window_seconds: 999}}}).metrics.map(m => [m.window, m.percentUsed]), [['none', 100]]);
+    assertEqual(parseUsage({plan_type: '<b>x</b>', rate_limit: {primary_window: {used_percent: 1}}}).plan, undefined);
+    for (const body of [null, 'x', {}, {rate_limit: {}}, {rate_limit: {primary_window: {used_percent: 'a'}}}]) {
+        let code = '';
+        try {
+            parseUsage(body);
+        } catch (error) {
+            code = error.code;
+        }
+        assertEqual([JSON.stringify(body), code], [JSON.stringify(body), 'provider_changed']);
+    }
+});
+
+import {createCodexProvider} from '../lib/providers/codex.js';
+import {TokenError} from '../lib/oauth/tokenManager.js';
+
+const USAGE = {plan_type: 'pro', rate_limit: {primary_window: {used_percent: 20, limit_window_seconds: 18000, reset_at: 1790000000}}};
+
+function codex({replies, tokenError = null}) {
+    const calls = {urls: [], auth: [], invalidated: 0, tokenCalls: 0};
+    const provider = createCodexProvider({
+        http: {request: async (url, options) => { calls.urls.push(url); calls.auth.push(options.headers.Authorization); return replies.shift(); }},
+        tokens: {
+            accessToken: async () => { calls.tokenCalls++; if (tokenError) throw tokenError; return `tok${calls.tokenCalls}`; },
+            invalidate: () => { calls.invalidated++; },
+        },
+    });
+    return {provider, calls};
+}
+
+test('codex provider: asks the usage endpoint with the access token and reads the plan', async () => {
+    const {provider, calls} = codex({replies: [{status: 200, json: USAGE}]});
+    const body = await provider.fetch({isCancelled: () => false});
+    assertEqual([calls.urls, calls.auth], [['https://chatgpt.com/backend-api/wham/usage'], ['Bearer tok1']]);
+    assertEqual([body.plan, body.metrics.length], ['Pro', 1]);
+});
+
+test('codex provider: a refused token is renewed once; a second refusal means the sign-in expired', async () => {
+    const {provider, calls} = codex({replies: [{status: 401, json: null}, {status: 200, json: USAGE}]});
+    assertEqual((await provider.fetch({isCancelled: () => false})).metrics.length, 1);
+    assertEqual([calls.invalidated, calls.auth], [1, ['Bearer tok1', 'Bearer tok2']]);
+    const twice = codex({replies: [{status: 401, json: null}, {status: 401, json: null}]});
+    const error = await failureOf(twice.provider.fetch({isCancelled: () => false}));
+    assertEqual([error.code, error.reason], ['auth_required', 'expired']);
+});
+
+test('codex provider: 403, rate limits, odd replies and every token failure are told apart', async () => {
+    const ctx = {isCancelled: () => false};
+    const refused = await failureOf(codex({replies: [{status: 403, json: null}]}).provider.fetch(ctx));
+    assertEqual([refused.code, refused.reason], ['auth_required', 'refused']);
+    const limited = await failureOf(codex({replies: [{status: 429, retryAfter: '12', json: null}]}).provider.fetch(ctx));
+    assertEqual([limited.code, limited.retryAfterMs], ['rate_limited', 12000]);
+    assertEqual((await failureOf(codex({replies: [{status: 200, json: {}}]}).provider.fetch(ctx))).code, 'provider_changed');
+    const cases = {network: ['network', undefined], no_config: ['auth_required', 'no_config'], expired: ['auth_required', 'expired'],
+        reconnect: ['auth_required', 'expired'], not_connected: ['auth_required', undefined], disconnected: ['auth_required', undefined]};
+    for (const [code, expected] of Object.entries(cases)) {
+        const error = await failureOf(codex({replies: [], tokenError: new TokenError(code)}).provider.fetch(ctx));
+        assertEqual([code, error.code, error.reason], [code, ...expected]);
+    }
+    assertEqual((await failureOf(codex({replies: [], tokenError: new Error('boom')}).provider.fetch(ctx))).code, 'network');
+});
+
+// ---- Claude usage
+
+import {parseUsage as parseClaudeUsage} from '../lib/core/claude.js';
+import {createClaudeProvider} from '../lib/providers/claude.js';
+
+test('claude: both windows are read with their percentage and RFC 3339 reset', () => {
+    const {metrics} = parseClaudeUsage({
+        five_hour: {utilization: 37.5, resets_at: '2026-10-08T03:00:00.000000+00:00'},
+        seven_day: {utilization: 12, resets_at: '2026-10-12T05:00:00Z'},
+        seven_day_opus: null,
+        overage: null,
+    });
+    assertEqual(metrics.map(m => [m.id, m.window, m.windowSecs, m.percentUsed]), [['session', 'session', 18000, 37.5], ['week', 'week', 604800, 12]]);
+    assertEqual([metrics[0].resetsAt, metrics[1].resetsAt], [Date.parse('2026-10-08T03:00:00Z'), Date.parse('2026-10-12T05:00:00Z')]);
+});
+
+test('claude: a missing window is absent, a bad reset is dropped, nothing usable is a change', () => {
+    const one = parseClaudeUsage({five_hour: null, seven_day: {utilization: 150, resets_at: 'not a date'}});
+    assertEqual([one.metrics.length, one.metrics[0].percentUsed, one.metrics[0].resetsAt], [1, 100, undefined]);
+    for (const body of [null, 'x', {}, {five_hour: {utilization: 'a'}}, {five_hour: {resets_at: '2026-01-01T00:00:00Z'}}]) {
+        let code = '';
+        try {
+            parseClaudeUsage(body);
+        } catch (error) {
+            code = error.code;
+        }
+        assertEqual([JSON.stringify(body), code], [JSON.stringify(body), 'provider_changed']);
+    }
+});
+
+test('claude provider: sends the beta header with the bearer token and renews once after a 401', async () => {
+    const seen = [];
+    let n = 0;
+    const replies = [{status: 401, json: null}, {status: 200, json: {five_hour: {utilization: 5, resets_at: '2026-10-08T03:00:00Z'}}}];
+    const provider = createClaudeProvider({
+        http: {request: async (url, options) => { seen.push({url, headers: options.headers}); return replies.shift(); }},
+        tokens: {accessToken: async () => `tok${++n}`, invalidate: () => {}},
+    });
+    const body = await provider.fetch({isCancelled: () => false});
+    assertEqual(body.metrics.length, 1);
+    assertEqual(seen.map(s => s.url), ['https://api.anthropic.com/api/oauth/usage', 'https://api.anthropic.com/api/oauth/usage']);
+    assertEqual(seen.map(s => [s.headers['anthropic-beta'], s.headers.Authorization]), [['oauth-2025-04-20', 'Bearer tok1'], ['oauth-2025-04-20', 'Bearer tok2']]);
+});
+
+// ---- Antigravity quota
+
+import {parseQuota} from '../lib/core/antigravity.js';
+import {DEFAULT_USER_AGENT, createAntigravityProvider} from '../lib/providers/antigravity.js';
+
+const QUOTA = {
+    groups: [
+        {displayName: 'Gemini', buckets: [
+            {bucketId: 'gemini-pro', window: '5h', remainingFraction: 0.59, resetTime: '2026-10-08T03:00:00Z'},
+            {bucketId: 'gemini-pro', window: 'weekly', remainingFraction: 1, resetTime: '2026-10-12T05:00:00Z'},
+        ]},
+        {displayName: 'Claude and GPT', buckets: [
+            {bucketId: '3p-claude', window: 'weekly', remainingFraction: '0.25', resetTime: '2026-10-12T05:00:00Z'},
+            {bucketId: '3p-claude', window: '5h', remainingFraction: 0, resetTime: 'later'},
+        ]},
+    ],
+};
+
+test('antigravity: buckets become two pools with a five-hour and a weekly window each', () => {
+    const {metrics} = parseQuota(QUOTA);
+    assertEqual(metrics.map(m => [m.id, m.pool.short, m.window, Math.round(m.percentUsed)]),
+        [['gemini-5h', 'G', 'session', 41], ['gemini-weekly', 'G', 'week', 0], ['claude-gpt-weekly', 'C/G', 'week', 75], ['claude-gpt-5h', 'C/G', 'session', 100]]);
+    assertEqual([metrics[0].resetsAt, metrics[3].resetsAt], [Date.parse('2026-10-08T03:00:00Z'), undefined]);
+    assertEqual(metrics[2].pool, {id: 'claude-gpt', name: 'Claude and GPT', short: 'C/G'});
+});
+
+test('antigravity: unknown pools and windows, repeated buckets and bad fractions are skipped', () => {
+    const {metrics} = parseQuota({groups: [{buckets: [
+        {bucketId: 'gemini-a', window: '5h', remainingFraction: 0.5},
+        {bucketId: 'gemini-b', window: '5h', remainingFraction: 0.1},      // same pool and window: the fullest wins
+        {bucketId: 'other-x', window: '5h', remainingFraction: 0.5},
+        {bucketId: 'gemini-a', window: 'monthly', remainingFraction: 0.5},
+        {bucketId: '3p-a', window: 'weekly', remainingFraction: 'x'},
+        {bucketId: '3p-a', window: 'weekly', remainingFraction: 7},        // more than all left: not a fraction
+        null, {window: '5h'},
+    ]}]});
+    assertEqual(metrics.map(m => [m.id, m.percentUsed]), [['gemini-5h', 90]]);
+    for (const body of [null, {}, {groups: []}, {groups: [{buckets: []}]}, {groups: 'x'}]) {
+        let code = '';
+        try {
+            parseQuota(body);
+        } catch (error) {
+            code = error.code;
+        }
+        assertEqual([JSON.stringify(body), code], [JSON.stringify(body), 'provider_changed']);
+    }
+});
+
+test('antigravity provider: a POST with an empty JSON body and a User-Agent that names the program', async () => {
+    const seen = [];
+    const make = userAgent => createAntigravityProvider({
+        http: {request: async (url, options) => { seen.push({url, options}); return {status: 200, json: QUOTA}; }},
+        tokens: {accessToken: async () => 'tok', invalidate: () => {}},
+        userAgent,
+    });
+    await make(() => null).fetch({isCancelled: () => false});
+    await make(() => 'antigravity/9.9 mine').fetch({isCancelled: () => false});
+    assertEqual(seen[0].url, 'https://daily-cloudcode-pa.googleapis.com/v1internal:retrieveUserQuotaSummary');
+    assertEqual([seen[0].options.method, seen[0].options.body, seen[0].options.contentType], ['POST', '{}', 'application/json']);
+    assertEqual([seen[0].options.headers['User-Agent'], seen[0].options.headers.Authorization], [DEFAULT_USER_AGENT, 'Bearer tok']);
+    assertEqual(seen[1].options.headers['User-Agent'], 'antigravity/9.9 mine');
+    assertTrue(DEFAULT_USER_AGENT.includes('antigravity') && DEFAULT_USER_AGENT.includes('gnome-ai-quota'));
+});
+
+test('antigravity: names from the server cannot reach into the parser, and a zero that was left out counts', () => {
+    const bucket = extra => ({groups: [{buckets: [{bucketId: 'gemini-a', window: '5h', remainingFraction: 0.5, ...extra}]}]});
+    for (const window of ['constructor', '__proto__', 'toString', 'hasOwnProperty']) {
+        let code = '';
+        try {
+            parseQuota(bucket({window}));
+        } catch (error) {
+            code = error.code;
+        }
+        assertEqual([window, code], [window, 'provider_changed']);
+    }
+    for (const remainingFraction of [5, -0.5, '1e3', 'abc', null])
+        assertEqual(failureOf2(() => parseQuota(bucket({remainingFraction}))), 'provider_changed');
+    // No `remainingFraction` at all, but a reset time: protocol-buffer JSON leaves a zero out.
+    const exhausted = {groups: [{buckets: [{bucketId: '3p-x', window: 'weekly', resetTime: '2026-10-12T05:00:00Z'}]}]};
+    assertEqual(parseQuota(exhausted).metrics.map(m => m.percentUsed), [100]);
+    assertEqual(failureOf2(() => parseQuota({groups: [{buckets: [{bucketId: '3p-x', window: 'weekly'}]}]})), 'provider_changed');
+});
+
+function failureOf2(fn) {
+    try {
+        fn();
+    } catch (error) {
+        return error.code;
+    }
+    return '';
+}
+
+test('oauth usage: a token that is refused even after a renewal is not renewed again at every poll', async () => {
+    let invalidated = 0;
+    const seen = [];
+    const provider = createClaudeProvider({
+        http: {request: async () => { seen.push(1); return {status: 401, json: null}; }},
+        tokens: {accessToken: async () => 'tok', invalidate: () => { invalidated++; }},
+    });
+    const ctx = {isCancelled: () => false};
+    for (let poll = 0; poll < 3; poll++) {
+        const error = await failureOf(provider.fetch(ctx));
+        assertEqual([error.code, error.reason], ['auth_required', 'expired']);
+    }
+    assertEqual([invalidated, seen.length], [1, 4]);       // one renewal; later polls ask once
+});
+
+test('a number that belongs to a pool says which pool, for the eye and for a screen reader', () => {
+    const snapshot = {id: 'antigravity', name: 'Antigravity', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: 1}, metrics: parseQuota(QUOTA).metrics};
+    const ctx = {nowMs: 1, locale: 'en'};
+    const bar = barView(snapshot, ctx);
+    assertTrue(bar.accessibleName.includes('Claude and GPT') || bar.accessibleName.includes('Gemini'), bar.accessibleName);
+    const card = cardView(snapshot, ctx);
+    assertTrue(/% · (Gemini|Claude and GPT) · /.test(card.heroSmall), card.heroSmall);
+    assertEqual(card.groups.map(g => g.title), ['Gemini', 'Claude and GPT']);
+    assertEqual(card.groups[1].rows.map(r => r.poolTitle), ['Claude and GPT', 'Claude and GPT']);
+    // a provider without pools reads as before
+    const plain = barView({id: 'c', name: 'C', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: 1}, metrics: [{id: 'w', kind: 'percent', window: 'week', windowSecs: 604800, percentUsed: 12}]}, ctx);
+    assertEqual(plain.accessibleName, 'C: 12% of week used');
+});

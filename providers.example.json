@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "providers": {
+    "codex": {
+      "clientId": "REPLACE-WITH-THE-CLIENT-ID",
+      "redirectPort": 54321,
+      "redirectHost": "localhost"
+    },
+    "claude": {
+      "clientId": "REPLACE-WITH-THE-CLIENT-ID",
+      "redirectPort": 54321,
+      "redirectHost": "localhost"
+    },
+    "antigravity": {
+      "clientId": "REPLACE-WITH-THE-CLIENT-ID",
+      "clientSecret": "REPLACE-IF-THE-PROVIDER-REQUIRES-ONE",
+      "redirectPort": 54321,
+      "redirectHost": "localhost",
+      "userAgent": "REPLACE-IF-THE-PROVIDER-REQUIRES-ONE"
+    }
+  }
+}

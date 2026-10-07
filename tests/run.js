@@ -5,5 +5,10 @@ import './core.test.js';
 import './scheduler.test.js';
 import './theme.test.js';
 import './http.test.js';
+import './structure.test.js';
+import './oauth.test.js';
+import './tokenManager.test.js';
+import './localConfig.test.js';
+import './controller.test.js';
 
 System.exit(await runAll() ? 1 : 0);

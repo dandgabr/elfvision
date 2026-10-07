@@ -93,6 +93,26 @@
       <summary>Command Code username</summary>
       <description>Your username on the Command Code site. It only builds the link to the page where API keys are created; it is not a credential.</description>
     </key>
+    <key name="untracked-providers" type="as">
+      <default>[]</default>
+      <summary>Providers not tracked</summary>
+      <description>Ids of providers whose collection is paused and that are hidden from the bar and the popup. Their credentials are kept.</description>
+    </key>
+    <key name="credentials-touched" type="s">
+      <default>''</default>
+      <summary>Provider whose credentials just changed</summary>
+      <description>The preferences window writes the id of the provider it stored or removed a credential for, just before it raises the revision, so the extension asks only that provider again. It holds no secret.</description>
+    </key>
+    <key name="prefs-target" type="s">
+      <default>''</default>
+      <summary>Account to show in preferences</summary>
+      <description>The extension writes a provider id here before it opens the preferences window, which then shows that account and clears the value.</description>
+    </key>
+    <key name="terms-acknowledged" type="as">
+      <default>[]</default>
+      <summary>Providers whose terms notice was accepted</summary>
+      <description>Ids of the providers whose possible terms-of-use conflict the user confirmed before the first sign-in, so the notice is not shown again.</description>
+    </key>
     <key name="demo-scenario" type="s">
       <choices>
         <choice value="steady"/>
