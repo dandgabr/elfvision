@@ -25,51 +25,61 @@ msgstr "Várias cotas pedem atenção"
 msgid "Open the panel to see which."
 msgstr "Abra o painel para ver quais."
 
-#: lib/core/alertText.js:25
+#: lib/core/alertText.js:27
+msgid "Test notification"
+msgstr "Notificação de teste"
+
+#: lib/core/alertText.js:28
+msgid ""
+"If you can read this, notifications work. With Do Not Disturb on, the banner "
+"is held and this waits in the list."
+msgstr "Se você está lendo isto, as notificações funcionam. Com o Não Perturbe ligado, o banner fica retido e esta espera na lista."
+
+#: lib/core/alertText.js:31
 msgid "A provider"
 msgstr "Um provedor"
 
-#: lib/core/alertText.js:35
+#: lib/core/alertText.js:41
 msgid "Quota alert"
 msgstr "Alerta de cota"
 
-#: lib/core/alertText.js:58
+#: lib/core/alertText.js:64
 msgid "Critical: %s at %s%%"
 msgstr "Crítico: %s em %s%%"
 
-#: lib/core/alertText.js:58
+#: lib/core/alertText.js:64
 msgid "Warning: %s at %s%%"
 msgstr "Atenção: %s em %s%%"
 
-#: lib/core/alertText.js:61 lib/prefs/notifications.js:13
+#: lib/core/alertText.js:67 lib/prefs/notifications.js:20
 msgid "Credits"
 msgstr "Créditos"
 
-#: lib/core/alertText.js:63
+#: lib/core/alertText.js:69
 msgid "%s: %s%% of the budget used."
 msgstr "%s: %s%% do orçamento usado."
 
-#: lib/core/alertText.js:64
+#: lib/core/alertText.js:70
 msgid "%s: %s%% used."
 msgstr "%s: %s%% da cota usada."
 
-#: lib/core/alertText.js:67
+#: lib/core/alertText.js:73
 msgid "Resets in %s."
 msgstr "Reinicia em %s."
 
-#: lib/core/alertText.js:76
+#: lib/core/alertText.js:82
 msgid "%s: reconnect the account"
 msgstr "%s: reconecte a conta"
 
-#: lib/core/alertText.js:77
+#: lib/core/alertText.js:83
 msgid "The sign-in expired or was refused. Reconnect it in Preferences."
 msgstr "O login expirou ou foi recusado. Reconecte em Preferências."
 
-#: lib/core/alertText.js:81
+#: lib/core/alertText.js:87
 msgid "%s: no recent data"
 msgstr "%s: sem dados recentes"
 
-#: lib/core/alertText.js:82
+#: lib/core/alertText.js:88
 msgid ""
 "The last successful check was a while ago. The service may be down, or your "
 "connection."
@@ -395,52 +405,56 @@ msgid_plural "%s · %d with problems"
 msgstr[0] "%s · %d com problema"
 msgstr[1] "%s · %d com problemas"
 
-#: lib/prefs/about.js:24
+#: lib/prefs/about.js:32
 msgid "About"
 msgstr "Sobre"
 
-#: lib/prefs/about.js:28
+#: lib/prefs/about.js:36
 msgid "AI Quota"
 msgstr "Cota de IA"
 
-#: lib/prefs/about.js:32
+#: lib/prefs/about.js:41
 msgid ""
 "Shows the remaining quota of your AI providers in the top bar and in a popup."
 msgstr "Mostra a cota restante dos seus provedores de IA na barra superior e em um popup."
 
-#: lib/prefs/about.js:43
+#: lib/prefs/about.js:52
 msgid "Restore defaults"
 msgstr "Restaurar padrões"
 
-#: lib/prefs/about.js:44
+#: lib/prefs/about.js:53
 msgid ""
-"Appearance, the top bar, the popup and the notifications. Your accounts are "
-"not touched."
-msgstr "Aparência, barra superior, popup e notificações. Suas contas não são alteradas."
+"Appearance, top bar, popup and notifications. Your accounts and tracked "
+"providers are not changed."
+msgstr "Aparência, barra, popup e notificações. Suas contas e os provedores acompanhados não são alterados."
 
-#: lib/prefs/about.js:46
+#: lib/prefs/about.js:56
 msgid "Restore…"
 msgstr "Restaurar…"
 
-#: lib/prefs/about.js:55
+#: lib/prefs/about.js:65
 msgid "Restore the default settings?"
 msgstr "Restaurar as configurações padrão?"
 
-#: lib/prefs/about.js:56
+#: lib/prefs/about.js:66
 msgid ""
-"The top bar, the popup, the theme and the notifications go back to how they "
-"were at first. Your accounts stay connected, and providers you stopped "
-"tracking stay stopped."
-msgstr "A barra superior, o popup, o tema e as notificações voltam ao que eram no início. Suas contas continuam conectadas, e os provedores que você parou de acompanhar continuam parados."
+"Appearance, theme, top bar, popup, notification and data source settings go "
+"back to their defaults. Your accounts are not changed, and providers you "
+"stopped tracking stay stopped."
+msgstr "Aparência, tema, barra, popup, notificações e fonte dos dados voltam aos valores padrão. Suas contas não são alteradas, e os provedores que você parou de acompanhar continuam parados."
 
-#: lib/prefs/about.js:58 lib/prefs/accounts.js:147 lib/prefs/oauthGroup.js:69
+#: lib/prefs/about.js:68 lib/prefs/accounts.js:147 lib/prefs/oauthGroup.js:69
 #: lib/prefs/oauthGroup.js:295 lib/prefs/oauthGroup.js:343
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: lib/prefs/about.js:59
+#: lib/prefs/about.js:69
 msgid "Restore"
 msgstr "Restaurar"
+
+#: lib/prefs/about.js:77
+msgid "Defaults restored"
+msgstr "Padrões restaurados"
 
 #: lib/prefs/accounts.js:25
 msgid "Accounts"
@@ -553,82 +567,84 @@ msgstr "Onde consigo uma chave?"
 msgid "Opens your keys page. Enter your %s username above first."
 msgstr "Abre a sua página de chaves. Informe antes o seu usuário no %s, no campo acima."
 
-#: lib/prefs/notifications.js:10
+#: lib/prefs/notifications.js:17
 msgid "5-hour window"
 msgstr "Janela de 5 horas"
 
-#: lib/prefs/notifications.js:10
-msgid "A quota that resets every five hours."
-msgstr "Uma cota que reinicia a cada cinco horas."
-
-#: lib/prefs/notifications.js:11
-msgid "A quota that resets every week."
-msgstr "Uma cota que reinicia toda semana."
-
-#: lib/prefs/notifications.js:11
+#: lib/prefs/notifications.js:18
 msgid "Weekly window"
 msgstr "Janela semanal"
 
-#: lib/prefs/notifications.js:12
-msgid "A quota that resets every month."
-msgstr "Uma cota que reinicia todo mês."
-
-#: lib/prefs/notifications.js:12
+#: lib/prefs/notifications.js:19
 msgid "Monthly window"
 msgstr "Janela mensal"
 
-#: lib/prefs/notifications.js:13
-msgid "A money balance with a budget, shown as the share of it already spent."
-msgstr "Um saldo em dinheiro com orçamento, mostrado como a parte já gasta dele."
-
-#: lib/prefs/notifications.js:24 lib/prefs/notifications.js:29
+#: lib/prefs/notifications.js:33
 msgid "Notifications"
 msgstr "Notificações"
 
-#: lib/prefs/notifications.js:30
-msgid ""
-"A notification is sent once when a quota reaches its threshold, and again "
-"only after it falls a little below it or resets. The bar and the popup "
-"always show the state."
-msgstr "Uma notificação é enviada uma vez quando a cota chega ao limite, e de novo só depois que ela cai um pouco abaixo dele ou reinicia. A barra e o popup sempre mostram o estado."
-
-#: lib/prefs/notifications.js:33
+#: lib/prefs/notifications.js:39
 msgid "Send notifications"
 msgstr "Enviar notificações"
 
-#: lib/prefs/notifications.js:34
-msgid "Turning this off keeps the bar and the popup as they are."
-msgstr "Desligar isto não muda a barra nem o popup."
+#: lib/prefs/notifications.js:40
+msgid ""
+"Off: nothing is sent, connection alerts included. The bar and the popup do "
+"not change."
+msgstr "Desligado: nada é enviado, nem os avisos de conexão. A barra e o popup não mudam."
 
-#: lib/prefs/notifications.js:41
+#: lib/prefs/notifications.js:46
+msgid "Send a test notification"
+msgstr "Enviar uma notificação de teste"
+
+#: lib/prefs/notifications.js:47
+msgid ""
+"Do Not Disturb holds the banner; the notification still waits in the list."
+msgstr "O Não Perturbe retém o banner; a notificação continua esperando na lista."
+
+#: lib/prefs/notifications.js:49
+msgid "Send"
+msgstr "Enviar"
+
+#: lib/prefs/notifications.js:57
 msgid "Quotas"
 msgstr "Cotas"
 
-#: lib/prefs/notifications.js:42
-msgid "Choose which kinds of quota notify and at what used percentage."
-msgstr "Escolha quais tipos de cota notificam e em que percentual usado."
+#: lib/prefs/notifications.js:58
+msgid ""
+"A notification is sent once when a quota reaches its threshold, and again "
+"only after it falls 3 points below it or resets."
+msgstr "Uma notificação é enviada uma vez quando a cota chega ao percentual escolhido, e de novo só depois que ela cai 3 pontos abaixo dele ou reinicia."
 
-#: lib/prefs/notifications.js:48
+#: lib/prefs/notifications.js:64
 msgid "Notify at"
-msgstr "Avisar em"
+msgstr "Notificar em"
 
-#: lib/prefs/notifications.js:49
+#: lib/prefs/notifications.js:65
 msgid "Used percentage"
 msgstr "Percentual usado"
 
-#: lib/prefs/notifications.js:59
+#: lib/prefs/notifications.js:75
+msgid "Notifies at %d%% used"
+msgstr "Notifica com %d%% usado"
+
+#: lib/prefs/notifications.js:76
+msgid "Off"
+msgstr "Desligado"
+
+#: lib/prefs/notifications.js:89
 msgid "Connection"
 msgstr "Conexão"
 
-#: lib/prefs/notifications.js:61
+#: lib/prefs/notifications.js:91
 msgid "Notify about connection problems"
 msgstr "Avisar sobre problemas de conexão"
 
-#: lib/prefs/notifications.js:62
+#: lib/prefs/notifications.js:92
 msgid ""
-"Once, when an account has been rejected or has gone without data for a "
-"while. Providers you stopped tracking never notify."
-msgstr "Uma vez, quando uma conta foi recusada ou ficou um tempo sem dados. Provedores que você parou de acompanhar nunca avisam."
+"Once, when an account has been rejected for ten minutes, or has had no data "
+"for fifteen minutes or more. Providers you stopped tracking never notify."
+msgstr "Uma vez, quando uma conta foi recusada por dez minutos, ou ficou quinze minutos ou mais sem dados. Provedores que você parou de acompanhar nunca avisam."
 
 #: lib/prefs/oauthGroup.js:29
 msgid ""
@@ -972,7 +988,7 @@ msgstr "Preferências"
 msgid "Refreshing…"
 msgstr "Atualizando…"
 
-#: lib/ui/indicator.js:285 prefs.js:276
+#: lib/ui/indicator.js:285 prefs.js:277
 msgid "Demo data (made up)"
 msgstr "Dados de demonstração (fictícios)"
 
@@ -1040,212 +1056,212 @@ msgstr "Expandir %s"
 msgid "Try again"
 msgstr "Tentar de novo"
 
-#: prefs.js:88
+#: prefs.js:89
 msgid "Some themes could not be loaded"
 msgstr "Alguns temas não puderam ser carregados"
 
-#: prefs.js:112
+#: prefs.js:113
 msgid "System"
 msgstr "Sistema"
 
-#: prefs.js:112 prefs.js:229
+#: prefs.js:113 prefs.js:230
 msgid "Your themes"
 msgstr "Seus temas"
 
-#: prefs.js:119 prefs.js:204
+#: prefs.js:120 prefs.js:205
 msgid "System (GNOME)"
 msgstr "Sistema (GNOME)"
 
-#: prefs.js:123
+#: prefs.js:124
 msgid "Follows the GNOME accent color and the light or dark setting."
 msgstr "Segue a cor de destaque do GNOME e a configuração de claro ou escuro."
 
-#: prefs.js:152 prefs.js:209
+#: prefs.js:153 prefs.js:210
 msgid "Theme"
 msgstr "Tema"
 
-#: prefs.js:165
+#: prefs.js:166
 msgid "General"
 msgstr "Geral"
 
-#: prefs.js:169
+#: prefs.js:170
 msgid "Top bar"
 msgstr "Barra superior"
 
-#: prefs.js:171
+#: prefs.js:172
 msgid "Left"
 msgstr "Esquerda"
 
-#: prefs.js:172
+#: prefs.js:173
 msgid "Center"
 msgstr "Centro"
 
-#: prefs.js:173
+#: prefs.js:174
 msgid "Right"
 msgstr "Direita"
 
-#: prefs.js:174
+#: prefs.js:175
 msgid "Position"
 msgstr "Posição"
 
-#: prefs.js:174
+#: prefs.js:175
 msgid "Where the quota items sit on the top bar."
 msgstr "Onde os itens de cota ficam na barra superior."
 
-#: prefs.js:178
+#: prefs.js:179
 msgid "Providers on the bar"
 msgstr "Provedores na barra"
 
-#: prefs.js:179
+#: prefs.js:180
 msgid "Up to this many providers are shown (1 to 5), most critical first."
 msgstr "Quantos provedores aparecem, de 1 a 5, os mais críticos primeiro."
 
-#: prefs.js:186
+#: prefs.js:187
 msgid "Automatic"
 msgstr "Automático"
 
-#: prefs.js:187
+#: prefs.js:188
 msgid "Always compact"
 msgstr "Sempre compactar"
 
-#: prefs.js:188
+#: prefs.js:189
 msgid "Never compact"
 msgstr "Nunca compactar"
 
-#: prefs.js:189
+#: prefs.js:190
 msgid ""
 "Automatic: only when space runs out. Always: drops the % sign and the window "
 "suffix. Never: hides providers instead."
 msgstr "Automático: só quando falta espaço. Sempre: remove o % e o sufixo da janela. Nunca: oculta provedores."
 
-#: prefs.js:189
+#: prefs.js:190
 msgid "Compact mode"
 msgstr "Modo compacto"
 
-#: prefs.js:194
+#: prefs.js:195
 msgid "Colors and theme"
 msgstr "Cores e tema"
 
-#: prefs.js:196 prefs.js:251
+#: prefs.js:197 prefs.js:252
 msgid "Follow the system"
 msgstr "Seguir o sistema"
 
-#: prefs.js:197
+#: prefs.js:198
 msgid "Light"
 msgstr "Claro"
 
-#: prefs.js:198
+#: prefs.js:199
 msgid "Dark"
 msgstr "Escuro"
 
-#: prefs.js:199
+#: prefs.js:200
 msgid "Applies to the popup. The top bar always stays dark."
 msgstr "Vale para o popup. A barra superior continua escura."
 
-#: prefs.js:199
+#: prefs.js:200
 msgid "Light or dark"
 msgstr "Claro ou escuro"
 
-#: prefs.js:205
+#: prefs.js:206
 msgid "%s (unavailable)"
 msgstr "%s (indisponível)"
 
-#: prefs.js:210
+#: prefs.js:211
 msgid "Each theme has a light and a dark variant."
 msgstr "Todo tema tem variante clara e escura."
 
-#: prefs.js:230
+#: prefs.js:231
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr "Uma pasta por tema, com um theme.json dentro: %s"
 
-#: prefs.js:233
+#: prefs.js:234
 msgid "Open folder"
 msgstr "Abrir pasta"
 
-#: prefs.js:235
+#: prefs.js:236
 msgid "Open the themes folder"
 msgstr "Abrir a pasta de temas"
 
-#: prefs.js:249
+#: prefs.js:250
 msgid "Popup"
 msgstr "Popup"
 
-#: prefs.js:252
+#: prefs.js:253
 msgid "12 hours"
 msgstr "12 horas"
 
-#: prefs.js:253
+#: prefs.js:254
 msgid "24 hours"
 msgstr "24 horas"
 
-#: prefs.js:254
+#: prefs.js:255
 msgid "Clock"
 msgstr "Relógio"
 
-#: prefs.js:254
+#: prefs.js:255
 msgid "How reset times are written."
 msgstr "Como os horários de reinício são escritos."
 
-#: prefs.js:257
+#: prefs.js:258
 msgid "1h 20min"
 msgstr "1h 20min"
 
-#: prefs.js:258
+#: prefs.js:259
 msgid "1h20"
 msgstr "1h20"
 
-#: prefs.js:259
+#: prefs.js:260
 msgid "How the countdown to a reset is written."
 msgstr "Como a contagem até o reinício é escrita."
 
-#: prefs.js:259
+#: prefs.js:260
 msgid "Time until reset"
 msgstr "Tempo até o reinício"
 
-#: prefs.js:262
+#: prefs.js:263
 msgid "Open cards that need attention"
 msgstr "Abrir cartões que pedem atenção"
 
-#: prefs.js:263
+#: prefs.js:264
 msgid "Cards in warning, critical or error states open on their own."
 msgstr "Cartões em atenção, críticos ou com erro abrem sozinhos."
 
-#: prefs.js:271
+#: prefs.js:272
 msgid "Advanced"
 msgstr "Avançado"
 
-#: prefs.js:272
+#: prefs.js:273
 msgid "Demo data, to try every state without an account."
 msgstr "Dados de demonstração, para ver todos os estados sem uma conta."
 
-#: prefs.js:275
+#: prefs.js:276
 msgid "Real providers"
 msgstr "Provedores reais"
 
-#: prefs.js:277
+#: prefs.js:278
 msgid "Data source"
 msgstr "Fonte dos dados"
 
-#: prefs.js:277
+#: prefs.js:278
 msgid "Demo data queries no account."
 msgstr "Os dados de demonstração não consultam nenhuma conta."
 
-#: prefs.js:279
+#: prefs.js:280
 msgid "Steady"
 msgstr "Estável"
 
-#: prefs.js:280
+#: prefs.js:281
 msgid "Flaky"
 msgstr "Instável"
 
-#: prefs.js:281
+#: prefs.js:282
 msgid "Drifting"
 msgstr "Subindo"
 
-#: prefs.js:283
+#: prefs.js:284
 msgid "Demo scenario"
 msgstr "Cenário de demonstração"
 
-#: prefs.js:283
+#: prefs.js:284
 msgid "Steady: all fine. Flaky: errors come and go. Drifting: usage climbs."
 msgstr "Estável: tudo certo. Instável: erros vão e vêm. Subindo: o uso sobe."

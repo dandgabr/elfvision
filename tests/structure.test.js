@@ -180,7 +180,7 @@ test('defaults: every setting is either restored or kept, and none is both', () 
     let xml = '';
     for (let info = enumerator.next_file(null); info !== null; info = enumerator.next_file(null)) {
         if (info.get_name().endsWith('.gschema.xml'))
-            xml = text(`schemas/${info.get_name()}`);
+            xml += text(`schemas/${info.get_name()}`);   // every schema file, not only the last
     }
     const keys = [...xml.matchAll(/<key name="([^"]+)"/g)].map(match => match[1]);
     assertTrue(keys.length > 20, 'the schema was read');

@@ -68,18 +68,21 @@ export default class GnomeAiQuotaExtension extends Extension {
             this._controller?.credentialsChanged(touched);
         });
         this._untrackedChangedId = this._settings.connect('changed::untracked-providers', () => this._syncProviders());
+        // The test button of the preferences window raises this number; it carries nothing else.
+        this._testChangedId = this._settings.connect('changed::test-notification', () => this._notifier?.show({kind: 'test'}));
     }
 
     disable() {
         if (this._positionChangedId)
             this._settings?.disconnect(this._positionChangedId);
-        for (const id of [this._scenarioChangedId, this._sourceChangedId, this._credentialsChangedId, this._untrackedChangedId]) {
+        for (const id of [this._scenarioChangedId, this._sourceChangedId, this._credentialsChangedId, this._untrackedChangedId, this._testChangedId]) {
             if (id)
                 this._settings?.disconnect(id);
         }
         this._sourceChangedId = 0;
         this._credentialsChangedId = 0;
         this._untrackedChangedId = 0;
+        this._testChangedId = 0;
         this._positionChangedId = 0;
         this._scenarioChangedId = 0;
         this._destroyIndicator();

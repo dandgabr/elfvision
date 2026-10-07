@@ -60,6 +60,9 @@ catalogs() {
     python3 -I tools/check-po.py po/*.po
 }
 
+# Some tests read the compiled schema and the catalogs, which are not in the repository: build them first,
+# so a new setting is not tested against an old file.
+step "build" tools/build.sh
 step "unit tests" gjs -m tests/run.js
 step "script syntax" syntax
 step "shellcheck" lint

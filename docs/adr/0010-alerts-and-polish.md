@@ -107,13 +107,21 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 - **Not tracked:** a collapsed section under the hidden list; each row is the muted icon, the name
   and a Resume button, with no meter. The "Add account" line becomes its last row.
 - **About:** `Adw.AboutDialog` with the version from `metadata.json`, the licence and constant
-  `https://` links opened with `Gio.AppInfo.launch_default_for_uri`. No paths or user name.
+  `https://` links. No paths or user name.
 - **Restore defaults:** every schema key is classified as reset or kept, and a test fails for an
-  unclassified key. It resets appearance, bar, popup, notification and threshold settings
-  (the theme included, which the dialog says) and keeps accounts, tracking state, terms
-  acknowledgements, `account-status` and the credentials revision. Confirmation is an
-  `Adw.AlertDialog` that names what changes and says accounts stay connected; Cancel is the default.
-  After the reset it syncs the settings. It does not start the assistant again.
+  unclassified key. It resets appearance, bar, popup, notification and threshold settings, the theme
+  and the data source (someone stuck in demo data would take a restore that leaves it for a bug), and
+  keeps accounts, tracking state, terms acknowledgements, `account-status`, the credentials revision,
+  the demo scenario and the messages between the two processes. The dialog says "your accounts are
+  not changed" (not "stay connected": a rejected account stays rejected) and names what changes;
+  Cancel is the default. The reset is one batch (`delay` and `apply`), so the shell reacts once, and a
+  toast confirms it. It does not start the assistant again.
+- **Notifications page:** the master switch (it also silences the connection alert), a test button
+  (the preferences window raises the `test-notification` number and the shell shows one notification;
+  the assistant never sends one on its own), and for each kind of quota a switch and a threshold
+  shown in the row ("Notifies at 95% used" or "Off"). With the master switch off the rows are dimmed,
+  not blocked.
+- **About:** an own application icon in `icons/hicolor`.
 - **First-use assistant:** an `Adw.NavigationView` inside Preferences, never a window opened by the
   shell, gated by `first-run-done`, skippable and resumable: welcome, choose providers (the terms
   notice before any sign-in), connect each one (a failure does not block the next), choose the bar,

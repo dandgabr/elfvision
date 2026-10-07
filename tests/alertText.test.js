@@ -68,3 +68,9 @@ test('alert text: controls and bidirectional overrides are removed from names an
     const many = alertText({kind: 'threshold', providerId: 'claude', level: 'critical', crossings: [crossing(96), crossing(97, {type: 'week', window: 'week'})]}, context);
     assertEqual(many.body.split('\n').length, 2);
 });
+
+test('alert text: the test notification is plainly a test and carries nothing else', () => {
+    const text = alertText({kind: 'test', providerId: '<b>evil</b>', crossings: [{percent: 99}]}, context);
+    assertEqual(text.title, 'Test notification');
+    assertTrue(text.body.includes('Do Not Disturb') && !/evil|99/.test(text.title + text.body), text.body);
+});

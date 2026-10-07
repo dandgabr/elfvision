@@ -103,6 +103,12 @@
       <summary>Provider whose credentials just changed</summary>
       <description>The preferences window writes the id of the provider it stored or removed a credential for, just before it raises the revision, so the extension asks only that provider again. It holds no secret.</description>
     </key>
+    <key name="test-notification" type="i">
+      <range min="0" max="2147483647"/>
+      <default>0</default>
+      <summary>Send a test notification</summary>
+      <description>The preferences window raises this number when you press the test button, and the extension then sends one notification that says it is a test. It holds nothing else.</description>
+    </key>
     <key name="prefs-target" type="s">
       <default>''</default>
       <summary>Account to show in preferences</summary>
