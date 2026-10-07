@@ -1,0 +1,22 @@
+# Style slugs shipped in version 1, one per line. Slugs come from the
+# estilos-visuais gallery. The first entry, sistema-gnome, is built in and has
+# no gallery counterpart, so it is not listed here.
+isometric
+web-brutalism
+ai-native-generative-ui
+analog-newspaper-broadsheet
+hand-drawn-sketch
+expressive-variable-typography
+de-stijl
+mid-century-modern
+terminal-tui
+cyberpunk
+lunarpunk
+nanopunk
+solarpunk
+aurora-mesh-gradient
+holographic-foil-iridescent
+bento-grid
+card-based-ui
+flat-design
+linear-saas
