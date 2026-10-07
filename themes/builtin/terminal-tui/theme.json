@@ -1,0 +1,82 @@
+{
+  "id": "terminal-tui",
+  "name": "Terminal / TUI",
+  "group": "Movimentos históricos e retrô",
+  "description": "Interface de terminal em texto.",
+  "nativeScheme": "dark",
+  "difficulty": "medium",
+  "schemes": {
+    "dark": {
+      "bg": "#0c0c0c",
+      "surface": "#0c0c0c",
+      "surface-2": "#1a1a1a",
+      "fg": "#d8d8d0",
+      "muted": "#9a9a92",
+      "border": "#6e6e66",
+      "accent": "#5fd75f",
+      "accent-fg": "#0c0c0c",
+      "ok": "#5fd75f",
+      "warn": "#ffd75f",
+      "danger": "#ff5f5f",
+      "shadow": "none",
+      "error": "#fea668"
+    },
+    "light": {
+      "bg": "#f5f7f5",
+      "surface": "#fdfefc",
+      "surface-2": "#eef1ee",
+      "fg": "#151a15",
+      "muted": "#535a53",
+      "border": "#d6d8d6",
+      "accent": "#0a7f16",
+      "accent-fg": "#ffffff",
+      "ok": "#048013",
+      "warn": "#7f6612",
+      "danger": "#b63135",
+      "shadow": "0 1px 3px rgba(0,0,0,.14)",
+      "error": "#9c5312"
+    }
+  },
+  "adjusted": {
+    "dark": [
+      "error"
+    ],
+    "light": [
+      "error"
+    ]
+  },
+  "audit": {
+    "dark": {
+      "fg": 13.6,
+      "muted": 6.9,
+      "accent": 10.6,
+      "accent-fg": 10.6,
+      "ok": 10.6,
+      "warn": 14.1,
+      "danger": 6.6,
+      "error": 10.1
+    },
+    "light": {
+      "fg": 17.4,
+      "muted": 7.0,
+      "accent": 5.1,
+      "accent-fg": 5.2,
+      "ok": 5.1,
+      "warn": 5.4,
+      "danger": 6.0,
+      "error": 5.7
+    }
+  },
+  "fonts": {
+    "body": "\"JetBrains Mono\",ui-monospace,monospace",
+    "display": "var(--font-body)",
+    "mono": "var(--font-body)",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+  },
+  "radius": {
+    "card": "0",
+    "control": "0"
+  },
+  "border": "hairline",
+  "hardShadow": false
+}

@@ -1,0 +1,82 @@
+{
+  "id": "web-brutalism",
+  "name": "Web Brutalism & Data-Dense",
+  "group": "Brutalista e rebelde",
+  "description": "Crueza HTML, tabelas de alta densidade e estética de terminal.",
+  "nativeScheme": "light",
+  "difficulty": "medium",
+  "schemes": {
+    "light": {
+      "bg": "#ffffff",
+      "surface": "#ffffff",
+      "surface-2": "#eeeeee",
+      "fg": "#000000",
+      "muted": "#222222",
+      "border": "#000000",
+      "accent": "#0000ee",
+      "accent-fg": "#ffffff",
+      "ok": "#006400",
+      "warn": "#7a4a00",
+      "danger": "#b00000",
+      "shadow": "none",
+      "error": "#8b4a9a"
+    },
+    "dark": {
+      "bg": "#0e0f12",
+      "surface": "#18191c",
+      "surface-2": "#222427",
+      "fg": "#eceef4",
+      "muted": "#a6abb4",
+      "border": "#888a8e",
+      "accent": "#6f9bf9",
+      "accent-fg": "#0d0d12",
+      "ok": "#82d67b",
+      "warn": "#f6bf82",
+      "danger": "#fc8d7d",
+      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "error": "#e59ff6"
+    }
+  },
+  "adjusted": {
+    "light": [
+      "error"
+    ],
+    "dark": [
+      "error"
+    ]
+  },
+  "audit": {
+    "light": {
+      "fg": 21.0,
+      "muted": 15.9,
+      "accent": 9.4,
+      "accent-fg": 9.4,
+      "ok": 7.4,
+      "warn": 7.5,
+      "danger": 7.4,
+      "error": 5.9
+    },
+    "dark": {
+      "fg": 15.2,
+      "muted": 7.6,
+      "accent": 6.5,
+      "accent-fg": 7.1,
+      "ok": 9.9,
+      "warn": 10.6,
+      "danger": 7.7,
+      "error": 8.9
+    }
+  },
+  "fonts": {
+    "body": "'Times New Roman',Times,serif",
+    "display": "'Times New Roman',Times,serif",
+    "mono": "'Courier Prime','Courier New',monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap"
+  },
+  "radius": {
+    "card": "0",
+    "control": "0"
+  },
+  "border": "strong",
+  "hardShadow": false
+}

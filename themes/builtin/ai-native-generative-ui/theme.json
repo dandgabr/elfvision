@@ -1,0 +1,84 @@
+{
+  "id": "ai-native-generative-ui",
+  "name": "AI-native / Generative UI",
+  "group": "Imersivo e movimento",
+  "description": "Interface que se compõe a partir de intenção.",
+  "nativeScheme": "light",
+  "difficulty": "hard",
+  "schemes": {
+    "light": {
+      "bg": "#fbfaff",
+      "surface": "#ffffff",
+      "surface-2": "#f1eefc",
+      "fg": "#17152b",
+      "muted": "#5d5a78",
+      "border": "#d8d4eb",
+      "accent": "#6d4aff",
+      "accent-fg": "#ffffff",
+      "ok": "#0f7a4a",
+      "warn": "#8f5600",
+      "danger": "#bd2630",
+      "shadow": "0 1px 2px rgba(60,40,160,.06), 0 8px 24px rgba(60,40,160,.07)",
+      "error": "#8b4a9a"
+    },
+    "dark": {
+      "bg": "#0f0f12",
+      "surface": "#19191c",
+      "surface-2": "#232427",
+      "fg": "#edeef4",
+      "muted": "#a9aab4",
+      "border": "#36363a",
+      "accent": "#938efc",
+      "accent-fg": "#0d0d12",
+      "ok": "#79d59f",
+      "warn": "#fcbc79",
+      "danger": "#fc8c87",
+      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "error": "#e59ff6"
+    }
+  },
+  "adjusted": {
+    "light": [
+      "error",
+      "border"
+    ],
+    "dark": [
+      "error",
+      "border"
+    ]
+  },
+  "audit": {
+    "light": {
+      "fg": 17.8,
+      "muted": 6.6,
+      "accent": 5.2,
+      "accent-fg": 5.2,
+      "ok": 5.4,
+      "warn": 6.0,
+      "danger": 6.0,
+      "error": 5.9
+    },
+    "dark": {
+      "fg": 15.2,
+      "muted": 7.6,
+      "accent": 6.3,
+      "accent-fg": 6.9,
+      "ok": 9.9,
+      "warn": 10.5,
+      "danger": 7.7,
+      "error": 8.9
+    }
+  },
+  "fonts": {
+    "body": "'Geist', system-ui, sans-serif",
+    "display": "'Geist', system-ui, sans-serif",
+    "mono": "'Geist Mono', ui-monospace, monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+  },
+  "radius": {
+    "card": "16px",
+    "control": "10px"
+  },
+  "border": "hairline",
+  "hardShadow": false
+}

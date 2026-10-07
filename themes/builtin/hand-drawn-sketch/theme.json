@@ -1,0 +1,85 @@
+{
+  "id": "hand-drawn-sketch",
+  "name": "Hand-drawn / Sketch",
+  "group": "Tipografia e editorial",
+  "description": "Traços feitos à mão.",
+  "nativeScheme": "light",
+  "difficulty": "hard",
+  "schemes": {
+    "light": {
+      "bg": "#fbf7ec",
+      "surface": "#fffdf6",
+      "surface-2": "#fff3a6",
+      "fg": "#222222",
+      "muted": "#4a4a4a",
+      "border": "#222222",
+      "accent": "#169bcb",
+      "accent-fg": "#222222",
+      "ok": "#1b6b34",
+      "warn": "#7a4a00",
+      "danger": "#b3261e",
+      "shadow": "3px 4px 0 rgba(34,34,34,.18)",
+      "error": "#8b4a9a"
+    },
+    "dark": {
+      "bg": "#120f09",
+      "surface": "#1c1912",
+      "surface-2": "#26241d",
+      "fg": "#f0eee9",
+      "muted": "#aeaba1",
+      "border": "#8c8a84",
+      "accent": "#74d2fd",
+      "accent-fg": "#0d0d12",
+      "ok": "#86d395",
+      "warn": "#f6bf82",
+      "danger": "#fc8d7e",
+      "shadow": "3px 4px 0 #f0eee9",
+      "error": "#e59ff6"
+    }
+  },
+  "adjusted": {
+    "light": [
+      "accent",
+      "error",
+      "accent"
+    ],
+    "dark": [
+      "accent",
+      "error"
+    ]
+  },
+  "audit": {
+    "light": {
+      "fg": 15.6,
+      "muted": 8.7,
+      "accent": 3.1,
+      "accent-fg": 5.0,
+      "ok": 6.4,
+      "warn": 7.4,
+      "danger": 6.4,
+      "error": 5.8
+    },
+    "dark": {
+      "fg": 15.1,
+      "muted": 7.6,
+      "accent": 10.3,
+      "accent-fg": 11.4,
+      "ok": 9.8,
+      "warn": 10.6,
+      "danger": 7.7,
+      "error": 8.9
+    }
+  },
+  "fonts": {
+    "body": "'Patrick Hand','Comic Sans MS',cursive",
+    "display": "'Caveat',cursive",
+    "mono": "'Gochi Hand',cursive",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&family=Gochi+Hand&display=swap"
+  },
+  "radius": {
+    "card": "255px 15px 225px 15px/15px 225px 15px 255px",
+    "control": "15px 225px 15px 255px/255px 15px 225px 15px"
+  },
+  "border": "strong",
+  "hardShadow": true
+}

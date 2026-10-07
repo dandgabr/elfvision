@@ -1,0 +1,83 @@
+{
+  "id": "mid-century-modern",
+  "name": "Mid-century Modern",
+  "group": "Movimentos históricos e retrô",
+  "description": "Meados do século XX, tons terrosos.",
+  "nativeScheme": "light",
+  "difficulty": "medium",
+  "schemes": {
+    "light": {
+      "bg": "#f4ede0",
+      "surface": "#fffaf0",
+      "surface-2": "#ebe0cb",
+      "fg": "#2b2118",
+      "muted": "#5e4b3a",
+      "border": "#d6c7ab",
+      "accent": "#2a7f7f",
+      "accent-fg": "#ffffff",
+      "ok": "#1f6b4a",
+      "warn": "#8a5200",
+      "danger": "#a5402b",
+      "shadow": "0 6px 0 rgba(107,68,35,.12)",
+      "error": "#8b4a9a"
+    },
+    "dark": {
+      "bg": "#130f07",
+      "surface": "#1d1910",
+      "surface-2": "#28231b",
+      "fg": "#f1eee9",
+      "muted": "#afaaa1",
+      "border": "#3a362f",
+      "accent": "#5daeae",
+      "accent-fg": "#0d0d12",
+      "ok": "#87d0aa",
+      "warn": "#fbbc7b",
+      "danger": "#fc8e76",
+      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "error": "#e59ff6"
+    }
+  },
+  "adjusted": {
+    "light": [
+      "error"
+    ],
+    "dark": [
+      "error",
+      "border"
+    ]
+  },
+  "audit": {
+    "light": {
+      "fg": 15.1,
+      "muted": 7.9,
+      "accent": 4.5,
+      "accent-fg": 4.7,
+      "ok": 6.2,
+      "warn": 6.1,
+      "danger": 6.0,
+      "error": 5.7
+    },
+    "dark": {
+      "fg": 15.1,
+      "muted": 7.6,
+      "accent": 6.8,
+      "accent-fg": 7.5,
+      "ok": 9.7,
+      "warn": 10.5,
+      "danger": 7.7,
+      "error": 8.9
+    }
+  },
+  "fonts": {
+    "body": "\"Source Serif 4\",Georgia,serif",
+    "display": "\"Josefin Sans\",\"Futura\",sans-serif",
+    "mono": "ui-monospace,monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap"
+  },
+  "radius": {
+    "card": "28px 4px 28px 4px",
+    "control": "999px"
+  },
+  "border": "hairline",
+  "hardShadow": false
+}

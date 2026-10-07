@@ -1,0 +1,83 @@
+{
+  "id": "linear-saas",
+  "name": "Linear SaaS",
+  "group": "Limpo e funcional",
+  "description": "Dark UI refinada de produto SaaS, bordas sutis.",
+  "nativeScheme": "dark",
+  "difficulty": "easy",
+  "schemes": {
+    "dark": {
+      "bg": "#08090a",
+      "surface": "#101113",
+      "surface-2": "#17181b",
+      "fg": "#f0f1f3",
+      "muted": "#9a9ea8",
+      "border": "#2f3132",
+      "accent": "#7b7fff",
+      "accent-fg": "#0b0b14",
+      "ok": "#4cc38a",
+      "warn": "#e5b23c",
+      "danger": "#f2726b",
+      "shadow": "0 0 0 1px rgba(255,255,255,.04) inset",
+      "error": "#fea668"
+    },
+    "light": {
+      "bg": "#f6f6f9",
+      "surface": "#fdfdff",
+      "surface-2": "#eff0f3",
+      "fg": "#17181e",
+      "muted": "#565761",
+      "border": "#d7d7db",
+      "accent": "#5654d0",
+      "accent-fg": "#ffffff",
+      "ok": "#057d50",
+      "warn": "#856301",
+      "danger": "#b23836",
+      "shadow": "0 1px 3px rgba(0,0,0,.14)",
+      "error": "#9c5312"
+    }
+  },
+  "adjusted": {
+    "dark": [
+      "error",
+      "border"
+    ],
+    "light": [
+      "error"
+    ]
+  },
+  "audit": {
+    "dark": {
+      "fg": 16.7,
+      "muted": 7.0,
+      "accent": 5.7,
+      "accent-fg": 5.9,
+      "ok": 8.5,
+      "warn": 9.7,
+      "danger": 6.7,
+      "error": 9.8
+    },
+    "light": {
+      "fg": 17.4,
+      "muted": 7.1,
+      "accent": 5.8,
+      "accent-fg": 5.9,
+      "ok": 5.1,
+      "warn": 5.5,
+      "danger": 5.9,
+      "error": 5.6
+    }
+  },
+  "fonts": {
+    "body": "'Inter',system-ui,sans-serif",
+    "display": "'Inter',sans-serif",
+    "mono": "'JetBrains Mono',monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+  },
+  "radius": {
+    "card": "8px",
+    "control": "6px"
+  },
+  "border": "hairline",
+  "hardShadow": false
+}

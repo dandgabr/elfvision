@@ -1,0 +1,84 @@
+{
+  "id": "analog-newspaper-broadsheet",
+  "name": "Broadsheet Newspaper",
+  "group": "Tipografia e editorial",
+  "description": "Diagramação clássica de jornal diário, colunas estritas e capitulares.",
+  "nativeScheme": "light",
+  "difficulty": "medium",
+  "schemes": {
+    "light": {
+      "bg": "#f5f2eb",
+      "surface": "#ffffff",
+      "surface-2": "#eae4d5",
+      "fg": "#1c1b1a",
+      "muted": "#595652",
+      "border": "#1c1b1a",
+      "accent": "#02698c",
+      "accent-fg": "#f5f2eb",
+      "ok": "#2d5a3f",
+      "warn": "#8f6010",
+      "danger": "#a82c2c",
+      "shadow": "none",
+      "error": "#8b4a9a"
+    },
+    "dark": {
+      "bg": "#120e0e",
+      "surface": "#1c1818",
+      "surface-2": "#272322",
+      "fg": "#f4ecec",
+      "muted": "#b4a8a6",
+      "border": "#8e8988",
+      "accent": "#06ade4",
+      "accent-fg": "#0d0d12",
+      "ok": "#94cea8",
+      "warn": "#f4c07a",
+      "danger": "#fd8c83",
+      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "error": "#e59ff6"
+    }
+  },
+  "adjusted": {
+    "light": [
+      "accent",
+      "error"
+    ],
+    "dark": [
+      "accent",
+      "error"
+    ]
+  },
+  "audit": {
+    "light": {
+      "fg": 17.2,
+      "muted": 7.3,
+      "accent": 6.2,
+      "accent-fg": 5.5,
+      "ok": 7.9,
+      "warn": 5.5,
+      "danger": 6.9,
+      "error": 5.9
+    },
+    "dark": {
+      "fg": 15.1,
+      "muted": 7.6,
+      "accent": 6.8,
+      "accent-fg": 7.5,
+      "ok": 9.8,
+      "warn": 10.6,
+      "danger": 7.8,
+      "error": 8.9
+    }
+  },
+  "fonts": {
+    "body": "'Newsreader', Georgia, serif",
+    "display": "'Newsreader', serif",
+    "mono": "ui-monospace,'JetBrains Mono',monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,500&display=swap"
+  },
+  "radius": {
+    "card": "0",
+    "control": "0"
+  },
+  "border": "strong",
+  "hardShadow": false
+}

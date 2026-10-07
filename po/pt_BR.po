@@ -1,0 +1,564 @@
+# Brazilian Portuguese translation for gnome-ai-quota.
+# Copyright (C) 2026 the gnome-ai-quota authors.
+# This file is distributed under the same license as the gnome-ai-quota package.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-ai-quota\n"
+"Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
+"POT-Creation-Date: 2026-10-07 01:08-0300\n"
+"PO-Revision-Date: 2026-10-06 21:45-0300\n"
+"Last-Translator: gnome-ai-quota authors\n"
+"Language-Team: Brazilian Portuguese\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: lib/core/viewmodel.js:40
+msgid "5 hours"
+msgstr "5 horas"
+
+#: lib/core/viewmodel.js:41
+msgid "Week"
+msgstr "Semana"
+
+#: lib/core/viewmodel.js:42
+msgid "Month"
+msgstr "Mês"
+
+#: lib/core/viewmodel.js:50
+msgctxt "window suffix"
+msgid "W"
+msgstr "S"
+
+#: lib/core/viewmodel.js:51
+msgctxt "window suffix"
+msgid "M"
+msgstr "M"
+
+#: lib/core/viewmodel.js:97
+msgid "%s: not signed in"
+msgstr "%s: sem login"
+
+#: lib/core/viewmodel.js:99
+msgid "%s: rate limited"
+msgstr "%s: limite de requisições"
+
+#: lib/core/viewmodel.js:101
+msgid "%s: no connection"
+msgstr "%s: sem conexão"
+
+#: lib/core/viewmodel.js:103
+msgid "%s: service problem"
+msgstr "%s: problema no serviço"
+
+#: lib/core/viewmodel.js:105
+msgid "%s: data out of date"
+msgstr "%s: dados desatualizados"
+
+#: lib/core/viewmodel.js:107
+msgid "%s: %s left"
+msgstr "%s: restam %s"
+
+#: lib/core/viewmodel.js:111
+msgid "%s: %s%% of %s used"
+msgstr "%s: %s%% usado (%s)"
+
+#: lib/core/viewmodel.js:114
+msgid "critical"
+msgstr "crítico"
+
+#: lib/core/viewmodel.js:116
+msgid "warning"
+msgstr "atenção"
+
+#: lib/core/viewmodel.js:135
+msgid "Critical"
+msgstr "Crítico"
+
+#: lib/core/viewmodel.js:136
+msgid "Warning"
+msgstr "Atenção"
+
+#: lib/core/viewmodel.js:137
+msgid "Signed out"
+msgstr "Sem login"
+
+#: lib/core/viewmodel.js:140 lib/core/viewmodel.js:144
+msgid "No connection"
+msgstr "Sem conexão"
+
+#: lib/core/viewmodel.js:141
+msgid "Rate limited"
+msgstr "Limite de requisições"
+
+#: lib/core/viewmodel.js:142
+msgid "Unexpected reply"
+msgstr "Resposta inesperada"
+
+#: lib/core/viewmodel.js:143
+msgid "Service changed"
+msgstr "Serviço alterado"
+
+#: lib/core/viewmodel.js:150
+msgid "%s ago"
+msgstr "há %s"
+
+#: lib/core/viewmodel.js:151
+msgid "Out of date"
+msgstr "Desatualizado"
+
+#: lib/core/viewmodel.js:170
+msgid "Account connection arrives in a later version."
+msgstr "A conexão de contas chega em uma versão futura."
+
+#: lib/core/viewmodel.js:173
+msgid "Too many requests."
+msgstr "Muitas requisições."
+
+#: lib/core/viewmodel.js:177
+msgid "The service replied in an unexpected way. Showing the last value."
+msgstr "O serviço respondeu de forma inesperada. Mostrando o último valor."
+
+#: lib/core/viewmodel.js:178
+msgid "The service replied in an unexpected way."
+msgstr "O serviço respondeu de forma inesperada."
+
+#: lib/core/viewmodel.js:181
+msgid "The service seems to have changed. This connector needs an update."
+msgstr "O serviço parece ter mudado. Este conector precisa de atualização."
+
+#: lib/core/viewmodel.js:185
+msgid "Can't reach the service. Showing the last value, from %s ago."
+msgstr "Sem acesso ao serviço. Mostrando o último valor, de há %s."
+
+#: lib/core/viewmodel.js:186
+msgid "Couldn't get the data yet."
+msgstr "Ainda não foi possível obter os dados."
+
+#: lib/core/viewmodel.js:191
+msgid "Retrying in %s."
+msgstr "Nova tentativa em %s."
+
+#: lib/core/viewmodel.js:192
+msgid "Retrying soon."
+msgstr "Nova tentativa em breve."
+
+#: lib/core/viewmodel.js:212
+msgid "%s%% used"
+msgstr "%s%% usado"
+
+#: lib/core/viewmodel.js:216
+msgid "resets in %s"
+msgstr "reinicia em %s"
+
+#: lib/core/viewmodel.js:225
+msgid "Expected by now: %s%%"
+msgstr "Esperado até agora: %s%%"
+
+#: lib/core/viewmodel.js:251
+msgid "left"
+msgstr "restam"
+
+#: lib/core/viewmodel.js:277
+msgid "The last data is more than a day old."
+msgstr "Os últimos dados têm mais de um dia."
+
+#: lib/core/viewmodel.js:278
+msgid "No quota data yet."
+msgstr "Ainda sem dados de cota."
+
+#: lib/core/viewmodel.js:287
+msgid "Budget spent"
+msgstr "Orçamento gasto"
+
+#: lib/core/viewmodel.js:289
+msgid "of %s · %s%%"
+msgstr "de %s · %s%%"
+
+#: lib/core/viewmodel.js:291
+msgid "No reset: prepaid balance"
+msgstr "Sem reinício: saldo pré-pago"
+
+#: lib/core/viewmodel.js:317
+msgid "%s: %d point ahead of an even pace"
+msgid_plural "%s: %d points ahead of an even pace"
+msgstr[0] "%s: %d ponto acima do ritmo uniforme"
+msgstr[1] "%s: %d pontos acima do ritmo uniforme"
+
+#: lib/core/viewmodel.js:322
+msgid "Data is out of date."
+msgstr "Dado desatualizado."
+
+#: lib/core/viewmodel.js:348
+msgid "%d ok"
+msgstr "%d ok"
+
+#: lib/core/viewmodel.js:349
+msgid "%d warning"
+msgstr "%d em atenção"
+
+#: lib/core/viewmodel.js:350
+msgid "%d critical"
+msgid_plural "%d critical"
+msgstr[0] "%d crítico"
+msgstr[1] "%d críticos"
+
+#: lib/core/viewmodel.js:351
+msgid "%d signed out"
+msgstr "%d sem login"
+
+#: lib/core/viewmodel.js:352
+msgid "%d with a problem"
+msgstr "%d com problema"
+
+#: lib/core/viewmodel.js:364
+msgid "Updated %d min ago"
+msgstr "Atualizado há %d min"
+
+#: lib/core/viewmodel.js:364
+msgid "Updated just now"
+msgstr "Atualizado agora"
+
+#: lib/core/viewmodel.js:379
+msgid "Not updated yet"
+msgstr "Ainda não atualizado"
+
+#: lib/core/viewmodel.js:382
+msgid "%s · %d with a problem"
+msgid_plural "%s · %d with problems"
+msgstr[0] "%s · %d com problema"
+msgstr[1] "%s · %d com problemas"
+
+#: lib/ui/indicator.js:159
+msgid "Refresh"
+msgstr "Atualizar"
+
+#: lib/ui/indicator.js:160
+msgid "Preferences"
+msgstr "Preferências"
+
+#: lib/ui/indicator.js:193
+msgid "Refreshing…"
+msgstr "Atualizando…"
+
+#: lib/ui/indicator.js:289
+msgid "Waiting for the first update…"
+msgstr "Aguardando a primeira atualização…"
+
+#: lib/ui/indicator.js:407
+msgid "Waiting for the first update"
+msgstr "Aguardando a primeira atualização"
+
+#: lib/ui/indicator.js:430
+msgid "%d more provider"
+msgid_plural "%d more providers"
+msgstr[0] "mais %d provedor (abra para ver)"
+msgstr[1] "mais %d provedores (abra para ver)"
+
+#: lib/ui/indicator.js:445
+msgid "On the bar"
+msgstr "Na barra"
+
+#: lib/ui/indicator.js:447
+msgid "Hidden from the bar (%d)"
+msgid_plural "Hidden from the bar (%d)"
+msgstr[0] "Oculto da barra (%d)"
+msgstr[1] "Ocultos da barra (%d)"
+
+#: lib/ui/providerCard.js:130
+msgid "Collapse %s"
+msgstr "Recolher %s"
+
+#: lib/ui/providerCard.js:130
+msgid "Expand %s"
+msgstr "Expandir %s"
+
+#: lib/ui/providerCard.js:178
+msgid "Try again"
+msgstr "Tentar de novo"
+
+#: lib/ui/themeCatalog.js:10
+msgid "Clean and functional"
+msgstr "Limpo e funcional"
+
+#: lib/ui/themeCatalog.js:11
+msgid "Typography and editorial"
+msgstr "Tipografia e editorial"
+
+#: lib/ui/themeCatalog.js:12
+msgid "Surface and materials"
+msgstr "Superfície e materiais"
+
+#: lib/ui/themeCatalog.js:13
+msgid "Immersive and motion"
+msgstr "Imersivo e movimento"
+
+#: lib/ui/themeCatalog.js:14
+msgid "Punks and science fiction"
+msgstr "Punks e ficção científica"
+
+#: lib/ui/themeCatalog.js:15
+msgid "Historical and retro"
+msgstr "Histórico e retrô"
+
+#: lib/ui/themeCatalog.js:16
+msgid "Brutalist and rebellious"
+msgstr "Brutalista e rebelde"
+
+#: lib/ui/themeCatalog.js:20
+msgid "Solid colors, no shadows or gradients."
+msgstr "Cores sólidas, sem sombras nem gradientes."
+
+#: lib/ui/themeCatalog.js:21
+msgid "Everything in modular cards."
+msgstr "Tudo em cartões modulares."
+
+#: lib/ui/themeCatalog.js:22
+msgid "A grid of asymmetric blocks."
+msgstr "Uma grade de blocos assimétricos."
+
+#: lib/ui/themeCatalog.js:23
+msgid "Refined dark product UI with subtle borders."
+msgstr "Interface escura e refinada de produto, com bordas sutis."
+
+#: lib/ui/themeCatalog.js:24
+msgid "A daily newspaper page, in columns with serif type."
+msgstr "Uma página de jornal diário, em colunas e com tipo serifado."
+
+#: lib/ui/themeCatalog.js:25
+msgid "Large variable type, the glyph as the image."
+msgstr "Tipografia variável em grande escala, a letra como imagem."
+
+#: lib/ui/themeCatalog.js:26
+msgid "Strokes drawn by hand."
+msgstr "Traços feitos à mão."
+
+#: lib/ui/themeCatalog.js:27
+msgid "Soft mesh gradients."
+msgstr "Gradientes de malha suaves."
+
+#: lib/ui/themeCatalog.js:28
+msgid "Pearly, prismatic foil."
+msgstr "Folha perolada e prismática."
+
+#: lib/ui/themeCatalog.js:29
+msgid "Isometric projection."
+msgstr "Projeção isométrica."
+
+#: lib/ui/themeCatalog.js:30
+msgid "An interface composed from intent."
+msgstr "Uma interface composta a partir da intenção."
+
+#: lib/ui/themeCatalog.js:31
+msgid "Neon noir and tactical HUD."
+msgstr "Neon noir e HUD tático."
+
+#: lib/ui/themeCatalog.js:32
+msgid "Night, silver and digital mysticism."
+msgstr "Noite, prata e misticismo digital."
+
+#: lib/ui/themeCatalog.js:33
+msgid "Micro scale, particles and precision."
+msgstr "Microescala, partículas e precisão."
+
+#: lib/ui/themeCatalog.js:34
+msgid "A green, sunlit future on linen tones."
+msgstr "Um futuro verde e ensolarado em tons de linho."
+
+#: lib/ui/themeCatalog.js:35
+msgid "Black lines and primary colors."
+msgstr "Linhas pretas e cores primárias."
+
+#: lib/ui/themeCatalog.js:36
+msgid "Mid-twentieth century, earthy tones."
+msgstr "Meados do século XX, tons terrosos."
+
+#: lib/ui/themeCatalog.js:37
+msgid "A text terminal interface."
+msgstr "Uma interface de terminal em texto."
+
+#: lib/ui/themeCatalog.js:38
+msgid "Raw HTML and dense tables."
+msgstr "HTML cru e tabelas densas."
+
+#: prefs.js:75
+msgid "Some themes could not be loaded"
+msgstr "Alguns temas não puderam ser carregados"
+
+#: prefs.js:99
+msgid "System"
+msgstr "Sistema"
+
+#: prefs.js:99 prefs.js:219
+msgid "Your themes"
+msgstr "Seus temas"
+
+#: prefs.js:106 prefs.js:194
+msgid "System (GNOME)"
+msgstr "Sistema (GNOME)"
+
+#: prefs.js:110
+msgid "Follows the GNOME accent color and the light or dark setting."
+msgstr "Segue a cor de destaque do GNOME e a configuração de claro ou escuro."
+
+#: prefs.js:139 prefs.js:199
+msgid "Theme"
+msgstr "Tema"
+
+#: prefs.js:152 prefs.js:184
+msgid "Appearance"
+msgstr "Aparência"
+
+#: prefs.js:157
+msgid "Top bar"
+msgstr "Barra superior"
+
+#: prefs.js:158
+msgid ""
+"The bar shrinks, then shows fewer providers, when other extensions leave it "
+"little room."
+msgstr "A barra encolhe e depois mostra menos provedores quando outras extensões deixam pouco espaço."
+
+#: prefs.js:161
+msgid "Left"
+msgstr "Esquerda"
+
+#: prefs.js:162
+msgid "Center"
+msgstr "Centro"
+
+#: prefs.js:163
+msgid "Right"
+msgstr "Direita"
+
+#: prefs.js:164
+msgid "Position"
+msgstr "Posição"
+
+#: prefs.js:164
+msgid "Where the quota items sit on the top bar."
+msgstr "Onde os itens de cota ficam na barra superior."
+
+#: prefs.js:168
+msgid "Providers on the bar"
+msgstr "Provedores na barra"
+
+#: prefs.js:169
+msgid "The most providers shown, from 1 to 5."
+msgstr "O máximo de provedores exibidos, de 1 a 5. Os mais críticos aparecem primeiro."
+
+#: prefs.js:176
+msgid "Automatic"
+msgstr "Automático"
+
+#: prefs.js:177
+msgid "Always compact"
+msgstr "Sempre compactar"
+
+#: prefs.js:178
+msgid "Never compact"
+msgstr "Nunca compactar"
+
+#: prefs.js:179
+msgid "Compact mode"
+msgstr "Modo compacto"
+
+#: prefs.js:179
+msgid "Drops the percent sign and the window suffix."
+msgstr "Remove o sinal de % e o sufixo da janela."
+
+#: prefs.js:186 prefs.js:241
+msgid "Follow the system"
+msgstr "Seguir o sistema"
+
+#: prefs.js:187
+msgid "Light"
+msgstr "Claro"
+
+#: prefs.js:188
+msgid "Dark"
+msgstr "Escuro"
+
+#: prefs.js:189
+msgid "Applies to the popup. The top bar always stays dark."
+msgstr "Vale para o popup. A barra superior continua escura."
+
+#: prefs.js:189
+msgid "Light or dark"
+msgstr "Claro ou escuro"
+
+#: prefs.js:195
+msgid "%s (unavailable)"
+msgstr "%s (indisponível)"
+
+#: prefs.js:200
+msgid "Each theme has a light and a dark variant."
+msgstr "Todo tema tem variante clara e escura."
+
+#: prefs.js:220
+msgid "One folder per theme, with a theme.json inside: %s"
+msgstr "Uma pasta por tema, com um theme.json dentro: %s"
+
+#: prefs.js:223
+msgid "Open folder"
+msgstr "Abrir pasta"
+
+#: prefs.js:225
+msgid "Open the themes folder"
+msgstr "Abrir a pasta de temas"
+
+#: prefs.js:239
+msgid "Popup"
+msgstr "Popup"
+
+#: prefs.js:242
+msgid "12 hours"
+msgstr "12 horas"
+
+#: prefs.js:243
+msgid "24 hours"
+msgstr "24 horas"
+
+#: prefs.js:244
+msgid "Clock"
+msgstr "Relógio"
+
+#: prefs.js:244
+msgid "How reset times are written."
+msgstr "Como os horários de reinício são escritos."
+
+#: prefs.js:247
+msgid "1h 20min"
+msgstr "1h 20min"
+
+#: prefs.js:248
+msgid "1h20"
+msgstr "1h20"
+
+#: prefs.js:249
+msgid "How the countdown to a reset is written."
+msgstr "Como a contagem até o reinício é escrita."
+
+#: prefs.js:249
+msgid "Time until reset"
+msgstr "Tempo até o reinício"
+
+#: prefs.js:252
+msgid "Open cards that need attention"
+msgstr "Abrir cartões que pedem atenção"
+
+#: prefs.js:253
+msgid "Cards in warning, critical or error states open on their own."
+msgstr "Cartões em atenção, críticos ou com erro abrem sozinhos."
+
+#: prefs.js:260
+msgid "Demo build"
+msgstr "Versão de demonstração"
+
+#: prefs.js:261
+msgid "More settings arrive in later milestones. This build shows demo data."
+msgstr "Mais configurações chegam em marcos futuros. Esta versão mostra dados de demonstração."

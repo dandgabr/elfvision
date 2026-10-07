@@ -1,0 +1,84 @@
+{
+  "id": "flat-design",
+  "name": "Flat Design",
+  "group": "Limpo e funcional",
+  "description": "Cores sólidas, sem sombras nem gradientes.",
+  "nativeScheme": "light",
+  "difficulty": "easy",
+  "schemes": {
+    "light": {
+      "bg": "#ecf0f1",
+      "surface": "#ffffff",
+      "surface-2": "#dfe6e9",
+      "fg": "#2c3e50",
+      "muted": "#4a5b6b",
+      "border": "#d4d8d9",
+      "accent": "#1f78c1",
+      "accent-fg": "#ffffff",
+      "ok": "#157a4a",
+      "warn": "#a85d00",
+      "danger": "#c0392b",
+      "shadow": "none",
+      "error": "#8b4a9a"
+    },
+    "dark": {
+      "bg": "#0d1012",
+      "surface": "#171a1c",
+      "surface-2": "#222427",
+      "fg": "#eaeff4",
+      "muted": "#a4acb3",
+      "border": "#323437",
+      "accent": "#51a4f0",
+      "accent-fg": "#0d0d12",
+      "ok": "#7ad49f",
+      "warn": "#fdbb84",
+      "danger": "#fc8d7d",
+      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "error": "#e59ff6"
+    }
+  },
+  "adjusted": {
+    "light": [
+      "error",
+      "border"
+    ],
+    "dark": [
+      "error",
+      "border"
+    ]
+  },
+  "audit": {
+    "light": {
+      "fg": 11.0,
+      "muted": 7.0,
+      "accent": 4.7,
+      "accent-fg": 4.7,
+      "ok": 5.4,
+      "warn": 5.0,
+      "danger": 5.4,
+      "error": 5.9
+    },
+    "dark": {
+      "fg": 15.1,
+      "muted": 7.6,
+      "accent": 6.6,
+      "accent-fg": 7.3,
+      "ok": 9.8,
+      "warn": 10.5,
+      "danger": 7.7,
+      "error": 8.8
+    }
+  },
+  "fonts": {
+    "body": "'Nunito Sans',sans-serif",
+    "display": "'Montserrat',sans-serif",
+    "mono": "ui-monospace,monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;800&family=Montserrat:wght@700;800&display=swap"
+  },
+  "radius": {
+    "card": "4px",
+    "control": "3px"
+  },
+  "border": "hairline",
+  "hardShadow": false
+}

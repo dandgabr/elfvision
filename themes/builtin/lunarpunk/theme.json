@@ -1,0 +1,82 @@
+{
+  "id": "lunarpunk",
+  "name": "Lunarpunk",
+  "group": "Punks e ficção científica",
+  "description": "Noite, prata e misticismo digital.",
+  "nativeScheme": "dark",
+  "difficulty": "hard",
+  "schemes": {
+    "dark": {
+      "bg": "#0e1224",
+      "surface": "#141a33",
+      "surface-2": "#1d2547",
+      "fg": "#e4e8f8",
+      "muted": "#aab2d6",
+      "border": "#2e386b",
+      "accent": "#9a82ff",
+      "accent-fg": "#0b0e1d",
+      "ok": "#2fe0c2",
+      "warn": "#f2d36b",
+      "danger": "#ff8fb0",
+      "shadow": "0 0 0 1px rgba(124,92,255,.15),0 10px 40px rgba(124,92,255,.15)",
+      "error": "#fea668"
+    },
+    "light": {
+      "bg": "#f4f6ff",
+      "surface": "#fdfdff",
+      "surface-2": "#ecf0fb",
+      "fg": "#16181e",
+      "muted": "#555861",
+      "border": "#d5d7df",
+      "accent": "#6b4ec6",
+      "accent-fg": "#ffffff",
+      "ok": "#117a69",
+      "warn": "#7d670a",
+      "danger": "#a64063",
+      "shadow": "0 1px 3px rgba(0,0,0,.14)",
+      "error": "#9c5312"
+    }
+  },
+  "adjusted": {
+    "dark": [
+      "error"
+    ],
+    "light": [
+      "error"
+    ]
+  },
+  "audit": {
+    "dark": {
+      "fg": 14.0,
+      "muted": 8.2,
+      "accent": 5.7,
+      "accent-fg": 6.4,
+      "ok": 10.3,
+      "warn": 11.7,
+      "danger": 8.0,
+      "error": 8.9
+    },
+    "light": {
+      "fg": 17.5,
+      "muted": 7.0,
+      "accent": 5.9,
+      "accent-fg": 5.9,
+      "ok": 5.2,
+      "warn": 5.4,
+      "danger": 5.8,
+      "error": 5.6
+    }
+  },
+  "fonts": {
+    "body": "'Sora',system-ui,sans-serif",
+    "display": "'Fraunces',Georgia,serif",
+    "mono": "ui-monospace,monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,600;1,400&display=swap"
+  },
+  "radius": {
+    "card": "20px",
+    "control": "12px"
+  },
+  "border": "hairline",
+  "hardShadow": false
+}

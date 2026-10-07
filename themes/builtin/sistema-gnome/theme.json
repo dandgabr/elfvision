@@ -1,0 +1,40 @@
+{
+  "id": "sistema-gnome",
+  "name": "System (GNOME)",
+  "description": "Follows the GNOME Shell popup, the system accent color and the light or dark preference.",
+  "schemes": {
+    "dark": {
+      "bg": "#36363a",
+      "surface": "#424247",
+      "surface-2": "#4a4a50",
+      "fg": "#ffffff",
+      "muted": "#c3c3c8",
+      "border": "#56565c",
+      "accent": "system-accent",
+      "accent-fg": "#0d0d12",
+      "ok": "#8ff0a4",
+      "warn": "#f5c211",
+      "danger": "#ff938c",
+      "error": "#ffa348",
+      "shadow": "none"
+    },
+    "light": {
+      "bg": "#fafafa",
+      "surface": "#ffffff",
+      "surface-2": "#ececee",
+      "fg": "#1e1e1e",
+      "muted": "#5e5c64",
+      "border": "#d5d5da",
+      "accent": "system-accent",
+      "accent-fg": "#ffffff",
+      "ok": "#1a7f4c",
+      "warn": "#8f5d00",
+      "danger": "#c01c28",
+      "error": "#b04a00",
+      "shadow": "none"
+    }
+  },
+  "radius": {"card": 14, "control": 8},
+  "border": "hairline",
+  "fonts": {}
+}
