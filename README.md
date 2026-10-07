@@ -209,7 +209,7 @@ design are in [docs/adr](docs/adr/README.md).
 | M1 | Data layer (contract, scheduler, cache), themes, appearance settings | done |
 | M2 | Command Code with an API key stored in libsecret | done |
 | M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | done |
-| M4 | Notifications and connection alerts (done); Restore defaults and About (done); legend, tooltip and "not tracked" section, first-use assistant (planned) | in progress |
+| M4 | Notifications and connection alerts (done); Restore defaults and About (done); legend, bar tooltip and "not tracked" section (done); first-use assistant (planned) | in progress |
 
 Details in [ADR 0008](docs/adr/0008-mvp-roadmap.md).
 

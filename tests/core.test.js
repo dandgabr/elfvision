@@ -5,7 +5,7 @@ import {aheadOfPace, expectedPercent} from '../lib/core/pacing.js';
 import {selectForBar} from '../lib/core/selection.js';
 import {demoSnapshots} from '../lib/core/fixtures.js';
 import {candidateLayouts, chooseLayout, chooseStickyLayout, sideWidth} from '../lib/core/fit.js';
-import {barView, cardView, fmt, footerText, problemCount, summaryText, updatedText} from '../lib/core/viewmodel.js';
+import {SYMBOLS, barTooltip, barView, cardView, fmt, footerText, legendRows, problemCount, summaryText, untrackedProviders, updatedText} from '../lib/core/viewmodel.js';
 
 const NOW = Date.UTC(2026, 9, 6, 19, 46);
 const demo = () => demoSnapshots(NOW);
@@ -712,4 +712,55 @@ test('a number that belongs to a pool says which pool, for the eye and for a scr
     // a provider without pools reads as before
     const plain = barView({id: 'c', name: 'C', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: 1}, metrics: [{id: 'w', kind: 'percent', window: 'week', windowSecs: 604800, percentUsed: 12}]}, ctx);
     assertEqual(plain.accessibleName, 'C: 12% of week used');
+});
+
+
+
+test('legend: every mark the bar can show is explained, in the bar\'s own words', () => {
+    const rows = legendRows();
+    const marks = rows.map(row => row.glyph ?? row.icon);
+    for (const mark of [SYMBOLS.critical, SYMBOLS.warning, SYMBOLS.approximate, SYMBOLS.auth.icon, SYMBOLS.error.icon])
+        assertTrue(marks.includes(mark), `${mark} is in the legend`);
+    // What a bar item really shows is what the legend says it shows.
+    const metric = percent => ({id: 'm', kind: 'percent', window: 'session', windowSecs: 18000, percentUsed: percent});
+    const base = {id: 'claude', name: 'Claude', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: Date.now()}, metrics: [metric(50)]};
+    assertEqual(barView({...base, metrics: [metric(96)]}).glyph, {text: SYMBOLS.critical});
+    assertEqual(barView({...base, metrics: [metric(85)]}).glyph, {text: SYMBOLS.warning});
+    assertEqual(barView({...base, state: 'auth_required', metrics: []}).glyph, {icon: SYMBOLS.auth.icon});
+    assertEqual(barView({...base, state: 'network'}).glyph, {icon: SYMBOLS.error.icon});
+    assertTrue(barView({...base, source: {kind: 'stale', fetchedAt: Date.now() - 1e7}}).number.startsWith(SYMBOLS.approximate));
+    assertTrue(rows.every(row => row.title && row.description && row.cssClass));
+    // Translated through the injected functions.
+    const t = {gettext: s => `«${s}»`, ngettext: (a, b, n) => (n === 1 ? a : b), pgettext: (_c, s) => s};
+    assertTrue(legendRows(t).every(row => row.title.startsWith('«') && row.description.startsWith('«')));
+});
+
+test('bar tooltip: the item\'s own words plus the reset, made when it is shown, and nothing else', () => {
+    const now = 1_800_000_000_000;
+    const snapshot = {id: 'claude', name: 'Claude', plan: 'Max', state: 'ok', source: {kind: 'fresh', fetchedAt: now},
+        metrics: [{id: 'm', kind: 'percent', window: 'session', windowSecs: 18000, percentUsed: 82, resetsAt: now + 80 * 60 * 1000}]};
+    const view = barView(snapshot, {nowMs: now});
+    assertEqual(barTooltip(view, {nowMs: now}), 'Claude · 5 hours · 82% used (warning)\nResets in 1h 20min');
+    // The countdown is the one of the moment the tooltip is shown, not of the last update.
+    assertEqual(barTooltip(view, {nowMs: now + 30 * 60 * 1000}).split('\n')[1], 'Resets in 50min');
+    assertTrue(!barTooltip(view, {nowMs: now}).includes('Max'), 'the plan is not in the tooltip');
+    // Without a warning there is no state in brackets; critical says so.
+    assertEqual(barView({...snapshot, metrics: [{...snapshot.metrics[0], percentUsed: 40}]}, {nowMs: now}).tooltipHead, 'Claude · 5 hours · 40% used');
+    assertTrue(barView({...snapshot, metrics: [{...snapshot.metrics[0], percentUsed: 97}]}, {nowMs: now}).tooltipHead.endsWith('(critical)'));
+    // A reset in the past, a failure, a stale value and a balance have no second line.
+    const lines = (extra, nowMs = now) => barTooltip(barView({...snapshot, ...extra}, {nowMs}), {nowMs}).split('\n').length;
+    assertEqual(lines({metrics: [{...snapshot.metrics[0], resetsAt: now - 1000}]}), 1);
+    assertEqual(lines({state: 'auth_required', metrics: []}), 1);
+    assertEqual(lines({state: 'network'}), 2 - 1 + (barView({...snapshot, state: 'network'}, {nowMs: now}).resetsAt === null ? 0 : 1));
+    assertEqual(lines({metrics: [{id: 'usd', kind: 'money', balance: 5, budget: 10, currency: 'USD', percentUsed: 50, resetsAt: now + 1e6}]}), 1);
+    // What the memo of a bar item looks at includes the reset time, so a changed reset is redrawn.
+    assertTrue('resetsAt' in view && JSON.stringify(view).includes(String(now + 80 * 60 * 1000)));
+});
+
+test('not tracked: only known providers, in the registry\'s order', () => {
+    const registry = [{id: 'command-code', name: 'Command Code'}, {id: 'codex', name: 'Codex'}, {id: 'claude', name: 'Claude'}];
+    assertEqual(untrackedProviders(['claude', 'nope', 'command-code'], registry), [{id: 'command-code', name: 'Command Code'}, {id: 'claude', name: 'Claude'}]);
+    assertEqual(untrackedProviders([], registry), []);
+    assertEqual(untrackedProviders(undefined, registry), []);
+    assertEqual(untrackedProviders(['__proto__', 'constructor'], registry), []);
 });

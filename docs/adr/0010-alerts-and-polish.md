@@ -93,19 +93,26 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
   hours.
 - Every string that reaches a notification is stripped of control and bidirectional-override
   characters and length-capped (`alertText.js`), and notification markup is turned off, so what is
-  left is shown as typed. The tooltip gets the same treatment when it is built.
+  left is shown as typed. The tooltip gets the same cleaning (`lib/core/text.js`, shared with the
+  notifications) when it is shown.
 - Notifications use a source of their own (`MessageTray.Source`), created lazily and destroyed in
   `disable()`. A new notification replaces the old one of the same provider and kind instead of
   stacking. With Do Not Disturb on, banners are held and the notifications wait in the list.
 
 ### Bar, popup and prefs
 
-- **Tooltip:** the existing one, same text as the item's accessible name plus the reset time, wrapped
-  at 260 px, hidden while the screen is locked. It carries nothing the bar or popup do not.
-- **Legend:** a collapsed row at the foot of the popup, opened by a "?" button. Its rows are built
-  from the same view-model constants as the pills and glyphs, so it cannot drift.
-- **Not tracked:** a collapsed section under the hidden list; each row is the muted icon, the name
-  and a Resume button, with no meter. The "Add account" line becomes its last row.
+- **Tooltip:** the existing one, now on each item of the bar, written for the eye ("Codex · 5 hours ·
+  82% used (warning)") with the countdown made when it is shown, wrapped at 260 px. It carries nothing the bar or popup do not (no plan, no account), and
+  the click still reaches the button. (The extension is off while the screen is locked.)
+- **Legend:** hidden until a "?" button in the footer (a toggle with a tooltip) opens it at the end of
+  the popup and scrolls it into view. Its rows are
+  built from the same table of marks (`SYMBOLS`) as the bar and the pills, so it cannot drift, and a
+  test checks that every mark a bar item can show is in it.
+- **Not tracked:** a collapsed section under the hidden list, "Not tracked (N)"; each row is the
+  muted icon, the name and a Resume button, with no meter (resume writes the `untracked-providers`
+  setting, which the extension already follows). The "Add account" line stays separate and quiet below
+  it: it means "never connected", which is not the same as paused. The section opens by itself when
+  nothing else is on the popup, until the user opens or closes it by hand.
 - **About:** `Adw.AboutDialog` with the version from `metadata.json`, the licence and constant
   `https://` links. No paths or user name.
 - **Restore defaults:** every schema key is classified as reset or kept, and a test fails for an
@@ -145,7 +152,9 @@ Each chunk is followed by the UI, UX, frontend and security reviews.
 3. `power.js`, resume handling and the connection alert (done).
 4. Indicator extraction, view diff and coalescing.
 5. A Notifications page for the new settings, Restore defaults and About (done).
-6. Legend, "not tracked" and the tooltip audit.
+6. Legend, "not tracked" and the bar tooltip (done). The indicator's logic stays in `lib/ui` for
+   now; what was done for its cost is that a bar item or a card whose view did not change is not
+   redrawn.
 7. First-use assistant.
 8. Right-to-left prototype and a longer-text pseudo-locale pass.
 

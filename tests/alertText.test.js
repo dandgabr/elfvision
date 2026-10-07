@@ -74,3 +74,12 @@ test('alert text: the test notification is plainly a test and carries nothing el
     assertEqual(text.title, 'Test notification');
     assertTrue(text.body.includes('Do Not Disturb') && !/evil|99/.test(text.title + text.body), text.body);
 });
+
+import {safeText} from '../lib/core/text.js';
+
+test('safe text: controls and direction overrides go, a newline stays, the length is capped', () => {
+    assertEqual(safeText('a\u202eb\u0007c\u2067d\u200ee\nf'), 'abcde\nf');
+    assertEqual(safeText('x'.repeat(500), 10), 'xxxxxxxxxx');
+    assertEqual(safeText(42), '42');
+    assertEqual(safeText('<b>&amp;</b>'), '<b>&amp;</b>');   // markup is left as typed: the widgets do not interpret it
+});

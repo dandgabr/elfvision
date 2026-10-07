@@ -62,9 +62,40 @@ catalogs() {
 
 # Some tests read the compiled schema and the catalogs, which are not in the repository: build them first,
 # so a new setting is not tested against an old file.
+# The interface modules need the shell to be imported, so the unit tests never load them: a syntax
+# error in one (a name declared twice) would only show when the extension fails to enable.
+js_syntax() {
+    command -v node >/dev/null 2>&1 || { echo "node is not installed; skipping"; return 0; }
+    local file status=0
+    while IFS= read -r file; do
+        node --input-type=module --check < "$file" 2>&1 | sed "s|^|$file: |" | head -3
+        [ "${PIPESTATUS[0]}" -eq 0 ] || status=1
+    done < <(find extension.js prefs.js lib -name '*.js' | sort)
+    return "$status"
+}
+
+# The surest test that the extension loads: enable it in a real (headless) shell and read its state. The
+# unit tests cannot import the interface modules, and a name that is not defined or declared twice shows
+# only here.
+shell_loads() {
+    if ! command -v gnome-shell >/dev/null 2>&1 || ! command -v dbus-run-session >/dev/null 2>&1; then
+        echo "gnome-shell is not available; skipping"
+        return 0
+    fi
+    local out
+    out="$(timeout 120 tools/headless-shell.sh 2>&1)"
+    if grep -q "'state': <1.0>" <<<"$out" && grep -q "'error': <''>" <<<"$out"; then
+        return 0
+    fi
+    grep -E "'(state|error)'|Error" <<<"$out" | head -5
+    return 1
+}
+
 step "build" tools/build.sh
 step "unit tests" gjs -m tests/run.js
 step "script syntax" syntax
+step "javascript syntax" js_syntax
+step "extension enables in a shell" shell_loads
 step "shellcheck" lint
 step "schemas" glib-compile-schemas --strict --dry-run schemas
 step "translation template" template_in_step
