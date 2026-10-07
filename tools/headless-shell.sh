@@ -26,6 +26,11 @@ ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 # Keep data, config and cache away from the real session.
 export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
 export GSETTINGS_BACKEND=memory
+export GAQ_TEST_MONITOR="${GAQ_TEST_MONITOR:-1280x800}"
+if [[ ! "$GAQ_TEST_MONITOR" =~ ^[0-9]+x[0-9]+$ ]]; then
+    echo 'GAQ_TEST_MONITOR must be WIDTHxHEIGHT' >&2
+    exit 1
+fi
 # One script path per line, so names with spaces survive.
 SCRIPTS="$(printf '%s\n' "$@")"
 export WORK="$work" DATA_SOURCE="${DATA_SOURCE:-demo}" UUID="$uuid" SCRIPTS LOGFILE="$log" ROOT="$root" SKIP_ENABLE="${SKIP_ENABLE:-}"
@@ -41,7 +46,7 @@ dbus-run-session -- bash -c '
     # libsecret does not ask to create a keyring.
     gdbus call --session --dest org.freedesktop.secrets --object-path /org/freedesktop/secrets \
         --method org.freedesktop.Secret.Service.SetAlias default /org/freedesktop/secrets/collection/session >/dev/null 2>&1 || true
-    gnome-shell --headless --wayland --unsafe-mode --virtual-monitor 1280x800 >"$LOGFILE" 2>&1 &
+    gnome-shell --headless --wayland --unsafe-mode --virtual-monitor "$GAQ_TEST_MONITOR" >"$LOGFILE" 2>&1 &
     shell=$!
     for _ in $(seq 1 50); do
         sleep 0.3

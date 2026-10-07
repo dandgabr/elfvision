@@ -22,8 +22,7 @@ and a Preferences button.
 
 ## Status
 
-The project is built in milestones (M0 to M4, see the [Roadmap](#roadmap)); M0 to M3 are done and M4 is
-nearly done. Four providers are real: **Command
+The project is built in milestones (M0 to M4, see the [Roadmap](#roadmap)); M0 to M4 are done. The [conformance review](docs/temp/reviews/2026-10-07-m4-plan-conformance.md) records the original-plan adaptations and completed audit fixes. Four providers are real: **Command
 Code** (an API key pasted on the Accounts page of Preferences) and **Codex**, **Claude** and
 **Antigravity** (a sign-in through the browser, started from the same page). A provider you have
 not connected is not shown on the bar. An Advanced option switches to demo data (three
@@ -61,7 +60,7 @@ follow these four.
    account; the page asks you to confirm before it connects.
 
 Until an account is connected the bar shows only the extension's icon, and the popup says that no
-account is connected and has an **Add account** button. A first-use assistant that walks through these steps is planned.
+account is connected and has an **Add account** button. The first-use assistant walks through these steps when Preferences opens for the first time.
 
 Notifications are on from the start (see [Notifications](#notifications)); the **Notifications**
 page of Preferences changes them.
@@ -121,6 +120,17 @@ DATA_SOURCE=demo DEMO_SCENARIO=drift tools/nested-shell.sh
 
 Open them from the popup (Preferences) or with `gnome-extensions prefs`.
 
+For a new live-data user with no accounts, Preferences opens a setup assistant once:
+Welcome, Providers, Connect, Top bar, Notifications and a summary. Every provider is optional;
+choosing one never connects it. Skip, Escape or closing dismisses setup. General → Set up again
+reopens it, and Restore defaults leaves that choice alone. Existing accounts, demo mode and a
+request to show a particular account do not trigger setup. A keyring that cannot be checked does
+not count as an empty account list.
+
+When OAuth client ids are missing, setup shows and copies one command for the selected providers.
+Run it yourself in a terminal; the installed package includes the helper. The assistant never runs
+it, starts a sign-in or accepts terms for you. Only an explicit Connect action does that.
+
 | Page and group | Option | What it does |
 |---|---|---|
 | Accounts, each provider | Status, key or Connect | Shows the key field (Command Code) or Connect, Cancel and Disconnect (the others), with what the last check said. |
@@ -135,6 +145,7 @@ Open them from the popup (Preferences) or with `gnome-extensions prefs`.
 | General, Popup | Time until reset | Writes the countdown as `1h 20min` or `1h20`. |
 | General, Popup | Open cards that need attention | Opens cards in a warning, critical or error state on their own. A card you open or close by hand keeps that choice until its state changes. |
 | General, Advanced | Data source, Demo scenario | Switches to made-up providers (`steady`, `flaky` or `drift`) so every state can be seen without an account. The popup says when the data is made up. |
+| General, last group | Set up again | Reopens the optional setup assistant. Its dismissal is stored in `first-use-done`, which Restore defaults keeps. |
 | General, last group | About | Shows the version, the license and the links. |
 | General, last group | Restore defaults | After a confirmation, puts the look, the bar, the popup, the theme, the notifications and the data source back to their defaults. Accounts, tracked providers and your terms acknowledgements are never touched. |
 | Notifications | Send notifications | Is the master switch. It also silences the connection alert. Off leaves the bar and the popup as they are. |
@@ -212,9 +223,9 @@ design are in [docs/adr](docs/adr/README.md).
 | M1 | Data layer (contract, scheduler, cache), themes, appearance settings | done |
 | M2 | Command Code with an API key stored in libsecret | done |
 | M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | done |
-| M4 | Notifications and polish | in progress |
+| M4 | Notifications and polish | done |
 
-What each milestone holds, and what is left of M4, is in [ADR 0008](docs/adr/0008-mvp-roadmap.md).
+What each milestone holds, and which follow-up items remain, is in [ADR 0008](docs/adr/0008-mvp-roadmap.md).
 
 ## Security
 

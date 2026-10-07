@@ -4,6 +4,8 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Gtk from 'gi://Gtk';
 
+import {firstUsePolicy} from './lib/core/firstUse.js';
+import {openFirstUse} from './lib/prefs/firstUse.js';
 import {DEFAULT_THEME, scanThemes} from './lib/services/themeFiles.js';
 import {buildAboutGroup} from './lib/prefs/about.js';
 import {buildAccountsPage} from './lib/prefs/accounts.js';
@@ -157,8 +159,13 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         const settings = this.getSettings();
         const _ = this.gettext.bind(this);
         const handlerIds = [];
+        const initialTarget = settings.get_string('prefs-target');
+        let assistant = null;
+        let closed = false;
+        const closeSetup = () => assistant?.close();
         window.connect('close-request', () => {
-            handlerIds.forEach(id => settings.disconnect(id));
+            closed = true;
+            handlerIds.splice(0).forEach(id => settings.disconnect(id));
             return false;
         });
 
@@ -291,9 +298,32 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         expander.add_row(scenario);
         advanced.add(expander);
         page.add(advanced);
-        page.add(buildAboutGroup({window, settings, gettext: _, version: this.metadata['version-name'] ?? '', extensionPath: this.path}));
-        window.add(buildAccountsPage({window, settings, gettext: _, handlerIds, extensionPath: this.path}));
+        const accounts = buildAccountsPage({window, settings, gettext: _, handlerIds, extensionPath: this.path, onShow: closeSetup});
+        const notificationsPage = buildNotificationsPage({settings, gettext: _, handlerIds});
+        const setup = () => {
+            if (assistant || closed)
+                return;
+            assistant = openFirstUse({window, settings, gettext: _, accounts, extensionPath: this.path,
+                notificationsPage, onClosed: () => { assistant = null; }});
+        };
+        page.add(buildAboutGroup({window, settings, gettext: _, version: this.metadata['version-name'] ?? '', extensionPath: this.path, setup}));
+        window.add(accounts.page);
         window.add(page);
-        window.add(buildNotificationsPage({settings, gettext: _, handlerIds}));
+        window.add(notificationsPage);
+        const considerSetup = () => {
+            if (closed || assistant)
+                return;
+            const policy = firstUsePolicy({done: settings.get_boolean('first-use-done'),
+                source: settings.get_string('data-source'), target: initialTarget || settings.get_string('prefs-target'),
+                states: [...accounts.controllers.values()].map(controller => controller.snapshot())});
+            if (policy === 'complete')
+                settings.set_boolean('first-use-done', true);
+            else if (policy === 'open')
+                setup();
+        };
+        const unsubscribes = [...accounts.controllers.values()].map(controller => controller.subscribe(considerSetup));
+        window.connect('close-request', () => { unsubscribes.forEach(fn => fn()); return false; });
+        // Keyring lookup finishes asynchronously. Unknown or unavailable accounts never count as absent.
+        Promise.all([...accounts.controllers.values()].map(controller => controller.refresh())).then(considerSetup);
     }
 }

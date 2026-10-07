@@ -1,8 +1,12 @@
 # 0010. Alerts and polish (M4)
 
-Status: accepted. Implemented, except the first-use assistant (decided, being built) and the
-right-to-left and longer-text pass (see "Pending" at the end). Decided after a review by UI, UX, frontend and security
-consultants, and every part was reviewed again when it was built.
+Status: accepted. M4 is implemented. Findings from the
+[original-plan audit](../temp/reviews/2026-10-07-m4-plan-conformance.md) are fixed
+and verified; documented adaptations and human/live-account validation limits
+remain explicit in that record.
+Follow-up items outside the MVP are under "Pending".
+The first-use design was reviewed by UI, UX, frontend and security consultants; the implementation
+and the RTL/long-text pass also received independent reviews.
 
 ## Context
 
@@ -134,7 +138,7 @@ English msgids. There is no language setting, no language step in the assistant 
   the assistant never sends one on its own), and for each kind of quota a switch and a threshold
   shown in the row ("Notifies at 95% used" or "Off"). With the master switch off the rows are dimmed,
   not blocked.
-- **First-use assistant** (decided after a UI, UX, frontend and security review; not built yet).
+- **First-use assistant** (implemented after a UI, UX, frontend and security review).
   - *Where and when.* It is a pushed subpage of the Preferences window with its own
     `Adw.NavigationView` (a dialog or a second window would hide toasts and flip `is-active` during
     the browser round-trip). It opens by itself once, when Preferences opens with `first-use-done`
@@ -146,7 +150,7 @@ English msgids. There is no language setting, no language step in the assistant 
     The extension never opens Preferences by itself, and no notification announces the assistant.
   - *Steps.* Welcome (what it does, that nothing changes until a button is pressed, that keys stay in
     the keyring), Providers, Connect, Bar, Notifications, Done. The page title carries the progress
-    ("Setup · 2 of 5"); there are no dots. A bottom bar has the primary action on the right and a flat
+    ("Setup · 2 of 5"); there are no dots. A wrapping bottom bar has the primary action on the right and a flat
     "Skip this step" on the left; Escape and closing mean "later".
   - *Providers.* One unchecked row per provider, in registry order, each with how it signs in and a
     text mark for its terms (icon and words). Antigravity is last, with the strongest wording, and its
@@ -162,7 +166,7 @@ English msgids. There is no language setting, no language step in the assistant 
   - *No client id.* The page shows the whole command on screen in one line (selectable) with the
     existing Copy command button (no trailing newline, so the user presses Enter), says what the helper
     does (it reads the installed program for a public client id, using `PATH`, and writes
-    `providers.local.json`) and re-checks when the window becomes active again. The command takes the
+    `providers.local.json`) and re-checks when the window becomes active again. The packaged helper is included under `tools/`; the command takes the
     chosen providers in one call (the helper accepts several ids); the assistant never runs it,
     never reads another tool's files, the environment or `PATH`, and never reads the clipboard.
   - *Bar and notifications.* The Bar step asks for the position and the number of providers, with the
@@ -177,7 +181,31 @@ English msgids. There is no language setting, no language step in the assistant 
   - *Structure.* The pure logic is in `lib/core/firstUse.js` (the step list, which providers can be
     connected given the local configuration, whether a step is complete, whether to open by itself) and
     is tested; `lib/prefs` only draws. Each run of the assistant has its own list of handlers and
-    timers, released when the subpage is popped, so "Set up again" does not leak.
+    timers, released when the subpage is popped, so "Set up again" does not leak. Step completion informs
+    the connection status; it never blocks Continue or Skip. The common threshold changes all four
+    quota types only when edited; existing per-type choices are kept until then.
+    Done subscribes to account changes and validation results, updates rows in place,
+    and releases subscriptions on departure. Account views discard late UI callbacks
+    after disposal; fixed nonsecret save failures remain visible until recovery.
+    OAuth configuration is retained state, refreshed asynchronously rather than read
+    during rendering. Returning to Preferences also retries keyring availability.
+  - *Cancellation.* Leaving Connect cancels both a pending terms confirmation and an active flow.
+    A cancelled attempt cannot acknowledge terms or store a later response. Once the user-initiated
+    keyring write has started, it finishes and tells the shell; navigating away does not roll back an
+    already requested save. Keyring refreshes ignore replies superseded by newer lookups.
+  - *Narrow screens.* Account actions and the bottom navigation wrap. The helper command remains
+    one selectable line in a horizontal scroll area, with a separate Copy command button.
+
+### Right-to-left and longer text
+
+St boxes and chevrons follow actor direction. Manual meter geometry mirrors the fill and the
+complete pacing-tick rectangle; the paused list mirrors its indentation with `:rtl`. Pure geometry
+and pseudo-text behavior are unit-tested. The layout probes cover LTR/RTL and normal/expanded text
+in a private demo shell, and preferences traversal covers 360 px windows and larger fonts. Neither
+probe changes a real session, reads the clipboard or starts authentication.
+The state matrix covers sign-in, paste, keyring/error and consent/destructive dialogs;
+the St probe verifies measured enlarged fonts and horizontal containment on an 800px
+monitor. Tooltip labels are reused across focus changes and destroyed during cleanup.
 
 ### Structure and checks
 
@@ -188,13 +216,8 @@ English msgids. There is no language setting, no language step in the assistant 
 
 ## Pending
 
-Work that was decided here and is not done:
+Follow-up work outside the MVP scope:
 
-- **First-use assistant** (decided above, being built in small steps: the sign-in controller split, the
-  shell of the assistant, the steps, then the review round).
-- **Right-to-left and longer text:** mirror the layout in St (`:rtl`), the chevrons are already chosen
-  by direction; and a script that inflates every string by about 40% to find overflow
-  (ADR 0007).
 - **Indicator:** move its bar model to `lib/core` and coalesce the redraws of providers that answer
   together.
 - **Bar items on the keyboard:** the tooltip on the bar shows on hover only; Escape closes the popup

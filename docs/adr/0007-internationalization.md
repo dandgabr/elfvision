@@ -2,7 +2,7 @@
 
 Status: accepted. English and pt-BR catalogs exist and every string goes through
 gettext. The extension follows the language of the GNOME Shell session and there is
-no language setting. A pseudo-locale check is not implemented.
+no language setting. Developer pseudo-locale and RTL checks are implemented.
 
 ## Context
 
@@ -46,4 +46,9 @@ tools/po-fill.py            rebuilds pt_BR.po from the template
 - Every user-visible string goes through gettext from the start.
 - When strings change, check the layout of any translation more than 25% longer than
   its source.
-- Planned: a script that inflates every string by about 40% to find layout overflow.
+- `lib/core/pseudoLocale.js` inflates translated literal strings by about 40%, preserving printf
+  placeholders, plural selection and contexts. It is injected only by the developer probes; it
+  never changes the session locale or the text of provider names, credentials or copied commands.
+- `tools/layout-check.sh` checks St popup/card actions, RTL meter and pacing geometry and a paused
+  provider row in an isolated demo shell. `tools/prefs-smoke.sh` checks the assistant at 360 px in
+  LTR and RTL, with normal/expanded text and enlarged fonts, then exercises its closing paths.

@@ -109,6 +109,11 @@
       <summary>Send a test notification</summary>
       <description>The preferences window raises this number when you press the test button, and the extension then sends one notification that says it is a test. It holds nothing else.</description>
     </key>
+    <key name="first-use-done" type="b">
+      <default>false</default>
+      <summary>First-use setup dismissed</summary>
+      <description>True after setup is finished, skipped or closed, or an existing account is found. Only controls whether setup opens; never starts a sign-in.</description>
+    </key>
     <key name="prefs-target" type="s">
       <default>''</default>
       <summary>Account to show in preferences</summary>

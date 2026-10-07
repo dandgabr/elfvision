@@ -148,6 +148,7 @@ test('restore defaults: looks, notifications and the data source go back; every 
     const kept = {
         'credentials-revision': ['i', 7], 'credentials-touched': ['s', 'codex'], 'command-code-username': ['s', 'someone'],
         'untracked-providers': ['as', ['codex']], 'terms-acknowledged': ['as', ['claude']], 'prefs-target': ['s', 'claude'],
+        'first-use-done': ['b', true],
         'test-notification': ['i', 3], 'demo-scenario': ['s', 'flaky'],
     };
     for (const [key, [type, value]] of Object.entries(kept))
@@ -180,4 +181,23 @@ test('restore defaults: the shell is told once, not once for every key', () => {
     restoreDefaults(settings);
     // Each key that changed is announced once, with its final value; no key is announced as changed twice.
     assertEqual(changes, ['position=right', 'theme=sistema-gnome']);
+});
+
+test('restore defaults: later edits and setup dismissal reach an independent observer', () => {
+    const source = Gio.SettingsSchemaSource.new_from_directory(`${GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')))}/schemas`, null, false);
+    const schema = source.lookup('org.gnome.shell.extensions.gnome-ai-quota', false);
+    const backend = Gio.memory_settings_backend_new();
+    const settings = Gio.Settings.new_full(schema, backend, null);
+    const observer = Gio.Settings.new_full(schema, backend, null);
+    settings.set_string('position', 'left');
+    restoreDefaults(settings);
+    assertEqual(observer.get_string('position'), 'right');
+    settings.set_string('position', 'center');
+    settings.set_boolean('first-use-done', true);
+    assertEqual([observer.get_string('position'), observer.get_boolean('first-use-done')], ['center', true]);
+    assertEqual(settings.get_has_unapplied(), false);
+    restoreDefaults(settings);
+    assertEqual([observer.get_string('position'), observer.get_boolean('first-use-done')], ['right', true]);
+    settings.set_int('bar-count', 5);
+    assertEqual(observer.get_int('bar-count'), 5);
 });

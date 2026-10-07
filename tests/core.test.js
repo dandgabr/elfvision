@@ -6,6 +6,7 @@ import {selectForBar} from '../lib/core/selection.js';
 import {demoSnapshots} from '../lib/core/fixtures.js';
 import {candidateLayouts, chooseLayout, chooseStickyLayout, sideWidth} from '../lib/core/fit.js';
 import {SYMBOLS, barTooltip, barView, cardView, fmt, footerText, legendRows, problemCount, summaryText, untrackedProviders, updatedText} from '../lib/core/viewmodel.js';
+import {oauthSubtitle} from '../lib/prefs/accountText.js';
 
 const NOW = Date.UTC(2026, 9, 6, 19, 46);
 const demo = () => demoSnapshots(NOW);
@@ -156,6 +157,15 @@ test('summary and updated text', () => {
 test('fmt handles placeholders and escaped percent signs', () => {
     assertEqual(fmt('%s: %s%% of %s', 'Claude', '97', 'week'), 'Claude: 97% of week');
     assertEqual(fmt('%d ok', 3), '3 ok');
+});
+
+test('account countdown: padded seconds are formatted in English and translated templates', () => {
+    for (const [secondsLeft, expected] of [[299, '4:59'], [61, '1:01'], [0, '0:00']]) {
+        const state = {busy: true, secondsLeft};
+        assertEqual(oauthSubtitle(state, {}, s => s), `Finish signing in using your browser. ${expected} left.`);
+        assertEqual(oauthSubtitle(state, {}, () => 'Browser: %d:%02d'), `Browser: ${expected}`);
+    }
+    assertEqual(fmt('%s %02d%% %d', 'Used', 3, 10), 'Used 03% 10');
 });
 
 test('fit: candidate layouts go from rich to lean', () => {
