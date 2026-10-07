@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 01:08-0300\n"
+"POT-Creation-Date: 2026-10-07 08:59-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,214 +42,270 @@ msgstr ""
 
 #: lib/core/viewmodel.js:97
 #, javascript-format
-msgid "%s: not signed in"
+msgid "%s: no API key"
 msgstr ""
 
-#: lib/core/viewmodel.js:99
+#: lib/core/viewmodel.js:98
+#, javascript-format
+msgid "%s: key rejected"
+msgstr ""
+
+#: lib/core/viewmodel.js:98
+#, javascript-format
+msgid "%s: not connected"
+msgstr ""
+
+#: lib/core/viewmodel.js:100
 #, javascript-format
 msgid "%s: rate limited"
 msgstr ""
 
-#: lib/core/viewmodel.js:101
+#: lib/core/viewmodel.js:102
 #, javascript-format
 msgid "%s: no connection"
 msgstr ""
 
-#: lib/core/viewmodel.js:103
+#: lib/core/viewmodel.js:104
 #, javascript-format
 msgid "%s: service problem"
 msgstr ""
 
-#: lib/core/viewmodel.js:105
+#: lib/core/viewmodel.js:106
 #, javascript-format
 msgid "%s: data out of date"
 msgstr ""
 
-#: lib/core/viewmodel.js:107
+#: lib/core/viewmodel.js:108
 #, javascript-format
 msgid "%s: %s left"
 msgstr ""
 
-#: lib/core/viewmodel.js:111
+#: lib/core/viewmodel.js:112
 #, javascript-format
 msgid "%s: %s%% of %s used"
 msgstr ""
 
-#: lib/core/viewmodel.js:114
+#: lib/core/viewmodel.js:115
 msgid "critical"
 msgstr ""
 
-#: lib/core/viewmodel.js:116
+#: lib/core/viewmodel.js:117
 msgid "warning"
 msgstr ""
 
-#: lib/core/viewmodel.js:135
+#: lib/core/viewmodel.js:136
 msgid "Critical"
 msgstr ""
 
-#: lib/core/viewmodel.js:136
+#: lib/core/viewmodel.js:137
 msgid "Warning"
 msgstr ""
 
-#: lib/core/viewmodel.js:137
-msgid "Signed out"
+#: lib/core/viewmodel.js:139
+msgid "No key"
 msgstr ""
 
-#: lib/core/viewmodel.js:140 lib/core/viewmodel.js:144
+#: lib/core/viewmodel.js:140
+msgid "Key rejected"
+msgstr ""
+
+#: lib/core/viewmodel.js:140
+msgid "Not connected"
+msgstr ""
+
+#: lib/core/viewmodel.js:145
+msgid "Keyring locked"
+msgstr ""
+
+#: lib/core/viewmodel.js:145 lib/core/viewmodel.js:149
 msgid "No connection"
 msgstr ""
 
-#: lib/core/viewmodel.js:141
+#: lib/core/viewmodel.js:146
 msgid "Rate limited"
 msgstr ""
 
-#: lib/core/viewmodel.js:142
+#: lib/core/viewmodel.js:147
 msgid "Unexpected reply"
 msgstr ""
 
-#: lib/core/viewmodel.js:143
+#: lib/core/viewmodel.js:148
 msgid "Service changed"
 msgstr ""
 
-#: lib/core/viewmodel.js:150
+#: lib/core/viewmodel.js:155
 #, javascript-format
 msgid "%s ago"
 msgstr ""
 
-#: lib/core/viewmodel.js:151
+#: lib/core/viewmodel.js:156
 msgid "Out of date"
 msgstr ""
 
-#: lib/core/viewmodel.js:170
-msgid "Account connection arrives in a later version."
+#: lib/core/viewmodel.js:175
+msgid "No API key yet. Paste one in Preferences."
 msgstr ""
 
-#: lib/core/viewmodel.js:173
-msgid "Too many requests."
+#: lib/core/viewmodel.js:176
+msgid ""
+"The server rejected this key. Check it or paste a new one in Preferences."
 msgstr ""
 
 #: lib/core/viewmodel.js:177
+msgid "Open Preferences to connect this account."
+msgstr ""
+
+#: lib/core/viewmodel.js:180
+msgid "Too many requests."
+msgstr ""
+
+#: lib/core/viewmodel.js:184
 msgid "The service replied in an unexpected way. Showing the last value."
 msgstr ""
 
-#: lib/core/viewmodel.js:178
+#: lib/core/viewmodel.js:185
 msgid "The service replied in an unexpected way."
 msgstr ""
 
-#: lib/core/viewmodel.js:181
+#: lib/core/viewmodel.js:188
 msgid "The service seems to have changed. This connector needs an update."
 msgstr ""
 
-#: lib/core/viewmodel.js:185
+#: lib/core/viewmodel.js:192
+msgid "Can't read the keyring. Unlock it, then try again."
+msgstr ""
+
+#: lib/core/viewmodel.js:196
 #, javascript-format
 msgid "Can't reach the service. Showing the last value, from %s ago."
 msgstr ""
 
-#: lib/core/viewmodel.js:186
+#: lib/core/viewmodel.js:197
 msgid "Couldn't get the data yet."
 msgstr ""
 
-#: lib/core/viewmodel.js:191
+#: lib/core/viewmodel.js:202
 #, javascript-format
 msgid "Retrying in %s."
 msgstr ""
 
-#: lib/core/viewmodel.js:192
+#: lib/core/viewmodel.js:203
 msgid "Retrying soon."
 msgstr ""
 
-#: lib/core/viewmodel.js:212
+#: lib/core/viewmodel.js:219
+msgid "Balance"
+msgstr ""
+
+#: lib/core/viewmodel.js:222
+#, javascript-format
+msgid "%s left"
+msgstr ""
+
+#: lib/core/viewmodel.js:241
 #, javascript-format
 msgid "%s%% used"
 msgstr ""
 
-#: lib/core/viewmodel.js:216
+#: lib/core/viewmodel.js:245
 #, javascript-format
 msgid "resets in %s"
 msgstr ""
 
-#: lib/core/viewmodel.js:225
+#: lib/core/viewmodel.js:254
 #, javascript-format
 msgid "Expected by now: %s%%"
 msgstr ""
 
-#: lib/core/viewmodel.js:251
+#: lib/core/viewmodel.js:280
 msgid "left"
 msgstr ""
 
-#: lib/core/viewmodel.js:277
+#: lib/core/viewmodel.js:296
+msgid "Add key"
+msgstr ""
+
+#: lib/core/viewmodel.js:297 lib/ui/providerCard.js:180
+msgid "Open Preferences"
+msgstr ""
+
+#: lib/core/viewmodel.js:297
+msgid "Replace key"
+msgstr ""
+
+#: lib/core/viewmodel.js:311
 msgid "The last data is more than a day old."
 msgstr ""
 
-#: lib/core/viewmodel.js:278
+#: lib/core/viewmodel.js:312
 msgid "No quota data yet."
 msgstr ""
 
-#: lib/core/viewmodel.js:287
+#: lib/core/viewmodel.js:321
 msgid "Budget spent"
 msgstr ""
 
-#: lib/core/viewmodel.js:289
+#: lib/core/viewmodel.js:323
 #, javascript-format
 msgid "of %s · %s%%"
 msgstr ""
 
-#: lib/core/viewmodel.js:291
+#: lib/core/viewmodel.js:325
 msgid "No reset: prepaid balance"
 msgstr ""
 
-#: lib/core/viewmodel.js:317
+#: lib/core/viewmodel.js:351
 #, javascript-format
 msgid "%s: %d point ahead of an even pace"
 msgid_plural "%s: %d points ahead of an even pace"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/core/viewmodel.js:322
+#: lib/core/viewmodel.js:356
 msgid "Data is out of date."
 msgstr ""
 
-#: lib/core/viewmodel.js:348
+#: lib/core/viewmodel.js:382
 #, javascript-format
 msgid "%d ok"
 msgstr ""
 
-#: lib/core/viewmodel.js:349
+#: lib/core/viewmodel.js:383
 #, javascript-format
 msgid "%d warning"
 msgstr ""
 
-#: lib/core/viewmodel.js:350
+#: lib/core/viewmodel.js:384
 #, javascript-format
 msgid "%d critical"
 msgid_plural "%d critical"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/core/viewmodel.js:351
+#: lib/core/viewmodel.js:385
 #, javascript-format
-msgid "%d signed out"
+msgid "%d not connected"
 msgstr ""
 
-#: lib/core/viewmodel.js:352
+#: lib/core/viewmodel.js:386
 #, javascript-format
 msgid "%d with a problem"
 msgstr ""
 
-#: lib/core/viewmodel.js:364
+#: lib/core/viewmodel.js:398
 #, javascript-format
 msgid "Updated %d min ago"
 msgstr ""
 
-#: lib/core/viewmodel.js:364
+#: lib/core/viewmodel.js:398
 msgid "Updated just now"
 msgstr ""
 
-#: lib/core/viewmodel.js:379
+#: lib/core/viewmodel.js:413
 msgid "Not updated yet"
 msgstr ""
 
-#: lib/core/viewmodel.js:382
+#: lib/core/viewmodel.js:416
 #, javascript-format
 msgid "%s · %d with a problem"
 msgid_plural "%s · %d with problems"
@@ -268,43 +324,43 @@ msgstr ""
 msgid "Refreshing…"
 msgstr ""
 
-#: lib/ui/indicator.js:289
+#: lib/ui/indicator.js:291
 msgid "Waiting for the first update…"
 msgstr ""
 
-#: lib/ui/indicator.js:407
+#: lib/ui/indicator.js:409
 msgid "Waiting for the first update"
 msgstr ""
 
-#: lib/ui/indicator.js:430
+#: lib/ui/indicator.js:432
 #, javascript-format
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/indicator.js:445
+#: lib/ui/indicator.js:447
 msgid "On the bar"
 msgstr ""
 
-#: lib/ui/indicator.js:447
+#: lib/ui/indicator.js:449
 #, javascript-format
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/providerCard.js:130
+#: lib/ui/providerCard.js:132
 #, javascript-format
 msgid "Collapse %s"
 msgstr ""
 
-#: lib/ui/providerCard.js:130
+#: lib/ui/providerCard.js:132
 #, javascript-format
 msgid "Expand %s"
 msgstr ""
 
-#: lib/ui/providerCard.js:178
+#: lib/ui/providerCard.js:193
 msgid "Try again"
 msgstr ""
 
@@ -412,182 +468,326 @@ msgstr ""
 msgid "Raw HTML and dense tables."
 msgstr ""
 
-#: prefs.js:75
+#: prefs.js:87
 msgid "Some themes could not be loaded"
 msgstr ""
 
-#: prefs.js:99
+#: prefs.js:111
 msgid "System"
 msgstr ""
 
-#: prefs.js:99 prefs.js:219
+#: prefs.js:111 prefs.js:377
 msgid "Your themes"
 msgstr ""
 
-#: prefs.js:106 prefs.js:194
+#: prefs.js:118 prefs.js:352
 msgid "System (GNOME)"
 msgstr ""
 
-#: prefs.js:110
+#: prefs.js:122
 msgid "Follows the GNOME accent color and the light or dark setting."
 msgstr ""
 
-#: prefs.js:139 prefs.js:199
+#: prefs.js:151 prefs.js:357
 msgid "Theme"
 msgstr ""
 
-#: prefs.js:152 prefs.js:184
+#: prefs.js:157
+msgid "Accounts"
+msgstr ""
+
+#: prefs.js:160
+msgid ""
+"The key is kept in the system keyring and sent only to api.commandcode.ai."
+msgstr ""
+
+#: prefs.js:162
+msgid "Checking the keyring…"
+msgstr ""
+
+#: prefs.js:162
+msgid "Status"
+msgstr ""
+
+#: prefs.js:164
+msgid "Remove key"
+msgstr ""
+
+#: prefs.js:165
+msgid "Remove the Command Code key"
+msgstr ""
+
+#: prefs.js:171
+msgid "API key"
+msgstr ""
+
+#: prefs.js:173
+msgid "Your Command Code username"
+msgstr ""
+
+#: prefs.js:176
+msgid "Where do I get a key?"
+msgstr ""
+
+#: prefs.js:177
+msgid "Opens your keys page. Enter your Command Code username above first."
+msgstr ""
+
+#: prefs.js:206
+msgid ""
+"No keyring found. Unlock it in Passwords and Keys, or install a Secret "
+"Service provider."
+msgstr ""
+
+#: prefs.js:210
+msgid "No key yet. Paste one below."
+msgstr ""
+
+#: prefs.js:215
+msgid "Key accepted."
+msgstr ""
+
+#: prefs.js:216
+msgid "The server rejected this key."
+msgstr ""
+
+#: prefs.js:217
+msgid "Key saved. The keyring is locked, so it was not checked."
+msgstr ""
+
+#: prefs.js:218
+msgid "Key saved. Could not reach the server."
+msgstr ""
+
+#: prefs.js:219
+msgid "Key saved. The service replied in an unexpected way."
+msgstr ""
+
+#: prefs.js:220
+msgid "Key saved. Not checked yet."
+msgstr ""
+
+#: prefs.js:245
+msgid "That does not look like an API key."
+msgstr ""
+
+#: prefs.js:252
+msgid "Key saved. Checking…"
+msgstr ""
+
+#: prefs.js:259
+msgid "The keyring did not accept the key."
+msgstr ""
+
+#: prefs.js:270
+msgid "Remove the Command Code key?"
+msgstr ""
+
+#: prefs.js:271
+msgid ""
+"It is deleted from the keyring. The key stays valid on the Command Code site."
+msgstr ""
+
+#: prefs.js:273
+msgid "Cancel"
+msgstr ""
+
+#: prefs.js:274
+msgid "Remove"
+msgstr ""
+
+#: prefs.js:282
+msgid "The keyring is not available."
+msgstr ""
+
+#: prefs.js:310 prefs.js:342
 msgid "Appearance"
 msgstr ""
 
-#: prefs.js:157
+#: prefs.js:315
 msgid "Top bar"
 msgstr ""
 
-#: prefs.js:158
+#: prefs.js:316
 msgid ""
 "The bar shrinks, then shows fewer providers, when other extensions leave it "
 "little room."
 msgstr ""
 
-#: prefs.js:161
+#: prefs.js:319
 msgid "Left"
 msgstr ""
 
-#: prefs.js:162
+#: prefs.js:320
 msgid "Center"
 msgstr ""
 
-#: prefs.js:163
+#: prefs.js:321
 msgid "Right"
 msgstr ""
 
-#: prefs.js:164
+#: prefs.js:322
 msgid "Position"
 msgstr ""
 
-#: prefs.js:164
+#: prefs.js:322
 msgid "Where the quota items sit on the top bar."
 msgstr ""
 
-#: prefs.js:168
+#: prefs.js:326
 msgid "Providers on the bar"
 msgstr ""
 
-#: prefs.js:169
+#: prefs.js:327
 msgid "The most providers shown, from 1 to 5."
 msgstr ""
 
-#: prefs.js:176
+#: prefs.js:334
 msgid "Automatic"
 msgstr ""
 
-#: prefs.js:177
+#: prefs.js:335
 msgid "Always compact"
 msgstr ""
 
-#: prefs.js:178
+#: prefs.js:336
 msgid "Never compact"
 msgstr ""
 
-#: prefs.js:179
+#: prefs.js:337
 msgid "Compact mode"
 msgstr ""
 
-#: prefs.js:179
+#: prefs.js:337
 msgid "Drops the percent sign and the window suffix."
 msgstr ""
 
-#: prefs.js:186 prefs.js:241
+#: prefs.js:344 prefs.js:399
 msgid "Follow the system"
 msgstr ""
 
-#: prefs.js:187
+#: prefs.js:345
 msgid "Light"
 msgstr ""
 
-#: prefs.js:188
+#: prefs.js:346
 msgid "Dark"
 msgstr ""
 
-#: prefs.js:189
+#: prefs.js:347
 msgid "Applies to the popup. The top bar always stays dark."
 msgstr ""
 
-#: prefs.js:189
+#: prefs.js:347
 msgid "Light or dark"
 msgstr ""
 
-#: prefs.js:195
+#: prefs.js:353
 #, javascript-format
 msgid "%s (unavailable)"
 msgstr ""
 
-#: prefs.js:200
+#: prefs.js:358
 msgid "Each theme has a light and a dark variant."
 msgstr ""
 
-#: prefs.js:220
+#: prefs.js:378
 #, javascript-format
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr ""
 
-#: prefs.js:223
+#: prefs.js:381
 msgid "Open folder"
 msgstr ""
 
-#: prefs.js:225
+#: prefs.js:383
 msgid "Open the themes folder"
 msgstr ""
 
-#: prefs.js:239
+#: prefs.js:397
 msgid "Popup"
 msgstr ""
 
-#: prefs.js:242
+#: prefs.js:400
 msgid "12 hours"
 msgstr ""
 
-#: prefs.js:243
+#: prefs.js:401
 msgid "24 hours"
 msgstr ""
 
-#: prefs.js:244
+#: prefs.js:402
 msgid "Clock"
 msgstr ""
 
-#: prefs.js:244
+#: prefs.js:402
 msgid "How reset times are written."
 msgstr ""
 
-#: prefs.js:247
+#: prefs.js:405
 msgid "1h 20min"
 msgstr ""
 
-#: prefs.js:248
+#: prefs.js:406
 msgid "1h20"
 msgstr ""
 
-#: prefs.js:249
+#: prefs.js:407
 msgid "How the countdown to a reset is written."
 msgstr ""
 
-#: prefs.js:249
+#: prefs.js:407
 msgid "Time until reset"
 msgstr ""
 
-#: prefs.js:252
+#: prefs.js:410
 msgid "Open cards that need attention"
 msgstr ""
 
-#: prefs.js:253
+#: prefs.js:411
 msgid "Cards in warning, critical or error states open on their own."
 msgstr ""
 
-#: prefs.js:260
-msgid "Demo build"
+#: prefs.js:419
+msgid "Advanced"
 msgstr ""
 
-#: prefs.js:261
-msgid "More settings arrive in later milestones. This build shows demo data."
+#: prefs.js:420
+msgid "Demo data, to try every state without an account."
+msgstr ""
+
+#: prefs.js:423
+msgid "Real providers"
+msgstr ""
+
+#: prefs.js:424
+msgid "Demo data (made up)"
+msgstr ""
+
+#: prefs.js:425
+msgid "Data source"
+msgstr ""
+
+#: prefs.js:425
+msgid "Demo data queries no account."
+msgstr ""
+
+#: prefs.js:427
+msgid "Steady"
+msgstr ""
+
+#: prefs.js:428
+msgid "Flaky"
+msgstr ""
+
+#: prefs.js:429
+msgid "Drifting"
+msgstr ""
+
+#: prefs.js:431
+msgid "Demo scenario"
+msgstr ""
+
+#: prefs.js:431
+msgid "Steady: all fine. Flaky: errors come and go. Drifting: usage climbs."
 msgstr ""

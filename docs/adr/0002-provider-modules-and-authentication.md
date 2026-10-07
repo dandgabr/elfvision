@@ -1,7 +1,7 @@
 # 0002. Provider modules, own authentication, harness isolation
 
-Status: accepted. The contract, scheduler and cache are implemented with demo
-providers; the real provider modules arrive in M2 and M3.
+Status: accepted. The contract, scheduler and cache are implemented. The Command Code
+module is real (M2); Codex, Claude and Antigravity arrive in M3.
 
 ## Context
 

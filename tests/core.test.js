@@ -282,7 +282,7 @@ test('failures: each code gets its own pill, message and retry line', () => {
 test('failures: a signed-out provider has no retry and no value', () => {
     const view = cardView(failed('auth_required'), {nowMs: NOW});
     assertEqual([view.pill.text, view.heroText, view.retryText, view.canRetry, view.message],
-        ['⊘ Signed out', '–', null, false, 'Account connection arrives in a later version.']);
+        ['⊘ Not connected', '–', null, false, 'Open Preferences to connect this account.']);
 });
 
 test('failures: the last value is marked approximate and drawn neutral', () => {
@@ -303,10 +303,156 @@ test('failures: the first fetch failing without data explains itself', () => {
 
 test('summary and footer tell signed-out apart from failing, and do not hide problems', () => {
     const list = [byId(demo(), 'claude'), failed('auth_required'), failed('network')];
-    assertEqual(summaryText(list), '1 critical · 1 signed out · 1 with a problem');
+    assertEqual(summaryText(list), '1 critical · 1 not connected · 1 with a problem');
     assertEqual(problemCount(list), 2);
     assertEqual(footerText(null, 0), 'Not updated yet');
     assertEqual(footerText(130000, 0), 'Updated 2 min ago');
     assertEqual(footerText(130000, 1), 'Updated 2 min ago · 1 with a problem');
     assertEqual(footerText(130000, 3), 'Updated 2 min ago · 3 with problems');
+});
+
+// ---- Command Code
+
+import {normalizeSnapshot} from '../lib/core/contract.js';
+import {parseCredits} from '../lib/core/commandCode.js';
+import {ProviderError, errorForStatus} from '../lib/providers/errors.js';
+import {createCommandCodeProvider} from '../lib/providers/commandCode.js';
+
+const CREDITS = {
+    credits: {monthlyCredits: 41.5},
+    windowLimits: {
+        fiveHour: {used: 30, cap: 120, resetAt: 1790000000000},
+        weekly: {used: 800, cap: 1000, resetAt: 1790500000000},
+    },
+};
+
+test('command code: the credits reply becomes two percent metrics and a balance', () => {
+    const {metrics} = parseCredits(CREDITS);
+    assertEqual(metrics.map(m => m.id), ['five-hour', 'weekly', 'monthly-credits']);
+    assertEqual([metrics[0].percentUsed, metrics[0].window, metrics[0].resetsAt], [25, 'session', 1790000000000]);
+    assertEqual([metrics[1].percentUsed, metrics[1].windowSecs], [80, 604800]);
+    assertEqual([metrics[2].kind, metrics[2].balance], ['money', 41.5]);
+});
+
+test('command code: a missing or broken field is dropped, never shown as zero', () => {
+    const partial = parseCredits({windowLimits: {fiveHour: {used: 'x', cap: 10}, weekly: {used: 5, cap: 0}}, credits: {monthlyCredits: 3}});
+    assertEqual(partial.metrics.map(m => m.id), ['monthly-credits']);
+    assertEqual(parseCredits({windowLimits: {weekly: {used: 2000, cap: 1000}}}).metrics[0].percentUsed, 100);
+    for (const body of [null, 'text', 42, {}, {windowLimits: {}}, {credits: {monthlyCredits: -1}}]) {
+        let code = '';
+        try {
+            parseCredits(body);
+        } catch (error) {
+            code = error.code;
+        }
+        assertEqual([JSON.stringify(body), code], [JSON.stringify(body), 'provider_changed']);
+    }
+});
+
+test('http statuses map to provider states', () => {
+    assertEqual(errorForStatus(200), null);
+    assertEqual(errorForStatus(204), null);
+    assertEqual([errorForStatus(401).code, errorForStatus(403).code], ['auth_required', 'auth_required']);
+    assertEqual([errorForStatus(404).code, errorForStatus(500).code, errorForStatus(302).code], ['provider_changed', 'network', 'network']);
+    const limited = errorForStatus(429, '90');
+    assertEqual([limited.code, limited.retryAfterMs], ['rate_limited', 90000]);
+    assertEqual(errorForStatus(429, 'Wed, 21 Oct 2026 07:28:00 GMT').retryAfterMs, undefined);
+});
+
+function commandCode({key = 'secret-key', reply = {status: 200, retryAfter: null, json: CREDITS}, keyError = false} = {}) {
+    const calls = [];
+    const provider = createCommandCodeProvider({
+        http: {get: async (url, options) => { calls.push({url, options}); return reply; }},
+        getKey: async () => { if (keyError) throw new Error('locked'); return key; },
+    });
+    return {provider, calls};
+}
+
+async function failureOf(promise) {
+    try {
+        await promise;
+    } catch (error) {
+        return error;
+    }
+    return null;
+}
+
+test('command code provider: sends the key as a bearer token to one https endpoint', async () => {
+    const {provider, calls} = commandCode();
+    const body = await provider.fetch({isCancelled: () => false});
+    assertEqual(body.metrics.length, 3);
+    assertEqual(calls.length, 1);
+    assertEqual(calls[0].url, 'https://api.commandcode.ai/alpha/billing/credits');
+    assertEqual(calls[0].options.headers.Authorization, 'Bearer secret-key');
+});
+
+test('command code provider: no key, a locked keyring and bad replies are explicit failures', async () => {
+    const ctx = {isCancelled: () => false};
+    assertEqual((await failureOf(commandCode({key: null}).provider.fetch(ctx))).code, 'auth_required');
+    const locked = await failureOf(commandCode({keyError: true}).provider.fetch(ctx));
+    assertEqual([locked.code, locked.reason], ['network', 'keyring']);
+    assertEqual((await failureOf(commandCode({key: null}).provider.fetch(ctx))).reason, 'no_key');
+    assertEqual((await failureOf(commandCode({reply: {status: 401, json: null}}).provider.fetch(ctx))).reason, 'rejected');
+    assertEqual((await failureOf(commandCode({reply: {status: 401, json: null}}).provider.fetch(ctx))).code, 'auth_required');
+    assertEqual((await failureOf(commandCode({reply: {status: 200, json: {nothing: true}}}).provider.fetch(ctx))).code, 'provider_changed');
+    const limited = await failureOf(commandCode({reply: {status: 429, retryAfter: '30', json: null}}).provider.fetch(ctx));
+    assertEqual([limited.code, limited.retryAfterMs], ['rate_limited', 30000]);
+    // the key never appears in an error message
+    const rejected = await failureOf(commandCode({reply: {status: 401, json: null}}).provider.fetch(ctx));
+    assertTrue(!rejected.message.includes('secret-key'));
+    assertTrue(rejected instanceof ProviderError);
+});
+
+test('command code provider: a key that could not be a header value is never sent', async () => {
+    const ctx = {isCancelled: () => false};
+    for (const key of ['k\r\nX-Evil: 1', 'a'.repeat(2000000), '   ', 'has space inside', 'short', 'ünïcode-key-1234']) {
+        const {provider, calls} = commandCode({key});
+        const error = await failureOf(provider.fetch(ctx));
+        assertEqual([error.code, error.reason, calls.length], ['auth_required', 'rejected', 0]);
+    }
+});
+
+test('credential failures keep their reason through the scheduler and say the right thing', async () => {
+    const view = reason => {
+        const snapshot = {id: 'p', name: 'P', plan: '', state: 'auth_required', source: {kind: 'stale'}, metrics: [], ...(reason ? {reason} : {})};
+        return cardView(snapshot, {nowMs: 0});
+    };
+    assertEqual([view('no_key').pill.text, view('no_key').configureText], ['⊘ No key', 'Add key']);
+    assertEqual([view('rejected').pill.text, view('rejected').configureText], ['⊘ Key rejected', 'Replace key']);
+    assertEqual([view(null).pill.text, view(null).configureText], ['⊘ Not connected', 'Open Preferences']);
+    const locked = cardView({id: 'p', name: 'P', plan: '', state: 'network', reason: 'keyring', source: {kind: 'stale'}, metrics: []}, {nowMs: 0});
+    assertEqual([locked.pill.text, locked.canRetry], ['⚠ Keyring locked', true]);
+    assertEqual(normalizeSnapshot({id: 'p', state: 'ok', reason: 'bogus'}).snapshot.reason, undefined);
+    assertEqual(normalizeSnapshot({id: 'p', state: 'auth_required', reason: 'rejected'}).snapshot.reason, 'rejected');
+});
+
+import {accountStatus} from '../lib/core/accountStatus.js';
+
+test('account status: one word per situation, shared by the extension and the preferences', () => {
+    const status = (state, reason) => accountStatus({state, ...(reason ? {reason} : {})});
+    assertEqual(status('ok'), 'ok');
+    assertEqual([status('auth_required', 'no_key'), status('auth_required', 'rejected'), status('auth_required')], ['no_key', 'rejected', 'rejected']);
+    assertEqual([status('network', 'keyring'), status('network'), status('rate_limited')], ['keyring', 'unreachable', 'unreachable']);
+    assertEqual([status('parse_error'), status('provider_changed')], ['changed', 'changed']);
+});
+
+test('a demo provider that needs an account does not offer to open Preferences', () => {
+    const snapshot = {id: 'p', name: 'P', plan: '', state: 'auth_required', source: {kind: 'stale'}, metrics: []};
+    assertEqual(cardView(snapshot, {nowMs: 0, configurable: false}).canConfigure, false);
+    assertEqual(cardView(snapshot, {nowMs: 0}).canConfigure, true);
+});
+
+test('a balance beside percent windows is a plain labeled line without a meter', () => {
+    const snapshot = {
+        id: 'command-code', name: 'Command Code', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: 1},
+        metrics: [
+            {id: 'weekly', kind: 'percent', window: 'week', windowSecs: 604800, percentUsed: 2},
+            {id: 'monthly-credits', kind: 'money', window: 'none', windowSecs: 0, balance: 41.5, budget: 0, currency: 'USD', percentUsed: 0},
+        ],
+    };
+    const view = cardView(snapshot, {nowMs: 1, locale: 'en'});
+    const rows = view.groups[0].rows;
+    assertEqual(rows.map(r => r.label), ['Week', 'Balance']);
+    assertEqual([rows[1].valueText, rows[1].noMeter, rows[1].percentText], ['$41.50 left', true, '']);
+    assertEqual(view.hero ?? view.heroText, view.heroText);
 });

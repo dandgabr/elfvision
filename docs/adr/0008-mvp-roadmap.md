@@ -10,7 +10,7 @@ Each milestone is tried in the nested shell (`tools/nested-shell.sh`).
 |---|---|---|
 | M0 | Skeleton: `metadata.json` for shell 50, panel button, bar with the pacing tick, popup with demo cards. No network. | done |
 | M1 | Data layer: the `ProviderSnapshot` contract, scheduler (interval, jitter, backoff, stale), severity and pacing, disk cache, deterministic demo providers, unit tests under `gjs`. Theme loader with the 20 themes. Appearance settings and the theme picker. | done, in PR #1 |
-| M2 | Command Code: the first real provider, with an API key stored in libsecret and a minimal key field in Preferences. Closes the loop end to end. | next |
+| M2 | Command Code: the first real provider, with an API key stored in libsecret and a minimal key field in Preferences. Closes the loop end to end. | done |
 | M3 | OAuth in Preferences: a reusable loopback server and PKCE, single-flight refresh. Providers in order: Codex, Claude, Antigravity. | planned |
 | M4 | Notifications with dedupe and hysteresis, the connection alert, `auth_required` and stale states in the UI, `providers.local.json`, the gitleaks pre-commit hook, tracking controls. | planned |
 
@@ -32,6 +32,14 @@ providers.example.json
   (ADR 0003).
 - Re-check each provider's terms and endpoints against primary sources before
   relying on them.
+
+## Before M3
+
+- Decide how a new provider is added: the shape of a provider module, how the Accounts
+  page grows beyond one account (one group per provider, or a list), and how a login
+  flow, a key entry and their states look. This goes through a design review (UI, UX
+  and frontend) before any code, because Command Code's page is a template the other
+  three will copy.
 
 ## Open items
 

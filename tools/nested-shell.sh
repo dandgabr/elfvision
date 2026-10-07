@@ -22,9 +22,20 @@ ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
 # A file backend, not "memory": the preferences window is another process and
 # must share the settings with the shell.
+# DATA_SOURCE=demo starts with made-up data instead of the real providers.
+if [ -n "${DATA_SOURCE:-}" ]; then
+    GSETTINGS_BACKEND=keyfile GSETTINGS_SCHEMA_DIR="$root/schemas" \
+        gsettings set org.gnome.shell.extensions.gnome-ai-quota data-source "$DATA_SOURCE"
+fi
 export GSETTINGS_BACKEND=keyfile GTK_A11Y=none UUID="$uuid" OPEN_PREFS="${1:-}"
 
 dbus-run-session -- bash -c '
+    # A throwaway, unlocked keyring, so the provider keys of a test never touch yours.
+    gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1 || true
+    # Only the in-memory session collection exists; make it the default one so
+    # libsecret does not ask to create a keyring.
+    gdbus call --session --dest org.freedesktop.secrets --object-path /org/freedesktop/secrets \
+        --method org.freedesktop.Secret.Service.SetAlias default /org/freedesktop/secrets/collection/session >/dev/null 2>&1 || true
     gnome-shell --devkit --wayland --unsafe-mode >/dev/null 2>&1 &
     shell=$!
     for _ in $(seq 1 60); do
