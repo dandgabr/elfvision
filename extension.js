@@ -42,7 +42,7 @@ export default class GnomeAiQuotaExtension extends Extension {
                 this._createController();
                 this._createIndicator();
             } catch (error) {
-                console.error(`gnome-ai-quota: cannot rebuild: ${error.message}`);
+                console.error(`gnome-ai-quota: cannot rebuild: ${error.message}\n${error.stack ?? ''}`);
             }
         };
         // A new demo scenario only matters for demo data: real providers must not be restarted.
@@ -108,20 +108,18 @@ export default class GnomeAiQuotaExtension extends Extension {
         const generation = (this._syncGeneration = (this._syncGeneration ?? 0) + 1);
         try {
             const untracked = this._settings.get_strv('untracked-providers');
-            const wanted = [];
-            for (const meta of availableProviders()) {
-                if (!untracked.includes(meta.id) && await isConnected(meta))
-                    wanted.push(meta.id);
-            }
+            const candidates = availableProviders().filter(meta => !untracked.includes(meta.id));
+            const answers = await Promise.all(candidates.map(meta => isConnected(meta)));
+            const wanted = candidates.filter((_meta, index) => answers[index]).map(meta => meta.id);
             // A newer sync, a rebuild or a disable happened while the keyring was asked.
             if (generation !== this._syncGeneration || controller !== this._controller)
                 return;
             controller.sync(wanted, createProvider);
+            controller.markSynced();
         } catch (error) {
-            console.error(`gnome-ai-quota: cannot sync the providers: ${error.message}`);
-        } finally {
-            // Even after a failure the list is as known as it will get: do not claim "nothing".
-            if (controller === this._controller)
+            console.error(`gnome-ai-quota: cannot sync the providers: ${error.message}\n${error.stack ?? ''}`);
+            // After a failure the list is as known as it will get: do not claim "nothing".
+            if (generation === this._syncGeneration && controller === this._controller)
                 controller.markSynced();
         }
     }

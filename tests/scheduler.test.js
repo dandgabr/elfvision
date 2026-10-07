@@ -495,3 +495,43 @@ test('scheduler: the fetch is told when it was abandoned after a timeout', async
     scheduler.remove('codex');
     assertEqual(context.isCancelled(), true);
 });
+
+test('scheduler: a provider with a recent cached value is not fetched again at once (a screen lock restarts everything)', async () => {
+    const fresh = scripted('a', [{metrics: [{id: 'm', kind: 'percent', percentUsed: 1}]}]);
+    const retry = scripted('b', [{metrics: [{id: 'm', kind: 'percent', percentUsed: 1}]}]);
+    const none = scripted('c', [{metrics: [{id: 'm', kind: 'percent', percentUsed: 1}]}]);
+    const {clock, scheduler} = setup([fresh, retry, none]);
+    const now = clock.now();
+    scheduler.seed({...normalizeSnapshot({id: 'a', name: 'A', metrics: []}).snapshot, source: {kind: 'fresh', fetchedAt: now - MINUTE}});
+    scheduler.seed({...normalizeSnapshot({id: 'b', name: 'B', state: 'network', metrics: []}).snapshot, nextRetryAt: now + 2 * MINUTE});
+    scheduler.start();
+    await clock.advance(3 * SECOND);
+    assertEqual([fresh.calls, retry.calls, none.calls], [0, 0, 1]);      // only the one with nothing yet
+    await clock.advance(4 * MINUTE);                                      // a is due 4 minutes from now
+    assertEqual(fresh.calls, 1);
+    assertEqual(retry.calls, 1);                                          // b waited for its own retry time
+});
+
+test('scheduler: when the network is back, providers that failed for lack of it are tried at once', async () => {
+    const down = scripted('a', [new ProviderError('network', 'offline'), {metrics: [{id: 'm', kind: 'percent', percentUsed: 1}]}]);
+    const bad = scripted('b', [new ProviderError('auth_required', 'no'), {metrics: [{id: 'm', kind: 'percent', percentUsed: 1}]}]);
+    const {clock, scheduler} = setup([down, bad]);
+    scheduler.start();
+    await clock.advance(3 * SECOND);
+    assertEqual([down.calls, bad.calls], [1, 1]);
+    await scheduler.retryNetworkFailures();
+    assertEqual([down.calls, bad.calls], [2, 1]);      // the signed-out one is not retried
+    assertEqual(scheduler.snapshots().find(s => s.id === 'a').state, 'ok');
+});
+
+test('contract: text from a provider is bounded before it reaches the cache or a widget', () => {
+    const long = 'x'.repeat(5000);
+    const {snapshot} = normalizeSnapshot({id: long, name: long, plan: long, error: long, metrics: [
+        {id: long, kind: 'percent', percentUsed: 5, pool: {id: long, name: long, short: long}},
+        {id: 'm2', kind: 'money', balance: 1, currency: long},
+    ]});
+    assertTrue(snapshot.id.length <= 64 && snapshot.name.length <= 64 && snapshot.plan.length <= 64);
+    assertTrue(snapshot.error.length <= 200);
+    assertTrue(snapshot.metrics[0].id.length <= 64 && snapshot.metrics[0].pool.name.length <= 64 && snapshot.metrics[0].pool.short.length <= 8);
+    assertTrue(snapshot.metrics[1].currency.length <= 8);
+});
