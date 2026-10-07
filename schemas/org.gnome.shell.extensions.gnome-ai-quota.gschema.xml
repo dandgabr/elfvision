@@ -88,6 +88,11 @@
       <summary>Account status</summary>
       <description>The running extension writes, for each real provider, how its account is doing (ok, no_key, rejected, keyring, unreachable or changed), so the preferences window can show it next to the credential. It holds no secret.</description>
     </key>
+    <key name="command-code-username" type="s">
+      <default>''</default>
+      <summary>Command Code username</summary>
+      <description>Your username on the Command Code site. It only builds the link to the page where API keys are created; it is not a credential.</description>
+    </key>
     <key name="demo-scenario" type="s">
       <choices>
         <choice value="steady"/>

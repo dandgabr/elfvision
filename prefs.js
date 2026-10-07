@@ -169,13 +169,35 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         });
         status.add_suffix(remove);
         const entry = new Adw.PasswordEntryRow({title: _('API key'), show_apply_button: true});
+        // The page that creates keys lives under the user's own name on the site.
+        const username = new Adw.EntryRow({title: _('Your Command Code username')});
+        username.text = settings.get_string('command-code-username') || GLib.get_user_name();
         const link = new Adw.ActionRow({
             title: _('Where do I get a key?'),
-            subtitle: _('Opens your keys page on the Command Code site.'),
+            subtitle: _('Opens your keys page. Enter your Command Code username above first.'),
             activatable: true,
         });
         link.add_suffix(new Gtk.Image({icon_name: 'adw-external-link-symbolic'}));
-        link.connect('activated', () => Gio.AppInfo.launch_default_for_uri(`https://commandcode.ai/${GLib.uri_escape_string(GLib.get_user_name(), null, false)}/settings/keys`, null));
+        const validName = () => /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/.test(username.text.trim());
+        const syncLink = () => {
+            link.sensitive = validName();
+            if (username.text.trim() && !validName())
+                username.add_css_class('error');
+            else
+                username.remove_css_class('error');
+        };
+        username.connect('changed', () => {
+            syncLink();
+            if (validName())
+                settings.set_string('command-code-username', username.text.trim());
+        });
+        syncLink();
+        link.connect('activated', () => {
+            if (validName()) {
+                Gio.AppInfo.launch_default_for_uri(
+                    `https://commandcode.ai/${GLib.uri_escape_string(username.text.trim(), null, false)}/settings/keys`, null);
+            }
+        });
 
         let hasKey = null;       // null until the keyring answered
         let keyringDown = false;
@@ -269,6 +291,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         });
         group.add(status);
         group.add(entry);
+        group.add(username);
         group.add(link);
         page.add(group);
         return page;

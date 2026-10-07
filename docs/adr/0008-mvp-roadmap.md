@@ -33,6 +33,14 @@ providers.example.json
 - Re-check each provider's terms and endpoints against primary sources before
   relying on them.
 
+## Before M3
+
+- Decide how a new provider is added: the shape of a provider module, how the Accounts
+  page grows beyond one account (one group per provider, or a list), and how a login
+  flow, a key entry and their states look. This goes through a design review (UI, UX
+  and frontend) before any code, because Command Code's page is a template the other
+  three will copy.
+
 ## Open items
 
 - Which of the other gallery styles become installable themes.
