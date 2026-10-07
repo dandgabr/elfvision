@@ -156,13 +156,16 @@ GitHub Actions run these on every push to `main`, every pull request and once a 
 | Workflow | Tool | Looks at |
 |---|---|---|
 | gitleaks | gitleaks, with `.gitleaks.toml` | secrets in the whole history |
-| codeql | CodeQL, `security-extended` | the JavaScript, the Python tools and the workflows; results under Security, Code scanning |
+| CodeQL (GitHub's default setup) | CodeQL, extended query suite | the JavaScript, the Python tools and the workflows; results under Security, Code scanning |
 | sast | bandit | the Python tools |
 | sast | Semgrep (`p/javascript`, `p/security-audit`, `p/secrets`) | the JavaScript and secrets |
 | sast | ShellCheck | the shell scripts and the hook |
 | sast | zizmor | the workflows themselves |
 
-A finding fails the job. Every action is pinned to a commit, workflows get the least
+CodeQL is not a workflow file here: the repository uses GitHub's own *default setup* (Settings, Code
+security, Code scanning), set to the extended suite for `javascript-typescript`, `python` and `actions`.
+GitHub does not accept results from a CodeQL workflow of our own while the default setup is on, so
+there is only one of the two. A finding fails the job in the other tools. Every action is pinned to a commit, workflows get the least
 permissions they need, and Dependabot (with a one-week cooldown) proposes new versions of the
 actions and of the pinned scanners in `.github/requirements-sast.txt`.
 
