@@ -1,6 +1,6 @@
 import GLib from 'gi://GLib';
 
-import {assertEqual, assertTrue, test} from './harness.js';
+import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
 import {compileTheme, pickScheme, swatches, systemAccent, validateTheme} from '../lib/core/theme.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
@@ -127,7 +127,7 @@ import Gio from 'gi://Gio';
 import {loadTheme as loadThemeFile, scanThemes} from '../lib/services/themeFiles.js';
 
 function sandbox() {
-    const path = GLib.Dir.make_tmp('gaq-theme-test-XXXXXX');
+    const path = tmpDir();
     GLib.mkdir_with_parents(`${path}/themes/builtin`, 0o755);
     return path;
 }

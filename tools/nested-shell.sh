@@ -22,7 +22,7 @@ ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 # The client ids of your real configuration, copied (read only, private) so Connect works here.
 real_config="${XDG_CONFIG_HOME:-$HOME/.config}/gnome-ai-quota/providers.local.json"
 if [ -r "$real_config" ]; then
-    mkdir -p -m 700 "$work/config/gnome-ai-quota"
+    mkdir -p "$work/config/gnome-ai-quota" && chmod 700 "$work/config/gnome-ai-quota"
     install -m 600 "$real_config" "$work/config/gnome-ai-quota/providers.local.json"
 fi
 

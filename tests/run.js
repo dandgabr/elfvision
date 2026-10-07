@@ -11,4 +11,4 @@ import './tokenManager.test.js';
 import './localConfig.test.js';
 import './controller.test.js';
 
-System.exit(await runAll() ? 1 : 0);
+System.exit(await runAll(ARGV.filter(arg => arg !== '--')[0] ?? '') ? 1 : 0);
