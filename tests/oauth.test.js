@@ -266,3 +266,40 @@ test('oauth protocol: an error wrapped as {code} is read, and a spec cannot over
         {clientId: 'c', redirectUri: 'http://localhost:1/cb', challenge: 'good', state: 'good'});
     assertEqual([queryOf(url).state, queryOf(url).code_challenge, queryOf(url).audience], ['good', 'good', 'x']);
 });
+
+import {parseManualInput} from '../lib/oauth/callback.js';
+
+test('manual sign-in: the pasted address or a bare code is read; a foreign state is not accepted', () => {
+    const state = 'abc-STATE_1';
+    assertEqual(parseManualInput(`http://127.0.0.1:1455/auth/callback?code=ac_ABC.123&state=${state}`, {state}), {code: 'ac_ABC.123'});
+    assertEqual(parseManualInput(`  http://localhost:1455/auth/callback?code=ac_XYZ&state=${state}#frag  `, {state}), {code: 'ac_XYZ'});
+    assertEqual(parseManualInput('code=only-query_1&state=' + state, {state}), {code: 'only-query_1'});
+    assertEqual(parseManualInput('http://127.0.0.1:1455/auth/callback?code=no-state-here', {state}), {code: 'no-state-here'});
+    assertEqual(parseManualInput('ac_TKegMQzab4MyZb8VmdMU9Qrln9sL2OJotRbYSGxampleXX', {state}), {code: 'ac_TKegMQzab4MyZb8VmdMU9Qrln9sL2OJotRbYSGxampleXX'});
+    const codeOf = text => failureOf(() => parseManualInput(text, {state})).code;
+    assertEqual(codeOf('http://127.0.0.1:1455/auth/callback?code=ac_ABC&state=forged'), 'state_mismatch');
+    assertEqual(codeOf(`http://127.0.0.1:1455/auth/callback?error=access_denied&state=${state}`), 'denied');
+    assertEqual(codeOf('http://127.0.0.1:1455/auth/callback?state=' + state), 'no_code');
+    for (const bad of ['', '   ', 'short', 'has space inside the code', '<script>alert(1)</script>', 'x'.repeat(3000), 'code=1&code=2'])
+        assertEqual([bad.slice(0, 20), ['malformed', 'no_code'].includes(codeOf(bad))], [bad.slice(0, 20), true]);
+});
+
+test('oauth sign-in: pasting the address finishes it when the browser cannot reach the server', async () => {
+    // the "browser" does nothing: the user pastes what the address bar showed
+    const sign = login({reply: {body: {access_token: 'acc', refresh_token: 'ref', expires_in: 100}}});
+    const params = queryOf(sign.authUrl);
+    assertEqual(failureOf(() => sign.submit('nonsense with spaces')).code, 'malformed');
+    assertEqual(failureOf(() => sign.submit(`${params.redirect_uri}?code=PASTED&state=forged`)).code, 'state_mismatch');
+    sign.submit(`${params.redirect_uri}?code=PASTED&state=${encodeURIComponent(params.state)}`);
+    assertEqual((await sign.done).access, 'acc');
+    assertEqual(sign.token.seen[0].code, 'PASTED');
+    assertTrue(sign.token.seen[0].code_verifier.length === 43);
+    sign.token.stop();
+
+    // a bare code works too, and a second paste after the end is refused
+    const bare = login({reply: {body: {access_token: 'acc2', refresh_token: 'ref2'}}});
+    bare.submit('ac_BARE-CODE_12345');
+    assertEqual((await bare.done).access, 'acc2');
+    assertEqual(failureOf(() => bare.submit('ac_ANOTHER-CODE_1')).code, 'malformed');
+    bare.token.stop();
+});

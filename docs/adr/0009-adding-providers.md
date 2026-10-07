@@ -77,8 +77,13 @@ once, here, after a review by UI, UX, frontend and security consultants.
   preferences window closes. A wrong `state` gets a plain 400 and does not end the
   sign-in. The reply page is static, reflects nothing and carries `no-store`,
   `no-referrer`, `nosniff` and a strict CSP.
-- The sign-in times out after 180 seconds (two-factor prompts and password managers
-  take time); this replaces the 120 seconds of ADR 0003.
+- The sign-in times out after 300 seconds (a browser seen for the first time, a password
+  manager and a second factor take a while); this replaces the 120 seconds of ADR 0003.
+- While it waits, the Accounts page also takes what the user pastes: the whole address the
+  browser ended on, or only the code. This covers a browser that cannot reach the local
+  server (another sandbox, a closed port, a timeout seen too late). An address carries the
+  `state`, which is checked when present; a bare code has none, which is safe because the
+  code is only good together with this sign-in's PKCE verifier.
 - The browser opens through `Gio.AppInfo.launch_default_for_uri` on a URL built from
   constants. If it does not open, the page offers a Copy link button.
 - Token requests need a POST: the HTTP client grows a `request()` next to `get()`,

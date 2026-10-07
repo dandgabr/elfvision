@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 09:36-0300\n"
+"POT-Creation-Date: 2026-10-07 10:25-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -275,7 +275,7 @@ msgstr ""
 msgid "Replace key"
 msgstr ""
 
-#: lib/core/viewmodel.js:313 lib/prefs/oauthGroup.js:86
+#: lib/core/viewmodel.js:313 lib/prefs/oauthGroup.js:92
 msgid "Reconnect"
 msgstr ""
 
@@ -371,11 +371,11 @@ msgstr ""
 msgid "The key is kept in the system keyring and sent only to %s."
 msgstr ""
 
-#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:61
+#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:62
 msgid "Checking the keyring…"
 msgstr ""
 
-#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:61
+#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:62
 msgid "Status"
 msgstr ""
 
@@ -392,7 +392,7 @@ msgstr ""
 msgid "API key"
 msgstr ""
 
-#: lib/prefs/accounts.js:82 lib/prefs/oauthGroup.js:112
+#: lib/prefs/accounts.js:82 lib/prefs/oauthGroup.js:119
 msgid ""
 "No keyring found. Unlock it in Passwords and Keys, or install a Secret "
 "Service provider."
@@ -448,8 +448,8 @@ msgstr ""
 msgid "It is deleted from the keyring. The key stays valid on the %s site."
 msgstr ""
 
-#: lib/prefs/accounts.js:146 lib/prefs/oauthGroup.js:63
-#: lib/prefs/oauthGroup.js:245 lib/prefs/oauthGroup.js:274
+#: lib/prefs/accounts.js:146 lib/prefs/oauthGroup.js:64
+#: lib/prefs/oauthGroup.js:252 lib/prefs/oauthGroup.js:291
 msgid "Cancel"
 msgstr ""
 
@@ -457,7 +457,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: lib/prefs/accounts.js:155 lib/prefs/oauthGroup.js:293
+#: lib/prefs/accounts.js:155 lib/prefs/oauthGroup.js:310
 msgid "The keyring is not available."
 msgstr ""
 
@@ -483,175 +483,185 @@ msgstr ""
 msgid "Opens your keys page. Enter your %s username above first."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:27
+#: lib/prefs/oauthGroup.js:28
 #, javascript-format
 msgid ""
 "The sign-in did not start: port %d is in use by another program. Close it "
 "and try again."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:29
+#: lib/prefs/oauthGroup.js:30
 msgid "Sign-in timed out. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:31
+#: lib/prefs/oauthGroup.js:32
 msgid "Sign-in was cancelled. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:35
+#: lib/prefs/oauthGroup.js:36
 msgid "The sign-in reply was not valid. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:37
+#: lib/prefs/oauthGroup.js:38
 msgid "The sign-in address was not allowed. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:40
+#: lib/prefs/oauthGroup.js:41
 msgid "The provider did not accept the sign-in. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:41
+#: lib/prefs/oauthGroup.js:42
 msgid "Sign-in failed. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:58
+#: lib/prefs/oauthGroup.js:59
 #, javascript-format
 msgid "Unofficial access: %s may not allow this and could limit your account."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:64
+#: lib/prefs/oauthGroup.js:65
 msgid "Copy link"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:65
+#: lib/prefs/oauthGroup.js:66
 msgid "Copy path"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:66 lib/prefs/oauthGroup.js:275
+#: lib/prefs/oauthGroup.js:67 lib/prefs/oauthGroup.js:292
 msgid "Disconnect"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:86
+#: lib/prefs/oauthGroup.js:74
+msgid "Paste the address or the code"
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:92
 msgid "Connect"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:89
+#: lib/prefs/oauthGroup.js:95
 #, javascript-format
 msgid "Connect %s"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:89
+#: lib/prefs/oauthGroup.js:95
 #, javascript-format
 msgid "Reconnect %s"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:103
+#: lib/prefs/oauthGroup.js:109
 msgid "Set up the client id and the keyring first."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:115
+#: lib/prefs/oauthGroup.js:122
 msgid "Not connected."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:116
+#: lib/prefs/oauthGroup.js:123
 #, javascript-format
 msgid ""
 "The client id for %s is missing. Run python3 -I tools/import-client-ids.py, "
 "or add it to %s."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:120
+#: lib/prefs/oauthGroup.js:127
 msgid "Connected."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:121
+#: lib/prefs/oauthGroup.js:128
 msgid "The sign-in expired. Reconnect to keep seeing this quota."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:122
+#: lib/prefs/oauthGroup.js:129
 msgid "The provider refused access. Check your account on its site."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:123
+#: lib/prefs/oauthGroup.js:130
 msgid "Connected. The keyring is locked, so it was not checked."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:124
+#: lib/prefs/oauthGroup.js:131
 msgid "Connected. Could not reach the server."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:125
+#: lib/prefs/oauthGroup.js:132
 msgid "Connected. The service replied in an unexpected way."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:126
+#: lib/prefs/oauthGroup.js:133
 msgid "Connected, but the client id is missing from the local configuration."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:127
+#: lib/prefs/oauthGroup.js:134
 msgid "Connected. Not checked yet."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:170
+#: lib/prefs/oauthGroup.js:177
 msgid "You can close this tab and go back to Preferences."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:171
+#: lib/prefs/oauthGroup.js:178
 msgid "Sign-in did not finish. You can close this tab."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:182
+#: lib/prefs/oauthGroup.js:189
 msgid "Couldn't open the browser. Copy the link and open it yourself."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:207
+#: lib/prefs/oauthGroup.js:214
 #, javascript-format
 msgid "Finish signing in in your browser. %d:%02d left."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:223
+#: lib/prefs/oauthGroup.js:230
 #, javascript-format
 msgid "%s connected."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:225
+#: lib/prefs/oauthGroup.js:232
 msgid "The keyring did not accept the sign-in."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:229
+#: lib/prefs/oauthGroup.js:236
 msgid "Sign-in cancelled. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:242
+#: lib/prefs/oauthGroup.js:249
 #, javascript-format
 msgid "Using %s this way may break its terms"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:243
+#: lib/prefs/oauthGroup.js:250
 msgid ""
 "This extension signs in the way the official app does, which the terms may "
 "not allow. Your account could be limited or suspended. Use it at your own "
 "risk."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:246
+#: lib/prefs/oauthGroup.js:253
 msgid "I understand, connect"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:261
+#: lib/prefs/oauthGroup.js:271
+msgid ""
+"That does not look like the address or the code. Copy it from the browser "
+"bar."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:278
 msgid "Link copied."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:266
+#: lib/prefs/oauthGroup.js:283
 msgid "Path copied."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:271
+#: lib/prefs/oauthGroup.js:288
 #, javascript-format
 msgid "Disconnect %s?"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:272
+#: lib/prefs/oauthGroup.js:289
 #, javascript-format
 msgid ""
 "The sign-in is deleted from the keyring and the extension stops reading this "
@@ -659,7 +669,7 @@ msgid ""
 "revoke it there."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:290
+#: lib/prefs/oauthGroup.js:307
 #, javascript-format
 msgid "%s disconnected."
 msgstr ""
