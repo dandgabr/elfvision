@@ -1,8 +1,6 @@
 {
   "id": "lunarpunk",
   "name": "Lunarpunk",
-  "group": "Punks e ficção científica",
-  "description": "Noite, prata e misticismo digital.",
   "nativeScheme": "dark",
   "difficulty": "hard",
   "schemes": {

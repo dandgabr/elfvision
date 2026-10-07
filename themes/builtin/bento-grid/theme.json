@@ -1,8 +1,6 @@
 {
   "id": "bento-grid",
   "name": "Bento Grid",
-  "group": "Limpo e funcional",
-  "description": "Grade de blocos assimétricos estilo bento.",
   "nativeScheme": "light",
   "difficulty": "medium",
   "schemes": {

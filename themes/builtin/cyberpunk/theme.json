@@ -1,8 +1,6 @@
 {
   "id": "cyberpunk",
   "name": "Cyberpunk & Tactical HUD",
-  "group": "Punks e ficção científica",
-  "description": "Neon-noir, chuva, alta tecnologia decadente e painéis de HUD.",
   "nativeScheme": "dark",
   "difficulty": "hard",
   "schemes": {

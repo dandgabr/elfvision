@@ -1,8 +1,6 @@
 {
   "id": "nanopunk",
   "name": "Nanopunk",
-  "group": "Punks e ficção científica",
-  "description": "Microescala, partículas e precisão.",
   "nativeScheme": "light",
   "difficulty": "hard",
   "schemes": {

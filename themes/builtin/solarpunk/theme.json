@@ -1,8 +1,6 @@
 {
   "id": "solarpunk",
   "name": "Solarpunk & Biomorphic",
-  "group": "Punks e ficção científica",
-  "description": "Futuro verde solar, linho pastoral e algoritmos de crescimento biológico.",
   "nativeScheme": "light",
   "difficulty": "hard",
   "schemes": {
