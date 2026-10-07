@@ -1,8 +1,6 @@
 {
   "id": "terminal-tui",
   "name": "Terminal / TUI",
-  "group": "Movimentos históricos e retrô",
-  "description": "Interface de terminal em texto.",
   "nativeScheme": "dark",
   "difficulty": "medium",
   "schemes": {

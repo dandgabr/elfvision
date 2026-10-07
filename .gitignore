@@ -14,8 +14,8 @@ __pycache__/
 *.pyc
 
 # Secrets and local configuration. Never commit provider credentials,
-# OAuth client ids, API keys or tokens. Use providers.example.json for
-# placeholders and keep real values in ~/.config/gnome-ai-quota/.
+# OAuth client ids, API keys or tokens. Real values belong in
+# ~/.config/gnome-ai-quota/, never in the working tree.
 *.local.json
 providers.json
 credentials*.json

@@ -1,8 +1,6 @@
 {
   "id": "mid-century-modern",
   "name": "Mid-century Modern",
-  "group": "Movimentos históricos e retrô",
-  "description": "Meados do século XX, tons terrosos.",
   "nativeScheme": "light",
   "difficulty": "medium",
   "schemes": {

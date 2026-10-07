@@ -1,8 +1,6 @@
 {
   "id": "isometric",
   "name": "Isometric",
-  "group": "Imersivo e movimento",
-  "description": "Projeção isométrica.",
   "nativeScheme": "light",
   "difficulty": "hard",
   "schemes": {

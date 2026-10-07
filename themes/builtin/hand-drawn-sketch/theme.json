@@ -1,8 +1,6 @@
 {
   "id": "hand-drawn-sketch",
   "name": "Hand-drawn / Sketch",
-  "group": "Tipografia e editorial",
-  "description": "Traços feitos à mão.",
   "nativeScheme": "light",
   "difficulty": "hard",
   "schemes": {

@@ -1,8 +1,6 @@
 {
   "id": "de-stijl",
   "name": "De Stijl",
-  "group": "Movimentos históricos e retrô",
-  "description": "Linhas pretas e cores primárias.",
   "nativeScheme": "light",
   "difficulty": "medium",
   "schemes": {

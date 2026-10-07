@@ -1,8 +1,6 @@
 {
   "id": "ai-native-generative-ui",
   "name": "AI-native / Generative UI",
-  "group": "Imersivo e movimento",
-  "description": "Interface que se compõe a partir de intenção.",
   "nativeScheme": "light",
   "difficulty": "hard",
   "schemes": {
