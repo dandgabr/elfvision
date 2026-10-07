@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 10:52-0300\n"
+"POT-Creation-Date: 2026-10-07 11:11-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,8 +198,7 @@ msgstr ""
 #: lib/core/viewmodel.js:193
 #, javascript-format
 msgid ""
-"The client id for %s is missing. Add it to providers.local.json, then "
-"connect."
+"%s is not set up yet. Open Preferences and follow the steps for this account."
 msgstr ""
 
 #: lib/core/viewmodel.js:194
@@ -219,7 +218,7 @@ msgid "The service replied in an unexpected way."
 msgstr ""
 
 #: lib/core/viewmodel.js:205
-msgid "The service seems to have changed. This connector needs an update."
+msgid "The service seems to have changed. This extension needs an update."
 msgstr ""
 
 #: lib/core/viewmodel.js:209
@@ -280,11 +279,11 @@ msgstr ""
 msgid "Replace key"
 msgstr ""
 
-#: lib/core/viewmodel.js:317 lib/prefs/oauthGroup.js:101
+#: lib/core/viewmodel.js:317 lib/prefs/oauthGroup.js:102
 msgid "Reconnect"
 msgstr ""
 
-#: lib/core/viewmodel.js:318 lib/ui/providerCard.js:180
+#: lib/core/viewmodel.js:318 lib/ui/providerCard.js:185
 msgid "Open Preferences"
 msgstr ""
 
@@ -328,7 +327,9 @@ msgstr ""
 #: lib/core/viewmodel.js:405
 #, javascript-format
 msgid "%d warning"
-msgstr ""
+msgid_plural "%d warnings"
+msgstr[0] ""
+msgstr[1] ""
 
 #: lib/core/viewmodel.js:406
 #, javascript-format
@@ -340,7 +341,9 @@ msgstr[1] ""
 #: lib/core/viewmodel.js:407
 #, javascript-format
 msgid "%d not connected"
-msgstr ""
+msgid_plural "%d not connected"
+msgstr[0] ""
+msgstr[1] ""
 
 #: lib/core/viewmodel.js:408
 #, javascript-format
@@ -376,11 +379,11 @@ msgstr ""
 msgid "The key is kept in the system keyring and sent only to %s."
 msgstr ""
 
-#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:66
+#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:67
 msgid "Checking the keyring…"
 msgstr ""
 
-#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:66
+#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:67
 msgid "Status"
 msgstr ""
 
@@ -397,93 +400,95 @@ msgstr ""
 msgid "API key"
 msgstr ""
 
-#: lib/prefs/accounts.js:82 lib/prefs/oauthGroup.js:130
+#: lib/prefs/accounts.js:83 lib/prefs/oauthGroup.js:131
 msgid ""
 "No keyring found. Unlock it in Passwords and Keys, or install a Secret "
 "Service provider."
 msgstr ""
 
-#: lib/prefs/accounts.js:86
-msgid "No key yet. Paste one below."
-msgstr ""
-
-#: lib/prefs/accounts.js:91
-msgid "Key accepted."
+#: lib/prefs/accounts.js:87
+msgid "No key yet. Paste one in the field below."
 msgstr ""
 
 #: lib/prefs/accounts.js:92
-msgid "The server rejected this key."
+msgid "Key accepted."
 msgstr ""
 
 #: lib/prefs/accounts.js:93
-msgid "Key saved. The keyring is locked, so it was not checked."
+msgid "The server rejected this key."
 msgstr ""
 
 #: lib/prefs/accounts.js:94
-msgid "Key saved. Could not reach the server."
+msgid "Key saved. The keyring is locked, so it was not checked."
 msgstr ""
 
 #: lib/prefs/accounts.js:95
-msgid "Key saved. The service replied in an unexpected way."
+msgid "Key saved. Could not reach the server."
 msgstr ""
 
 #: lib/prefs/accounts.js:96
+msgid "Key saved. The service replied in an unexpected way."
+msgstr ""
+
+#: lib/prefs/accounts.js:97
 msgid "Key saved. Not checked yet."
 msgstr ""
 
-#: lib/prefs/accounts.js:118
+#: lib/prefs/accounts.js:119
 msgid "That does not look like an API key."
 msgstr ""
 
-#: lib/prefs/accounts.js:125
+#: lib/prefs/accounts.js:126
 msgid "Key saved. Checking…"
 msgstr ""
 
-#: lib/prefs/accounts.js:132
+#: lib/prefs/accounts.js:133
 msgid "The keyring did not accept the key."
-msgstr ""
-
-#: lib/prefs/accounts.js:143
-#, javascript-format
-msgid "Remove the %s key?"
 msgstr ""
 
 #: lib/prefs/accounts.js:144
 #, javascript-format
+msgid "Remove the %s key?"
+msgstr ""
+
+#: lib/prefs/accounts.js:145
+#, javascript-format
 msgid "It is deleted from the keyring. The key stays valid on the %s site."
 msgstr ""
 
-#: lib/prefs/accounts.js:146 lib/prefs/oauthGroup.js:68
-#: lib/prefs/oauthGroup.js:285 lib/prefs/oauthGroup.js:331
+#: lib/prefs/accounts.js:147 lib/prefs/oauthGroup.js:69
+#: lib/prefs/oauthGroup.js:295 lib/prefs/oauthGroup.js:343
 msgid "Cancel"
 msgstr ""
 
-#: lib/prefs/accounts.js:147
+#: lib/prefs/accounts.js:148
 msgid "Remove"
 msgstr ""
 
-#: lib/prefs/accounts.js:155 lib/prefs/oauthGroup.js:350
+#: lib/prefs/accounts.js:156 lib/prefs/oauthGroup.js:362
 msgid "The keyring is not available."
 msgstr ""
 
-#: lib/prefs/accounts.js:171
-msgid "Track in the bar"
-msgstr ""
-
 #: lib/prefs/accounts.js:172
-msgid "Off pauses collection and hides it. Your credentials stay."
+#, javascript-format
+msgid "Track %s"
 msgstr ""
 
-#: lib/prefs/accounts.js:190
+#: lib/prefs/accounts.js:173
+msgid ""
+"Off stops fetching and hides it from the bar. Your credentials stay saved."
+msgstr ""
+
+#: lib/prefs/accounts.js:191
 #, javascript-format
 msgid "Your %s username"
 msgstr ""
 
-#: lib/prefs/accounts.js:193
+#: lib/prefs/accounts.js:194
 msgid "Where do I get a key?"
 msgstr ""
 
-#: lib/prefs/accounts.js:194
+#: lib/prefs/accounts.js:195
 #, javascript-format
 msgid "Opens your keys page. Enter your %s username above first."
 msgstr ""
@@ -523,136 +528,141 @@ msgstr ""
 msgid "Sign-in failed. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:61
+#: lib/prefs/oauthGroup.js:62
 #, javascript-format
 msgid ""
 "Against the terms: %s forbids this, and Google could suspend your whole "
 "Google account."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:63
+#: lib/prefs/oauthGroup.js:64
 #, javascript-format
 msgid "Unofficial access: %s may not allow this and could limit your account."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:69
+#: lib/prefs/oauthGroup.js:70
 msgid "Copy link"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:70
+#: lib/prefs/oauthGroup.js:71
 msgid "Copy command"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:71 lib/prefs/oauthGroup.js:332
+#: lib/prefs/oauthGroup.js:72 lib/prefs/oauthGroup.js:344
 msgid "Disconnect"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:79
-msgid "If the browser could not finish: paste the address or the code"
+#: lib/prefs/oauthGroup.js:80
+msgid "Paste the address or the code"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:101
+#: lib/prefs/oauthGroup.js:102
 msgid "Connect"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:104
+#: lib/prefs/oauthGroup.js:105
 #, javascript-format
 msgid "Connect %s"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:104
+#: lib/prefs/oauthGroup.js:105
 #, javascript-format
 msgid "Reconnect %s"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:118
+#: lib/prefs/oauthGroup.js:119
 msgid "Set up the client id and the keyring first."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:124
+#: lib/prefs/oauthGroup.js:125
 #, javascript-format
 msgid "Copies the command that finds the client id (it writes to %s)."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:133
+#: lib/prefs/oauthGroup.js:135
 msgid "Not connected."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:134
-#, javascript-format
-msgid ""
-"The client id for %s is missing. Run the helper described in the README, "
-"then try again."
-msgstr ""
-
 #: lib/prefs/oauthGroup.js:137
-msgid "Connected."
+#, javascript-format
+msgid "The local configuration cannot be used: %s"
 msgstr ""
 
 #: lib/prefs/oauthGroup.js:138
-msgid "The sign-in expired. Reconnect to keep seeing this quota."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:139
-msgid "The provider refused access. Check your account on its site."
-msgstr ""
-
-#: lib/prefs/oauthGroup.js:140
-msgid "Connected. The keyring is locked, so it was not checked."
+#, javascript-format
+msgid ""
+"%s is not set up yet. Press \"Copy command\", run it in a terminal, then "
+"come back."
 msgstr ""
 
 #: lib/prefs/oauthGroup.js:141
-msgid "Connected. Could not reach the server."
+msgid "Connected."
 msgstr ""
 
 #: lib/prefs/oauthGroup.js:142
-msgid "Connected. The service replied in an unexpected way."
+msgid "The sign-in expired. Reconnect to keep seeing this quota."
 msgstr ""
 
 #: lib/prefs/oauthGroup.js:143
-msgid "Connected, but the client id is missing from the local configuration."
+msgid "The provider refused access. Check your account on its site."
 msgstr ""
 
 #: lib/prefs/oauthGroup.js:144
+msgid "Connected. The keyring is locked, so it was not checked."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:145
+msgid "Connected. Could not reach the server."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:146
+msgid "Connected. The service replied in an unexpected way."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:147
+msgid "Connected, but the client id is missing from the local configuration."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:148
 msgid "Connected. Not checked yet."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:194
+#: lib/prefs/oauthGroup.js:204
 msgid "You can close this tab and go back to Preferences."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:195
+#: lib/prefs/oauthGroup.js:205
 msgid "Sign-in did not finish. You can close this tab."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:207
+#: lib/prefs/oauthGroup.js:217
 msgid "Couldn't open the browser. Copy the link and open it yourself."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:241
+#: lib/prefs/oauthGroup.js:251
 #, javascript-format
-msgid "Finish signing in in your browser. %d:%02d left."
+msgid "Finish signing in using your browser. %d:%02d left."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:257
+#: lib/prefs/oauthGroup.js:267
 #, javascript-format
 msgid "%s connected."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:259
+#: lib/prefs/oauthGroup.js:269
 msgid "The keyring did not accept the sign-in."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:263
+#: lib/prefs/oauthGroup.js:273
 msgid "Sign-in cancelled. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:278
+#: lib/prefs/oauthGroup.js:288
 #, javascript-format
 msgid "Using %s this way breaks its terms"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:279
+#: lib/prefs/oauthGroup.js:289
 #, javascript-format
 msgid ""
 "This extension signs in the way the official app does. The terms of %s "
@@ -661,54 +671,54 @@ msgid ""
 "your Google Cloud data. Use it only if you accept that risk."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:282
+#: lib/prefs/oauthGroup.js:292
 #, javascript-format
 msgid "Using %s this way may break its terms"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:283
+#: lib/prefs/oauthGroup.js:293
 msgid ""
 "This extension signs in the way the official app does, which the terms may "
 "not allow. Your account could be limited or suspended. Use it at your own "
 "risk."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:286
+#: lib/prefs/oauthGroup.js:296
 msgid "Connect anyway"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:286
+#: lib/prefs/oauthGroup.js:296
 msgid "I understand, connect"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:308
+#: lib/prefs/oauthGroup.js:318
 msgid "That address belongs to another sign-in. Start again from this window."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:310
+#: lib/prefs/oauthGroup.js:320
 msgid "The sign-in was refused in the browser."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:311
+#: lib/prefs/oauthGroup.js:321
 msgid ""
 "That is not the address or the code. Copy the full address from the browser "
 "bar, or the code shown on the page."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:318
+#: lib/prefs/oauthGroup.js:328
 msgid "Link copied."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:323
+#: lib/prefs/oauthGroup.js:335
 msgid "Command copied."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:328
+#: lib/prefs/oauthGroup.js:340
 #, javascript-format
 msgid "Disconnect %s?"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:329
+#: lib/prefs/oauthGroup.js:341
 #, javascript-format
 msgid ""
 "The sign-in is deleted from the keyring and the extension stops reading this "
@@ -716,9 +726,113 @@ msgid ""
 "revoke it there."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:347
+#: lib/prefs/oauthGroup.js:359
 #, javascript-format
 msgid "%s disconnected."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:10
+msgid "Clean and functional"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:11
+msgid "Typography and editorial"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:12
+msgid "Surface and materials"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:13
+msgid "Immersive and motion"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:14
+msgid "Punks and science fiction"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:15
+msgid "Historical and retro"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:16
+msgid "Brutalist and rebellious"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:20
+msgid "Solid colors, no shadows or gradients."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:21
+msgid "Everything in modular cards."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:22
+msgid "A grid of asymmetric blocks."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:23
+msgid "Refined dark product UI with subtle borders."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:24
+msgid "A daily newspaper page, in columns with serif type."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:25
+msgid "Large variable type, the glyph as the image."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:26
+msgid "Strokes drawn by hand."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:27
+msgid "Soft mesh gradients."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:28
+msgid "Pearly, prismatic foil."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:29
+msgid "Isometric projection."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:30
+msgid "An interface composed from intent."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:31
+msgid "Neon noir and tactical HUD."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:32
+msgid "Night, silver and digital mysticism."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:33
+msgid "Micro scale, particles and precision."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:34
+msgid "A green, sunlit future on linen tones."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:35
+msgid "Black lines and primary colors."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:36
+msgid "Mid-twentieth century, earthy tones."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:37
+msgid "A text terminal interface."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:38
+msgid "Raw HTML and dense tables."
 msgstr ""
 
 #: lib/ui/indicator.js:157
@@ -737,168 +851,68 @@ msgstr ""
 msgid "Refreshing…"
 msgstr ""
 
-#: lib/ui/indicator.js:319
+#: lib/ui/indicator.js:285 prefs.js:274
+msgid "Demo data (made up)"
+msgstr ""
+
+#: lib/ui/indicator.js:336
 msgid "Waiting for the first update…"
 msgstr ""
 
-#: lib/ui/indicator.js:322
+#: lib/ui/indicator.js:339
 msgid "Nothing connected yet."
 msgstr ""
 
-#: lib/ui/indicator.js:322
+#: lib/ui/indicator.js:339
 msgid "Nothing is being tracked."
 msgstr ""
 
-#: lib/ui/indicator.js:324
+#: lib/ui/indicator.js:341
 msgid "Turn tracking back on in Preferences."
 msgstr ""
 
-#: lib/ui/indicator.js:325
+#: lib/ui/indicator.js:342
 msgid "Add an account in Preferences to see your quotas here."
 msgstr ""
 
-#: lib/ui/indicator.js:454
+#: lib/ui/indicator.js:471
 msgid "Nothing connected yet"
 msgstr ""
 
-#: lib/ui/indicator.js:460
+#: lib/ui/indicator.js:477
 msgid "Waiting for the first update"
 msgstr ""
 
-#: lib/ui/indicator.js:483
+#: lib/ui/indicator.js:500
 #, javascript-format
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/indicator.js:498
+#: lib/ui/indicator.js:515
 msgid "On the bar"
 msgstr ""
 
-#: lib/ui/indicator.js:501
+#: lib/ui/indicator.js:518
 #, javascript-format
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/providerCard.js:132
+#: lib/ui/providerCard.js:137
 #, javascript-format
 msgid "Collapse %s"
 msgstr ""
 
-#: lib/ui/providerCard.js:132
+#: lib/ui/providerCard.js:137
 #, javascript-format
 msgid "Expand %s"
 msgstr ""
 
-#: lib/ui/providerCard.js:193
+#: lib/ui/providerCard.js:198
 msgid "Try again"
-msgstr ""
-
-#: lib/ui/themeCatalog.js:10
-msgid "Clean and functional"
-msgstr ""
-
-#: lib/ui/themeCatalog.js:11
-msgid "Typography and editorial"
-msgstr ""
-
-#: lib/ui/themeCatalog.js:12
-msgid "Surface and materials"
-msgstr ""
-
-#: lib/ui/themeCatalog.js:13
-msgid "Immersive and motion"
-msgstr ""
-
-#: lib/ui/themeCatalog.js:14
-msgid "Punks and science fiction"
-msgstr ""
-
-#: lib/ui/themeCatalog.js:15
-msgid "Historical and retro"
-msgstr ""
-
-#: lib/ui/themeCatalog.js:16
-msgid "Brutalist and rebellious"
-msgstr ""
-
-#: lib/ui/themeCatalog.js:20
-msgid "Solid colors, no shadows or gradients."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:21
-msgid "Everything in modular cards."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:22
-msgid "A grid of asymmetric blocks."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:23
-msgid "Refined dark product UI with subtle borders."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:24
-msgid "A daily newspaper page, in columns with serif type."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:25
-msgid "Large variable type, the glyph as the image."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:26
-msgid "Strokes drawn by hand."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:27
-msgid "Soft mesh gradients."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:28
-msgid "Pearly, prismatic foil."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:29
-msgid "Isometric projection."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:30
-msgid "An interface composed from intent."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:31
-msgid "Neon noir and tactical HUD."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:32
-msgid "Night, silver and digital mysticism."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:33
-msgid "Micro scale, particles and precision."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:34
-msgid "A green, sunlit future on linen tones."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:35
-msgid "Black lines and primary colors."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:36
-msgid "Mid-twentieth century, earthy tones."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:37
-msgid "A text terminal interface."
-msgstr ""
-
-#: lib/ui/themeCatalog.js:38
-msgid "Raw HTML and dense tables."
 msgstr ""
 
 #: prefs.js:86
@@ -909,11 +923,11 @@ msgstr ""
 msgid "System"
 msgstr ""
 
-#: prefs.js:110 prefs.js:230
+#: prefs.js:110 prefs.js:227
 msgid "Your themes"
 msgstr ""
 
-#: prefs.js:117 prefs.js:205
+#: prefs.js:117 prefs.js:202
 msgid "System (GNOME)"
 msgstr ""
 
@@ -921,198 +935,194 @@ msgstr ""
 msgid "Follows the GNOME accent color and the light or dark setting."
 msgstr ""
 
-#: prefs.js:150 prefs.js:210
+#: prefs.js:150 prefs.js:207
 msgid "Theme"
 msgstr ""
 
-#: prefs.js:163 prefs.js:195
-msgid "Appearance"
+#: prefs.js:163
+msgid "General"
 msgstr ""
 
-#: prefs.js:168
+#: prefs.js:167
 msgid "Top bar"
 msgstr ""
 
 #: prefs.js:169
-msgid ""
-"The bar shrinks, then shows fewer providers, when other extensions leave it "
-"little room."
-msgstr ""
-
-#: prefs.js:172
 msgid "Left"
 msgstr ""
 
-#: prefs.js:173
+#: prefs.js:170
 msgid "Center"
 msgstr ""
 
-#: prefs.js:174
+#: prefs.js:171
 msgid "Right"
 msgstr ""
 
-#: prefs.js:175
+#: prefs.js:172
 msgid "Position"
 msgstr ""
 
-#: prefs.js:175
+#: prefs.js:172
 msgid "Where the quota items sit on the top bar."
 msgstr ""
 
-#: prefs.js:179
+#: prefs.js:176
 msgid "Providers on the bar"
 msgstr ""
 
-#: prefs.js:180
-msgid "The most providers shown, from 1 to 5."
+#: prefs.js:177
+msgid "Up to this many providers are shown (1 to 5), most critical first."
 msgstr ""
 
-#: prefs.js:187
+#: prefs.js:184
 msgid "Automatic"
 msgstr ""
 
-#: prefs.js:188
+#: prefs.js:185
 msgid "Always compact"
 msgstr ""
 
-#: prefs.js:189
+#: prefs.js:186
 msgid "Never compact"
 msgstr ""
 
-#: prefs.js:190
+#: prefs.js:187
+msgid ""
+"Automatic: only when space runs out. Always: drops the % sign and the window "
+"suffix. Never: hides providers instead."
+msgstr ""
+
+#: prefs.js:187
 msgid "Compact mode"
 msgstr ""
 
-#: prefs.js:190
-msgid "Drops the percent sign and the window suffix."
+#: prefs.js:192
+msgid "Colors and theme"
 msgstr ""
 
-#: prefs.js:197 prefs.js:252
+#: prefs.js:194 prefs.js:249
 msgid "Follow the system"
 msgstr ""
 
-#: prefs.js:198
+#: prefs.js:195
 msgid "Light"
 msgstr ""
 
-#: prefs.js:199
+#: prefs.js:196
 msgid "Dark"
 msgstr ""
 
-#: prefs.js:200
+#: prefs.js:197
 msgid "Applies to the popup. The top bar always stays dark."
 msgstr ""
 
-#: prefs.js:200
+#: prefs.js:197
 msgid "Light or dark"
 msgstr ""
 
-#: prefs.js:206
+#: prefs.js:203
 #, javascript-format
 msgid "%s (unavailable)"
 msgstr ""
 
-#: prefs.js:211
+#: prefs.js:208
 msgid "Each theme has a light and a dark variant."
 msgstr ""
 
-#: prefs.js:231
+#: prefs.js:228
 #, javascript-format
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr ""
 
-#: prefs.js:234
+#: prefs.js:231
 msgid "Open folder"
 msgstr ""
 
-#: prefs.js:236
+#: prefs.js:233
 msgid "Open the themes folder"
 msgstr ""
 
-#: prefs.js:250
+#: prefs.js:247
 msgid "Popup"
 msgstr ""
 
-#: prefs.js:253
+#: prefs.js:250
 msgid "12 hours"
 msgstr ""
 
-#: prefs.js:254
+#: prefs.js:251
 msgid "24 hours"
 msgstr ""
 
-#: prefs.js:255
+#: prefs.js:252
 msgid "Clock"
 msgstr ""
 
-#: prefs.js:255
+#: prefs.js:252
 msgid "How reset times are written."
 msgstr ""
 
-#: prefs.js:258
+#: prefs.js:255
 msgid "1h 20min"
 msgstr ""
 
-#: prefs.js:259
+#: prefs.js:256
 msgid "1h20"
 msgstr ""
 
-#: prefs.js:260
+#: prefs.js:257
 msgid "How the countdown to a reset is written."
 msgstr ""
 
-#: prefs.js:260
+#: prefs.js:257
 msgid "Time until reset"
 msgstr ""
 
-#: prefs.js:263
+#: prefs.js:260
 msgid "Open cards that need attention"
 msgstr ""
 
-#: prefs.js:264
+#: prefs.js:261
 msgid "Cards in warning, critical or error states open on their own."
 msgstr ""
 
-#: prefs.js:272
+#: prefs.js:269
 msgid "Advanced"
 msgstr ""
 
-#: prefs.js:273
+#: prefs.js:270
 msgid "Demo data, to try every state without an account."
 msgstr ""
 
-#: prefs.js:276
+#: prefs.js:273
 msgid "Real providers"
 msgstr ""
 
-#: prefs.js:277
-msgid "Demo data (made up)"
-msgstr ""
-
-#: prefs.js:278
+#: prefs.js:275
 msgid "Data source"
 msgstr ""
 
-#: prefs.js:278
+#: prefs.js:275
 msgid "Demo data queries no account."
 msgstr ""
 
-#: prefs.js:280
+#: prefs.js:277
 msgid "Steady"
 msgstr ""
 
-#: prefs.js:281
+#: prefs.js:278
 msgid "Flaky"
 msgstr ""
 
-#: prefs.js:282
+#: prefs.js:279
 msgid "Drifting"
 msgstr ""
 
-#: prefs.js:284
+#: prefs.js:281
 msgid "Demo scenario"
 msgstr ""
 
-#: prefs.js:284
+#: prefs.js:281
 msgid "Steady: all fine. Flaky: errors come and go. Drifting: usage climbs."
 msgstr ""

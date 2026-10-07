@@ -160,14 +160,11 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         });
 
         const page = new Adw.PreferencesPage({
-            title: _('Appearance'),
-            icon_name: 'preferences-desktop-appearance-symbolic',
+            title: _('General'),
+            icon_name: 'preferences-system-symbolic',
         });
 
-        const bar = new Adw.PreferencesGroup({
-            title: _('Top bar'),
-            description: _('The bar shrinks, then shows fewer providers, when other extensions leave it little room.'),
-        });
+        const bar = new Adw.PreferencesGroup({title: _('Top bar')});
         const position = choiceRow(settings, 'position', [
             ['left', _('Left')],
             ['center', _('Center')],
@@ -177,7 +174,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
 
         const count = new Adw.SpinRow({
             title: _('Providers on the bar'),
-            subtitle: _('The most providers shown, from 1 to 5.'),
+            subtitle: _('Up to this many providers are shown (1 to 5), most critical first.'),
             adjustment: new Gtk.Adjustment({lower: 1, upper: 5, step_increment: 1, page_increment: 1}),
         });
         settings.bind('bar-count', count, 'value', 0);
@@ -187,12 +184,12 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
             ['auto', _('Automatic')],
             ['always', _('Always compact')],
             ['never', _('Never compact')],
-        ], _('Compact mode'), _('Drops the percent sign and the window suffix.'), handlerIds);
+        ], _('Compact mode'), _('Automatic: only when space runs out. Always: drops the % sign and the window suffix. Never: hides providers instead.'), handlerIds);
         bar.add(compact);
 
         page.add(bar);
 
-        const look = new Adw.PreferencesGroup({title: _('Appearance')});
+        const look = new Adw.PreferencesGroup({title: _('Colors and theme')});
         const scheme = choiceRow(settings, 'color-scheme', [
             ['system', _('Follow the system')],
             ['light', _('Light')],
@@ -237,7 +234,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         });
         open.connect('clicked', () => {
             GLib.mkdir_with_parents(folder, 0o755);
-            Gio.AppInfo.launch_default_for_uri(`file://${folder}`, null);
+            Gio.AppInfo.launch_default_for_uri(GLib.filename_to_uri(folder, null), null);
         });
         folderRow.add_suffix(open);
         look.add(folderRow);
@@ -291,7 +288,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         expander.add_row(scenario);
         advanced.add(expander);
         page.add(advanced);
-        window.add(buildAccountsPage({window, settings, gettext: _, handlerIds}));
+        window.add(buildAccountsPage({window, settings, gettext: _, handlerIds, extensionPath: this.path}));
         window.add(page);
     }
 }
