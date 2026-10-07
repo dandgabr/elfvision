@@ -50,6 +50,14 @@ suffix (`·5h`, `·S`, `·M`) and a 3 px bar under the item (track at 20% opacit
   children are added or removed in a panel box, when an allocation changes and
   when monitors change. The popup lists as "Hidden from the bar" whatever the
   bar does not show.
+- **Steady layout (amended 2026-10-06):** a neighbour that changes width every
+  second (a system monitor) made the first version flip between layouts and
+  shake the popup. The chosen layout is now sticky: the one in use is kept while
+  it fits, and a richer one is adopted only with 32 px to spare. Widths measured
+  by the last full pass are reused when only the panel changes, and the bar does
+  not re-fit while the popup is open (the pending fit runs on close). The popup
+  is anchored to an invisible copy of the button's box while open, so it does not
+  follow the button when neighbours resize.
 - **Settings (amended 2026-10-06):** `position` (`left`, `center`, `right`),
   `bar-count` (1 to 5, default 3) and `compact-mode` (`auto`, `always`, `never`).
   `never` keeps the `%` and the suffix and only drops providers. The button goes

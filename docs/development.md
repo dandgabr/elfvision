@@ -76,6 +76,14 @@ directory is not committed.
 
 ## Pitfalls found so far
 
+- **A popup follows its source actor.** `BoxPointer._reposition` re-reads the
+  source's position on every allocation, so a neighbouring extension that changes
+  width each second moves the popup. Pin it with `boxPointer.setPosition(anchor)`
+  to an invisible actor while it is open (`_pinPopup` in `lib/ui/indicator.js`).
+- **Layout choices need hysteresis.** Choosing the richest layout that fits flips
+  whenever a neighbour's width wobbles around the limit. Keep the current layout
+  while it fits (`chooseStickyLayout`).
+
 - **Signal names.** `St.BoxLayout` has `child-added` and `child-removed`, not
   `actor-added`; a wrong name makes the extension fail to load.
 - **Do not destroy what you need later.** `destroy_all_children()` also destroys

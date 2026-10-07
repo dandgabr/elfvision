@@ -4,7 +4,7 @@ import {formatClock, formatDuration, formatMoney, formatPercent} from '../lib/co
 import {aheadOfPace, expectedPercent} from '../lib/core/pacing.js';
 import {selectForBar} from '../lib/core/selection.js';
 import {demoSnapshots} from '../lib/core/fixtures.js';
-import {candidateLayouts, chooseLayout, sideWidth} from '../lib/core/fit.js';
+import {candidateLayouts, chooseLayout, chooseStickyLayout, sideWidth} from '../lib/core/fit.js';
 import {barView, cardView, fmt, summaryText, updatedText} from '../lib/core/viewmodel.js';
 
 const NOW = Date.UTC(2026, 9, 6, 19, 46);
@@ -184,4 +184,20 @@ test('fit: side width mirrors the panel allocation', () => {
     assertEqual(sideWidth(1280, 200), 540);
     assertEqual(sideWidth(100, 400), 0);
     assertEqual(sideWidth(1280, 200, 40), 560);
+});
+
+test('fit: the sticky choice does not flip on small width changes', () => {
+    const layouts = candidateLayouts(3, 'auto');
+    const key = l => `${l.count}|${l.compact}|${l.headline}`;
+    const widths = {'3|false|false': 300, '3|true|false': 210, '2|true|false': 140, '1|true|true': 90, '1|true|false': 70};
+    const choose = (budget, current) => key(chooseStickyLayout(layouts, l => widths[key(l)], budget, current, key, 32).layout);
+    // Budget wobbling between 295 and 305 around the full layout (300 px):
+    assertEqual(choose(295, null), '3|true|false');
+    assertEqual(choose(305, '3|true|false'), '3|true|false');
+    assertEqual(choose(340, '3|true|false'), '3|false|false');
+    // Once full, small shrinkage keeps it until it really stops fitting.
+    assertEqual(choose(302, '3|false|false'), '3|false|false');
+    assertEqual(choose(299, '3|false|false'), '3|true|false');
+    // With no current layout it behaves like chooseLayout.
+    assertEqual(choose(150, null), '2|true|false');
 });
