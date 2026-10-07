@@ -1,7 +1,8 @@
 # 0010. Alerts and polish (M4)
 
-Status: accepted, being implemented in the order at the end. Decided after a review by UI, UX,
-frontend and security consultants.
+Status: accepted. Implemented, except the first-use assistant and the right-to-left and longer-text
+pass (see "Pending" at the end). Decided after a review by UI, UX, frontend and security
+consultants, and every part was reviewed again when it was built.
 
 ## Context
 
@@ -30,8 +31,9 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 - The controller reports changes, not only that something changed: `subscribeChanges(({previous,
   next}) => ...)`. It seeds its previous values from the cache, so the first poll after a shell
   restart is not taken for a crossing.
-- Several providers answering together cause one UI update (changes are coalesced into one idle
-  callback).
+- Coalescing the updates of several providers that answer together into one redraw was planned and
+  is not done; what was done instead is that a bar item or a card whose view did not change is
+  not redrawn (see "Pending").
 
 ### Quota notifications
 
@@ -47,15 +49,16 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
   are not counted: they are rare and must not be lost); the rest fold into one summary.
 - A paused ("Stop tracking") or never connected provider produces no event, and its state is dropped.
 - Urgency is normal for a warning and high for a critical; never the critical urgency, which would
-  bypass Do Not Disturb. One action, "Open", opens the popup. No snooze, no repeats, no escalation.
+  bypass Do Not Disturb. One action: "Open" opens the popup, and a sign-in problem offers "Reconnect"
+  instead, which opens Preferences on that provider. No snooze, no repeats, no escalation.
 - Nothing is announced until the providers are known (the controller is synced with the keyring):
   a cached value of a provider that is paused or was removed must not alert.
 - The alert state (`provider`, `metric`, `level`, `resetsAt`) is kept in
   `~/.cache/gnome-ai-quota/alerts.json`, written like the snapshot cache (private folder, atomic
   replace), validated on load (size in bytes, key shapes, ranges; timestamps in the future are
   dropped). A corrupt or missing file means nothing was alerted yet. What was seen about a metric
-  is forgotten after an hour (or three poll intervals), so a file from before a long pause cannot
-  announce a state that already existed. The alert service re-evaluates every provider once a
+  is forgotten after 24 hours (or three poll intervals), so a file from before a long pause cannot
+  announce a state that already existed; a shorter pause (a lock, a night) still catches a crossing. The alert service re-evaluates every provider once a
   minute, because a rejected sign-in produces one snapshot and is never polled again.
 
 ### Connection alert
@@ -113,8 +116,8 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
   setting, which the extension already follows). The "Add account" line stays separate and quiet below
   it: it means "never connected", which is not the same as paused. The section opens by itself when
   nothing else is on the popup, until the user opens or closes it by hand.
-- **About:** `Adw.AboutDialog` with the version from `metadata.json`, the licence and constant
-  `https://` links. No paths or user name.
+- **About:** `Adw.AboutDialog` with the version from `metadata.json`, the licence, constant
+  `https://` links and an own application icon in `icons/hicolor`. No paths or user name.
 - **Restore defaults:** every schema key is classified as reset or kept, and a test fails for an
   unclassified key. It resets appearance, bar, popup, notification and threshold settings, the theme
   and the data source (someone stuck in demo data would take a restore that leaves it for a bug), and
@@ -128,7 +131,6 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
   the assistant never sends one on its own), and for each kind of quota a switch and a threshold
   shown in the row ("Notifies at 95% used" or "Off"). With the master switch off the rows are dimmed,
   not blocked.
-- **About:** an own application icon in `icons/hicolor`.
 - **First-use assistant:** an `Adw.NavigationView` inside Preferences, never a window opened by the
   shell, gated by `first-run-done`, skippable and resumable: welcome, choose providers (the terms
   notice before any sign-in), connect each one (a failure does not block the next), choose the bar,
@@ -136,34 +138,51 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
   "Add account". It never reads other tools' credential files or the environment, never turns on a
   provider or notifications silently and sends no test notification unprompted.
 
-### Structure
+### Structure and checks
 
-- The bar model in `indicator.js` (654 lines) moves to `lib/core/` and the indicator diffs each
-  provider's view by a cheap key, so a snapshot that changes nothing redraws nothing.
+- A bar item or a card whose view did not change is not redrawn, and one whose draw failed is drawn
+  again. The indicator's own logic (654 lines) stays in `lib/ui` for now.
 - `structure.test.js` also checks that `alerts.js` imports no `gi://`, that `MessageTray` appears
   only in `lib/ui/` and that `Gio.DBus` appears only in `lib/services/`.
 
-## Implementation order
+## How it was built
 
-Each chunk is followed by the UI, UX, frontend and security reviews.
+Each part was reviewed (UI, UX, frontend, security, QA as it applied) before it was merged.
 
-1. `core/alerts.js` with tests, `alertStore`, `subscribeChanges` and cache seeding (done).
-2. The notifier and its wiring and teardown; wording review (done).
-3. `power.js`, resume handling and the connection alert (done).
-4. Indicator extraction, view diff and coalescing.
-5. A Notifications page for the new settings, Restore defaults and About (done).
-6. Legend, "not tracked" and the bar tooltip (done). The indicator's logic stays in `lib/ui` for
-   now; what was done for its cost is that a bar item or a card whose view did not change is not
-   redrawn.
-7. First-use assistant.
-8. Right-to-left prototype and a longer-text pseudo-locale pass.
+1. The alert reducer, its stored state and the controller's change reports (PR 8).
+2. The notifier and its wiring, with the settings in the schema and the pt-BR texts (PR 8).
+3. Suspend and resume, and the connection alert (PR 8).
+4. The Notifications page, Restore defaults and About (PR 9).
+5. The legend, the bar tooltip and the "not tracked" list (PR 10).
 
-## Open points
+Checks added on the way, because the unit tests cannot import the interface modules:
+`tools/check.sh` builds first, checks the syntax of every JavaScript module and enables the
+extension in a headless shell and reads its state (it fails on a name declared twice or not defined).
+The verification that notifications work was done in a Shell 50.5: `MessageTray.Source`, `Notification`,
+`addAction` and `source.addNotification` behave as used, and with Do Not Disturb on neither a normal nor
+a high-urgency notification shows a banner while both stay in the list.
 
-- Checked in a headless Shell 50.5: `MessageTray.Source({title, iconName})`,
-  `Main.messageTray.add`, `Notification({source, title, body, gicon, urgency, privacyScope})`,
-  `addAction` and `source.addNotification` exist as used, and notifications arrive with the urgency,
-  scope and icon set. With Do Not Disturb on, neither a normal nor a high-urgency notification shows a
-  banner and both are kept in the list; with it off the banner shows.
+## Pending
+
+Work that was decided here and is not done:
+
+- **First-use assistant** (above). It needs a design pass of its own with the UI and UX consultants
+  when it is built.
+- **Right-to-left and longer text:** mirror the layout in St (`:rtl`), the chevrons are already chosen
+  by direction; and a script that inflates every string by about 40% to find overflow
+  (ADR 0007).
+- **Indicator:** move its bar model to `lib/core` and coalesce the redraws of providers that answer
+  together.
+- **Bar items on the keyboard:** the tooltip on the bar shows on hover only; Escape closes the popup
+  before the legend.
+- **ESLint** (`no-undef` and the like) in CI: today the shell step of `tools/check.sh` covers it
+  locally, and CI does not run the shell.
+
+Known limits and open questions:
+
+- The extension is off while the screen is locked (no `unlock-dialog` mode): no alert is raised
+  then, and a notification that was not read before locking is gone after unlocking.
 - Whether "Disconnect all accounts and delete local data" is wanted as a separate action.
 - Whether the pt-BR text needs a reader other than the owner.
+- A warning and a critical level share one threshold per kind of quota; the text says which level was
+  reached, but a second threshold is not offered.

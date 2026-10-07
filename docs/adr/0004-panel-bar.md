@@ -1,7 +1,8 @@
 # 0004. Top-bar design
 
 Status: accepted. The bar, its states, selection and adaptive layout are
-implemented; notifications and motion are planned for M4.
+implemented, with the notifications and the per-item tooltip of M4 (ADR 0010). Motion is not
+implemented.
 
 ## Context
 
@@ -35,8 +36,9 @@ tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M
   Claude/GPT pool, each with 5-hour and weekly windows): the bar shows the most
   critical metric. The suffix names the window and the pool (`G S`, `C/G 5h` in
   Portuguese; `G W` in English, the window letter being translated), about 18 px wider
-  for that item. The accessible name and the popup card name the pool in full. A bar
-  tooltip that lists every metric and marks the displayed one is planned for M4.
+  for that item. The accessible name and the popup card name the pool in full. The
+  tooltip of each item (ADR 0010) shows the displayed metric and when it resets; a tooltip that
+  lists every metric is not implemented.
 - **Money providers:** the number is the remaining balance (`$12.40`, `$124`,
   `$1.2K`) and the bar is the share of the budget spent. In headline mode, money
   shows only when it is the worst case; a configured dollar floor counts as
@@ -63,12 +65,15 @@ tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M
   suffix and only drops providers. The button goes after the Activities button in
   the left box and first in the right box.
 
-Planned for M4:
+Implemented in M4 (ADR 0010):
 
 - **Notifications.** Default threshold 95%, once per window with 3 points of
   hysteresis, configurable per quota kind (session, weekly, monthly, credits; any
-  subset), with an optional dollar floor for credits. A separate connection alert
-  covers not signed in, persistent errors and long-stale data.
+  subset). A separate connection alert covers a rejected sign-in and long-stale data. The
+  optional dollar floor for credits was not built.
+
+Not implemented:
+
 - **Motion.** One 300 ms tween on the bar, a 150 ms cross-fade on the number, one
   pulse when crossing 80% (two at 95%), nothing looping, no timers at rest, and all
   durations zero when GNOME animations are off.

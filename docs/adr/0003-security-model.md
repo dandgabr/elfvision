@@ -1,7 +1,8 @@
 # 0003. Security model and terms-of-service risk
 
-Status: accepted and implemented (M2 and M3). The notifications and alerts of M4 will follow
-the same rules.
+Status: accepted and implemented (M2 and M3). The notifications and alerts of M4 follow the
+same rules (ADR 0010): fixed translated text, nothing provider-controlled on screen, a private state
+file. CI repeats the secret scan and adds static analysis (see the development guide).
 
 ## Context
 

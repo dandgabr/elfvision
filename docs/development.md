@@ -27,17 +27,24 @@ extension.js        entry point (enable and disable)
 prefs.js            preferences window (GTK 4, libadwaita)
 lib/core/           pure JavaScript: contract, scheduler, errors, cache format, the parser
                     of each provider's reply, theme compiler and its CSS template,
-                    severity, pacing, selection, fitting, formatting, view models
+                    severity, pacing, selection, fitting, formatting, view models, the alert
+                    rules (alerts.js), their texts (alertText.js), safe text and the
+                    Restore defaults classification (defaults.js)
 lib/providers/     the registry, one module per provider, the demo providers
 lib/oauth/          PKCE, the sign-in's local server and flow, the token manager
-lib/services/       GLib, Gio and Soup glue: HTTP, keyring, timers, cache file, theme
-                    files, theme manager, quota controller
-lib/prefs/          the Accounts page and the theme picker text (GTK 4, libadwaita)
-lib/ui/             St widgets: meter, bar item, provider card, indicator, tooltip
+lib/services/       GLib, Gio and Soup glue: HTTP, keyring, timers, cache and alert files,
+                    theme files, theme manager, quota controller, alert service and the
+                    suspend watcher (the only code that talks to the system bus)
+lib/prefs/          the Accounts and Notifications pages, About and Restore defaults
+                    (GTK 4, libadwaita)
+lib/ui/             St widgets: meter, bar item, provider card, indicator, tooltip, the
+                    notifier (the only code that makes notifications), legend and the
+                    not-tracked list
 themes/builtin/     the 20 built-in themes, one folder each with a theme.json
 themes/v1.txt       the style slugs that tools/gen-themes.py generates
 schemas/            GSettings schema
-icons/              symbolic SVG icons, one per provider id
+icons/              symbolic SVG icons, one per provider id, and the application icon
+.github/            CI workflows (gitleaks, static analysis), Dependabot, pinned scanners
 po/                 gettext template and translations
 tests/              unit tests (no GNOME Shell needed)
 tools/              build, translation, theme generation and test-shell scripts
@@ -89,9 +96,17 @@ that keep secrets out of the repository. Add a test with the code you change.
 `tmpDir()` gives a folder removed afterwards, and `gjs -m tests/run.js -- <text>` runs only the
 tests whose name contains `<text>`.
 
-`tools/check.sh` runs the tests together with everything else that needs no graphical session:
-script syntax, ShellCheck, the schemas, the translation template and catalogs (including that
-every placeholder survives translation) and whitespace. Run it before a commit.
+`tools/check.sh` runs, in this order: the build (the compiled schema and the catalogs, which some tests
+read), the unit tests, the syntax of the shell scripts and of every JavaScript module, **the extension
+enabled in a headless GNOME Shell** (it reads the extension's state and fails on an error), ShellCheck,
+the schemas, the translation template and catalogs (including that every placeholder survives
+translation) and whitespace. Run it before a commit. The shell step is skipped when `gnome-shell` is
+not installed.
+
+The unit tests cannot import the interface modules (`lib/ui`, `extension.js`), because they need the
+shell. A mistake there (a name declared twice, one that is not defined) only shows when the extension is
+enabled, which is what the shell step of `check.sh` is for. Keep the logic in `lib/core`, where it can be
+tested, and the interface thin.
 
 ## Three ways to run it
 
@@ -160,6 +175,27 @@ gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota demo
 The headless shell keeps its settings in memory, out of reach of a `gsettings` call from
 outside, so set the key from a script with `Gio.Settings` instead; the nested shell takes
 `DEMO_SCENARIO` (see above).
+
+### Checking a change in a shell
+
+For the interface, run it and look. Ways that worked:
+
+- The bar, the popup and the notifications: `DATA_SOURCE=demo DEMO_SCENARIO=drift
+  tools/nested-shell.sh` (see above). Close the window to end it.
+- Scripted checks and screenshots: `tools/headless-shell.sh` with a script (see above). Some things to
+  know: the `Eval` scope has `Main`, `Gio`, `GLib` and `Shell` but not `Clutter` (use
+  `imports.gi.Clutter`); a fresh shell shows the Fedora welcome dialog and the overview, so close the
+  dialogs in `Main.layoutManager.modalDialogGroup` and call `Main.overview.hide()` first; a virtual
+  pointer that starts at the top-left corner triggers the hot corner, so move it to the middle of the
+  screen first.
+- A preferences page on its own: a small `gjs -m` program that builds the page with the settings
+  schema and `Gio.memory_settings_backend_new()` and presents it in an `Adw.PreferencesWindow` inside
+  the headless shell shows the page without the rest of the window, which makes it easy to capture each
+  state.
+- The shell switches an extension off while the screen is locked (it declares no `unlock-dialog`
+  session mode), so `Main.screenShield.lock(false)` in a test makes `disable()` run.
+- When a change adds a setting, run `tools/build.sh` (or `tools/check.sh`) first: some tests read the
+  compiled schema, and an old one does not know the new key.
 
 ## Static analysis
 

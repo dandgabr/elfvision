@@ -10,18 +10,19 @@ highest usage percentage among its windows, a window suffix (`5h`, `W`, `M`) and
 and above) turns the item into a bordered pill with a `!`, and stale or failing
 data is marked with `~` or `⚠`, so color is never the only signal. When other
 extensions leave little room, the bar drops the `%` and the suffix, then providers,
-instead of being clipped.
+instead of being clipped. Hovering an item shows its own words and when it resets.
 
 **Popup.** Click the bar to open one collapsible card per provider. A card shows
 the plan, a state pill, the worst usage as a large number and one row per window
 with a progress bar, a pacing tick (where an even rate of use would be) and the
 reset time. Providers that do not fit on the bar are listed under "Hidden from the
-bar". The footer shows when the data was last updated, a Refresh button and a
-Preferences button.
+bar", and the ones you paused under "Not tracked", each with a Resume button. The footer shows
+when the data was last updated, a **?** button that explains every mark of the bar, a Refresh button
+and a Preferences button.
 
 ## Status
 
-Milestones M0 to M3 are done (see [Roadmap](#roadmap)). Four providers are real: **Command
+Milestones M0 to M3 are done and M4 is almost done (see [Roadmap](#roadmap)). Four providers are real: **Command
 Code** (an API key pasted on the Accounts page of Preferences) and **Codex**, **Claude** and
 **Antigravity** (a sign-in in the browser, started from the same page). A provider you have
 not connected is not shown on the bar. An Advanced option switches to demo data (three
@@ -59,7 +60,10 @@ metric and come after these four.
    account; the page asks you to confirm before it connects.
 
 Until an account is connected the bar shows only the extension's icon, and the popup says so and
-has an **Add account** button.
+has an **Add account** button. A first-use assistant that walks through these steps is planned.
+
+Notifications are on from the start (see [Notifications](#notifications)); the **Notifications**
+page of Preferences changes them.
 
 ## Requirements
 
@@ -104,6 +108,10 @@ settings and a temporary data directory, and enable this checkout in it.
 tools/nested-shell.sh          # a shell in a window on your desktop
 tools/nested-shell.sh prefs    # the same, with the preferences window open
 tools/headless-shell.sh        # no window: boot, print the extension state and shell errors
+
+# The throwaway shells have an empty keyring, so no account is connected. To see the bar, the popup
+# and the notifications working, start with made-up data (drift climbs toward the limits):
+DATA_SOURCE=demo DEMO_SCENARIO=drift tools/nested-shell.sh
 ```
 
 [docs/development.md](docs/development.md) explains what each one is for.
@@ -126,6 +134,33 @@ Open them from the popup (Preferences) or with `gnome-extensions prefs`.
 | General, Popup | Time until reset | `1h 20min` or `1h20`. |
 | General, Popup | Open cards that need attention | Cards in warning, critical or error state open on their own. A card you open or close by hand keeps that choice until its state changes. |
 | General, Advanced | Data source, Demo scenario | Demo data shows made-up providers (`steady`, `flaky` or `drift`) so every state can be seen without an account. The popup says when the data is made up. |
+
+## Notifications
+
+The extension sends a system notification when a quota reaches a threshold (95% by default, set
+separately for the 5-hour, weekly, monthly and credit quotas) and when an account has been
+rejected or without data for a while. The rules are meant to be quiet:
+
+- A quota notifies once when it crosses its threshold, and again only after it falls 3 points below
+  it or resets. A value that was already high when the extension started is shown on the bar and
+  popup but not announced.
+- At most three quota notifications an hour; the rest become one "several quotas need attention".
+- A rejected sign-in notifies after ten minutes, and missing data after fifteen minutes (and three
+  poll intervals), once per problem, never for a provider you stopped tracking or a locked keyring.
+  After the computer wakes up the connection alert stays quiet for a short while.
+- The text is fixed and translated: the provider name, the window, the percentage and the time to
+  reset. It never carries an account, a plan or an error message.
+- Do Not Disturb holds the banner; the notification waits in the list. The **Send a test
+  notification** button on the Notifications page lets you check this.
+
+### Known limits
+
+- GNOME turns the extension off while the screen is locked. No alert is raised then, a notification
+  you did not read before locking is gone after unlocking (the bar and popup still show the state),
+  and a quota that crossed its threshold during the lock is announced on the first look after
+  unlocking.
+- The three sign-in providers are reached with another application's OAuth client; their terms may
+  not allow it (see Security).
 
 ## Themes
 
@@ -163,8 +198,8 @@ validation rules.
 
 ## Languages
 
-English and Brazilian Portuguese, through gettext. The extension follows the
-system language. To add a language, see
+English and Brazilian Portuguese, through gettext. The extension follows the language of the
+GNOME Shell session; a language without a translation shows English. There is no language setting. To add a language, see
 [docs/development.md](docs/development.md#translations).
 
 ## Project layout
@@ -174,12 +209,13 @@ extension.js     entry point (enable and disable)
 prefs.js         preferences window (GTK 4, libadwaita)
 metadata.json    uuid, name, supported shell version
 lib/core/        pure JavaScript: data contract, scheduler, cache format, errors, parsers of each
-                 provider's reply, theme compiler, view models
+                 provider's reply, theme compiler, view models, the alert rules and their texts
 lib/providers/   the provider registry, one module per provider and the demo providers
 lib/oauth/       PKCE, the local server of the sign-in, the sign-in flow, the token manager
-lib/services/    GLib, Gio and Soup glue: HTTP, keyring, timers, cache file, theme files, controller
-lib/prefs/       the Accounts page and the theme picker text (GTK 4, libadwaita)
-lib/ui/          St widgets: bar item, meter, provider card, indicator, tooltip
+lib/services/    GLib, Gio and Soup glue: HTTP, keyring, timers, cache and alert files, theme files,
+                 controller, alert service, suspend watcher
+lib/prefs/       the Accounts and Notifications pages, About and Restore defaults (GTK 4, libadwaita)
+lib/ui/          St widgets: bar item, meter, provider card, indicator, tooltip, notifier, legend
 themes/builtin/  the 20 built-in themes
 schemas/         GSettings schema
 icons/           one symbolic icon per provider
@@ -187,12 +223,15 @@ po/              gettext template and translations
 tests/           unit tests that run under gjs, with no GNOME Shell
 tools/           build, package, check, translation, theme generation, client id helper, test shells
 docs/            development guide and architecture decision records
+.github/         CI: secret scan and static analysis workflows, Dependabot
 ```
 
 ## Development and tests
 
 ```sh
-tools/check.sh      # tests, script syntax, ShellCheck, schemas and translations in one go
+tools/check.sh      # build, tests, syntax, the extension enabled in a headless shell, ShellCheck,
+                    # schemas and translations in one go
+tools/sast.sh       # the static analysis that CI runs (bandit, Semgrep, ShellCheck, zizmor, gitleaks)
 tools/build.sh      # compile the schema and translations
 gjs -m tests/run.js # only the tests (add -- <text> to run the ones whose name contains it)
 ```
@@ -209,7 +248,7 @@ design are in [docs/adr](docs/adr/README.md).
 | M1 | Data layer (contract, scheduler, cache), themes, appearance settings | done |
 | M2 | Command Code with an API key stored in libsecret | done |
 | M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | done |
-| M4 | Notifications and connection alerts (done); Restore defaults and About (done); legend, bar tooltip and "not tracked" section (done); first-use assistant (planned) | in progress |
+| M4 | Notifications and connection alerts, a Notifications page, Restore defaults, About, a legend, a bar tooltip and a "Not tracked" list (done); a first-use assistant and a right-to-left and longer-text pass (planned) | in progress |
 
 Details in [ADR 0008](docs/adr/0008-mvp-roadmap.md).
 

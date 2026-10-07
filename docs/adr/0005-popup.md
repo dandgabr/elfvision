@@ -1,7 +1,8 @@
 # 0005. Popup design and defaults
 
 Status: accepted. The one-column popup, failure states, empty states and the settings below are
-implemented. Items marked planned arrive in M4.
+implemented, and M4 added the legend, the "Not tracked" section and the bar tooltip (ADR 0010). What
+is marked planned is still not built.
 
 ## Context
 
@@ -30,8 +31,8 @@ for money balances are planned as options, not implemented.
 
 - **Order.** Providers on the bar first, in bar order, then "Hidden from the bar"
   (with a critical `!` pill in its header if any hidden provider is critical). Cards
-  never jump by severity. A "Not tracked" section with a grey line and a Track button
-  is planned with the tracking controls.
+  never jump by severity. A collapsed "Not tracked (N)" section lists the providers the
+  user paused, each with a Resume button; it opens by itself when nothing else is on the popup.
 - **Card.** Icon, name, plan, state pill, and a hero value (the highest percentage,
   or the money balance) with the window it belongs to (`97 % · week`). The whole
   header is the toggle button, so Enter and Space work on the focused header. Each
@@ -40,10 +41,12 @@ for money balances are planned as options, not implemented.
   relative and absolute. Providers with pools get a sub-heading per pool. A single
   pacing line shows only when the deviation is relevant.
 - **Actions.** *Try again* lives in the card body of a provider that can recover by
-  retrying. Planned: *Connect* and *Track* in the body, and a `⋯` menu with Refresh
-  this one, Do not track and Remove connector (confirmed inline, no modal).
+  retrying. A button named for the state (Connect, Reconnect, Replace key) opens Preferences on
+  that account, and resuming a paused provider is the Resume button of "Not tracked". Planned and not
+  built: a `⋯` menu with Refresh this one, Do not track and Remove connector (confirmed inline, no modal).
 - **Footer.** "Updated N min ago", with the number of providers in trouble next to
-  it, then Refresh and Preferences. The popup is at most 70% of the monitor height;
+  it, then a "?" toggle that opens the legend of the marks on the bar, Refresh and Preferences (the status has
+  a line of its own). The popup is at most 70% of the monitor height;
   only the body scrolls and the footer stays fixed.
 - **Keyboard.** Tab and arrows move between headers and buttons, Enter expands and
   Esc closes. Color is never the only channel: glyphs, pills, italics and borders
