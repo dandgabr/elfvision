@@ -340,3 +340,14 @@
 .gaq-button:active {
     background-color: rgba(255, 255, 255, 0.2);
 }
+
+/* ---------- tooltip ---------- */
+
+.gaq-tooltip {
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background-color: rgba(30, 30, 33, 0.97);
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 11px;
+}

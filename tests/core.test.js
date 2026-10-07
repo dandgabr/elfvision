@@ -132,6 +132,7 @@ test('card view: windows, pace and reset text', () => {
     assertEqual([week.label, week.percentText, week.mark, week.resetText], ['Week', '97', '! ', 'resets in 2d 2h']);
     // 50 h of a 168 h window remain, so 70% should be used; the card is at 97%.
     assertEqual(view.paceText, 'Pace: 27 points above expected');
+    assertEqual([week.paceTip, view.groups[0].rows[0].paceTip], ['Expected by now: 70%', 'Expected by now: 37%']);
 });
 
 test('card view: pools are grouped in order', () => {
