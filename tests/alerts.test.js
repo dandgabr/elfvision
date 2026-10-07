@@ -47,7 +47,9 @@ test('alerts: hysteresis re-arms only after the usage falls 3 points below the t
 test('alerts: a window that resets re-arms the alert, even if the usage did not fall', () => {
     const later = T0 + 6 * 3600_000;
     const next = snap(97, {metrics: [metric(97, {resetsAt: later + 5 * 3600_000})]});
-    const {events} = run([[snap(90), T0], [snap(96), T0 + MIN], [next, later]]);
+    // Polls every 50 minutes, as a real provider would, so nothing is forgotten in between.
+    const between = [1, 2, 3, 4, 5, 6, 7].map(n => [snap(96), T0 + n * 50 * MIN]);
+    const {events} = run([[snap(90), T0], ...between, [next, later]]);
     assertEqual(events.length, 2);
     // The reset time wobbling by seconds is not a new window.
     const wobble = snap(97, {metrics: [metric(97, {resetsAt: T0 + 3600_000 + RESET_JITTER_MS - 1000})]});
@@ -171,4 +173,68 @@ test('alerts: the saved state survives a restart, and a bad file is an empty one
         sent: [T0, 'x', null], capped: 'no',
     }));
     assertEqual(dirty.state, {version: 1, levels: {'claude|five': {fired: false, resetsAt: null, at: 0}}, connection: {codex: {cause: 'auth', since: T0, alerted: true}}, sent: [T0], capped: 0});
+});
+
+test('alerts: a threshold exactly at the limit, and the edges of the hysteresis', () => {
+    // Exactly at the threshold counts; one point under does not.
+    assertEqual(run([[snap(90), T0], [snap(94.9), T0 + MIN]]).events.length, 0);
+    assertEqual(run([[snap(90), T0], [snap(95), T0 + MIN]]).events.length, 1);
+    // Exactly threshold - hysteresis re-arms; one tenth above does not.
+    const base = [[snap(90), T0], [snap(96), T0 + MIN]];
+    assertEqual(run([...base, [snap(92.1), T0 + 2 * MIN], [snap(96), T0 + 3 * MIN]]).events.length, 1);
+    assertEqual(run([...base, [snap(92), T0 + 2 * MIN], [snap(96), T0 + 3 * MIN]]).events.length, 2);
+});
+
+test('alerts: a hysteresis of zero cannot make an alert fire on every poll', () => {
+    const settings = {hysteresis: 0};
+    assertEqual(normalizeAlertSettings(settings).hysteresis, 1);
+    const steps = [[snap(90), T0]];
+    for (let i = 1; i <= 5; i++)
+        steps.push([snap(95), T0 + i * MIN]);
+    assertEqual(run(steps, {settings}).events.length, 1);
+});
+
+test('alerts: one outage is one alert, whatever its cause turns into', () => {
+    const net = {state: 'network', metrics: []};
+    const auth = {state: 'auth_required', metrics: [], reason: 'expired'};
+    const steps = [[snap(10, net), T0], [snap(10, net), T0 + OUTAGE_ALERT_AFTER_MS], [snap(10, auth), T0 + OUTAGE_ALERT_AFTER_MS + MIN],
+        [snap(10, net), T0 + OUTAGE_ALERT_AFTER_MS + 2 * MIN], [snap(10, auth), T0 + 2 * OUTAGE_ALERT_AFTER_MS]];
+    assertEqual(run(steps).events.length, 1);
+    // The clock keeps running across a change of cause: auth after the network trouble is not a fresh ten minutes.
+    const flip = [[snap(10, net), T0], [snap(10, auth), T0 + MIN], [snap(10, auth), T0 + AUTH_ALERT_AFTER_MS]];
+    assertEqual(run(flip).events.length, 1);
+});
+
+test('alerts: a time in the future in the state cannot silence alerts', () => {
+    const future = T0 + 400 * 24 * 3600_000;
+    const state = {...emptyAlertState(), sent: [future, future, future], capped: future,
+        levels: {'claude|five': {fired: true, resetsAt: future, at: future}},
+        connection: {claude: {cause: 'auth', since: future, alerted: false}}};
+    const out = run([[snap(80), T0], [snap(99), T0 + MIN]], {state});
+    assertEqual(out.events.length, 1);                 // the cap did not hold it back, and the re-arm worked
+    const bad = {state: 'auth_required', metrics: [], reason: 'expired'};
+    // A start time in the future is taken as now, so the ten minutes count from the first look.
+    assertEqual(run([[snap(10, bad), T0], [snap(10, bad), T0 + AUTH_ALERT_AFTER_MS]], {state}).events.length, 1);
+});
+
+test('alerts: what was seen long ago is forgotten, so a restart does not announce an old state', () => {
+    const old = {...emptyAlertState(), levels: {'claude|five': {fired: false, resetsAt: T0 + 3600_000, at: T0 - 5 * 3600_000}}};
+    assertEqual(run([[snap(97), T0]], {state: old}).events, []);                          // too old: a first sight
+    const recent = {...emptyAlertState(), levels: {'claude|five': {fired: false, resetsAt: T0 + 3600_000, at: T0 - 5 * MIN}}};
+    assertEqual(run([[snap(97), T0]], {state: recent}).events.length, 1);                  // recent: a real crossing
+    // A provider polled once an hour keeps its memory for three intervals.
+    const hourly = {...emptyAlertState(), levels: {'claude|five': {fired: false, resetsAt: null, at: T0 - 2 * 3600_000}}};
+    assertEqual(run([[snap(97), T0]], {state: hourly, intervalMs: 3600_000}).events.length, 1);
+});
+
+test('alerts: a metric that is briefly missing keeps its memory, and a removed provider starts over', () => {
+    const empty = {metrics: []};
+    const {events} = run([[snap(90), T0], [snap(96), T0 + MIN], [snap(10, empty), T0 + 2 * MIN], [snap(97), T0 + 3 * MIN]]);
+    assertEqual(events.length, 1);                      // it was announced once and is still "fired" when it returns
+    const gone = forgetProvider(run([[snap(90), T0], [snap(96), T0 + MIN]]).state, 'claude');
+    assertEqual(run([[snap(97), T0 + 2 * MIN]], {state: gone}).events, []);              // a first sight again
+});
+
+test('alerts: a state this module does not know is never an outage', () => {
+    assertEqual(run([[snap(10, {state: 'loading', metrics: []}), T0], [snap(10, {state: 'loading', metrics: []}), T0 + 3600_000]]).events, []);
 });

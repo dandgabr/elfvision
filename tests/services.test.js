@@ -102,6 +102,18 @@ test('alert store: the state comes back, privately; a missing, huge or corrupt f
     assertEqual((await store.load()).state, emptyAlertState());
 });
 
+test('alert store: a symbolic link in place of the file is not followed', async () => {
+    const directory = tmpDir();
+    GLib.file_set_contents(`${directory}/elsewhere.json`, serializeText());
+    Gio.File.new_for_path(`${directory}/alerts.json`).make_symbolic_link(`${directory}/elsewhere.json`, null);
+    const result = await new AlertStore(directory).load();
+    assertEqual([result.state, result.problems.length], [emptyAlertState(), 1]);
+});
+
+function serializeText() {
+    return JSON.stringify({version: 1, levels: {'claude|five': {fired: true, resetsAt: null, at: 1}}});
+}
+
 test('timers: a bad delay never fires at once or overflows, and a timer can be cleared', async () => {
     let fired = 0;
     const ids = [];

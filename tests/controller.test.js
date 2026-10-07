@@ -89,3 +89,38 @@ test('controller: a change listener that fails does not stop the others or the p
     assertEqual(seen, ['a']);
     controller.stop();
 });
+
+test('controller: a listener that throws nothing useful does not stop the pipeline, and a late snapshot of a removed provider is ignored', async () => {
+    const saved = [];
+    const store = {load: async () => ({snapshots: [], problems: []}), save: s => saved.push(s.map(x => x.id))};
+    const controller = new QuotaController({providers: [provider('a')], cache: store});
+    const changes = [];
+    controller.subscribeChanges(() => { throw null; });                       // not even an Error
+    controller.subscribeChanges(change => changes.push([change.id, change.next?.state ?? null]));
+    let updates = 0;
+    controller.subscribe(() => updates++);
+    await controller.start();
+    await controller.refresh();
+    assertTrue(updates >= 1, 'the interface was still told');
+    assertEqual(changes, [['a', 'ok']]);
+
+    // A poll that ends after the provider was removed must not bring its state back.
+    const late = controller._scheduler.snapshots()[0];
+    controller.removeProvider('a');
+    const before = changes.length;
+    controller._onSnapshot(late);
+    assertEqual([changes.length, controller._last.has('a')], [before, false]);
+    controller.stop();
+});
+
+test('controller: a cached value that is hours old reaches the listeners as stale, not as a live reading', async () => {
+    const old = {id: 'a', name: 'a', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: Date.now() - 3 * 3600_000},
+        metrics: [{id: 'm', kind: 'percent', window: 'session', windowSecs: 18000, percentUsed: 99}]};
+    const controller = new QuotaController({providers: [provider('a')], cache: cache([old])});
+    const seen = [];
+    controller.subscribeChanges(change => seen.push(change.previous?.source.kind));
+    await controller.start();
+    await controller.refresh();
+    assertEqual(seen, ['stale']);
+    controller.stop();
+});

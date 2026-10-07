@@ -43,15 +43,18 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
   reset time: APIs wobble by seconds).
 - A state that already existed when the extension started produces no notification; the bar and the
   popup show it.
-- At most one notification per provider per poll, and three per hour in all; the rest fold into one
-  summary.
+- At most one quota notification per provider per poll, and three an hour in all (connection alerts
+  are not counted: they are rare and must not be lost); the rest fold into one summary.
 - A paused ("Stop tracking") or never connected provider produces no event, and its state is dropped.
 - Urgency is normal for a warning and high for a critical; never the critical urgency, which would
   bypass Do Not Disturb. One action, "Open", opens the popup. No snooze, no repeats, no escalation.
 - The alert state (`provider`, `metric`, `level`, `resetsAt`) is kept in
   `~/.cache/gnome-ai-quota/alerts.json`, written like the snapshot cache (private folder, atomic
-  replace), validated on load (size, known providers, ranges). A corrupt or missing file means
-  nothing was alerted yet, and alerts are held for the first poll cycle.
+  replace), validated on load (size in bytes, key shapes, ranges; timestamps in the future are
+  dropped). A corrupt or missing file means nothing was alerted yet. What was seen about a metric
+  is forgotten after an hour (or three poll intervals), so a file from before a long pause cannot
+  announce a state that already existed. The alert service re-evaluates every provider once a
+  minute, because a rejected sign-in produces one snapshot and is never polled again.
 
 ### Connection alert
 
