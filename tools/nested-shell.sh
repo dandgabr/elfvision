@@ -20,7 +20,9 @@ mkdir -p "$work/data/gnome-shell/extensions"
 ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 
 export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
-export GSETTINGS_BACKEND=memory GTK_A11Y=none UUID="$uuid" OPEN_PREFS="${1:-}"
+# A file backend, not "memory": the preferences window is another process and
+# must share the settings with the shell.
+export GSETTINGS_BACKEND=keyfile GTK_A11Y=none UUID="$uuid" OPEN_PREFS="${1:-}"
 
 dbus-run-session -- bash -c '
     gnome-shell --devkit --wayland --unsafe-mode >/dev/null 2>&1 &
