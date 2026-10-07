@@ -10,6 +10,7 @@ import {AlertService} from './lib/services/alertService.js';
 import {AlertStore} from './lib/services/alertStore.js';
 import {CacheStore} from './lib/services/cacheStore.js';
 import {QuotaController} from './lib/services/controller.js';
+import {PowerWatcher} from './lib/services/power.js';
 import {ThemeManager} from './lib/services/themeManager.js';
 import GaqIndicator from './lib/ui/indicator.js';
 import {AlertNotifier} from './lib/ui/notifier.js';
@@ -111,6 +112,10 @@ export default class GnomeAiQuotaExtension extends Extension {
             extension: this,
             settings: this._settings,
             openPopup: () => this._indicator?.menu.open(),
+            openPreferences: providerId => {
+                this._settings.set_string('prefs-target', providerId);
+                this.openPreferences();
+            },
         });
         this._alerts = new AlertService({
             controller: this._controller,
@@ -120,9 +125,26 @@ export default class GnomeAiQuotaExtension extends Extension {
         });
         this._alerts.start().catch(error =>
             console.error(`gnome-ai-quota: cannot start the alerts: ${error?.message ?? error}`));
+        // After the computer wakes up the data looks old and the network is slow to return: keep
+        // the connection alert quiet for a while, then ask the providers again.
+        this._power = new PowerWatcher({onResume: () => {
+            this._alerts?.quietFor();
+            this._resumeRefresh = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 4000 + Math.floor(Math.random() * 4000), () => {
+                this._resumeRefresh = 0;
+                this._controller?.refresh().catch(() => {});
+                return GLib.SOURCE_REMOVE;
+            });
+        }});
+        this._power.start();
     }
 
     _destroyAlerts() {
+        this._power?.stop();
+        this._power = null;
+        if (this._resumeRefresh) {
+            GLib.source_remove(this._resumeRefresh);
+            this._resumeRefresh = 0;
+        }
         this._alerts?.stop();
         this._alerts = null;
         this._notifier?.destroy();

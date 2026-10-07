@@ -48,6 +48,8 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 - A paused ("Stop tracking") or never connected provider produces no event, and its state is dropped.
 - Urgency is normal for a warning and high for a critical; never the critical urgency, which would
   bypass Do Not Disturb. One action, "Open", opens the popup. No snooze, no repeats, no escalation.
+- Nothing is announced until the providers are known (the controller is synced with the keyring):
+  a cached value of a provider that is paused or was removed must not alert.
 - The alert state (`provider`, `metric`, `level`, `resetsAt`) is kept in
   `~/.cache/gnome-ai-quota/alerts.json`, written like the snapshot cache (private folder, atomic
   replace), validated on load (size in bytes, key shapes, ranges; timestamps in the future are
@@ -68,20 +70,24 @@ accordingly. Catalogs: English (the msgids) and pt-BR.
 - Never for a locked keyring (it clears itself; the popup says so), a paused provider or one that
   was never connected.
 - Suspend and resume: a `login1` `PrepareForSleep` handler (`lib/services/power.js`) opens a
-  90-second grace window after waking in which the connection alert stays quiet, and refreshes after
-  the network is back, with jitter. Quota crossings are not suppressed: they are still true.
+  90-second grace window after waking in which the connection alert stays quiet, and the providers
+  are asked again four to eight seconds after waking. Quota crossings are not suppressed: they are still true.
 
 ### Notification content and privacy
 
 - Fixed, translated templates only: provider name, window, percent used and time to reset, in the
-  same words as the pills and cards ("Critical", "Warning", "5 hours", "Week"). Never an account or
+  same words as the pills and cards ("Critical", "Warning", "5 hours", "Week"). The summary of
+  folded notices says "Several quotas need attention" (they can be warnings, not only criticals).
+  A sign-in problem offers a "Reconnect" action that opens Preferences on that provider; the rest
+  offer "Open", which opens the popup; neither does anything while the screen is locked. Never an account or
   user name, email, plan, error or HTTP text, path or token. Numbers are checked and clamped,
   enumerations looked up in a table, so nothing provider-controlled reaches the text.
 - On the lock screen the banner is generic ("A quota is almost used") unless the user turns on
   `notify-details-on-lock` (off by default). How the Shell 50 handles it is not verified and gets a
   manual test with the screen locked.
-- Any dynamic value is escaped with `GLib.markup_escape_text`, length-capped and stripped of control
-  and bidirectional-override characters, in notifications and the tooltip alike.
+- Every string that reaches a notification is stripped of control and bidirectional-override
+  characters and length-capped (`alertText.js`), and notification markup is turned off, so what is
+  left is shown as typed. The tooltip gets the same treatment when it is built.
 - Notifications use a source of their own (`MessageTray.Source`), created lazily and destroyed in
   `disable()`. The shell hides what a `USER`-scope notification says while the screen is locked,
   so that is the scope used unless `notify-details-on-lock` is on (then `SYSTEM`); this replaces
@@ -124,7 +130,7 @@ Each chunk is followed by the UI, UX, frontend and security reviews.
 
 1. `core/alerts.js` with tests, `alertStore`, `subscribeChanges` and cache seeding (done).
 2. The notifier and its wiring and teardown; wording review (done).
-3. `power.js`, resume handling and the connection alert.
+3. `power.js`, resume handling and the connection alert (done).
 4. Indicator extraction, view diff and coalescing.
 5. Restore defaults and About.
 6. Legend, "not tracked" and the tooltip audit.

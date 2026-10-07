@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 14:32-0300\n"
+"POT-Creation-Date: 2026-10-07 14:40-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,69 +18,69 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: lib/core/alertText.js:19
+#: lib/core/alertText.js:21
+msgid "Several quotas need attention"
+msgstr ""
+
+#: lib/core/alertText.js:22
+msgid "Open the panel to see which."
+msgstr ""
+
+#: lib/core/alertText.js:25
 msgid "A provider"
 msgstr ""
 
-#: lib/core/alertText.js:27
-msgid "Several quotas are almost used"
-msgstr ""
-
-#: lib/core/alertText.js:28
-msgid "Open the panel to see them."
-msgstr ""
-
-#: lib/core/alertText.js:31
+#: lib/core/alertText.js:35
 msgid "Quota alert"
 msgstr ""
 
-#: lib/core/alertText.js:42
+#: lib/core/alertText.js:58
 #, javascript-format
 msgid "Critical: %s at %s%%"
 msgstr ""
 
-#: lib/core/alertText.js:42
+#: lib/core/alertText.js:58
 #, javascript-format
 msgid "Warning: %s at %s%%"
 msgstr ""
 
-#: lib/core/alertText.js:45
+#: lib/core/alertText.js:61
 msgid "Credits"
 msgstr ""
 
-#: lib/core/alertText.js:47
+#: lib/core/alertText.js:63
 #, javascript-format
 msgid "%s: %s%% of the budget used."
 msgstr ""
 
-#: lib/core/alertText.js:48
+#: lib/core/alertText.js:64
 #, javascript-format
 msgid "%s: %s%% used."
 msgstr ""
 
-#: lib/core/alertText.js:51
+#: lib/core/alertText.js:67
 #, javascript-format
 msgid "Resets in %s."
 msgstr ""
 
-#: lib/core/alertText.js:60
+#: lib/core/alertText.js:76
 #, javascript-format
-msgid "%s: sign in again"
+msgid "%s: reconnect the account"
 msgstr ""
 
-#: lib/core/alertText.js:61
-msgid ""
-"The sign-in expired or was refused. Open the preferences to connect it again."
+#: lib/core/alertText.js:77
+msgid "The sign-in expired or was refused. Reconnect it in Preferences."
 msgstr ""
 
-#: lib/core/alertText.js:65
+#: lib/core/alertText.js:81
 #, javascript-format
 msgid "%s: no recent data"
 msgstr ""
 
-#: lib/core/alertText.js:66
+#: lib/core/alertText.js:82
 msgid ""
-"The last successful check was a while ago. The service may be unreachable."
+"The last successful check was a while ago. The service may be down, or your "
+"connection."
 msgstr ""
 
 #: lib/core/viewmodel.js:40
@@ -344,7 +344,7 @@ msgstr ""
 msgid "Replace key"
 msgstr ""
 
-#: lib/core/viewmodel.js:317 lib/prefs/oauthGroup.js:102
+#: lib/core/viewmodel.js:317 lib/prefs/oauthGroup.js:102 lib/ui/notifier.js:67
 msgid "Reconnect"
 msgstr ""
 
@@ -966,11 +966,11 @@ msgid_plural "Hidden from the bar (%d)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/notifier.js:56
+#: lib/ui/notifier.js:69
 msgid "Open"
 msgstr ""
 
-#: lib/ui/notifier.js:74
+#: lib/ui/notifier.js:93
 msgid "AI quota"
 msgstr ""
 

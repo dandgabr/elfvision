@@ -26,14 +26,22 @@ function fakeTimers() {
 
 function fakeSettings(values = {}) {
     const all = {'notifications-enabled': true, 'alert-connection': true, ...values};
-    return {
-        get_boolean: key => all[key] ?? true,
-        get_int: key => all[key] ?? 95,
+    const handlers = new Map();
+    let next = 1;
+    const settings = {
+        reads: 0,
+        get_boolean: key => { settings.reads++; return all[key] ?? true; },
+        get_int: key => { settings.reads++; return all[key] ?? 95; },
+        connect: (_signal, fn) => { handlers.set(next, fn); return next++; },
+        disconnect: id => handlers.delete(id),
+        handlers,
+        change: (key, value) => { all[key] = value; handlers.forEach(fn => fn()); },
     };
+    return settings;
 }
 
 function fakeController(timers) {
-    const controller = {snaps: [], listeners: new Set(),
+    const controller = {snaps: [], listeners: new Set(), synced: true,
         subscribeChanges(l) { controller.listeners.add(l); return () => controller.listeners.delete(l); },
         snapshots: () => controller.snaps, intervalOf: () => 5 * MIN,
         emit(next, id = next?.id) { controller.listeners.forEach(l => l({id, previous: null, next})); }};
@@ -90,20 +98,19 @@ test('alert service: the quiet window after a resume holds the connection alert 
 });
 
 test('alert service: with notifications off nothing is shown, and turning them on does not replay the past', async () => {
-    const values = {'notifications-enabled': false};
-    const {controller, events, timers, service} = await setup(fakeSettings(values));
+    const settings = fakeSettings({'notifications-enabled': false});
+    const {controller, events, timers, service} = await setup(settings);
     controller.emit(ok(80, timers.now()));
     controller.emit(ok(96, timers.now()));
     assertEqual(events, []);
-    values['notifications-enabled'] = true;
+    settings.change('notifications-enabled', true);
     controller.emit(ok(97, timers.now()));
     assertEqual(events, []);                                        // it was already announced silently
     service.stop();
 });
 
 test('alert service: the switches and thresholds come from the settings, re-checked', async () => {
-    const values = {'alert-session-enabled': false};
-    const {controller, events, timers, service} = await setup(fakeSettings(values));
+    const {controller, events, timers, service} = await setup(fakeSettings({'alert-session-enabled': false}));
     controller.emit(ok(80, timers.now()));
     controller.emit(ok(99, timers.now()));
     assertEqual(events, []);
@@ -140,4 +147,82 @@ test('alert service: a notifier that throws does not stop the others, and stop i
     controller.emit(ok(96, timers.now()));
     assertEqual([calls, controller.listeners.size, timers.jobs.size], [1, 0, 0]);
     await flush();
+});
+
+test('alert service: nothing is announced until the providers are known, and the settings are read once', async () => {
+    const settings = fakeSettings();
+    const {controller, events, timers, service} = await setup(settings);
+    controller.synced = false;
+    controller.snaps = [rejected];
+    controller.emit(ok(80, timers.now()));
+    controller.emit(ok(96, timers.now()));
+    timers.advance(30 * MIN);
+    assertEqual(events, []);                                        // a cached value of a provider not confirmed yet
+    controller.synced = true;
+    controller.emit(ok(80, timers.now()));
+    controller.emit(ok(96, timers.now()));
+    controller.emit(ok(80, timers.now()));
+    const reads = settings.reads;
+    controller.emit(ok(97, timers.now()));
+    controller.emit(ok(98, timers.now()));
+    assertEqual(settings.reads, reads);                             // cached between changes
+    settings.change('alert-session-percent', 99);
+    controller.emit(ok(98, timers.now()));
+    assertTrue(settings.reads > reads, 'read again after a change');
+    service.stop();
+    assertEqual(settings.handlers.size, 0);
+});
+
+test('alert service: a stop while the file is being read, or a restart, leaves nothing behind', async () => {
+    const timers = fakeTimers();
+    const controller = fakeController(timers);
+    let release;
+    const slow = {saved: [], load: () => new Promise(resolve => { release = () => resolve({state: emptyAlertState(), problems: []}); }), save() {}};
+    const service = new AlertService({controller, store: slow, settings: fakeSettings(), timers, notify() {}});
+    const starting = service.start();
+    service.stop();
+    release();
+    await starting;
+    assertEqual([controller.listeners.size, timers.jobs.size], [0, 0]);
+
+    const again = new AlertService({controller, store: store(), settings: fakeSettings(), timers, notify() {}});
+    await again.start();
+    again.stop();
+    await again.start();
+    assertEqual([controller.listeners.size, timers.jobs.size], [1, 1]);
+    again.stop();
+    assertEqual([controller.listeners.size, timers.jobs.size], [0, 0]);
+});
+
+import {PowerWatcher} from '../lib/services/power.js';
+
+test('power: a wake-up is reported, a suspend is told apart, and a stop ends the subscription', async () => {
+    const subscribed = [];
+    const connection = {signal_subscribe(...args) { subscribed.push(args); return 7; }, signal_unsubscribe(id) { subscribed.push(['off', id]); }};
+    const calls = [];
+    const watcher = new PowerWatcher({bus: async () => connection, onResume: () => calls.push('resume'), onSuspend: () => calls.push('suspend')});
+    await watcher.start();
+    const handler = subscribed[0][6];
+    const parameters = value => ({deepUnpack: () => [value]});
+    handler(null, null, null, null, null, parameters(true));
+    handler(null, null, null, null, null, parameters(false));
+    assertEqual(calls, ['suspend', 'resume']);
+    assertEqual([subscribed[0][0], subscribed[0][2], subscribed[0][3]], ['org.freedesktop.login1', 'PrepareForSleep', '/org/freedesktop/login1']);
+    watcher.stop();
+    assertEqual(subscribed[1], ['off', 7]);
+});
+
+test('power: a stop while the bus is being reached, or no bus at all, is harmless', async () => {
+    let release;
+    let subscribedAfterStop = 0;
+    const connection = {signal_subscribe() { subscribedAfterStop++; return 1; }, signal_unsubscribe() {}};
+    const slow = new PowerWatcher({bus: () => new Promise(resolve => { release = () => resolve(connection); }), onResume() {}});
+    const starting = slow.start();
+    slow.stop();
+    release();
+    await starting;
+    assertEqual(subscribedAfterStop, 0);
+    const broken = new PowerWatcher({bus: async () => { throw new Error('no bus'); }, onResume() {}});
+    await broken.start();                       // only a warning
+    broken.stop();
 });

@@ -160,3 +160,14 @@ test('secret check: a word whose hash is on the known list is found, wherever it
     }
     assertEqual(checkStaged({'doc.md': 'app_SomethingElseEntirely12345\n'}, {knownHashes: hashes}).ok, true);
 });
+
+test('structure: what the alert code subscribes to, it also lets go of', () => {
+    for (const path of ['lib/ui/notifier.js', 'lib/services/alertService.js', 'lib/services/power.js']) {
+        const source = text(path);
+        const pairs = [[/\.connect\(/g, /\.disconnect\(/g], [/\.setTimeout\(/g, /\.clearTimeout\(/g], [/signal_subscribe\(/g, /signal_unsubscribe\(/g]];
+        for (const [open, close] of pairs) {
+            const opened = (source.match(open) ?? []).length;
+            assertTrue(opened === 0 || (source.match(close) ?? []).length > 0, `${path}: ${open} without ${close}`);
+        }
+    }
+});
