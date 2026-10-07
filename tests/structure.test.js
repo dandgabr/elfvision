@@ -57,6 +57,11 @@ test('structure: GTK and Adwaita stay in the preferences window', () => {
     assertEqual(offenders(outside, PREFS_SIDE), []);
 });
 
+test('structure: the system bus is reached from the services only', () => {
+    const outside = [...sources('lib'), 'extension.js', 'prefs.js'].filter(path => !path.startsWith('lib/services/'));
+    assertEqual(outside.filter(path => /\bGio\.DBus\b|\bDBusProxy\b/.test(text(path))), []);
+});
+
 test('registry: ordered, unique, and only complete providers are available', () => {
     assertEqual(PROVIDERS.map(p => p.id), ['command-code', 'codex', 'claude', 'antigravity']);
     assertEqual(new Set(PROVIDERS.map(p => p.id)).size, PROVIDERS.length);
@@ -154,4 +159,15 @@ test('secret check: a word whose hash is on the known list is found, wherever it
         assertEqual([content, result.ok, result.err.includes('known client id')], [content, false, true]);
     }
     assertEqual(checkStaged({'doc.md': 'app_SomethingElseEntirely12345\n'}, {knownHashes: hashes}).ok, true);
+});
+
+test('structure: what the alert code subscribes to, it also lets go of', () => {
+    for (const path of ['lib/ui/notifier.js', 'lib/services/alertService.js', 'lib/services/power.js']) {
+        const source = text(path);
+        const pairs = [[/\.connect\(/g, /\.disconnect\(/g], [/\.setTimeout\(/g, /\.clearTimeout\(/g], [/signal_subscribe\(/g, /signal_unsubscribe\(/g]];
+        for (const [open, close] of pairs) {
+            const opened = (source.match(open) ?? []).length;
+            assertTrue(opened === 0 || (source.match(close) ?? []).length > 0, `${path}: ${open} without ${close}`);
+        }
+    }
 });

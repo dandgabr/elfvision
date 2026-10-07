@@ -1,8 +1,8 @@
 # 0007. Internationalization: English and pt-BR with gettext
 
 Status: accepted. English and pt-BR catalogs exist and every string goes through
-gettext. A language override in Preferences and a pseudo-locale check are not
-implemented.
+gettext. The extension follows the language of the GNOME Shell session and there is
+no language setting. A pseudo-locale check is not implemented.
 
 ## Context
 
@@ -14,8 +14,10 @@ formats. The repository language is English (ADR 0001).
 - **Languages:** English and Brazilian Portuguese. Another language needs only
   another `.po` file.
 - **Mechanism:** standard GNOME gettext (`Extension.gettext`, `ngettext`,
-  `pgettext`), with `.po` compiled to `.mo`. The extension follows the system
-  language.
+  `pgettext`), with `.po` compiled to `.mo`. The extension follows the language of
+  the GNOME Shell session; a language without a catalog shows the English source
+  strings (en_US). There is no override: forcing a language for the process would
+  translate the shell itself.
 - **Source strings are English** (`msgid`); pt-BR is a catalog entry.
 - Rules:
   - no sentence built by concatenation; use placeholders (`"resets in %s"`), because
@@ -44,5 +46,4 @@ tools/po-fill.py            rebuilds pt_BR.po from the template
 - Every user-visible string goes through gettext from the start.
 - When strings change, check the layout of any translation more than 25% longer than
   its source.
-- Planned: an option in Preferences to force the language, and a script that inflates
-  every string by about 40% to find layout overflow.
+- Planned: a script that inflates every string by about 40% to find layout overflow.

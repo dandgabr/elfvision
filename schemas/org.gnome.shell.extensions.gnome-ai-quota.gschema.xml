@@ -113,6 +113,65 @@
       <summary>Providers whose terms notice was accepted</summary>
       <description>Ids of the providers whose possible terms-of-use conflict the user confirmed before the first sign-in, so the notice is not shown again.</description>
     </key>
+    <key name="notifications-enabled" type="b">
+      <default>true</default>
+      <summary>Notifications</summary>
+      <description>Tell you with a system notification when a quota crosses its threshold, and when an account has been failing for a while. Turning this off keeps the bar and the popup as they are.</description>
+    </key>
+    <key name="alert-session-enabled" type="b">
+      <default>true</default>
+      <summary>Notify for five-hour quotas</summary>
+      <description>Whether a five-hour quota that crosses its threshold sends a notification.</description>
+    </key>
+    <key name="alert-session-percent" type="i">
+      <range min="1" max="100"/>
+      <default>95</default>
+      <summary>Threshold for five-hour quotas</summary>
+      <description>The used percentage at which a five-hour quota sends its notification. It sends another only after the usage falls 3 points below it or the quota resets.</description>
+    </key>
+    <key name="alert-week-enabled" type="b">
+      <default>true</default>
+      <summary>Notify for weekly quotas</summary>
+      <description>Whether a weekly quota that crosses its threshold sends a notification.</description>
+    </key>
+    <key name="alert-week-percent" type="i">
+      <range min="1" max="100"/>
+      <default>95</default>
+      <summary>Threshold for weekly quotas</summary>
+      <description>The used percentage at which a weekly quota sends its notification. It sends another only after the usage falls 3 points below it or the quota resets.</description>
+    </key>
+    <key name="alert-month-enabled" type="b">
+      <default>true</default>
+      <summary>Notify for monthly quotas</summary>
+      <description>Whether a monthly quota that crosses its threshold sends a notification.</description>
+    </key>
+    <key name="alert-month-percent" type="i">
+      <range min="1" max="100"/>
+      <default>95</default>
+      <summary>Threshold for monthly quotas</summary>
+      <description>The used percentage at which a monthly quota sends its notification. It sends another only after the usage falls 3 points below it or the quota resets.</description>
+    </key>
+    <key name="alert-credits-enabled" type="b">
+      <default>true</default>
+      <summary>Notify for credit quotas</summary>
+      <description>Whether a credit quota that crosses its threshold sends a notification.</description>
+    </key>
+    <key name="alert-credits-percent" type="i">
+      <range min="1" max="100"/>
+      <default>95</default>
+      <summary>Threshold for credit quotas</summary>
+      <description>The used percentage at which a credit quota sends its notification. It sends another only after the usage falls 3 points below it or the quota resets.</description>
+    </key>
+    <key name="alert-connection" type="b">
+      <default>true</default>
+      <summary>Notify about connection problems</summary>
+      <description>Tell you once when an account has been rejected, or its data has been missing, for a while. Providers you stopped tracking never notify.</description>
+    </key>
+    <key name="notify-details-on-lock" type="b">
+      <default>false</default>
+      <summary>Show details on the lock screen</summary>
+      <description>By default the text of a notification (provider and percentage) is hidden while the screen is locked. Turn this on to show it there.</description>
+    </key>
     <key name="demo-scenario" type="s">
       <choices>
         <choice value="steady"/>

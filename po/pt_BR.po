@@ -17,6 +17,64 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: lib/core/alertText.js:21
+msgid "Several quotas need attention"
+msgstr "Várias cotas pedem atenção"
+
+#: lib/core/alertText.js:22
+msgid "Open the panel to see which."
+msgstr "Abra o painel para ver quais."
+
+#: lib/core/alertText.js:25
+msgid "A provider"
+msgstr "Um provedor"
+
+#: lib/core/alertText.js:35
+msgid "Quota alert"
+msgstr "Alerta de cota"
+
+#: lib/core/alertText.js:58
+msgid "Critical: %s at %s%%"
+msgstr "Crítico: %s em %s%%"
+
+#: lib/core/alertText.js:58
+msgid "Warning: %s at %s%%"
+msgstr "Atenção: %s em %s%%"
+
+#: lib/core/alertText.js:61
+msgid "Credits"
+msgstr "Créditos"
+
+#: lib/core/alertText.js:63
+msgid "%s: %s%% of the budget used."
+msgstr "%s: %s%% do orçamento usado."
+
+#: lib/core/alertText.js:64
+msgid "%s: %s%% used."
+msgstr "%s: %s%% da cota usada."
+
+#: lib/core/alertText.js:67
+msgid "Resets in %s."
+msgstr "Reinicia em %s."
+
+#: lib/core/alertText.js:76
+msgid "%s: reconnect the account"
+msgstr "%s: reconecte a conta"
+
+#: lib/core/alertText.js:77
+msgid "The sign-in expired or was refused. Reconnect it in Preferences."
+msgstr "O login expirou ou foi recusado. Reconecte em Preferências."
+
+#: lib/core/alertText.js:81
+msgid "%s: no recent data"
+msgstr "%s: sem dados recentes"
+
+#: lib/core/alertText.js:82
+msgid ""
+"The last successful check was a while ago. The service may be down, or your "
+"connection."
+msgstr "A última consulta bem-sucedida foi há algum tempo. Verifique sua conexão ou o serviço."
+
 #: lib/core/viewmodel.js:40
 msgid "5 hours"
 msgstr "5 horas"
@@ -255,7 +313,7 @@ msgstr "Adicionar chave"
 msgid "Replace key"
 msgstr "Trocar chave"
 
-#: lib/core/viewmodel.js:317 lib/prefs/oauthGroup.js:102
+#: lib/core/viewmodel.js:317 lib/prefs/oauthGroup.js:102 lib/ui/notifier.js:67
 msgid "Reconnect"
 msgstr "Reconectar"
 
@@ -842,6 +900,14 @@ msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] "Oculto da barra (%d)"
 msgstr[1] "Ocultos da barra (%d)"
+
+#: lib/ui/notifier.js:69
+msgid "Open"
+msgstr "Abrir"
+
+#: lib/ui/notifier.js:93
+msgid "AI quota"
+msgstr "Cota de IA"
 
 #: lib/ui/providerCard.js:137
 msgid "Collapse %s"
