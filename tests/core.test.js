@@ -5,7 +5,7 @@ import {aheadOfPace, expectedPercent} from '../lib/core/pacing.js';
 import {selectForBar} from '../lib/core/selection.js';
 import {demoSnapshots} from '../lib/core/fixtures.js';
 import {candidateLayouts, chooseLayout, chooseStickyLayout, sideWidth} from '../lib/core/fit.js';
-import {SYMBOLS, barView, cardView, fmt, footerText, legendRows, problemCount, summaryText, untrackedProviders, updatedText} from '../lib/core/viewmodel.js';
+import {SYMBOLS, barTooltip, barView, cardView, fmt, footerText, legendRows, problemCount, summaryText, untrackedProviders, updatedText} from '../lib/core/viewmodel.js';
 
 const NOW = Date.UTC(2026, 9, 6, 19, 46);
 const demo = () => demoSnapshots(NOW);
@@ -735,17 +735,26 @@ test('legend: every mark the bar can show is explained, in the bar\'s own words'
     assertTrue(legendRows(t).every(row => row.title.startsWith('«') && row.description.startsWith('«')));
 });
 
-test('bar tooltip: the item\'s own words plus the reset, and nothing else', () => {
+test('bar tooltip: the item\'s own words plus the reset, made when it is shown, and nothing else', () => {
     const now = 1_800_000_000_000;
     const snapshot = {id: 'claude', name: 'Claude', plan: 'Max', state: 'ok', source: {kind: 'fresh', fetchedAt: now},
-        metrics: [{id: 'm', kind: 'percent', window: 'session', windowSecs: 18000, percentUsed: 72, resetsAt: now + 80 * 60 * 1000}]};
+        metrics: [{id: 'm', kind: 'percent', window: 'session', windowSecs: 18000, percentUsed: 82, resetsAt: now + 80 * 60 * 1000}]};
     const view = barView(snapshot, {nowMs: now});
-    assertEqual(view.tooltip, `${view.accessibleName}\nresets in 1h 20min`);
-    assertTrue(!view.tooltip.includes('Max'), 'the plan is not in the tooltip');
-    // A reset in the past, a failure and a balance have no second line.
-    assertEqual(barView({...snapshot, metrics: [{...snapshot.metrics[0], resetsAt: now - 1000}]}, {nowMs: now}).tooltip.includes('\n'), false);
-    assertEqual(barView({...snapshot, state: 'auth_required', metrics: []}, {nowMs: now}).tooltip.includes('\n'), false);
-    assertEqual(barView({...snapshot, metrics: [{id: 'usd', kind: 'money', balance: 5, budget: 10, currency: 'USD', percentUsed: 50, resetsAt: now + 1e6}]}, {nowMs: now}).tooltip.includes('\n'), false);
+    assertEqual(barTooltip(view, {nowMs: now}), 'Claude · 5 hours · 82% used (warning)\nResets in 1h 20min');
+    // The countdown is the one of the moment the tooltip is shown, not of the last update.
+    assertEqual(barTooltip(view, {nowMs: now + 30 * 60 * 1000}).split('\n')[1], 'Resets in 50min');
+    assertTrue(!barTooltip(view, {nowMs: now}).includes('Max'), 'the plan is not in the tooltip');
+    // Without a warning there is no state in brackets; critical says so.
+    assertEqual(barView({...snapshot, metrics: [{...snapshot.metrics[0], percentUsed: 40}]}, {nowMs: now}).tooltipHead, 'Claude · 5 hours · 40% used');
+    assertTrue(barView({...snapshot, metrics: [{...snapshot.metrics[0], percentUsed: 97}]}, {nowMs: now}).tooltipHead.endsWith('(critical)'));
+    // A reset in the past, a failure, a stale value and a balance have no second line.
+    const lines = (extra, nowMs = now) => barTooltip(barView({...snapshot, ...extra}, {nowMs}), {nowMs}).split('\n').length;
+    assertEqual(lines({metrics: [{...snapshot.metrics[0], resetsAt: now - 1000}]}), 1);
+    assertEqual(lines({state: 'auth_required', metrics: []}), 1);
+    assertEqual(lines({state: 'network'}), 2 - 1 + (barView({...snapshot, state: 'network'}, {nowMs: now}).resetsAt === null ? 0 : 1));
+    assertEqual(lines({metrics: [{id: 'usd', kind: 'money', balance: 5, budget: 10, currency: 'USD', percentUsed: 50, resetsAt: now + 1e6}]}), 1);
+    // What the memo of a bar item looks at includes the reset time, so a changed reset is redrawn.
+    assertTrue('resetsAt' in view && JSON.stringify(view).includes(String(now + 80 * 60 * 1000)));
 });
 
 test('not tracked: only known providers, in the registry\'s order', () => {

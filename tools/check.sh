@@ -74,10 +74,28 @@ js_syntax() {
     return "$status"
 }
 
+# The surest test that the extension loads: enable it in a real (headless) shell and read its state. The
+# unit tests cannot import the interface modules, and a name that is not defined or declared twice shows
+# only here.
+shell_loads() {
+    if ! command -v gnome-shell >/dev/null 2>&1 || ! command -v dbus-run-session >/dev/null 2>&1; then
+        echo "gnome-shell is not available; skipping"
+        return 0
+    fi
+    local out
+    out="$(timeout 120 tools/headless-shell.sh 2>&1)"
+    if grep -q "'state': <1.0>" <<<"$out" && grep -q "'error': <''>" <<<"$out"; then
+        return 0
+    fi
+    grep -E "'(state|error)'|Error" <<<"$out" | head -5
+    return 1
+}
+
 step "build" tools/build.sh
 step "unit tests" gjs -m tests/run.js
 step "script syntax" syntax
 step "javascript syntax" js_syntax
+step "extension enables in a shell" shell_loads
 step "shellcheck" lint
 step "schemas" glib-compile-schemas --strict --dry-run schemas
 step "translation template" template_in_step

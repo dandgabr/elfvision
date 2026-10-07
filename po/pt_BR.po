@@ -17,69 +17,69 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: lib/core/alertText.js:21
+#: lib/core/alertText.js:22
 msgid "Several quotas need attention"
 msgstr "Várias cotas pedem atenção"
 
-#: lib/core/alertText.js:22
+#: lib/core/alertText.js:23
 msgid "Open the panel to see which."
 msgstr "Abra o painel para ver quais."
 
-#: lib/core/alertText.js:27
+#: lib/core/alertText.js:28
 msgid "Test notification"
 msgstr "Notificação de teste"
 
-#: lib/core/alertText.js:28
+#: lib/core/alertText.js:29
 msgid ""
 "If you can read this, notifications work. With Do Not Disturb on, the banner "
 "is held and this waits in the list."
 msgstr "Se você está lendo isto, as notificações funcionam. Com o Não Perturbe ligado, o banner fica retido e esta espera na lista."
 
-#: lib/core/alertText.js:31
+#: lib/core/alertText.js:32
 msgid "A provider"
 msgstr "Um provedor"
 
-#: lib/core/alertText.js:41
+#: lib/core/alertText.js:42
 msgid "Quota alert"
 msgstr "Alerta de cota"
 
-#: lib/core/alertText.js:64
+#: lib/core/alertText.js:54
 msgid "Critical: %s at %s%%"
 msgstr "Crítico: %s em %s%%"
 
-#: lib/core/alertText.js:64
+#: lib/core/alertText.js:54
 msgid "Warning: %s at %s%%"
 msgstr "Atenção: %s em %s%%"
 
-#: lib/core/alertText.js:67 lib/prefs/notifications.js:22
+#: lib/core/alertText.js:57 lib/prefs/notifications.js:22
 msgid "Credits"
 msgstr "Créditos"
 
-#: lib/core/alertText.js:69
+#: lib/core/alertText.js:59
 msgid "%s: %s%% of the budget used."
 msgstr "%s: %s%% do orçamento usado."
 
-#: lib/core/alertText.js:70
+#: lib/core/alertText.js:60
 msgid "%s: %s%% used."
 msgstr "%s: %s%% da cota usada."
 
-#: lib/core/alertText.js:73
+#: lib/core/alertText.js:63
 msgid "Resets in %s."
 msgstr "Reinicia em %s."
 
-#: lib/core/alertText.js:82
+#: lib/core/alertText.js:72
 msgid "%s: reconnect the account"
 msgstr "%s: reconecte a conta"
 
-#: lib/core/alertText.js:83
+#: lib/core/alertText.js:73
 msgid "The sign-in expired or was refused. Reconnect it in Preferences."
 msgstr "O login expirou ou foi recusado. Reconecte em Preferências."
 
-#: lib/core/alertText.js:87
+#: lib/core/alertText.js:77
 msgid "%s: no recent data"
 msgstr "%s: sem dados recentes"
 
-#: lib/core/alertText.js:88
+#: lib/core/alertText.js:78
 msgid ""
 "The last successful check was a while ago. The service may be down, or your "
 "connection."
@@ -159,285 +159,293 @@ msgstr "%s: %s%% usado, %s (%s)"
 msgid "%s: %s%% of %s used"
 msgstr "%s: %s%% usado, %s"
 
-#: lib/core/viewmodel.js:135
+#: lib/core/viewmodel.js:135 lib/core/viewmodel.js:145
 msgid "critical"
 msgstr "crítico"
 
-#: lib/core/viewmodel.js:137
+#: lib/core/viewmodel.js:137 lib/core/viewmodel.js:145
 msgid "warning"
 msgstr "atenção"
 
-#: lib/core/viewmodel.js:145 lib/core/viewmodel.js:283
-msgid "resets in %s"
-msgstr "reinicia em %s"
+#: lib/core/viewmodel.js:146
+msgid "%s · %s · %s%% used"
+msgstr "%s · %s · %s%% usado"
 
-#: lib/core/viewmodel.js:165 lib/core/viewmodel.js:481
+#: lib/core/viewmodel.js:168 lib/core/viewmodel.js:499
 msgid "Critical"
 msgstr "Crítico"
 
-#: lib/core/viewmodel.js:166 lib/core/viewmodel.js:483
+#: lib/core/viewmodel.js:169 lib/core/viewmodel.js:501
 msgid "Warning"
 msgstr "Atenção"
 
-#: lib/core/viewmodel.js:169
+#: lib/core/viewmodel.js:172
 msgid "No key"
 msgstr "Sem chave"
 
-#: lib/core/viewmodel.js:170
+#: lib/core/viewmodel.js:173
 msgid "Key rejected"
 msgstr "Chave recusada"
 
-#: lib/core/viewmodel.js:171
+#: lib/core/viewmodel.js:174
 msgid "Sign-in expired"
 msgstr "Login expirou"
 
-#: lib/core/viewmodel.js:172
+#: lib/core/viewmodel.js:175
 msgid "Access refused"
 msgstr "Acesso recusado"
 
-#: lib/core/viewmodel.js:173
+#: lib/core/viewmodel.js:176
 msgid "Setup needed"
 msgstr "Configuração necessária"
 
-#: lib/core/viewmodel.js:174 lib/core/viewmodel.js:487
+#: lib/core/viewmodel.js:177 lib/core/viewmodel.js:505
 msgid "Not connected"
 msgstr "Não conectado"
 
-#: lib/core/viewmodel.js:179
+#: lib/core/viewmodel.js:182
 msgid "Keyring locked"
 msgstr "Chaveiro bloqueado"
 
-#: lib/core/viewmodel.js:179 lib/core/viewmodel.js:183
+#: lib/core/viewmodel.js:182 lib/core/viewmodel.js:186
 msgid "No connection"
 msgstr "Sem conexão"
 
-#: lib/core/viewmodel.js:180
+#: lib/core/viewmodel.js:183
 msgid "Rate limited"
 msgstr "Limite atingido"
 
-#: lib/core/viewmodel.js:181
+#: lib/core/viewmodel.js:184
 msgid "Unexpected reply"
 msgstr "Resposta inesperada"
 
-#: lib/core/viewmodel.js:182
+#: lib/core/viewmodel.js:185
 msgid "Service changed"
 msgstr "Serviço alterado"
 
-#: lib/core/viewmodel.js:189
+#: lib/core/viewmodel.js:192
 msgid "%s ago"
 msgstr "há %s"
 
-#: lib/core/viewmodel.js:190
+#: lib/core/viewmodel.js:193
 msgid "Out of date"
 msgstr "Desatualizado"
 
-#: lib/core/viewmodel.js:210
+#: lib/core/viewmodel.js:213
 msgid "No API key yet. Paste one in Preferences."
 msgstr "Ainda não há chave de API. Cole uma nas Preferências."
 
-#: lib/core/viewmodel.js:211
+#: lib/core/viewmodel.js:214
 msgid ""
 "The server rejected this key. Check it or paste a new one in Preferences."
 msgstr "O servidor recusou esta chave. Confira a chave ou cole outra nas Preferências."
 
-#: lib/core/viewmodel.js:212
+#: lib/core/viewmodel.js:215
 msgid ""
 "Your %s sign-in expired or was revoked. Connect again to keep seeing this "
 "quota."
 msgstr "O login do %s expirou ou foi revogado. Conecte de novo para continuar vendo esta cota."
 
-#: lib/core/viewmodel.js:213
+#: lib/core/viewmodel.js:216
 msgid "%s refused access. Check your account on its site."
 msgstr "O %s recusou o acesso. Veja sua conta no site dele."
 
-#: lib/core/viewmodel.js:214
+#: lib/core/viewmodel.js:217
 msgid ""
 "%s is not set up yet. Open Preferences and follow the steps for this account."
 msgstr "O %s ainda não foi configurado. Abra as Preferências e siga os passos desta conta."
 
-#: lib/core/viewmodel.js:215
+#: lib/core/viewmodel.js:218
 msgid "Open Preferences to connect this account."
 msgstr "Abra as Preferências para conectar esta conta."
 
-#: lib/core/viewmodel.js:218
+#: lib/core/viewmodel.js:221
 msgid "Too many requests."
 msgstr "O serviço pediu para esperar."
 
-#: lib/core/viewmodel.js:222
+#: lib/core/viewmodel.js:225
 msgid "The service replied in an unexpected way. Showing the last value."
 msgstr "O serviço respondeu de forma inesperada. Mostrando o último valor."
 
-#: lib/core/viewmodel.js:223
+#: lib/core/viewmodel.js:226
 msgid "The service replied in an unexpected way."
 msgstr "O serviço respondeu de forma inesperada."
 
-#: lib/core/viewmodel.js:226
+#: lib/core/viewmodel.js:229
 msgid "The service seems to have changed. This extension needs an update."
 msgstr "O serviço parece ter mudado. Esta extensão precisa de atualização."
 
-#: lib/core/viewmodel.js:230
+#: lib/core/viewmodel.js:233
 msgid "Can't read the keyring. Unlock it, then try again."
 msgstr "Não foi possível ler o chaveiro. Desbloqueie-o e tente de novo."
 
-#: lib/core/viewmodel.js:234
+#: lib/core/viewmodel.js:237
 msgid "Can't reach the service. Showing the last value, from %s ago."
 msgstr "Sem conexão com o serviço. Mostrando o último valor, obtido há %s."
 
-#: lib/core/viewmodel.js:235
+#: lib/core/viewmodel.js:238
 msgid "Couldn't get the data yet."
 msgstr "Ainda não foi possível obter os dados."
 
-#: lib/core/viewmodel.js:240
+#: lib/core/viewmodel.js:243
 msgid "Retrying in %s."
 msgstr "Nova tentativa em %s."
 
-#: lib/core/viewmodel.js:241
+#: lib/core/viewmodel.js:244
 msgid "Retrying soon."
 msgstr "Nova tentativa em breve."
 
-#: lib/core/viewmodel.js:257
+#: lib/core/viewmodel.js:260
 msgid "Balance"
 msgstr "Saldo"
 
-#: lib/core/viewmodel.js:260
+#: lib/core/viewmodel.js:263
 msgid "%s left"
 msgstr "%s disponível"
 
-#: lib/core/viewmodel.js:279
+#: lib/core/viewmodel.js:282
 msgid "%s%% used"
 msgstr "%s%% usado"
 
-#: lib/core/viewmodel.js:292
+#: lib/core/viewmodel.js:286
+msgid "resets in %s"
+msgstr "reinicia em %s"
+
+#: lib/core/viewmodel.js:295
 msgid "Expected by now: %s%%"
 msgstr "Esperado até agora: %s%%"
 
-#: lib/core/viewmodel.js:318
+#: lib/core/viewmodel.js:321
 msgid "left"
 msgstr "disponível"
 
-#: lib/core/viewmodel.js:336
+#: lib/core/viewmodel.js:339
 msgid "Add key"
 msgstr "Adicionar chave"
 
-#: lib/core/viewmodel.js:337
+#: lib/core/viewmodel.js:340
 msgid "Replace key"
 msgstr "Trocar chave"
 
-#: lib/core/viewmodel.js:338 lib/prefs/oauthGroup.js:102 lib/ui/notifier.js:68
+#: lib/core/viewmodel.js:341 lib/prefs/oauthGroup.js:102 lib/ui/notifier.js:68
 msgid "Reconnect"
 msgstr "Reconectar"
 
-#: lib/core/viewmodel.js:339 lib/ui/providerCard.js:190
+#: lib/core/viewmodel.js:342 lib/ui/providerCard.js:190
 msgid "Open Preferences"
 msgstr "Abrir Preferências"
 
-#: lib/core/viewmodel.js:353
+#: lib/core/viewmodel.js:356
 msgid "The last data is more than a day old."
 msgstr "Os últimos dados têm mais de um dia."
 
-#: lib/core/viewmodel.js:354
+#: lib/core/viewmodel.js:357
 msgid "No quota data yet."
 msgstr "Ainda sem dados de cota."
 
-#: lib/core/viewmodel.js:363
+#: lib/core/viewmodel.js:366
 msgid "Budget spent"
 msgstr "Orçamento gasto"
 
-#: lib/core/viewmodel.js:365
+#: lib/core/viewmodel.js:368
 msgid "of %s · %s%%"
 msgstr "de %s · %s%%"
 
-#: lib/core/viewmodel.js:367
+#: lib/core/viewmodel.js:370
 msgid "No reset: prepaid balance"
 msgstr "Sem reinício: saldo pré-pago"
 
-#: lib/core/viewmodel.js:393
+#: lib/core/viewmodel.js:396
 msgid "%s: %d point ahead of an even pace"
 msgid_plural "%s: %d points ahead of an even pace"
 msgstr[0] "%s: %d ponto acima do ritmo uniforme"
 msgstr[1] "%s: %d pontos acima do ritmo uniforme"
 
-#: lib/core/viewmodel.js:399
+#: lib/core/viewmodel.js:402
 msgid "Data is out of date."
 msgstr "Dado desatualizado."
 
-#: lib/core/viewmodel.js:425
+#: lib/core/viewmodel.js:428
 msgid "%d ok"
 msgstr "%d ok"
 
-#: lib/core/viewmodel.js:426
+#: lib/core/viewmodel.js:429
 msgid "%d warning"
 msgid_plural "%d warnings"
 msgstr[0] "%d em atenção"
 msgstr[1] "%d em atenção"
 
-#: lib/core/viewmodel.js:427
+#: lib/core/viewmodel.js:430
 msgid "%d critical"
 msgid_plural "%d critical"
 msgstr[0] "%d crítico"
 msgstr[1] "%d críticos"
 
-#: lib/core/viewmodel.js:428
+#: lib/core/viewmodel.js:431
 msgid "%d not connected"
 msgid_plural "%d not connected"
 msgstr[0] "%d não conectado"
 msgstr[1] "%d não conectados"
 
-#: lib/core/viewmodel.js:429
+#: lib/core/viewmodel.js:432
 msgid "%d with a problem"
 msgstr "%d com problema"
 
-#: lib/core/viewmodel.js:441
+#: lib/core/viewmodel.js:444
 msgid "Updated %d min ago"
 msgstr "Atualizado há %d min"
 
-#: lib/core/viewmodel.js:441
+#: lib/core/viewmodel.js:444
 msgid "Updated just now"
 msgstr "Atualizado agora"
 
-#: lib/core/viewmodel.js:456
+#: lib/core/viewmodel.js:459
 msgid "Not updated yet"
 msgstr "Ainda não atualizado"
 
-#: lib/core/viewmodel.js:459
+#: lib/core/viewmodel.js:462
 msgid "%s · %d with a problem"
 msgid_plural "%s · %d with problems"
 msgstr[0] "%s · %d com problema"
 msgstr[1] "%s · %d com problemas"
 
-#: lib/core/viewmodel.js:482
+#: lib/core/viewmodel.js:486
+msgid "Resets in %s"
+msgstr "Reinicia em %s"
+
+#: lib/core/viewmodel.js:500
 msgid "The quota is nearly used up."
 msgstr "A cota está quase toda usada."
 
-#: lib/core/viewmodel.js:484
+#: lib/core/viewmodel.js:502
 msgid "The quota is getting high."
 msgstr "A cota está ficando alta."
 
-#: lib/core/viewmodel.js:485
+#: lib/core/viewmodel.js:503
 msgid "Approximate"
 msgstr "Aproximado"
 
-#: lib/core/viewmodel.js:486
+#: lib/core/viewmodel.js:504
 msgid "The last known value; the service could not be reached just now."
 msgstr "O último valor conhecido; não foi possível consultar o serviço agora."
 
-#: lib/core/viewmodel.js:488
+#: lib/core/viewmodel.js:506
 msgid "Sign in again, or add a key, in Preferences."
-msgstr "Entre de novo, ou adicione uma chave, nas Preferências."
+msgstr "Entre novamente ou adicione uma chave nas Preferências."
 
-#: lib/core/viewmodel.js:489
+#: lib/core/viewmodel.js:507
 msgid "Problem"
 msgstr "Problema"
 
-#: lib/core/viewmodel.js:490
+#: lib/core/viewmodel.js:508
 msgid "The service could not be reached or replied in an unexpected way."
 msgstr "Não foi possível consultar o serviço, ou ele respondeu de um jeito inesperado."
 
-#: lib/core/viewmodel.js:491
+#: lib/core/viewmodel.js:509
 msgid "Pace"
 msgstr "Ritmo"
 
-#: lib/core/viewmodel.js:492
+#: lib/core/viewmodel.js:510
 msgid ""
 "The mark on a bar is where the usage would be if it were spread evenly until "
 "the reset."
@@ -1010,69 +1018,69 @@ msgstr "Uma interface de terminal em texto."
 msgid "Raw HTML and dense tables."
 msgstr "HTML cru e tabelas densas."
 
-#: lib/ui/indicator.js:158
+#: lib/ui/indicator.js:159
 msgid "Add account"
 msgstr "Adicionar conta"
 
-#: lib/ui/indicator.js:197
+#: lib/ui/indicator.js:203
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: lib/ui/indicator.js:198
+#: lib/ui/indicator.js:204
 msgid "Preferences"
 msgstr "Preferências"
 
-#: lib/ui/indicator.js:211
+#: lib/ui/indicator.js:215 lib/ui/indicator.js:216
 msgid "What the marks on the bar mean"
 msgstr "O que significam as marcas da barra"
 
-#: lib/ui/indicator.js:242
+#: lib/ui/indicator.js:266
 msgid "Refreshing…"
 msgstr "Atualizando…"
 
-#: lib/ui/indicator.js:308 prefs.js:277
+#: lib/ui/indicator.js:334 prefs.js:277
 msgid "Demo data (made up)"
 msgstr "Dados de demonstração (fictícios)"
 
-#: lib/ui/indicator.js:359
+#: lib/ui/indicator.js:385
 msgid "Waiting for the first update…"
 msgstr "Aguardando a primeira atualização…"
 
-#: lib/ui/indicator.js:362
+#: lib/ui/indicator.js:388
 msgid "Nothing connected yet."
 msgstr "Nada conectado ainda."
 
-#: lib/ui/indicator.js:362
+#: lib/ui/indicator.js:388
 msgid "Nothing is being tracked."
 msgstr "Nada está sendo acompanhado."
 
-#: lib/ui/indicator.js:364
-msgid "Resume one of the providers below."
-msgstr "Retome um dos provedores abaixo."
+#: lib/ui/indicator.js:390
+msgid "Resume a provider below to see its quota."
+msgstr "Retome um provedor abaixo para ver a cota."
 
-#: lib/ui/indicator.js:365
+#: lib/ui/indicator.js:391
 msgid "Add an account in Preferences to see your quotas here."
 msgstr "Adicione uma conta nas Preferências para ver suas cotas aqui."
 
-#: lib/ui/indicator.js:495
+#: lib/ui/indicator.js:521
 msgid "Nothing connected yet"
 msgstr "Nada conectado ainda"
 
-#: lib/ui/indicator.js:501
+#: lib/ui/indicator.js:527
 msgid "Waiting for the first update"
 msgstr "Aguardando a primeira atualização"
 
-#: lib/ui/indicator.js:524
+#: lib/ui/indicator.js:551
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] "mais %d provedor (abra para ver)"
 msgstr[1] "mais %d provedores (abra para ver)"
 
-#: lib/ui/indicator.js:539
+#: lib/ui/indicator.js:566
 msgid "On the bar"
 msgstr "Na barra"
 
-#: lib/ui/indicator.js:542
+#: lib/ui/indicator.js:569
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] "Oculto da barra (%d)"
@@ -1086,21 +1094,21 @@ msgstr "Abrir"
 msgid "AI quota"
 msgstr "Cota de IA"
 
-#: lib/ui/popupExtras.js:18
+#: lib/ui/popupExtras.js:20
 msgid "Marks on the bar"
-msgstr "Marcas da barra"
+msgstr "Marcas na barra"
 
-#: lib/ui/popupExtras.js:77
+#: lib/ui/popupExtras.js:92
 msgid "Not tracked (%d)"
 msgid_plural "Not tracked (%d)"
 msgstr[0] "Não acompanhado (%d)"
 msgstr[1] "Não acompanhados (%d)"
 
-#: lib/ui/popupExtras.js:87
+#: lib/ui/popupExtras.js:102
 msgid "Resume"
 msgstr "Retomar"
 
-#: lib/ui/popupExtras.js:88
+#: lib/ui/popupExtras.js:103
 msgid "Resume tracking %s"
 msgstr "Retomar o acompanhamento de %s"
 
