@@ -548,3 +548,47 @@ test('codex provider: 403, rate limits, odd replies and every token failure are 
     }
     assertEqual((await failureOf(codex({replies: [], tokenError: new Error('boom')}).provider.fetch(ctx))).code, 'network');
 });
+
+// ---- Claude usage
+
+import {parseUsage as parseClaudeUsage} from '../lib/core/claude.js';
+import {createClaudeProvider} from '../lib/providers/claude.js';
+
+test('claude: both windows are read with their percentage and RFC 3339 reset', () => {
+    const {metrics} = parseClaudeUsage({
+        five_hour: {utilization: 37.5, resets_at: '2026-10-08T03:00:00.000000+00:00'},
+        seven_day: {utilization: 12, resets_at: '2026-10-12T05:00:00Z'},
+        seven_day_opus: null,
+        overage: null,
+    });
+    assertEqual(metrics.map(m => [m.id, m.window, m.windowSecs, m.percentUsed]), [['session', 'session', 18000, 37.5], ['week', 'week', 604800, 12]]);
+    assertEqual([metrics[0].resetsAt, metrics[1].resetsAt], [Date.parse('2026-10-08T03:00:00Z'), Date.parse('2026-10-12T05:00:00Z')]);
+});
+
+test('claude: a missing window is absent, a bad reset is dropped, nothing usable is a change', () => {
+    const one = parseClaudeUsage({five_hour: null, seven_day: {utilization: 150, resets_at: 'not a date'}});
+    assertEqual([one.metrics.length, one.metrics[0].percentUsed, one.metrics[0].resetsAt], [1, 100, undefined]);
+    for (const body of [null, 'x', {}, {five_hour: {utilization: 'a'}}, {five_hour: {resets_at: '2026-01-01T00:00:00Z'}}]) {
+        let code = '';
+        try {
+            parseClaudeUsage(body);
+        } catch (error) {
+            code = error.code;
+        }
+        assertEqual([JSON.stringify(body), code], [JSON.stringify(body), 'provider_changed']);
+    }
+});
+
+test('claude provider: sends the beta header with the bearer token and renews once after a 401', async () => {
+    const seen = [];
+    let n = 0;
+    const replies = [{status: 401, json: null}, {status: 200, json: {five_hour: {utilization: 5, resets_at: '2026-10-08T03:00:00Z'}}}];
+    const provider = createClaudeProvider({
+        http: {get: async (url, options) => { seen.push({url, headers: options.headers}); return replies.shift(); }},
+        tokens: {accessToken: async () => `tok${++n}`, invalidate: () => {}},
+    });
+    const body = await provider.fetch({isCancelled: () => false});
+    assertEqual(body.metrics.length, 1);
+    assertEqual(seen.map(s => s.url), ['https://api.anthropic.com/api/oauth/usage', 'https://api.anthropic.com/api/oauth/usage']);
+    assertEqual(seen.map(s => [s.headers['anthropic-beta'], s.headers.Authorization]), [['oauth-2025-04-20', 'Bearer tok1'], ['oauth-2025-04-20', 'Bearer tok2']]);
+});

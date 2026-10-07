@@ -156,6 +156,19 @@ id being in the repository.
 - Until the extension has asked the keyring which accounts are connected, an empty list
   means "not known yet": the empty state is not shown, and the cache keeps the values it had.
 
+## Providers added so far
+
+- **Codex** (open-source client): authorize and token on `auth.openai.com`, form code exchange,
+  JSON refresh, return address `http://127.0.0.1:1455/auth/callback` (1457 as a fallback), usage
+  at `chatgpt.com/backend-api/wham/usage`. A plan without a five-hour window reports only the
+  weekly one.
+- **Claude** (read from the installed Claude Code program): authorize at
+  `claude.com/cai/oauth/authorize`, token at `platform.claude.com/v1/oauth/token` with JSON
+  for both the exchange (which also carries the `state`) and the refresh, return address
+  `http://localhost:<free port>/callback`, usage at `api.anthropic.com/api/oauth/usage` with the
+  header `anthropic-beta: oauth-2025-04-20`. Only the `user:profile` scope is asked; the program
+  itself asks more, to run the model.
+
 ## Implementation order
 
 1. Registry and metadata for Command Code, and the Accounts page generated from it.

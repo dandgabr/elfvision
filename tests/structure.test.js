@@ -54,7 +54,7 @@ test('structure: GTK and Adwaita stay in the preferences window', () => {
 test('registry: ordered, unique, and only complete providers are available', () => {
     assertEqual(PROVIDERS.map(p => p.id), ['command-code', 'codex', 'claude', 'antigravity']);
     assertEqual(new Set(PROVIDERS.map(p => p.id)).size, PROVIDERS.length);
-    assertEqual(LIVE_PROVIDER_IDS, ['command-code', 'codex']);
+    assertEqual(LIVE_PROVIDER_IDS, ['command-code', 'codex', 'claude']);
     for (const meta of PROVIDERS) {
         assertTrue(['api-key', 'oauth-pkce'].includes(meta.auth), meta.id);
         assertTrue(meta.apiHosts.every(host => /^[a-z0-9.-]+$/.test(host)), `${meta.id} hosts`);

@@ -36,7 +36,7 @@ Planned providers:
 |---|---|---|
 | Command Code | API key in the keyring | M2 |
 | Codex | OAuth 2 with PKCE | M3, available |
-| Claude | OAuth 2 with PKCE | M3 |
+| Claude | OAuth 2 with PKCE | M3, available |
 | Antigravity | OAuth 2 with PKCE (Google) | M3 |
 
 Providers billed by money, such as OpenRouter, fit the same data model as a `money`
@@ -46,8 +46,8 @@ metric and come after these four.
 
 1. Open Preferences and go to **Accounts**.
 2. **Command Code:** paste an API key (the page links to where keys are created).
-3. **Codex:** run `python3 -I tools/import-client-ids.py` once (it finds the public client id of
-   your installed Codex and stores it in `~/.config/gnome-ai-quota/providers.local.json`, private
+3. **Codex** and **Claude:** run `python3 -I tools/import-client-ids.py` once (it finds the public
+   client id of each installed tool and stores it in `~/.config/gnome-ai-quota/providers.local.json`, private
    to you), then press **Connect** and sign in in the browser.
 
 Nothing appears on the bar until an account is connected.

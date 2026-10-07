@@ -303,3 +303,15 @@ test('oauth sign-in: pasting the address finishes it when the browser cannot rea
     assertEqual(failureOf(() => bare.submit('ac_ANOTHER-CODE_1')).code, 'malformed');
     bare.token.stop();
 });
+
+import {codeExchangeRequest} from '../lib/oauth/protocol.js';
+
+test('oauth protocol: the code exchange is a form, or JSON with the state when the provider wants it', () => {
+    const fields = {clientId: 'c1', code: 'cd', redirectUri: 'http://localhost:9/callback', verifier: 'v', state: 'st'};
+    const form = codeExchangeRequest({}, fields);
+    assertEqual(form.contentType, 'application/x-www-form-urlencoded');
+    assertTrue(form.body.includes('grant_type=authorization_code') && !form.body.includes('state='));
+    const json = codeExchangeRequest({exchangeEncoding: 'json', exchangeSendsState: true}, fields);
+    assertEqual([json.contentType, JSON.parse(json.body)], ['application/json', {
+        grant_type: 'authorization_code', code: 'cd', redirect_uri: 'http://localhost:9/callback', client_id: 'c1', code_verifier: 'v', state: 'st'}]);
+});

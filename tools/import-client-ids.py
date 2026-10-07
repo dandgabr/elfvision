@@ -33,6 +33,12 @@ PROVIDERS = {
         'public_pattern': r'CLIENT_ID:\s*&str\s*=\s*"([^"]+)"',
         'id_pattern': r'^app_[A-Za-z0-9]{24}$',
     },
+    'claude': {
+        'command': 'claude',
+        # Claude Code is not open source: the id sits next to the token address in its program.
+        'binary_pattern': rb'TOKEN_URL:"https://platform\.claude\.com/v1/oauth/token".{0,900}?CLIENT_ID:"([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})"',
+        'id_pattern': r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
+    },
 }
 
 
@@ -68,25 +74,35 @@ def looks_like_an_id(text):
 
 
 def from_binary(spec):
-    """The id in the tool's own program (the file named like its command), when exactly
-    one candidate there looks like an id. Anything less certain falls through to the
-    open-source code."""
-    pattern = re.compile(spec['binary_pattern'])
-    for file in candidate_binaries(spec['command']):
-        if file.name != spec['command']:
+    """The id in the tool's own program, when exactly one candidate looks like an id. The
+    program is what the command resolves to (a launcher script is followed to the real
+    file), plus files in its package named like the command. Anything less certain falls
+    through to the open-source code, if the tool has one."""
+    pattern = re.compile(spec['binary_pattern'], re.DOTALL)
+    candidates = candidate_binaries(spec['command'])
+    for index, file in enumerate(candidates):
+        if index > 0 and file.name != spec['command']:
             continue
         try:
             data = file.read_bytes()
         except OSError:
             continue
-        ids = {match.decode() for match in pattern.findall(data)}
-        ids = {value for value in ids if looks_like_an_id(value)}
-        if len(ids) == 1:
-            return ids.pop(), 'the installed program'
+        found = set()
+        for match in pattern.findall(data):
+            value = match.decode() if isinstance(match, bytes) else match.decode()
+            found.add(value)
+        if 'id_pattern' in spec:
+            found = {value for value in found if re.fullmatch(spec['id_pattern'], value)}
+        else:
+            found = {value for value in found if looks_like_an_id(value)}
+        if len(found) == 1:
+            return found.pop(), 'the installed program'
     return None, None
 
 
 def from_public_source(spec):
+    if 'public_url' not in spec:
+        return None, None
     try:
         with urllib.request.urlopen(spec['public_url'], timeout=20) as reply:  # noqa: S310 (fixed https url)
             text = reply.read(2_000_000).decode('utf-8', 'replace')
