@@ -1,0 +1,196 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-ai-quota package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-ai-quota\n"
+"Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
+"POT-Creation-Date: 2026-10-06 21:45-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: lib/core/viewmodel.js:42
+msgid "5 hours"
+msgstr ""
+
+#: lib/core/viewmodel.js:43
+msgid "Week"
+msgstr ""
+
+#: lib/core/viewmodel.js:44
+msgid "Month"
+msgstr ""
+
+#: lib/core/viewmodel.js:52
+msgctxt "window suffix"
+msgid "W"
+msgstr ""
+
+#: lib/core/viewmodel.js:53
+msgctxt "window suffix"
+msgid "M"
+msgstr ""
+
+#: lib/core/viewmodel.js:98
+#, javascript-format
+msgid "%s: not signed in"
+msgstr ""
+
+#: lib/core/viewmodel.js:100
+#, javascript-format
+msgid "%s: connection problem"
+msgstr ""
+
+#: lib/core/viewmodel.js:102
+#, javascript-format
+msgid "%s: data out of date"
+msgstr ""
+
+#: lib/core/viewmodel.js:104
+#, javascript-format
+msgid "%s: %s left"
+msgstr ""
+
+#: lib/core/viewmodel.js:106
+#, javascript-format
+msgid "%s: %s%% of %s used"
+msgstr ""
+
+#: lib/core/viewmodel.js:125
+msgid "Critical"
+msgstr ""
+
+#: lib/core/viewmodel.js:126
+msgid "Warning"
+msgstr ""
+
+#: lib/core/viewmodel.js:127
+msgid "Signed out"
+msgstr ""
+
+#: lib/core/viewmodel.js:128
+msgid "Offline"
+msgstr ""
+
+#: lib/core/viewmodel.js:131
+#, javascript-format
+msgid "%s ago"
+msgstr ""
+
+#: lib/core/viewmodel.js:149
+#, javascript-format
+msgid "resets in %s"
+msgstr ""
+
+#: lib/core/viewmodel.js:180
+msgid "left"
+msgstr ""
+
+#: lib/core/viewmodel.js:189
+msgid "Account not connected. Sign in to resume tracking this quota."
+msgstr ""
+
+#: lib/core/viewmodel.js:197
+msgid "Budget spent"
+msgstr ""
+
+#: lib/core/viewmodel.js:199
+#, javascript-format
+msgid "of %s · %s%%"
+msgstr ""
+
+#: lib/core/viewmodel.js:201
+msgid "No reset: prepaid balance"
+msgstr ""
+
+#: lib/core/viewmodel.js:226
+#, javascript-format
+msgid "Pace: %d point above expected"
+msgid_plural "Pace: %d points above expected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/core/viewmodel.js:231
+msgid "Data is out of date."
+msgstr ""
+
+#: lib/core/viewmodel.js:233
+msgid "Connection problem. Showing the last known value."
+msgstr ""
+
+#: lib/core/viewmodel.js:257
+#, javascript-format
+msgid "%d ok"
+msgstr ""
+
+#: lib/core/viewmodel.js:258
+#, javascript-format
+msgid "%d warning"
+msgstr ""
+
+#: lib/core/viewmodel.js:259
+#, javascript-format
+msgid "%d critical"
+msgstr ""
+
+#: lib/core/viewmodel.js:260
+#, javascript-format
+msgid "%d with a problem"
+msgstr ""
+
+#: lib/core/viewmodel.js:272
+#, javascript-format
+msgid "Updated %d min ago"
+msgstr ""
+
+#: lib/core/viewmodel.js:272
+msgid "Updated just now"
+msgstr ""
+
+#: lib/ui/indicator.js:81
+msgid "Refresh"
+msgstr ""
+
+#: lib/ui/indicator.js:89
+msgid "Preferences"
+msgstr ""
+
+#: lib/ui/indicator.js:147
+msgid "On the bar"
+msgstr ""
+
+#: lib/ui/indicator.js:149
+#, javascript-format
+msgid "Hidden from the bar (%d)"
+msgid_plural "Hidden from the bar (%d)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/ui/providerCard.js:92
+msgid "Collapse"
+msgstr ""
+
+#: lib/ui/providerCard.js:92
+msgid "Expand"
+msgstr ""
+
+#: prefs.js:8
+msgid "Appearance"
+msgstr ""
+
+#: prefs.js:12
+msgid "Demo build"
+msgstr ""
+
+#: prefs.js:13
+msgid "Settings arrive in later milestones. This build shows demo data."
+msgstr ""

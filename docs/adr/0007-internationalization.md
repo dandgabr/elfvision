@@ -31,7 +31,6 @@ formats. The repository language is English (ADR 0001).
 ```
 po/gnome-ai-quota.pot     catalog generated from the code
 po/pt_BR.po               main translation
-po/en.po                  English review
 locale/*/LC_MESSAGES/*.mo generated (ignored by git)
 tools/i18n.sh             xgettext + msgmerge + msgfmt
 ```

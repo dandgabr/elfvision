@@ -1,0 +1,195 @@
+# Brazilian Portuguese translation for gnome-ai-quota.
+# Copyright (C) 2026 the gnome-ai-quota authors.
+# This file is distributed under the same license as the gnome-ai-quota package.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-ai-quota\n"
+"Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
+"POT-Creation-Date: 2026-10-06 21:45-0300\n"
+"PO-Revision-Date: 2026-10-06 21:45-0300\n"
+"Last-Translator: gnome-ai-quota authors\n"
+"Language-Team: Brazilian Portuguese\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: lib/core/viewmodel.js:42
+msgid "5 hours"
+msgstr "5 horas"
+
+#: lib/core/viewmodel.js:43
+msgid "Week"
+msgstr "Semana"
+
+#: lib/core/viewmodel.js:44
+msgid "Month"
+msgstr "Mês"
+
+#: lib/core/viewmodel.js:52
+msgctxt "window suffix"
+msgid "W"
+msgstr "S"
+
+#: lib/core/viewmodel.js:53
+msgctxt "window suffix"
+msgid "M"
+msgstr "M"
+
+#: lib/core/viewmodel.js:98
+#, javascript-format
+msgid "%s: not signed in"
+msgstr "%s: sem login"
+
+#: lib/core/viewmodel.js:100
+#, javascript-format
+msgid "%s: connection problem"
+msgstr "%s: problema de conexão"
+
+#: lib/core/viewmodel.js:102
+#, javascript-format
+msgid "%s: data out of date"
+msgstr "%s: dados desatualizados"
+
+#: lib/core/viewmodel.js:104
+#, javascript-format
+msgid "%s: %s left"
+msgstr "%s: restam %s"
+
+#: lib/core/viewmodel.js:106
+#, javascript-format
+msgid "%s: %s%% of %s used"
+msgstr "%s: %s%% usado (%s)"
+
+#: lib/core/viewmodel.js:125
+msgid "Critical"
+msgstr "Crítico"
+
+#: lib/core/viewmodel.js:126
+msgid "Warning"
+msgstr "Atenção"
+
+#: lib/core/viewmodel.js:127
+msgid "Signed out"
+msgstr "Sem login"
+
+#: lib/core/viewmodel.js:128
+msgid "Offline"
+msgstr "Sem conexão"
+
+#: lib/core/viewmodel.js:131
+#, javascript-format
+msgid "%s ago"
+msgstr "há %s"
+
+#: lib/core/viewmodel.js:149
+#, javascript-format
+msgid "resets in %s"
+msgstr "reinicia em %s"
+
+#: lib/core/viewmodel.js:180
+msgid "left"
+msgstr "restam"
+
+#: lib/core/viewmodel.js:189
+msgid "Account not connected. Sign in to resume tracking this quota."
+msgstr "Conta não conectada. Entre para voltar a acompanhar a cota."
+
+#: lib/core/viewmodel.js:197
+msgid "Budget spent"
+msgstr "Orçamento gasto"
+
+#: lib/core/viewmodel.js:199
+#, javascript-format
+msgid "of %s · %s%%"
+msgstr "de %s · %s%%"
+
+#: lib/core/viewmodel.js:201
+msgid "No reset: prepaid balance"
+msgstr "Sem reset: saldo pré-pago"
+
+#: lib/core/viewmodel.js:226
+#, javascript-format
+msgid "Pace: %d point above expected"
+msgid_plural "Pace: %d points above expected"
+msgstr[0] "Ritmo: %d ponto acima do esperado"
+msgstr[1] "Ritmo: %d pontos acima do esperado"
+
+#: lib/core/viewmodel.js:231
+msgid "Data is out of date."
+msgstr "Dado desatualizado."
+
+#: lib/core/viewmodel.js:233
+msgid "Connection problem. Showing the last known value."
+msgstr "Problema de conexão. Mostrando o último valor conhecido."
+
+#: lib/core/viewmodel.js:257
+#, javascript-format
+msgid "%d ok"
+msgstr "%d ok"
+
+#: lib/core/viewmodel.js:258
+#, javascript-format
+msgid "%d warning"
+msgstr "%d em atenção"
+
+#: lib/core/viewmodel.js:259
+#, javascript-format
+msgid "%d critical"
+msgstr "%d crítico(s)"
+
+#: lib/core/viewmodel.js:260
+#, javascript-format
+msgid "%d with a problem"
+msgstr "%d com problema"
+
+#: lib/core/viewmodel.js:272
+#, javascript-format
+msgid "Updated %d min ago"
+msgstr "Atualizado há %d min"
+
+#: lib/core/viewmodel.js:272
+msgid "Updated just now"
+msgstr "Atualizado agora"
+
+#: lib/ui/indicator.js:81
+msgid "Refresh"
+msgstr "Atualizar"
+
+#: lib/ui/indicator.js:89
+msgid "Preferences"
+msgstr "Preferências"
+
+#: lib/ui/indicator.js:147
+msgid "On the bar"
+msgstr "Na barra"
+
+#: lib/ui/indicator.js:149
+#, javascript-format
+msgid "Hidden from the bar (%d)"
+msgid_plural "Hidden from the bar (%d)"
+msgstr[0] "Oculto da barra (%d)"
+msgstr[1] "Ocultos da barra (%d)"
+
+#: lib/ui/providerCard.js:92
+msgid "Collapse"
+msgstr "Recolher"
+
+#: lib/ui/providerCard.js:92
+msgid "Expand"
+msgstr "Expandir"
+
+#: prefs.js:8
+msgid "Appearance"
+msgstr "Aparência"
+
+#: prefs.js:12
+msgid "Demo build"
+msgstr "Versão de demonstração"
+
+#: prefs.js:13
+msgid "Settings arrive in later milestones. This build shows demo data."
+msgstr "As configurações chegam em marcos futuros. Esta versão mostra dados de demonstração."

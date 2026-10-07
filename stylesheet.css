@@ -1,0 +1,333 @@
+/* gnome-ai-quota, theme "sistema-gnome" (dark, follows the shell popup).
+ * St has no var(), so every state is a class: gaq-ok, gaq-warning,
+ * gaq-critical, gaq-stale, gaq-auth, gaq-error. Class names are prefixed
+ * with gaq- so nothing leaks into the shell theme. */
+
+/* ---------- top bar ---------- */
+
+.gaq-bar {
+    spacing: 2px;
+}
+
+.gaq-item {
+    padding: 0 2px;
+}
+
+.gaq-row {
+    spacing: 3px;
+    padding: 1px 5px;
+    border: 1px solid transparent;
+    border-radius: 99px;
+}
+
+.gaq-icon {
+    icon-size: 16px;
+}
+
+.gaq-number {
+    font-size: 14px;
+    font-weight: 700;
+    min-width: 1.6em;
+    text-align: right;
+}
+
+.gaq-value {
+    spacing: 1px;
+}
+
+.gaq-percent {
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.gaq-suffix {
+    font-size: 10px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.gaq-glyph {
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.gaq-glyph-icon {
+    icon-size: 12px;
+}
+
+.gaq-meter-bar {
+    margin: 0 8px 3px 8px;
+}
+
+.gaq-item.gaq-warning .gaq-number,
+.gaq-item.gaq-warning .gaq-glyph {
+    font-weight: 800;
+    color: #f5c211;
+}
+
+.gaq-item.gaq-critical .gaq-number,
+.gaq-item.gaq-critical .gaq-glyph {
+    font-weight: 800;
+    color: #ff7b63;
+}
+
+.gaq-item.gaq-critical .gaq-row {
+    background-color: rgba(255, 123, 99, 0.22);
+    border-color: #ff7b63;
+}
+
+.gaq-item.gaq-stale .gaq-number {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.gaq-item.gaq-stale .gaq-icon,
+.gaq-item.gaq-auth .gaq-icon,
+.gaq-item.gaq-error .gaq-icon,
+.gaq-item.gaq-error .gaq-number {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.gaq-item.gaq-auth .gaq-number {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.gaq-item.gaq-error .gaq-glyph-icon {
+    color: #ffa348;
+}
+
+/* ---------- meter (shared by the bar and the popup) ---------- */
+
+.gaq-meter {
+    height: 8px;
+    border-radius: 99px;
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.gaq-meter-thin {
+    height: 5px;
+}
+
+.gaq-meter-bar {
+    height: 3px;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.gaq-meter-fill {
+    border-radius: 99px;
+    background-color: #62a0ea;
+}
+
+.gaq-meter-bar .gaq-meter-fill {
+    border-radius: 2px;
+}
+
+.gaq-meter-fill.gaq-warning {
+    background-color: #f5c211;
+}
+
+.gaq-meter-fill.gaq-critical {
+    background-color: #ff7b63;
+}
+
+.gaq-meter-fill.gaq-error {
+    background-color: #ffa348;
+}
+
+.gaq-meter-tick {
+    width: 2px;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* ---------- popup ---------- */
+
+.gaq-popup {
+    width: 380px;
+    spacing: 12px;
+}
+
+.gaq-content {
+    spacing: 12px;
+    padding-right: 2px;
+}
+
+.gaq-cards {
+    spacing: 12px;
+}
+
+.gaq-summary {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.62);
+    padding: 0 2px;
+}
+
+.gaq-section {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.62);
+    padding: 2px 2px 0 2px;
+}
+
+.gaq-card {
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 14px 16px;
+    spacing: 8px;
+}
+
+.gaq-card.gaq-critical {
+    border-color: #ff7b63;
+}
+
+.gaq-card.gaq-stale {
+    opacity: 204;
+}
+
+.gaq-card-header {
+    spacing: 8px;
+}
+
+.gaq-card-icon {
+    icon-size: 18px;
+}
+
+.gaq-card-name {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.gaq-card-plan {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.gaq-chevron {
+    padding: 2px;
+    border-radius: 8px;
+}
+
+.gaq-chevron:hover,
+.gaq-chevron:focus {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.gaq-chevron-icon {
+    icon-size: 14px;
+}
+
+.gaq-hero-box {
+    spacing: 2px;
+}
+
+.gaq-hero {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.gaq-hero-small {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.62);
+    padding-bottom: 2px;
+}
+
+.gaq-card.gaq-warning .gaq-hero {
+    color: #f5c211;
+}
+
+.gaq-card.gaq-critical .gaq-hero {
+    color: #ff7b63;
+}
+
+.gaq-pill {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.gaq-pill-warning {
+    color: #f5c211;
+    border-color: #f5c211;
+}
+
+.gaq-pill-critical {
+    color: #ff7b63;
+    border-color: #ff7b63;
+    background-color: rgba(255, 123, 99, 0.22);
+}
+
+.gaq-pill-error {
+    color: #ffa348;
+    border-color: #ffa348;
+}
+
+.gaq-card-body {
+    spacing: 8px;
+}
+
+.gaq-window {
+    spacing: 2px;
+}
+
+.gaq-pool {
+    padding-top: 4px;
+}
+
+.gaq-muted {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.gaq-strong {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.gaq-strong.gaq-warning {
+    color: #f5c211;
+}
+
+.gaq-strong.gaq-critical {
+    color: #ff7b63;
+}
+
+.gaq-detail {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.gaq-pace {
+    font-size: 11px;
+    color: #f5c211;
+}
+
+.gaq-footer {
+    spacing: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gaq-button {
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.gaq-button:hover,
+.gaq-button:focus {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.gaq-button:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}

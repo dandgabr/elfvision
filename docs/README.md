@@ -16,6 +16,11 @@ silently.
 | [0007](adr/0007-internationalization.md) | Internationalization: English and pt-BR with gettext |
 | [0008](adr/0008-mvp-roadmap.md) | MVP milestones and open items |
 
+## Working on the code
+
+See [`development.md`](development.md) for the layout, the tests, the headless shell
+and the translation workflow.
+
 ## Design references
 
 The interactive mockups that led to these decisions were published as private

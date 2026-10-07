@@ -52,5 +52,5 @@ pre-commit hook.
 ## Resolved
 
 - The repository was renamed from `gnome-ia-quota` to `gnome-ai-quota` (English
-  "AI") on 2026-10-06. The extension uuid is `gnome-ai-quota@dandgabr`, the CSS class
+  "AI") on 2026-10-06. The extension uuid is `gnome-ai-quota@dandgabr.github.io`, the CSS class
   prefix is `gaq-`, and the user directories use `gnome-ai-quota`.

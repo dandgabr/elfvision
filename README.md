@@ -3,8 +3,9 @@
 A GNOME Shell extension that shows the remaining quota of your AI providers
 in the top bar and in a popup, in the spirit of the *System Monitor* extension.
 
-> **Status:** design phase. The decisions are recorded in [`docs/`](docs/README.md);
-> there is no installable build yet.
+> **Status:** milestone M0 (skeleton). The bar and the popup render demo data
+> only; no provider is connected yet. The decisions are recorded in
+> [`docs/`](docs/README.md) and the workflow in [`docs/development.md`](docs/development.md).
 
 ## What it does
 
