@@ -441,3 +441,18 @@ test('a demo provider that needs an account does not offer to open Preferences',
     assertEqual(cardView(snapshot, {nowMs: 0, configurable: false}).canConfigure, false);
     assertEqual(cardView(snapshot, {nowMs: 0}).canConfigure, true);
 });
+
+test('a balance beside percent windows is a plain labeled line without a meter', () => {
+    const snapshot = {
+        id: 'command-code', name: 'Command Code', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: 1},
+        metrics: [
+            {id: 'weekly', kind: 'percent', window: 'week', windowSecs: 604800, percentUsed: 2},
+            {id: 'monthly-credits', kind: 'money', window: 'none', windowSecs: 0, balance: 41.5, budget: 0, currency: 'USD', percentUsed: 0},
+        ],
+    };
+    const view = cardView(snapshot, {nowMs: 1, locale: 'en'});
+    const rows = view.groups[0].rows;
+    assertEqual(rows.map(r => r.label), ['Week', 'Balance']);
+    assertEqual([rows[1].valueText, rows[1].noMeter, rows[1].percentText], ['$41.50 left', true, '']);
+    assertEqual(view.hero ?? view.heroText, view.heroText);
+});

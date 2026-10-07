@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 03:01-0300\n"
+"POT-Creation-Date: 2026-10-07 08:49-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,110 +193,119 @@ msgstr ""
 msgid "Retrying soon."
 msgstr ""
 
-#: lib/core/viewmodel.js:223
+#: lib/core/viewmodel.js:219
+msgid "Balance"
+msgstr ""
+
+#: lib/core/viewmodel.js:222
+#, javascript-format
+msgid "%s left"
+msgstr ""
+
+#: lib/core/viewmodel.js:241
 #, javascript-format
 msgid "%s%% used"
 msgstr ""
 
-#: lib/core/viewmodel.js:227
+#: lib/core/viewmodel.js:245
 #, javascript-format
 msgid "resets in %s"
 msgstr ""
 
-#: lib/core/viewmodel.js:236
+#: lib/core/viewmodel.js:254
 #, javascript-format
 msgid "Expected by now: %s%%"
 msgstr ""
 
-#: lib/core/viewmodel.js:262
+#: lib/core/viewmodel.js:280
 msgid "left"
 msgstr ""
 
-#: lib/core/viewmodel.js:278
+#: lib/core/viewmodel.js:296
 msgid "Add key"
 msgstr ""
 
-#: lib/core/viewmodel.js:279 lib/ui/providerCard.js:180
+#: lib/core/viewmodel.js:297 lib/ui/providerCard.js:180
 msgid "Open Preferences"
 msgstr ""
 
-#: lib/core/viewmodel.js:279
+#: lib/core/viewmodel.js:297
 msgid "Replace key"
 msgstr ""
 
-#: lib/core/viewmodel.js:293
+#: lib/core/viewmodel.js:311
 msgid "The last data is more than a day old."
 msgstr ""
 
-#: lib/core/viewmodel.js:294
+#: lib/core/viewmodel.js:312
 msgid "No quota data yet."
 msgstr ""
 
-#: lib/core/viewmodel.js:303
+#: lib/core/viewmodel.js:321
 msgid "Budget spent"
 msgstr ""
 
-#: lib/core/viewmodel.js:305
+#: lib/core/viewmodel.js:323
 #, javascript-format
 msgid "of %s · %s%%"
 msgstr ""
 
-#: lib/core/viewmodel.js:307
+#: lib/core/viewmodel.js:325
 msgid "No reset: prepaid balance"
 msgstr ""
 
-#: lib/core/viewmodel.js:333
+#: lib/core/viewmodel.js:351
 #, javascript-format
 msgid "%s: %d point ahead of an even pace"
 msgid_plural "%s: %d points ahead of an even pace"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/core/viewmodel.js:338
+#: lib/core/viewmodel.js:356
 msgid "Data is out of date."
 msgstr ""
 
-#: lib/core/viewmodel.js:364
+#: lib/core/viewmodel.js:382
 #, javascript-format
 msgid "%d ok"
 msgstr ""
 
-#: lib/core/viewmodel.js:365
+#: lib/core/viewmodel.js:383
 #, javascript-format
 msgid "%d warning"
 msgstr ""
 
-#: lib/core/viewmodel.js:366
+#: lib/core/viewmodel.js:384
 #, javascript-format
 msgid "%d critical"
 msgid_plural "%d critical"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/core/viewmodel.js:367
+#: lib/core/viewmodel.js:385
 #, javascript-format
 msgid "%d not connected"
 msgstr ""
 
-#: lib/core/viewmodel.js:368
+#: lib/core/viewmodel.js:386
 #, javascript-format
 msgid "%d with a problem"
 msgstr ""
 
-#: lib/core/viewmodel.js:380
+#: lib/core/viewmodel.js:398
 #, javascript-format
 msgid "Updated %d min ago"
 msgstr ""
 
-#: lib/core/viewmodel.js:380
+#: lib/core/viewmodel.js:398
 msgid "Updated just now"
 msgstr ""
 
-#: lib/core/viewmodel.js:395
+#: lib/core/viewmodel.js:413
 msgid "Not updated yet"
 msgstr ""
 
-#: lib/core/viewmodel.js:398
+#: lib/core/viewmodel.js:416
 #, javascript-format
 msgid "%s · %d with a problem"
 msgid_plural "%s · %d with problems"
@@ -517,7 +526,7 @@ msgid "Where do I get a key?"
 msgstr ""
 
 #: prefs.js:174
-msgid "Open the Command Code site and create an API key."
+msgid "Opens your keys page on the Command Code site."
 msgstr ""
 
 #: prefs.js:184

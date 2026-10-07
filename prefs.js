@@ -171,11 +171,11 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         const entry = new Adw.PasswordEntryRow({title: _('API key'), show_apply_button: true});
         const link = new Adw.ActionRow({
             title: _('Where do I get a key?'),
-            subtitle: _('Open the Command Code site and create an API key.'),
+            subtitle: _('Opens your keys page on the Command Code site.'),
             activatable: true,
         });
         link.add_suffix(new Gtk.Image({icon_name: 'adw-external-link-symbolic'}));
-        link.connect('activated', () => Gio.AppInfo.launch_default_for_uri('https://commandcode.ai', null));
+        link.connect('activated', () => Gio.AppInfo.launch_default_for_uri(`https://commandcode.ai/${GLib.uri_escape_string(GLib.get_user_name(), null, false)}/settings/keys`, null));
 
         let hasKey = null;       // null until the keyring answered
         let keyringDown = false;
