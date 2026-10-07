@@ -458,6 +458,11 @@
     padding-left: 4px;
 }
 
+.gaq-untracked-list:rtl {
+    padding-left: 0;
+    padding-right: 4px;
+}
+
 .gaq-untracked-row {
     spacing: 8px;
 }

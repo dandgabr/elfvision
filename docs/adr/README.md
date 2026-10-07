@@ -12,7 +12,7 @@ replaced gets a new record, and the old one is marked `superseded by NNNN` and k
 | [0004](0004-panel-bar.md) | Top-bar items, states, selection and adaptive layout | accepted, partly implemented |
 | [0005](0005-popup.md) | Popup structure, defaults and failure states | accepted, partly implemented |
 | [0006](0006-theming.md) | 20 themes as data, light and dark, token compiler | accepted, partly implemented |
-| [0007](0007-internationalization.md) | English and pt-BR with gettext, following the session language | accepted, partly implemented |
+| [0007](0007-internationalization.md) | English and pt-BR with gettext, following the session language | accepted |
 | [0008](0008-mvp-roadmap.md) | Milestones M0 to M4 and open items | accepted |
 | [0009](0009-adding-providers.md) | How providers are added (M3) | accepted |
 | [0010](0010-alerts-and-polish.md) | Alerts, notifications and polish (M4) | accepted, partly implemented |

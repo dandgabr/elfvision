@@ -41,7 +41,7 @@ lib/oauth/          PKCE, the sign-in's local server and flow, the token manager
 lib/services/       GLib, Gio and Soup glue: HTTP, keyring, timers, cache and alert files,
                     theme files, theme manager, quota controller, alert service and the
                     suspend watcher (the only code that talks to the system bus)
-lib/prefs/          the Accounts and Notifications pages, About and Restore defaults
+lib/prefs/          account controllers and views, the setup assistant, Notifications, About and Restore defaults
                     (GTK 4, libadwaita)
 lib/ui/             St widgets (St is the shell's widget toolkit): meter, bar item, provider card, indicator, tooltip, the
                     notifier (the only code that makes notifications), legend and the
@@ -123,7 +123,20 @@ tests whose name contains `<text>`.
 7. The translation template and the catalogs, including that every placeholder survives translation.
 8. Whitespace.
 
-Run it before a commit.
+Run it before a commit. For preferences or layout changes, also run:
+
+```sh
+tools/prefs-smoke.sh  # 360px setup traversal, RTL, text inflation, larger fonts and closing paths
+tools/layout-check.sh # popup allocations and mirrored meters in an isolated demo shell
+```
+
+The preferences probe injects fake account controllers for traversal, counts their subscriptions
+and window handlers after every run, and uses an empty private keyring for full-window startup.
+Stateful GTK checks also cover delayed saves and validation, disposed callbacks, keyring recovery,
+account/dialog states and focus. The St probe measures enlarged fonts, horizontal label/action
+containment, keyboard focus, RTL meter geometry and tooltip cleanup on an 800px virtual monitor.
+It never reads a real keyring or opens a browser. The layout probe uses
+`lib/core/pseudoLocale.js` only in its temporary shell. Both commands fail on assertion errors.
 
 The unit tests cannot import the interface modules (`lib/ui`, `extension.js`), because they need the
 shell. A mistake there (a name declared twice, one that is not defined) only shows when the extension is
@@ -252,7 +265,7 @@ right, put the reason in a comment above it.
 ## Package
 
 `tools/pack.sh` builds `dist/<uuid>.shell-extension.zip` with everything the extension needs
-(code, icons, themes, schema and translations) and nothing else (no tests, tools or docs).
+(code, icons, themes, schema and translations) and the client-id helper, with no tests, development tools or docs.
 Install it with `gnome-extensions install --force`, then log out and in. `gnome-extensions
 install` compiles the schema; unpacking the zip by hand does not.
 
@@ -343,7 +356,8 @@ committed.
 | `tools/build.sh` | Compiles the schema and the translations. Run it after changing `schemas/` or `po/`. |
 | `tools/check.sh` | The checks to run before a commit (see [Tests](#tests)). |
 | `tools/sast.sh` | The static analysis that CI runs, locally (see [Static analysis](#static-analysis)). |
-| `tools/pack.sh` | Builds the installable zip. |
+| `tools/pack.sh` | Builds the installable zip, including the client-id helper. |
+| `tools/prefs-smoke.sh`, `tools/layout-check.sh` | Setup lifecycle and narrow/RTL/long-text checks in an isolated shell. |
 | `tools/headless-shell.sh`, `tools/nested-shell.sh` | Throwaway GNOME Shells (see [Running and checking](#running-and-checking-the-extension)). |
 | `tools/i18n.sh`, `tools/po-fill.py`, `tools/check-po.py` | Translation workflow and its checks (see [Translations](#translations)). |
 | `tools/gen-themes.py` | Generates the built-in themes from the style gallery (see [Themes](#themes)). |

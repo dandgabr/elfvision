@@ -1,8 +1,12 @@
 # 0010. Alerts and polish (M4)
 
-Status: accepted. Implemented, except the first-use assistant and the right-to-left and longer-text
-pass (see "Pending" at the end). Decided after a review by UI, UX, frontend and security
-consultants, and every part was reviewed again when it was built.
+Status: accepted. M4 is implemented. Findings from the
+[original-plan audit](../temp/reviews/2026-10-07-m4-plan-conformance.md) are fixed
+and verified; documented adaptations and human/live-account validation limits
+remain explicit in that record.
+Follow-up items outside the MVP are under "Pending".
+The first-use design was reviewed by UI, UX, frontend and security consultants; the implementation
+and the RTL/long-text pass also received independent reviews.
 
 ## Context
 
@@ -134,12 +138,74 @@ English msgids. There is no language setting, no language step in the assistant 
   the assistant never sends one on its own), and for each kind of quota a switch and a threshold
   shown in the row ("Notifies at 95% used" or "Off"). With the master switch off the rows are dimmed,
   not blocked.
-- **First-use assistant:** an `Adw.NavigationView` inside Preferences, never a window opened by the
-  shell, gated by a setting to be added, skippable and resumable: welcome, choose providers (the terms
-  notice before any sign-in), connect each one (a failure does not block the next), choose the bar,
-  notifications (the default and the 5-hour window offered). The popup keeps its empty state with
-  "Add account". It never reads other tools' credential files or the environment, never turns on a
-  provider or notifications silently and sends no test notification unprompted.
+- **First-use assistant** (implemented after a UI, UX, frontend and security review).
+  - *Where and when.* It is a pushed subpage of the Preferences window with its own
+    `Adw.NavigationView` (a dialog or a second window would hide toasts and flip `is-active` during
+    the browser round-trip). It opens by itself once, when Preferences opens with `first-use-done`
+    unset, no account known, `prefs-target` empty and the live data source on. Skip, Finish and closing
+    the window all set `first-use-done`: nagging is worse than missing the assistant. An existing user
+    with an account has the flag set silently. "Set up again" in the About group reopens it without
+    touching the flag; Restore defaults leaves the flag alone (it is in `KEPT_KEYS`). The popup's empty
+    state opens Preferences without a target while the flag is unset, so the assistant is what appears.
+    The extension never opens Preferences by itself, and no notification announces the assistant.
+  - *Steps.* Welcome (what it does, that nothing changes until a button is pressed, that keys stay in
+    the keyring), Providers, Connect, Bar, Notifications, Done. The page title carries the progress
+    ("Setup · 2 of 5"); there are no dots. A wrapping bottom bar has the primary action on the right and a flat
+    "Skip this step" on the left; Escape and closing mean "later".
+  - *Providers.* One unchecked row per provider, in registry order, each with how it signs in and a
+    text mark for its terms (icon and words). Antigravity is last, with the strongest wording, and its
+    default is to skip it; it is not hidden. The choice lives in memory only and filters the Connect
+    step; nothing writes `untracked-providers`.
+  - *Connect.* One scrollable page with a group per chosen provider, so a failure blocks nothing. It
+    reuses the sign-in code of the Accounts page, split into a controller (state, terms, sign-in,
+    cancel, paste) and two thin views, so there is one sign-in implementation and one security review.
+    One sign-in runs at a time. Moving away, Skip or closing cancels it (the port closes and the PKCE
+    verifier goes with the closure). The terms dialog is the existing one, per provider, with Cancel as
+    the default and the stronger text for Antigravity; the assistant never pre-acknowledges, batches or
+    writes `terms-acknowledged` itself.
+  - *No client id.* The page shows the whole command on screen in one line (selectable) with the
+    existing Copy command button (no trailing newline, so the user presses Enter), says what the helper
+    does (it reads the installed program for a public client id, using `PATH`, and writes
+    `providers.local.json`) and re-checks when the window becomes active again. The packaged helper is included under `tools/`; the command takes the
+    chosen providers in one call (the helper accepts several ids); the assistant never runs it,
+    never reads another tool's files, the environment or `PATH`, and never reads the clipboard.
+  - *Bar and notifications.* The Bar step asks for the position and the number of providers, with the
+    defaults filled in. The Notifications step shows the master switch (notifications are on by
+    default, as decided in the bar round, so the step explains and lets the user turn them off) and
+    the one threshold, with a link to the Notifications page; it sends no test notification.
+  - *Done.* A summary of what is connected, skipped and failed, each with a link that closes the
+    assistant on that account; "Close setup" ends it.
+  - *Stored.* One boolean, `first-use-done`; nothing about accounts, providers or steps. A new key may
+    only show or hide the assistant: no setting can start a sign-in, store a credential or acknowledge
+    terms, and `prefs-target` does not accept a page or step name.
+  - *Structure.* The pure logic is in `lib/core/firstUse.js` (the step list, which providers can be
+    connected given the local configuration, whether a step is complete, whether to open by itself) and
+    is tested; `lib/prefs` only draws. Each run of the assistant has its own list of handlers and
+    timers, released when the subpage is popped, so "Set up again" does not leak. Step completion informs
+    the connection status; it never blocks Continue or Skip. The common threshold changes all four
+    quota types only when edited; existing per-type choices are kept until then.
+    Done subscribes to account changes and validation results, updates rows in place,
+    and releases subscriptions on departure. Account views discard late UI callbacks
+    after disposal; fixed nonsecret save failures remain visible until recovery.
+    OAuth configuration is retained state, refreshed asynchronously rather than read
+    during rendering. Returning to Preferences also retries keyring availability.
+  - *Cancellation.* Leaving Connect cancels both a pending terms confirmation and an active flow.
+    A cancelled attempt cannot acknowledge terms or store a later response. Once the user-initiated
+    keyring write has started, it finishes and tells the shell; navigating away does not roll back an
+    already requested save. Keyring refreshes ignore replies superseded by newer lookups.
+  - *Narrow screens.* Account actions and the bottom navigation wrap. The helper command remains
+    one selectable line in a horizontal scroll area, with a separate Copy command button.
+
+### Right-to-left and longer text
+
+St boxes and chevrons follow actor direction. Manual meter geometry mirrors the fill and the
+complete pacing-tick rectangle; the paused list mirrors its indentation with `:rtl`. Pure geometry
+and pseudo-text behavior are unit-tested. The layout probes cover LTR/RTL and normal/expanded text
+in a private demo shell, and preferences traversal covers 360 px windows and larger fonts. Neither
+probe changes a real session, reads the clipboard or starts authentication.
+The state matrix covers sign-in, paste, keyring/error and consent/destructive dialogs;
+the St probe verifies measured enlarged fonts and horizontal containment on an 800px
+monitor. Tooltip labels are reused across focus changes and destroyed during cleanup.
 
 ### Structure and checks
 
@@ -150,13 +216,8 @@ English msgids. There is no language setting, no language step in the assistant 
 
 ## Pending
 
-Work that was decided here and is not done:
+Follow-up work outside the MVP scope:
 
-- **First-use assistant** (above). It needs a design pass of its own with the UI and UX consultants
-  when it is built.
-- **Right-to-left and longer text:** mirror the layout in St (`:rtl`), the chevrons are already chosen
-  by direction; and a script that inflates every string by about 40% to find overflow
-  (ADR 0007).
 - **Indicator:** move its bar model to `lib/core` and coalesce the redraws of providers that answer
   together.
 - **Bar items on the keyboard:** the tooltip on the bar shows on hover only; Escape closes the popup
