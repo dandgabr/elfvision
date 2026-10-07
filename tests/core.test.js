@@ -508,7 +508,7 @@ const USAGE = {plan_type: 'pro', rate_limit: {primary_window: {used_percent: 20,
 function codex({replies, tokenError = null}) {
     const calls = {urls: [], auth: [], invalidated: 0, tokenCalls: 0};
     const provider = createCodexProvider({
-        http: {get: async (url, options) => { calls.urls.push(url); calls.auth.push(options.headers.Authorization); return replies.shift(); }},
+        http: {request: async (url, options) => { calls.urls.push(url); calls.auth.push(options.headers.Authorization); return replies.shift(); }},
         tokens: {
             accessToken: async () => { calls.tokenCalls++; if (tokenError) throw tokenError; return `tok${calls.tokenCalls}`; },
             invalidate: () => { calls.invalidated++; },
@@ -584,11 +584,75 @@ test('claude provider: sends the beta header with the bearer token and renews on
     let n = 0;
     const replies = [{status: 401, json: null}, {status: 200, json: {five_hour: {utilization: 5, resets_at: '2026-10-08T03:00:00Z'}}}];
     const provider = createClaudeProvider({
-        http: {get: async (url, options) => { seen.push({url, headers: options.headers}); return replies.shift(); }},
+        http: {request: async (url, options) => { seen.push({url, headers: options.headers}); return replies.shift(); }},
         tokens: {accessToken: async () => `tok${++n}`, invalidate: () => {}},
     });
     const body = await provider.fetch({isCancelled: () => false});
     assertEqual(body.metrics.length, 1);
     assertEqual(seen.map(s => s.url), ['https://api.anthropic.com/api/oauth/usage', 'https://api.anthropic.com/api/oauth/usage']);
     assertEqual(seen.map(s => [s.headers['anthropic-beta'], s.headers.Authorization]), [['oauth-2025-04-20', 'Bearer tok1'], ['oauth-2025-04-20', 'Bearer tok2']]);
+});
+
+// ---- Antigravity quota
+
+import {parseQuota} from '../lib/core/antigravity.js';
+import {DEFAULT_USER_AGENT, createAntigravityProvider} from '../lib/providers/antigravity.js';
+
+const QUOTA = {
+    groups: [
+        {displayName: 'Gemini', buckets: [
+            {bucketId: 'gemini-pro', window: '5h', remainingFraction: 0.59, resetTime: '2026-10-08T03:00:00Z'},
+            {bucketId: 'gemini-pro', window: 'weekly', remainingFraction: 1, resetTime: '2026-10-12T05:00:00Z'},
+        ]},
+        {displayName: 'Claude and GPT', buckets: [
+            {bucketId: '3p-claude', window: 'weekly', remainingFraction: '0.25', resetTime: '2026-10-12T05:00:00Z'},
+            {bucketId: '3p-claude', window: '5h', remainingFraction: 0, resetTime: 'later'},
+        ]},
+    ],
+};
+
+test('antigravity: buckets become two pools with a five-hour and a weekly window each', () => {
+    const {metrics} = parseQuota(QUOTA);
+    assertEqual(metrics.map(m => [m.id, m.pool.short, m.window, Math.round(m.percentUsed)]),
+        [['gemini-5h', 'G', 'session', 41], ['gemini-weekly', 'G', 'week', 0], ['claude-gpt-weekly', 'C/G', 'week', 75], ['claude-gpt-5h', 'C/G', 'session', 100]]);
+    assertEqual([metrics[0].resetsAt, metrics[3].resetsAt], [Date.parse('2026-10-08T03:00:00Z'), undefined]);
+    assertEqual(metrics[2].pool, {id: 'claude-gpt', name: 'Claude and GPT', short: 'C/G'});
+});
+
+test('antigravity: unknown pools and windows, repeated buckets and bad fractions are skipped', () => {
+    const {metrics} = parseQuota({groups: [{buckets: [
+        {bucketId: 'gemini-a', window: '5h', remainingFraction: 0.5},
+        {bucketId: 'gemini-b', window: '5h', remainingFraction: 0.1},      // same pool and window: first wins
+        {bucketId: 'other-x', window: '5h', remainingFraction: 0.5},
+        {bucketId: 'gemini-a', window: 'monthly', remainingFraction: 0.5},
+        {bucketId: '3p-a', window: 'weekly', remainingFraction: 'x'},
+        {bucketId: '3p-a', window: 'weekly', remainingFraction: 7},        // more than all left: clamped
+        null, {window: '5h'},
+    ]}]});
+    assertEqual(metrics.map(m => [m.id, m.percentUsed]), [['gemini-5h', 50], ['claude-gpt-weekly', 0]]);
+    for (const body of [null, {}, {groups: []}, {groups: [{buckets: []}]}, {groups: 'x'}]) {
+        let code = '';
+        try {
+            parseQuota(body);
+        } catch (error) {
+            code = error.code;
+        }
+        assertEqual([JSON.stringify(body), code], [JSON.stringify(body), 'provider_changed']);
+    }
+});
+
+test('antigravity provider: a POST with an empty JSON body and a User-Agent that names the program', async () => {
+    const seen = [];
+    const make = userAgent => createAntigravityProvider({
+        http: {request: async (url, options) => { seen.push({url, options}); return {status: 200, json: QUOTA}; }},
+        tokens: {accessToken: async () => 'tok', invalidate: () => {}},
+        userAgent,
+    });
+    await make(() => null).fetch({isCancelled: () => false});
+    await make(() => 'antigravity/9.9 mine').fetch({isCancelled: () => false});
+    assertEqual(seen[0].url, 'https://daily-cloudcode-pa.googleapis.com/v1internal:retrieveUserQuotaSummary');
+    assertEqual([seen[0].options.method, seen[0].options.body, seen[0].options.contentType], ['POST', '{}', 'application/json']);
+    assertEqual([seen[0].options.headers['User-Agent'], seen[0].options.headers.Authorization], [DEFAULT_USER_AGENT, 'Bearer tok']);
+    assertEqual(seen[1].options.headers['User-Agent'], 'antigravity/9.9 mine');
+    assertTrue(DEFAULT_USER_AGENT.includes('antigravity') && DEFAULT_USER_AGENT.includes('gnome-ai-quota'));
 });

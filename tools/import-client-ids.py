@@ -19,6 +19,8 @@ import re
 import shutil
 import stat
 import sys
+import urllib.error
+import urllib.parse
 import urllib.request
 
 CONFIG = pathlib.Path(os.environ.get('XDG_CONFIG_HOME', pathlib.Path.home() / '.config')) / 'gnome-ai-quota' / 'providers.local.json'
@@ -32,6 +34,12 @@ PROVIDERS = {
         'public_url': 'https://raw.githubusercontent.com/openai/codex/main/codex-rs/login/src/auth/manager.rs',
         'public_pattern': r'CLIENT_ID:\s*&str\s*=\s*"([^"]+)"',
         'id_pattern': r'^app_[A-Za-z0-9]{24}$',
+    },
+    'antigravity': {
+        'command': 'agy',
+        # A Google desktop-app client: an id and a secret, both in the program. Several ids and
+        # secrets are in there, so a pair is only accepted after Google itself says it is one.
+        'custom': 'google_pair',
     },
     'claude': {
         'command': 'claude',
@@ -100,6 +108,44 @@ def from_binary(spec):
     return None, None
 
 
+def google_pair(spec):
+    """The id and secret of the Google client the installed program signs in with.
+
+    Every candidate id is tried with every candidate secret against Google's token address
+    with a made-up code: `invalid_grant` means the id and the secret belong together,
+    `invalid_client` that they do not. No credential is involved or sent."""
+    path = shutil.which(spec['command'])
+    if not path:
+        return None, None
+    try:
+        data = pathlib.Path(path).resolve().read_bytes()
+    except OSError:
+        return None, None
+    ids = {m.decode() for m in re.findall(rb'[0-9]{12,13}-[a-z0-9]{30,34}\.apps\.googleusercontent\.com', data)}
+    # Strings sit side by side in the program: a secret is the first 35 characters.
+    secrets = {m.decode()[:35] for m in re.findall(rb'GOCSPX-[A-Za-z0-9_-]{20,}', data)}
+    for client_id in sorted(ids):
+        for secret in sorted(secrets):
+            body = urllib.parse.urlencode({
+                'grant_type': 'authorization_code', 'code': 'not-a-real-code', 'client_id': client_id,
+                'client_secret': secret, 'redirect_uri': 'http://127.0.0.1:51121/oauth-callback', 'code_verifier': 'x' * 43,
+            }).encode()
+            request = urllib.request.Request('https://oauth2.googleapis.com/token', data=body,
+                                             headers={'Content-Type': 'application/x-www-form-urlencoded'})
+            try:
+                urllib.request.urlopen(request, timeout=15)  # noqa: S310 (fixed https url)
+            except urllib.error.HTTPError as error:
+                try:
+                    verdict = json.loads(error.read().decode()).get('error')
+                except ValueError:
+                    verdict = None
+                if verdict == 'invalid_grant':
+                    return {'clientId': client_id, 'clientSecret': secret}, 'the installed program, checked with Google'
+            except OSError:
+                return None, None
+    return None, None
+
+
 def from_public_source(spec):
     if 'public_url' not in spec:
         return None, None
@@ -139,9 +185,16 @@ def main():
         if entry.get('clientId') and not args.force:
             print(f'{name}: already set, kept')
             continue
-        client_id, source = from_binary(PROVIDERS[name])
-        if not client_id:
-            client_id, source = from_public_source(PROVIDERS[name])
+        spec = PROVIDERS[name]
+        if spec.get('custom') == 'google_pair':
+            found, source = google_pair(spec)
+            client_id = found['clientId'] if found else None
+            if found:
+                entry['clientSecret'] = found['clientSecret']
+        else:
+            client_id, source = from_binary(spec)
+            if not client_id:
+                client_id, source = from_public_source(spec)
         if not client_id:
             print(f'{name}: not found; add its clientId to {CONFIG} by hand')
             continue

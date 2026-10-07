@@ -169,6 +169,20 @@ id being in the repository.
   header `anthropic-beta: oauth-2025-04-20`. Only the `user:profile` scope is asked; the program
   itself asks more, to run the model.
 
+- **Antigravity** (read from the installed program): a Google desktop-app client. Authorize at
+  `accounts.google.com/o/oauth2/auth` with `access_type=offline` and `prompt=consent` (without
+  them Google gives no refresh token), token and revoke at `oauth2.googleapis.com`, a form
+  exchange that carries the client secret Google's desktop clients need (not confidential, and
+  kept out of the repository like the id), return address `http://127.0.0.1:<free port>/oauth-callback`,
+  only the `cloud-platform` scope. The quota endpoint is a POST of `{}` to
+  `daily-cloudcode-pa.googleapis.com/v1internal:retrieveUserQuotaSummary` with a User-Agent
+  that contains `antigravity` (the endpoint checks only that); the extension sends
+  `antigravity/1.0 gnome-ai-quota`, or the one in the local file. The reply has two pools, Gemini
+  (`gemini-` buckets) and Claude and GPT (`3p-` buckets), each with a five-hour and a weekly
+  window. Its terms forbid this use outright and Google may act on the whole Google account, so
+  the notice is stronger than the others. The helper picks the id and secret by asking Google's
+  token address with a made-up code: `invalid_grant` means they belong together.
+
 ## Implementation order
 
 1. Registry and metadata for Command Code, and the Accounts page generated from it.

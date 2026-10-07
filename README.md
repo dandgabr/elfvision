@@ -37,7 +37,7 @@ Planned providers:
 | Command Code | API key in the keyring | M2 |
 | Codex | OAuth 2 with PKCE | M3, available |
 | Claude | OAuth 2 with PKCE | M3, available |
-| Antigravity | OAuth 2 with PKCE (Google) | M3 |
+| Antigravity | OAuth 2 with PKCE (Google) | M3, available (high risk: see the notice) |
 
 Providers billed by money, such as OpenRouter, fit the same data model as a `money`
 metric and come after these four.
@@ -46,7 +46,7 @@ metric and come after these four.
 
 1. Open Preferences and go to **Accounts**.
 2. **Command Code:** paste an API key (the page links to where keys are created).
-3. **Codex** and **Claude:** run `python3 -I tools/import-client-ids.py` once (it finds the public
+3. **Codex**, **Claude** and **Antigravity:** run `python3 -I tools/import-client-ids.py` once (it finds the public
    client id of each installed tool and stores it in `~/.config/gnome-ai-quota/providers.local.json`, private
    to you), then press **Connect** and sign in in the browser.
 
@@ -192,7 +192,7 @@ design are in [docs/adr](docs/adr/README.md).
 | M0 | Skeleton: panel button, bar, popup with demo cards | done |
 | M1 | Data layer (contract, scheduler, cache), themes, appearance settings | done, in PR #1 |
 | M2 | Command Code with an API key stored in libsecret | done |
-| M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | in progress, Codex done |
+| M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | done, pending review |
 | M4 | Notifications, connection alerts, polish | planned |
 
 Details in [ADR 0008](docs/adr/0008-mvp-roadmap.md).

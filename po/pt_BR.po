@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 10:25-0300\n"
+"POT-Creation-Date: 2026-10-07 10:47-0300\n"
 "PO-Revision-Date: 2026-10-06 21:45-0300\n"
 "Last-Translator: gnome-ai-quota authors\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -252,7 +252,7 @@ msgstr "Adicionar chave"
 msgid "Replace key"
 msgstr "Trocar chave"
 
-#: lib/core/viewmodel.js:313 lib/prefs/oauthGroup.js:92
+#: lib/core/viewmodel.js:313 lib/prefs/oauthGroup.js:94
 msgid "Reconnect"
 msgstr "Reconectar"
 
@@ -338,11 +338,11 @@ msgstr "Contas"
 msgid "The key is kept in the system keyring and sent only to %s."
 msgstr "A chave fica no chaveiro do sistema e só é enviada a %s."
 
-#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:62
+#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:64
 msgid "Checking the keyring…"
 msgstr "Consultando o chaveiro…"
 
-#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:62
+#: lib/prefs/accounts.js:59 lib/prefs/oauthGroup.js:64
 msgid "Status"
 msgstr "Situação"
 
@@ -358,7 +358,7 @@ msgstr "Remover a chave do %s"
 msgid "API key"
 msgstr "Chave de API"
 
-#: lib/prefs/accounts.js:82 lib/prefs/oauthGroup.js:119
+#: lib/prefs/accounts.js:82 lib/prefs/oauthGroup.js:121
 msgid ""
 "No keyring found. Unlock it in Passwords and Keys, or install a Secret "
 "Service provider."
@@ -412,8 +412,8 @@ msgstr "Remover a chave do %s?"
 msgid "It is deleted from the keyring. The key stays valid on the %s site."
 msgstr "Ela é apagada do chaveiro. A chave continua válida no site do %s."
 
-#: lib/prefs/accounts.js:146 lib/prefs/oauthGroup.js:64
-#: lib/prefs/oauthGroup.js:252 lib/prefs/oauthGroup.js:291
+#: lib/prefs/accounts.js:146 lib/prefs/oauthGroup.js:66
+#: lib/prefs/oauthGroup.js:257 lib/prefs/oauthGroup.js:296
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -421,7 +421,7 @@ msgstr "Cancelar"
 msgid "Remove"
 msgstr "Remover"
 
-#: lib/prefs/accounts.js:155 lib/prefs/oauthGroup.js:310
+#: lib/prefs/accounts.js:155 lib/prefs/oauthGroup.js:315
 msgid "The keyring is not available."
 msgstr "O chaveiro não está disponível."
 
@@ -476,152 +476,164 @@ msgid "Sign-in failed. Nothing was saved."
 msgstr "O login falhou. Nada foi salvo."
 
 #: lib/prefs/oauthGroup.js:59
+msgid ""
+"Not allowed: the terms of %s forbid this, and your whole Google account "
+"could be suspended."
+msgstr "Não permitido: os termos do %s proíbem isto, e toda a sua conta Google pode ser suspensa."
+
+#: lib/prefs/oauthGroup.js:61
 msgid "Unofficial access: %s may not allow this and could limit your account."
 msgstr "Acesso não oficial: o %s pode não permitir isto e limitar a sua conta."
 
-#: lib/prefs/oauthGroup.js:65
+#: lib/prefs/oauthGroup.js:67
 msgid "Copy link"
 msgstr "Copiar link"
 
-#: lib/prefs/oauthGroup.js:66
+#: lib/prefs/oauthGroup.js:68
 msgid "Copy path"
 msgstr "Copiar caminho"
 
-#: lib/prefs/oauthGroup.js:67 lib/prefs/oauthGroup.js:292
+#: lib/prefs/oauthGroup.js:69 lib/prefs/oauthGroup.js:297
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: lib/prefs/oauthGroup.js:74
+#: lib/prefs/oauthGroup.js:76
 msgid "Paste the address or the code"
 msgstr "Cole o endereço ou o código"
 
-#: lib/prefs/oauthGroup.js:92
+#: lib/prefs/oauthGroup.js:94
 msgid "Connect"
 msgstr "Conectar"
 
-#: lib/prefs/oauthGroup.js:95
+#: lib/prefs/oauthGroup.js:97
 msgid "Connect %s"
 msgstr "Conectar o %s"
 
-#: lib/prefs/oauthGroup.js:95
+#: lib/prefs/oauthGroup.js:97
 msgid "Reconnect %s"
 msgstr "Reconectar o %s"
 
-#: lib/prefs/oauthGroup.js:109
+#: lib/prefs/oauthGroup.js:111
 msgid "Set up the client id and the keyring first."
 msgstr "Configure antes o client id e o chaveiro."
 
-#: lib/prefs/oauthGroup.js:122
+#: lib/prefs/oauthGroup.js:124
 msgid "Not connected."
 msgstr "Não conectado."
 
-#: lib/prefs/oauthGroup.js:123
+#: lib/prefs/oauthGroup.js:125
 msgid ""
 "The client id for %s is missing. Run python3 -I tools/import-client-ids.py, "
 "or add it to %s."
 msgstr "Falta o client id do %s. Rode python3 -I tools/import-client-ids.py ou adicione-o a %s."
 
-#: lib/prefs/oauthGroup.js:127
+#: lib/prefs/oauthGroup.js:129
 msgid "Connected."
 msgstr "Conectado."
 
-#: lib/prefs/oauthGroup.js:128
+#: lib/prefs/oauthGroup.js:130
 msgid "The sign-in expired. Reconnect to keep seeing this quota."
 msgstr "O login expirou. Reconecte para continuar vendo esta cota."
 
-#: lib/prefs/oauthGroup.js:129
+#: lib/prefs/oauthGroup.js:131
 msgid "The provider refused access. Check your account on its site."
 msgstr "O provedor recusou o acesso. Veja sua conta no site dele."
 
-#: lib/prefs/oauthGroup.js:130
+#: lib/prefs/oauthGroup.js:132
 msgid "Connected. The keyring is locked, so it was not checked."
 msgstr "Conectado. O chaveiro está bloqueado, então não foi verificado."
 
-#: lib/prefs/oauthGroup.js:131
+#: lib/prefs/oauthGroup.js:133
 msgid "Connected. Could not reach the server."
 msgstr "Conectado. Não foi possível falar com o servidor."
 
-#: lib/prefs/oauthGroup.js:132
+#: lib/prefs/oauthGroup.js:134
 msgid "Connected. The service replied in an unexpected way."
 msgstr "Conectado. O serviço respondeu de forma inesperada."
 
-#: lib/prefs/oauthGroup.js:133
+#: lib/prefs/oauthGroup.js:135
 msgid "Connected, but the client id is missing from the local configuration."
 msgstr "Conectado, mas falta o client id na configuração local."
 
-#: lib/prefs/oauthGroup.js:134
+#: lib/prefs/oauthGroup.js:136
 msgid "Connected. Not checked yet."
 msgstr "Conectado, ainda não verificado."
 
-#: lib/prefs/oauthGroup.js:177
+#: lib/prefs/oauthGroup.js:179
 msgid "You can close this tab and go back to Preferences."
 msgstr "Você já pode fechar esta aba e voltar às Preferências."
 
-#: lib/prefs/oauthGroup.js:178
+#: lib/prefs/oauthGroup.js:180
 msgid "Sign-in did not finish. You can close this tab."
 msgstr "O login não terminou. Você pode fechar esta aba."
 
-#: lib/prefs/oauthGroup.js:189
+#: lib/prefs/oauthGroup.js:191
 msgid "Couldn't open the browser. Copy the link and open it yourself."
 msgstr "Não consegui abrir o navegador. Copie o link e abra você mesmo."
 
-#: lib/prefs/oauthGroup.js:214
+#: lib/prefs/oauthGroup.js:216
 msgid "Finish signing in in your browser. %d:%02d left."
 msgstr "Conclua o login no navegador. Restam %d:%02d."
 
-#: lib/prefs/oauthGroup.js:230
+#: lib/prefs/oauthGroup.js:232
 msgid "%s connected."
 msgstr "%s conectado."
 
-#: lib/prefs/oauthGroup.js:232
+#: lib/prefs/oauthGroup.js:234
 msgid "The keyring did not accept the sign-in."
 msgstr "O chaveiro não aceitou o login."
 
-#: lib/prefs/oauthGroup.js:236
+#: lib/prefs/oauthGroup.js:238
 msgid "Sign-in cancelled. Nothing was saved."
 msgstr "Login cancelado. Nada foi salvo."
 
-#: lib/prefs/oauthGroup.js:249
+#: lib/prefs/oauthGroup.js:251
 msgid "Using %s this way may break its terms"
 msgstr "Usar o %s assim pode violar os termos dele"
 
-#: lib/prefs/oauthGroup.js:250
+#: lib/prefs/oauthGroup.js:252
 msgid ""
 "This extension signs in the way the official app does, which the terms may "
 "not allow. Your account could be limited or suspended. Use it at your own "
 "risk."
 msgstr "A extensão entra do mesmo modo que o app oficial, o que os termos podem não permitir. Sua conta pode ser limitada ou suspensa. Use por sua conta e risco."
 
-#: lib/prefs/oauthGroup.js:253
+#: lib/prefs/oauthGroup.js:254
+msgid ""
+"The terms of %s forbid this, and Google may suspend your whole Google "
+"account, not only %s."
+msgstr "Os termos do %s proíbem isto, e o Google pode suspender toda a sua conta Google, não só o %s."
+
+#: lib/prefs/oauthGroup.js:258
 msgid "I understand, connect"
 msgstr "Entendi, conectar"
 
-#: lib/prefs/oauthGroup.js:271
+#: lib/prefs/oauthGroup.js:276
 msgid ""
 "That does not look like the address or the code. Copy it from the browser "
 "bar."
 msgstr "Isso não parece o endereço nem o código. Copie-o da barra do navegador."
 
-#: lib/prefs/oauthGroup.js:278
+#: lib/prefs/oauthGroup.js:283
 msgid "Link copied."
 msgstr "Link copiado."
 
-#: lib/prefs/oauthGroup.js:283
+#: lib/prefs/oauthGroup.js:288
 msgid "Path copied."
 msgstr "Caminho copiado."
 
-#: lib/prefs/oauthGroup.js:288
+#: lib/prefs/oauthGroup.js:293
 msgid "Disconnect %s?"
 msgstr "Desconectar o %s?"
 
-#: lib/prefs/oauthGroup.js:289
+#: lib/prefs/oauthGroup.js:294
 msgid ""
 "The sign-in is deleted from the keyring and the extension stops reading this "
 "quota. Access already granted may stay listed in your %s account until you "
 "revoke it there."
 msgstr "O login é apagado do chaveiro e a extensão para de ler esta cota. O acesso concedido pode continuar listado na sua conta do %s até você revogá-lo lá."
 
-#: lib/prefs/oauthGroup.js:307
+#: lib/prefs/oauthGroup.js:312
 msgid "%s disconnected."
 msgstr "%s desconectado."
 
