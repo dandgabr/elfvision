@@ -18,12 +18,8 @@ Provider order: Command Code, Codex, Claude, Antigravity.
 
 ## Next: M4
 
-Three things come first, because they decide the shape of the rest: where an alert is raised (the
-controller should report the previous and the new snapshot of a provider, so an alert service can
-keep its own state and dedupe by provider, metric and reset time), what the connection alert
-means for a provider that is paused, and where the notification text is reviewed for the same
-terms the rest of the interface uses. As with the provider structure (ADR 0009), a design review
-(UI, UX and frontend) comes before the code.
+Decided in [ADR 0010](0010-alerts-and-polish.md), after a design review (UI, UX, frontend and
+security) like the one of ADR 0009.
 
 ## Open items
 

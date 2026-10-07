@@ -12,6 +12,7 @@ says so; a decision that is replaced gets a new record.
 | [0004](0004-panel-bar.md) | Top-bar items, states, selection and adaptive layout | accepted, notifications and motion planned |
 | [0005](0005-popup.md) | Popup structure, defaults and failure states | accepted, tracking controls planned |
 | [0006](0006-theming.md) | 20 themes as data, light and dark, token compiler | accepted, implemented |
-| [0007](0007-internationalization.md) | English and pt-BR with gettext | accepted, language override planned |
+| [0007](0007-internationalization.md) | English and pt-BR with gettext | accepted, follows the session language |
 | [0008](0008-mvp-roadmap.md) | Milestones M0 to M4 and open items | accepted |
 | [0009](0009-adding-providers.md) | How providers are added (M3) | accepted, open points listed |
+| [0010](0010-alerts-and-polish.md) | Alerts, notifications and polish (M4) | accepted, in progress |

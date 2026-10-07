@@ -1,0 +1,130 @@
+# 0010. Alerts and polish (M4)
+
+Status: accepted, being implemented in the order at the end. Decided after a review by UI, UX,
+frontend and security consultants.
+
+## Context
+
+M0 to M3 give a working bar, popup and four providers. M4 makes it quiet and finished: system
+notifications, a connection alert, a legend, a bar tooltip, a "not tracked" section, an About page,
+Restore defaults and a first-use assistant. ADR 0008 asked three things to be settled first: where
+an alert is raised, what the connection alert means for a paused provider, and where the
+notification text is reviewed.
+
+## Decisions
+
+### Language
+
+The language is the one of the GNOME Shell session. The extension uses the shell's own gettext
+(`Extension.gettext`), so it follows the session locale; a language without a catalog shows the
+English msgids. There is no language setting, no language step in the assistant and no process-wide
+`setlocale` or `LANGUAGE` change (that would translate the shell itself). ADR 0007 is rewritten
+accordingly. Catalogs: English (the msgids) and pt-BR.
+
+### Where alerts are raised
+
+- `lib/core/alerts.js` is a pure reducer, with no `gi://` imports:
+  `evaluate({previous, next, state, settings, now}) -> {events, state}`. Events carry no text:
+  `{kind: 'threshold' | 'connection', providerId, metricId, level, params}`. The notifier turns
+  events into translated text, so the wording is reviewed in one place.
+- The controller reports changes, not only that something changed: `subscribeChanges(({previous,
+  next}) => ...)`. It seeds its previous values from the cache, so the first poll after a shell
+  restart is not taken for a crossing.
+- Several providers answering together cause one UI update (changes are coalesced into one idle
+  callback).
+
+### Quota notifications
+
+- Fire only when a metric crosses from below the threshold to at or above it. Default threshold 95%
+  (the critical level); per quota type (session, weekly, monthly, credits) the user can turn it off
+  or change it, as decided in the bar round.
+- Dedupe by provider, metric and level. Re-arm when usage falls 3 points below the threshold
+  (hysteresis) or when the reset time moves forward by more than five minutes (never key on the raw
+  reset time: APIs wobble by seconds).
+- A state that already existed when the extension started produces no notification; the bar and the
+  popup show it.
+- At most one notification per provider per poll, and three per hour in all; the rest fold into one
+  summary.
+- A paused ("Stop tracking") or never connected provider produces no event, and its state is dropped.
+- Urgency is normal for a warning and high for a critical; never the critical urgency, which would
+  bypass Do Not Disturb. One action, "Open", opens the popup. No snooze, no repeats, no escalation.
+- The alert state (`provider`, `metric`, `level`, `resetsAt`) is kept in
+  `~/.cache/gnome-ai-quota/alerts.json`, written like the snapshot cache (private folder, atomic
+  replace), validated on load (size, known providers, ranges). A corrupt or missing file means
+  nothing was alerted yet, and alerts are held for the first poll cycle.
+
+### Connection alert
+
+- Reasons that alert: `auth_required` (no key, expired, rejected) after two failed polls or ten
+  minutes, whichever is later, with one message ("Sign in again"); and a network error or rate limit
+  that leaves the data stale for more than three poll intervals, at least fifteen minutes.
+- One notification per outage; re-armed only by a success. No "connected again" notice.
+- Never for a locked keyring (it clears itself; the popup says so), a paused provider or one that
+  was never connected.
+- Suspend and resume: a `login1` `PrepareForSleep` handler (`lib/services/power.js`) opens a
+  90-second grace window after waking in which the connection alert stays quiet, and refreshes after
+  the network is back, with jitter. Quota crossings are not suppressed: they are still true.
+
+### Notification content and privacy
+
+- Fixed, translated templates only: provider name, window, percent used and time to reset, in the
+  same words as the pills and cards ("Critical", "Warning", "5 hours", "Week"). Never an account or
+  user name, email, plan, error or HTTP text, path or token. Numbers are checked and clamped,
+  enumerations looked up in a table, so nothing provider-controlled reaches the text.
+- On the lock screen the banner is generic ("A quota is almost used") unless the user turns on
+  `notify-details-on-lock` (off by default). How the Shell 50 handles it is not verified and gets a
+  manual test with the screen locked.
+- Any dynamic value is escaped with `GLib.markup_escape_text`, length-capped and stripped of control
+  and bidirectional-override characters, in notifications and the tooltip alike.
+- Notifications use a source of their own (`MessageTray.Source`), created lazily and destroyed in
+  `disable()`; one notification per key is updated instead of stacked.
+
+### Bar, popup and prefs
+
+- **Tooltip:** the existing one, same text as the item's accessible name plus the reset time, wrapped
+  at 260 px, hidden while the screen is locked. It carries nothing the bar or popup do not.
+- **Legend:** a collapsed row at the foot of the popup, opened by a "?" button. Its rows are built
+  from the same view-model constants as the pills and glyphs, so it cannot drift.
+- **Not tracked:** a collapsed section under the hidden list; each row is the muted icon, the name
+  and a Resume button, with no meter. The "Add account" line becomes its last row.
+- **About:** `Adw.AboutDialog` with the version from `metadata.json`, the licence and constant
+  `https://` links opened with `Gio.AppInfo.launch_default_for_uri`. No paths or user name.
+- **Restore defaults:** every schema key is classified as reset or kept, and a test fails for an
+  unclassified key. It resets appearance, bar, popup, notification and threshold settings
+  (the theme included, which the dialog says) and keeps accounts, tracking state, terms
+  acknowledgements, `account-status` and the credentials revision. Confirmation is an
+  `Adw.AlertDialog` that names what changes and says accounts stay connected; Cancel is the default.
+  After the reset it syncs the settings. It does not start the assistant again.
+- **First-use assistant:** an `Adw.NavigationView` inside Preferences, never a window opened by the
+  shell, gated by `first-run-done`, skippable and resumable: welcome, choose providers (the terms
+  notice before any sign-in), connect each one (a failure does not block the next), choose the bar,
+  notifications (the default and the 5-hour window offered). The popup keeps its empty state with
+  "Add account". It never reads other tools' credential files or the environment, never turns on a
+  provider or notifications silently and sends no test notification unprompted.
+
+### Structure
+
+- The bar model in `indicator.js` (654 lines) moves to `lib/core/` and the indicator diffs each
+  provider's view by a cheap key, so a snapshot that changes nothing redraws nothing.
+- `structure.test.js` also checks that `alerts.js` imports no `gi://`, that `MessageTray` appears
+  only in `lib/ui/` and that `Gio.DBus` appears only in `lib/services/`.
+
+## Implementation order
+
+Each chunk is followed by the UI, UX, frontend and security reviews.
+
+1. `core/alerts.js` with tests, `alertStore`, `subscribeChanges` and cache seeding.
+2. The notifier and its wiring and teardown; wording review.
+3. `power.js`, resume handling and the connection alert.
+4. Indicator extraction, view diff and coalescing.
+5. Restore defaults and About.
+6. Legend, "not tracked" and the tooltip audit.
+7. First-use assistant.
+8. Right-to-left prototype and a longer-text pseudo-locale pass.
+
+## Open points
+
+- The lock-screen behaviour of notifications on Shell 50 and the exact `MessageTray` API names are
+  to be checked in the nested shell; nothing here was run against the installed Shell yet.
+- Whether "Disconnect all accounts and delete local data" is wanted as a separate action.
+- Whether the pt-BR text needs a reader other than the owner.
