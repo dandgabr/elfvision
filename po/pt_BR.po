@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-06 21:45-0300\n"
+"POT-Creation-Date: 2026-10-06 22:13-0300\n"
 "PO-Revision-Date: 2026-10-06 21:45-0300\n"
 "Last-Translator: gnome-ai-quota authors\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -155,41 +155,103 @@ msgstr "Atualizado há %d min"
 msgid "Updated just now"
 msgstr "Atualizado agora"
 
-#: lib/ui/indicator.js:81
+#: lib/ui/indicator.js:106
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: lib/ui/indicator.js:89
+#: lib/ui/indicator.js:107
 msgid "Preferences"
 msgstr "Preferências"
 
-#: lib/ui/indicator.js:147
+#: lib/ui/indicator.js:253
 msgid "On the bar"
 msgstr "Na barra"
 
-#: lib/ui/indicator.js:149
+#: lib/ui/indicator.js:255
 #, javascript-format
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] "Oculto da barra (%d)"
 msgstr[1] "Ocultos da barra (%d)"
 
-#: lib/ui/providerCard.js:92
+#: lib/ui/providerCard.js:100
 msgid "Collapse"
 msgstr "Recolher"
 
-#: lib/ui/providerCard.js:92
+#: lib/ui/providerCard.js:100
 msgid "Expand"
 msgstr "Expandir"
 
-#: prefs.js:8
+#: prefs.js:39
 msgid "Appearance"
 msgstr "Aparência"
 
-#: prefs.js:12
+#: prefs.js:44
+msgid "Top bar"
+msgstr "Barra superior"
+
+#: prefs.js:45
+msgid ""
+"The bar shrinks, then shows fewer providers, when other extensions leave it "
+"little room."
+msgstr ""
+"A barra encolhe e depois mostra menos provedores quando outras extensões "
+"deixam pouco espaço."
+
+#: prefs.js:48
+msgid "Left"
+msgstr "Esquerda"
+
+#: prefs.js:49
+msgid "Center"
+msgstr "Centro"
+
+#: prefs.js:50
+msgid "Right"
+msgstr "Direita"
+
+#: prefs.js:51
+msgid "Position"
+msgstr "Posição"
+
+#: prefs.js:51
+msgid "Where the quota items sit on the top bar."
+msgstr "Onde os itens de cota ficam na barra superior."
+
+#: prefs.js:54
+msgid "Providers on the bar"
+msgstr "Na barra"
+
+#: prefs.js:55
+msgid "The most providers shown, from 1 to 5."
+msgstr "O máximo de provedores exibidos, de 1 a 5."
+
+#: prefs.js:62
+msgid "Automatic"
+msgstr "Automático"
+
+#: prefs.js:63
+msgid "Always compact"
+msgstr "Sempre compacto"
+
+#: prefs.js:64
+msgid "Never compact"
+msgstr "Nunca compacto"
+
+#: prefs.js:65
+msgid "Compact drops the percent sign and the window suffix."
+msgstr "O modo compacto remove o sinal de porcentagem e o sufixo da janela."
+
+#: prefs.js:65
+msgid "Compact mode"
+msgstr "Modo compacto"
+
+#: prefs.js:69
 msgid "Demo build"
 msgstr "Versão de demonstração"
 
-#: prefs.js:13
-msgid "Settings arrive in later milestones. This build shows demo data."
-msgstr "As configurações chegam em marcos futuros. Esta versão mostra dados de demonstração."
+#: prefs.js:70
+msgid "More settings arrive in later milestones. This build shows demo data."
+msgstr "Mais configurações chegam em marcos futuros. Esta versão mostra dados de demonstração."
+"As configurações chegam em marcos futuros. Esta versão mostra dados de "
+"demonstração."

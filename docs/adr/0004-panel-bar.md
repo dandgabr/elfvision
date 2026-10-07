@@ -40,6 +40,20 @@ suffix (`·5h`, `·S`, `·M`) and a 3 px bar under the item (track at 20% opacit
 - **Degradation:** full, then compact (no `%`), then headline with `+N`. Budget
   about 260 px. Never truncate a number with an ellipsis. Fixed item width
   (tabular digits) so the bar does not shake.
+- **Adaptive layout (amended 2026-10-06):** the bar measures the room the panel
+  leaves it and picks the richest layout that fits, so other extensions never
+  clip it. Candidates in order: full, compact with N providers, compact with
+  N-1 down to 2, headline (the worst provider plus `+N`), then one compact
+  provider. The room is the side width the shell allocates, computed as
+  `(panel width - center natural width + work area offset) / 2`, minus what the
+  other items of the same panel box need. It is re-evaluated, debounced, when
+  children are added or removed in a panel box, when an allocation changes and
+  when monitors change. The popup lists as "Hidden from the bar" whatever the
+  bar does not show.
+- **Settings (amended 2026-10-06):** `position` (`left`, `center`, `right`),
+  `bar-count` (1 to 5, default 3) and `compact-mode` (`auto`, `always`, `never`).
+  `never` keeps the `%` and the suffix and only drops providers. The button goes
+  after the Activities button in the left box, first in the right box.
 - **Notifications:** default threshold 95% (once per window, with 3 point
   hysteresis), configurable per quota kind (session, weekly, monthly, credits;
   any subset), with an optional dollar floor for credits. A separate **connection

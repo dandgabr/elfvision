@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-ai-quota">
+  <enum id="org.gnome.shell.extensions.gnome-ai-quota.Position">
+    <value nick="left" value="0"/>
+    <value nick="center" value="1"/>
+    <value nick="right" value="2"/>
+  </enum>
+  <enum id="org.gnome.shell.extensions.gnome-ai-quota.CompactMode">
+    <value nick="auto" value="0"/>
+    <value nick="always" value="1"/>
+    <value nick="never" value="2"/>
+  </enum>
+
+  <schema id="org.gnome.shell.extensions.gnome-ai-quota"
+          path="/org/gnome/shell/extensions/gnome-ai-quota/">
+    <key name="position" enum="org.gnome.shell.extensions.gnome-ai-quota.Position">
+      <default>'right'</default>
+      <summary>Panel position</summary>
+      <description>Which part of the top bar holds the quota items: left, center or right.</description>
+    </key>
+    <key name="bar-count" type="i">
+      <range min="1" max="5"/>
+      <default>3</default>
+      <summary>Providers on the bar</summary>
+      <description>The most providers shown on the top bar. Fewer are shown when space runs out.</description>
+    </key>
+    <key name="compact-mode" enum="org.gnome.shell.extensions.gnome-ai-quota.CompactMode">
+      <default>'auto'</default>
+      <summary>Compact mode</summary>
+      <description>auto: shrink the bar only when space runs out. always: always compact. never: never drop the percent sign and window suffix (providers may still be hidden).</description>
+    </key>
+  </schema>
+</schemalist>

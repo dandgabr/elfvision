@@ -13,6 +13,7 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
+"$root/tools/build.sh" >/dev/null
 uuid="$(python3 -I -c 'import json,sys;print(json.load(open(sys.argv[1]))["uuid"])' "$root/metadata.json")"
 scripts="$*"
 work="$(mktemp -d)"

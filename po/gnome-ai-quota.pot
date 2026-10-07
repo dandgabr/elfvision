@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-06 21:45-0300\n"
+"POT-Creation-Date: 2026-10-06 22:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -156,41 +156,99 @@ msgstr ""
 msgid "Updated just now"
 msgstr ""
 
-#: lib/ui/indicator.js:81
+#: lib/ui/indicator.js:106
 msgid "Refresh"
 msgstr ""
 
-#: lib/ui/indicator.js:89
+#: lib/ui/indicator.js:107
 msgid "Preferences"
 msgstr ""
 
-#: lib/ui/indicator.js:147
+#: lib/ui/indicator.js:253
 msgid "On the bar"
 msgstr ""
 
-#: lib/ui/indicator.js:149
+#: lib/ui/indicator.js:255
 #, javascript-format
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/providerCard.js:92
+#: lib/ui/providerCard.js:100
 msgid "Collapse"
 msgstr ""
 
-#: lib/ui/providerCard.js:92
+#: lib/ui/providerCard.js:100
 msgid "Expand"
 msgstr ""
 
-#: prefs.js:8
+#: prefs.js:39
 msgid "Appearance"
 msgstr ""
 
-#: prefs.js:12
+#: prefs.js:44
+msgid "Top bar"
+msgstr ""
+
+#: prefs.js:45
+msgid ""
+"The bar shrinks, then shows fewer providers, when other extensions leave it "
+"little room."
+msgstr ""
+
+#: prefs.js:48
+msgid "Left"
+msgstr ""
+
+#: prefs.js:49
+msgid "Center"
+msgstr ""
+
+#: prefs.js:50
+msgid "Right"
+msgstr ""
+
+#: prefs.js:51
+msgid "Position"
+msgstr ""
+
+#: prefs.js:51
+msgid "Where the quota items sit on the top bar."
+msgstr ""
+
+#: prefs.js:54
+msgid "Providers on the bar"
+msgstr ""
+
+#: prefs.js:55
+msgid "The most providers shown, from 1 to 5."
+msgstr ""
+
+#: prefs.js:62
+msgid "Automatic"
+msgstr ""
+
+#: prefs.js:63
+msgid "Always compact"
+msgstr ""
+
+#: prefs.js:64
+msgid "Never compact"
+msgstr ""
+
+#: prefs.js:65
+msgid "Compact drops the percent sign and the window suffix."
+msgstr ""
+
+#: prefs.js:65
+msgid "Compact mode"
+msgstr ""
+
+#: prefs.js:69
 msgid "Demo build"
 msgstr ""
 
-#: prefs.js:13
-msgid "Settings arrive in later milestones. This build shows demo data."
+#: prefs.js:70
+msgid "More settings arrive in later milestones. This build shows demo data."
 msgstr ""

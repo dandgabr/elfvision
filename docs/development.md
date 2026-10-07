@@ -8,17 +8,28 @@ prefs.js            preferences window (GTK 4, libadwaita)
 metadata.json       uuid gnome-ai-quota@dandgabr.github.io, shell 50
 stylesheet.css      the default theme (sistema-gnome), classes prefixed gaq-
 lib/core/           pure JavaScript: contract helpers, severity, pacing,
-                    selection, formatting, view models, demo fixtures
+                    selection, fitting, formatting, view models, demo fixtures
 lib/ui/             St widgets: meter, bar item, provider card, indicator
 icons/              symbolic SVG icons, one per provider id
 po/                 gettext template and translations
 tests/              unit tests for lib/core (no GNOME Shell needed)
-tools/              i18n.sh, headless-shell.sh, gen-themes.py
+schemas/            GSettings schema (position, bar-count, compact-mode)
+tools/              build.sh, i18n.sh, headless-shell.sh, gen-themes.py
 ```
 
 `lib/core` must not import `gi://` or `resource://` modules. Everything the UI
 shows is computed there (`viewmodel.js`) and painted by `lib/ui`, so the logic
 stays testable under plain `gjs`.
+
+## Build
+
+```sh
+tools/build.sh   # compile the GSettings schema and the translations
+```
+
+The extension needs `schemas/gschemas.compiled` and `locale/` to run from a
+checkout. Neither is committed. Run the build after cloning and after changing
+`schemas/` or `po/`.
 
 ## Tests
 
@@ -65,6 +76,14 @@ directory is not committed.
 
 ## Pitfalls found so far
 
+- **Signal names.** `St.BoxLayout` has `child-added` and `child-removed`, not
+  `actor-added`; a wrong name makes the extension fail to load.
+- **Do not destroy what you need later.** `destroy_all_children()` also destroys
+  siblings you keep a reference to (the `+N` badge). Give rebuilt items their own box.
+- **Skip measuring detached widgets.** Calling `get_preferred_width()` on a widget
+  outside the stage logs St criticals during shell teardown.
+- **Classic scrollbars.** `overlay_scrollbars: false` gives the scrollbar its own
+  column, so it does not draw over the cards.
 - **Negative margins break layout.** A CSS margin that makes the preferred width
   negative wraps to 2^32 in St, giving huge natural widths, allocations such as
   `-12 x 32` and Cogl viewport criticals. Group widgets in a tighter box instead.

@@ -4,6 +4,7 @@ import {formatClock, formatDuration, formatMoney, formatPercent} from '../lib/co
 import {aheadOfPace, expectedPercent} from '../lib/core/pacing.js';
 import {selectForBar} from '../lib/core/selection.js';
 import {demoSnapshots} from '../lib/core/fixtures.js';
+import {candidateLayouts, chooseLayout, sideWidth} from '../lib/core/fit.js';
 import {barView, cardView, fmt, summaryText, updatedText} from '../lib/core/viewmodel.js';
 
 const NOW = Date.UTC(2026, 9, 6, 19, 46);
@@ -153,4 +154,34 @@ test('summary and updated text', () => {
 test('fmt handles placeholders and escaped percent signs', () => {
     assertEqual(fmt('%s: %s%% of %s', 'Claude', '97', 'week'), 'Claude: 97% of week');
     assertEqual(fmt('%d ok', 3), '3 ok');
+});
+
+test('fit: candidate layouts go from rich to lean', () => {
+    const shape = layouts => layouts.map(l => `${l.headline ? 'H' : l.count}${l.compact ? 'c' : ''}`);
+    assertEqual(shape(candidateLayouts(3, 'auto')), ['3', '3c', '2c', 'Hc', '1c']);
+    assertEqual(shape(candidateLayouts(2, 'always')), ['2c', 'Hc', '1c']);
+    assertEqual(shape(candidateLayouts(2, 'never')), ['2', '1', 'Hc', '1c']);
+});
+
+test('fit: picks the richest layout that fits, else the leanest', () => {
+    const layouts = candidateLayouts(3, 'auto');
+    // Widths: each provider costs 100 px full, 70 px compact, headline is 90 px.
+    const measure = l => (l.headline ? 90 : l.count * (l.compact ? 70 : 100));
+    assertEqual(chooseLayout(layouts, measure, 400).layout.count, 3);
+    assertEqual(chooseLayout(layouts, measure, 400).layout.compact, false);
+    const tight = chooseLayout(layouts, measure, 215);
+    assertEqual([tight.layout.count, tight.layout.compact, tight.fits], [3, true, true]);
+    const tighter = chooseLayout(layouts, measure, 150);
+    assertEqual([tighter.layout.count, tighter.layout.compact], [2, true]);
+    const headline = chooseLayout(layouts, measure, 95);
+    assertEqual([headline.layout.headline, headline.fits], [true, true]);
+    // Nothing fits: the leanest layout is returned, the single compact provider.
+    const none = chooseLayout(layouts, l => (l.headline ? 90 : l.count * (l.compact ? 70 : 100)), 10);
+    assertEqual([none.layout.count, none.layout.headline, none.fits], [1, false, false]);
+});
+
+test('fit: side width mirrors the panel allocation', () => {
+    assertEqual(sideWidth(1280, 200), 540);
+    assertEqual(sideWidth(100, 400), 0);
+    assertEqual(sideWidth(1280, 200, 40), 560);
 });
