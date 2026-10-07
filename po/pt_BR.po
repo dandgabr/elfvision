@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 01:08-0300\n"
+"POT-Creation-Date: 2026-10-07 01:52-0300\n"
 "PO-Revision-Date: 2026-10-06 21:45-0300\n"
 "Last-Translator: gnome-ai-quota authors\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -112,8 +112,8 @@ msgid "Out of date"
 msgstr "Desatualizado"
 
 #: lib/core/viewmodel.js:170
-msgid "Account connection arrives in a later version."
-msgstr "A conexão de contas chega em uma versão futura."
+msgid "Open Preferences to connect this account."
+msgstr "Abra as Preferências para conectar esta conta."
 
 #: lib/core/viewmodel.js:173
 msgid "Too many requests."
@@ -163,71 +163,71 @@ msgstr "Esperado até agora: %s%%"
 msgid "left"
 msgstr "restam"
 
-#: lib/core/viewmodel.js:277
+#: lib/core/viewmodel.js:279
 msgid "The last data is more than a day old."
 msgstr "Os últimos dados têm mais de um dia."
 
-#: lib/core/viewmodel.js:278
+#: lib/core/viewmodel.js:280
 msgid "No quota data yet."
 msgstr "Ainda sem dados de cota."
 
-#: lib/core/viewmodel.js:287
+#: lib/core/viewmodel.js:289
 msgid "Budget spent"
 msgstr "Orçamento gasto"
 
-#: lib/core/viewmodel.js:289
+#: lib/core/viewmodel.js:291
 msgid "of %s · %s%%"
 msgstr "de %s · %s%%"
 
-#: lib/core/viewmodel.js:291
+#: lib/core/viewmodel.js:293
 msgid "No reset: prepaid balance"
 msgstr "Sem reinício: saldo pré-pago"
 
-#: lib/core/viewmodel.js:317
+#: lib/core/viewmodel.js:319
 msgid "%s: %d point ahead of an even pace"
 msgid_plural "%s: %d points ahead of an even pace"
 msgstr[0] "%s: %d ponto acima do ritmo uniforme"
 msgstr[1] "%s: %d pontos acima do ritmo uniforme"
 
-#: lib/core/viewmodel.js:322
+#: lib/core/viewmodel.js:324
 msgid "Data is out of date."
 msgstr "Dado desatualizado."
 
-#: lib/core/viewmodel.js:348
+#: lib/core/viewmodel.js:350
 msgid "%d ok"
 msgstr "%d ok"
 
-#: lib/core/viewmodel.js:349
+#: lib/core/viewmodel.js:351
 msgid "%d warning"
 msgstr "%d em atenção"
 
-#: lib/core/viewmodel.js:350
+#: lib/core/viewmodel.js:352
 msgid "%d critical"
 msgid_plural "%d critical"
 msgstr[0] "%d crítico"
 msgstr[1] "%d críticos"
 
-#: lib/core/viewmodel.js:351
+#: lib/core/viewmodel.js:353
 msgid "%d signed out"
 msgstr "%d sem login"
 
-#: lib/core/viewmodel.js:352
+#: lib/core/viewmodel.js:354
 msgid "%d with a problem"
 msgstr "%d com problema"
 
-#: lib/core/viewmodel.js:364
+#: lib/core/viewmodel.js:366
 msgid "Updated %d min ago"
 msgstr "Atualizado há %d min"
 
-#: lib/core/viewmodel.js:364
+#: lib/core/viewmodel.js:366
 msgid "Updated just now"
 msgstr "Atualizado agora"
 
-#: lib/core/viewmodel.js:379
+#: lib/core/viewmodel.js:381
 msgid "Not updated yet"
 msgstr "Ainda não atualizado"
 
-#: lib/core/viewmodel.js:382
+#: lib/core/viewmodel.js:384
 msgid "%s · %d with a problem"
 msgid_plural "%s · %d with problems"
 msgstr[0] "%s · %d com problema"
@@ -269,15 +269,19 @@ msgid_plural "Hidden from the bar (%d)"
 msgstr[0] "Oculto da barra (%d)"
 msgstr[1] "Ocultos da barra (%d)"
 
-#: lib/ui/providerCard.js:130
+#: lib/ui/providerCard.js:132
 msgid "Collapse %s"
 msgstr "Recolher %s"
 
-#: lib/ui/providerCard.js:130
+#: lib/ui/providerCard.js:132
 msgid "Expand %s"
 msgstr "Expandir %s"
 
-#: lib/ui/providerCard.js:178
+#: lib/ui/providerCard.js:180
+msgid "Open Preferences"
+msgstr "Abrir Preferências"
+
+#: lib/ui/providerCard.js:193
 msgid "Try again"
 msgstr "Tentar de novo"
 
@@ -385,180 +389,253 @@ msgstr "Uma interface de terminal em texto."
 msgid "Raw HTML and dense tables."
 msgstr "HTML cru e tabelas densas."
 
-#: prefs.js:75
+#: prefs.js:86
 msgid "Some themes could not be loaded"
 msgstr "Alguns temas não puderam ser carregados"
 
-#: prefs.js:99
+#: prefs.js:110
 msgid "System"
 msgstr "Sistema"
 
-#: prefs.js:99 prefs.js:219
+#: prefs.js:110 prefs.js:284
 msgid "Your themes"
 msgstr "Seus temas"
 
-#: prefs.js:106 prefs.js:194
+#: prefs.js:117 prefs.js:259
 msgid "System (GNOME)"
 msgstr "Sistema (GNOME)"
 
-#: prefs.js:110
+#: prefs.js:121
 msgid "Follows the GNOME accent color and the light or dark setting."
 msgstr "Segue a cor de destaque do GNOME e a configuração de claro ou escuro."
 
-#: prefs.js:139 prefs.js:199
+#: prefs.js:150 prefs.js:264
 msgid "Theme"
 msgstr "Tema"
 
-#: prefs.js:152 prefs.js:184
+#: prefs.js:157
+msgid "Accounts"
+msgstr "Contas"
+
+#: prefs.js:158
+msgid ""
+"Keys are kept in the system keyring, never in a file or in the settings."
+msgstr "As chaves ficam no chaveiro do sistema, nunca em um arquivo nem nas configurações."
+
+#: prefs.js:160
+msgid "Checking the keyring…"
+msgstr "Consultando o chaveiro…"
+
+#: prefs.js:162
+msgid "Remove key"
+msgstr "Remover chave"
+
+#: prefs.js:168
+msgid "API key"
+msgstr "Chave de API"
+
+#: prefs.js:173
+msgid "A key is stored."
+msgstr "Há uma chave guardada."
+
+#: prefs.js:173
+msgid "No key yet. Paste one below."
+msgstr "Ainda não há chave. Cole uma abaixo."
+
+#: prefs.js:176 prefs.js:197
+msgid "The keyring is not available."
+msgstr "O chaveiro não está disponível."
+
+#: prefs.js:189
+msgid "The keyring did not accept the key."
+msgstr "O chaveiro não aceitou a chave."
+
+#: prefs.js:216 prefs.js:249
 msgid "Appearance"
 msgstr "Aparência"
 
-#: prefs.js:157
+#: prefs.js:221
 msgid "Top bar"
 msgstr "Barra superior"
 
-#: prefs.js:158
+#: prefs.js:222
 msgid ""
 "The bar shrinks, then shows fewer providers, when other extensions leave it "
 "little room."
 msgstr "A barra encolhe e depois mostra menos provedores quando outras extensões deixam pouco espaço."
 
-#: prefs.js:161
+#: prefs.js:225
 msgid "Left"
 msgstr "Esquerda"
 
-#: prefs.js:162
+#: prefs.js:226
 msgid "Center"
 msgstr "Centro"
 
-#: prefs.js:163
+#: prefs.js:227
 msgid "Right"
 msgstr "Direita"
 
-#: prefs.js:164
+#: prefs.js:228
 msgid "Position"
 msgstr "Posição"
 
-#: prefs.js:164
+#: prefs.js:228
 msgid "Where the quota items sit on the top bar."
 msgstr "Onde os itens de cota ficam na barra superior."
 
-#: prefs.js:168
+#: prefs.js:232
 msgid "Providers on the bar"
 msgstr "Provedores na barra"
 
-#: prefs.js:169
+#: prefs.js:233
 msgid "The most providers shown, from 1 to 5."
 msgstr "O máximo de provedores exibidos, de 1 a 5. Os mais críticos aparecem primeiro."
 
-#: prefs.js:176
+#: prefs.js:240
 msgid "Automatic"
 msgstr "Automático"
 
-#: prefs.js:177
+#: prefs.js:241
 msgid "Always compact"
 msgstr "Sempre compactar"
 
-#: prefs.js:178
+#: prefs.js:242
 msgid "Never compact"
 msgstr "Nunca compactar"
 
-#: prefs.js:179
+#: prefs.js:243
 msgid "Compact mode"
 msgstr "Modo compacto"
 
-#: prefs.js:179
+#: prefs.js:243
 msgid "Drops the percent sign and the window suffix."
 msgstr "Remove o sinal de % e o sufixo da janela."
 
-#: prefs.js:186 prefs.js:241
+#: prefs.js:251 prefs.js:306
 msgid "Follow the system"
 msgstr "Seguir o sistema"
 
-#: prefs.js:187
+#: prefs.js:252
 msgid "Light"
 msgstr "Claro"
 
-#: prefs.js:188
+#: prefs.js:253
 msgid "Dark"
 msgstr "Escuro"
 
-#: prefs.js:189
+#: prefs.js:254
 msgid "Applies to the popup. The top bar always stays dark."
 msgstr "Vale para o popup. A barra superior continua escura."
 
-#: prefs.js:189
+#: prefs.js:254
 msgid "Light or dark"
 msgstr "Claro ou escuro"
 
-#: prefs.js:195
+#: prefs.js:260
 msgid "%s (unavailable)"
 msgstr "%s (indisponível)"
 
-#: prefs.js:200
+#: prefs.js:265
 msgid "Each theme has a light and a dark variant."
 msgstr "Todo tema tem variante clara e escura."
 
-#: prefs.js:220
+#: prefs.js:285
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr "Uma pasta por tema, com um theme.json dentro: %s"
 
-#: prefs.js:223
+#: prefs.js:288
 msgid "Open folder"
 msgstr "Abrir pasta"
 
-#: prefs.js:225
+#: prefs.js:290
 msgid "Open the themes folder"
 msgstr "Abrir a pasta de temas"
 
-#: prefs.js:239
+#: prefs.js:304
 msgid "Popup"
 msgstr "Popup"
 
-#: prefs.js:242
+#: prefs.js:307
 msgid "12 hours"
 msgstr "12 horas"
 
-#: prefs.js:243
+#: prefs.js:308
 msgid "24 hours"
 msgstr "24 horas"
 
-#: prefs.js:244
+#: prefs.js:309
 msgid "Clock"
 msgstr "Relógio"
 
-#: prefs.js:244
+#: prefs.js:309
 msgid "How reset times are written."
 msgstr "Como os horários de reinício são escritos."
 
-#: prefs.js:247
+#: prefs.js:312
 msgid "1h 20min"
 msgstr "1h 20min"
 
-#: prefs.js:248
+#: prefs.js:313
 msgid "1h20"
 msgstr "1h20"
 
-#: prefs.js:249
+#: prefs.js:314
 msgid "How the countdown to a reset is written."
 msgstr "Como a contagem até o reinício é escrita."
 
-#: prefs.js:249
+#: prefs.js:314
 msgid "Time until reset"
 msgstr "Tempo até o reinício"
 
-#: prefs.js:252
+#: prefs.js:317
 msgid "Open cards that need attention"
 msgstr "Abrir cartões que pedem atenção"
 
-#: prefs.js:253
+#: prefs.js:318
 msgid "Cards in warning, critical or error states open on their own."
 msgstr "Cartões em atenção, críticos ou com erro abrem sozinhos."
 
-#: prefs.js:260
-msgid "Demo build"
-msgstr "Versão de demonstração"
+#: prefs.js:325
+msgid "Development"
+msgstr "Desenvolvimento"
 
-#: prefs.js:261
-msgid "More settings arrive in later milestones. This build shows demo data."
-msgstr "Mais configurações chegam em marcos futuros. Esta versão mostra dados de demonstração."
+#: prefs.js:326
+msgid "Demo data lets you try every state without an account."
+msgstr "Os dados de demonstração permitem ver todos os estados sem uma conta."
+
+#: prefs.js:329
+msgid "Real providers"
+msgstr "Provedores reais"
+
+#: prefs.js:330
+msgid "Demo data"
+msgstr "Dados de demonstração"
+
+#: prefs.js:331
+msgid "Data source"
+msgstr "Fonte dos dados"
+
+#: prefs.js:331
+msgid "Where the numbers come from."
+msgstr "De onde vêm os números."
+
+#: prefs.js:333
+msgid "Steady"
+msgstr "Estável"
+
+#: prefs.js:334
+msgid "Flaky"
+msgstr "Instável"
+
+#: prefs.js:335
+msgid "Drifting"
+msgstr "Subindo"
+
+#: prefs.js:336
+msgid "Demo scenario"
+msgstr "Cenário de demonstração"
+
+#: prefs.js:336
+msgid "Only used with demo data."
+msgstr "Só vale com dados de demonstração."

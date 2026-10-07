@@ -28,9 +28,15 @@ export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME=
 export GSETTINGS_BACKEND=memory
 # One script path per line, so names with spaces survive.
 SCRIPTS="$(printf '%s\n' "$@")"
-export UUID="$uuid" SCRIPTS LOGFILE="$log" ROOT="$root" SKIP_ENABLE="${SKIP_ENABLE:-}"
+export DATA_SOURCE="${DATA_SOURCE:-demo}" UUID="$uuid" SCRIPTS LOGFILE="$log" ROOT="$root" SKIP_ENABLE="${SKIP_ENABLE:-}"
 
 dbus-run-session -- bash -c '
+    # A throwaway, unlocked keyring, so the provider keys of a test never touch yours.
+    gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1 || true
+    # Only the in-memory session collection exists; make it the default one so
+    # libsecret does not ask to create a keyring.
+    gdbus call --session --dest org.freedesktop.secrets --object-path /org/freedesktop/secrets \
+        --method org.freedesktop.Secret.Service.SetAlias default /org/freedesktop/secrets/collection/session >/dev/null 2>&1 || true
     gnome-shell --headless --wayland --unsafe-mode --virtual-monitor 1280x800 >"$LOGFILE" 2>&1 &
     shell=$!
     for _ in $(seq 1 50); do
@@ -44,6 +50,12 @@ dbus-run-session -- bash -c '
             --method org.gnome.Shell.Extensions.EnableExtension "$UUID" >/dev/null
     fi
     sleep 2
+    # The tests use made-up data; set DATA_SOURCE=live to use the real providers.
+    if [ "${DATA_SOURCE:-demo}" = demo ]; then
+        gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval \
+            "Main.panel.statusArea[\"$UUID\"]._settings.set_string(\"data-source\", \"demo\")" >/dev/null
+        sleep 1
+    fi
     echo "--- extension info"
     gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions \
         --method org.gnome.Shell.Extensions.GetExtensionInfo "$UUID" | tr "," "\n" | grep -E "state|error|enabled" || true

@@ -1,7 +1,10 @@
+import GLib from 'gi://GLib';
+
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-import {createDemoProviders} from './lib/providers/demo.js';
+import {LIVE_PROVIDER_IDS, createProviders} from './lib/providers/index.js';
+import {CacheStore} from './lib/services/cacheStore.js';
 import {QuotaController} from './lib/services/controller.js';
 import {ThemeManager} from './lib/services/themeManager.js';
 import GaqIndicator from './lib/ui/indicator.js';
@@ -30,19 +33,31 @@ export default class GnomeAiQuotaExtension extends Extension {
             this._destroyIndicator();
             this._createIndicator();
         });
-        this._scenarioChangedId = this._settings.connect('changed::demo-scenario', () => {
+        const rebuild = () => {
             this._destroyIndicator();
             this._destroyController();
             this._createController();
             this._createIndicator();
+        };
+        this._scenarioChangedId = this._settings.connect('changed::demo-scenario', rebuild);
+        this._sourceChangedId = this._settings.connect('changed::data-source', rebuild);
+        // The preferences window runs in another process; it raises this number
+        // after it stores or removes a credential.
+        this._credentialsChangedId = this._settings.connect('changed::credentials-revision', () => {
+            for (const id of LIVE_PROVIDER_IDS)
+                this._controller?.credentialsChanged(id);
         });
     }
 
     disable() {
         if (this._positionChangedId)
             this._settings?.disconnect(this._positionChangedId);
-        if (this._scenarioChangedId)
-            this._settings?.disconnect(this._scenarioChangedId);
+        for (const id of [this._scenarioChangedId, this._sourceChangedId, this._credentialsChangedId]) {
+            if (id)
+                this._settings?.disconnect(id);
+        }
+        this._sourceChangedId = 0;
+        this._credentialsChangedId = 0;
         this._positionChangedId = 0;
         this._scenarioChangedId = 0;
         this._destroyIndicator();
@@ -53,8 +68,11 @@ export default class GnomeAiQuotaExtension extends Extension {
     }
 
     _createController() {
-        const providers = createDemoProviders(this._settings.get_string('demo-scenario'));
-        this._controller = new QuotaController({providers});
+        const source = this._settings.get_string('data-source');
+        const providers = createProviders({source, scenario: this._settings.get_string('demo-scenario')});
+        // Demo and real data must never share a cache: they use the same ids.
+        const cacheDirectory = GLib.build_filenamev([GLib.get_user_cache_dir(), 'gnome-ai-quota', ...(source === 'demo' ? ['demo'] : [])]);
+        this._controller = new QuotaController({providers, cache: new CacheStore(cacheDirectory)});
         this._controller.start().catch(error =>
             console.error(`gnome-ai-quota: cannot start: ${error.message}`));
     }

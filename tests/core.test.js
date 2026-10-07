@@ -282,7 +282,7 @@ test('failures: each code gets its own pill, message and retry line', () => {
 test('failures: a signed-out provider has no retry and no value', () => {
     const view = cardView(failed('auth_required'), {nowMs: NOW});
     assertEqual([view.pill.text, view.heroText, view.retryText, view.canRetry, view.message],
-        ['⊘ Signed out', '–', null, false, 'Account connection arrives in a later version.']);
+        ['⊘ Signed out', '–', null, false, 'Open Preferences to connect this account.']);
 });
 
 test('failures: the last value is marked approximate and drawn neutral', () => {
@@ -309,4 +309,92 @@ test('summary and footer tell signed-out apart from failing, and do not hide pro
     assertEqual(footerText(130000, 0), 'Updated 2 min ago');
     assertEqual(footerText(130000, 1), 'Updated 2 min ago · 1 with a problem');
     assertEqual(footerText(130000, 3), 'Updated 2 min ago · 3 with problems');
+});
+
+// ---- Command Code
+
+import {parseCredits} from '../lib/core/commandCode.js';
+import {ProviderError, errorForStatus} from '../lib/providers/errors.js';
+import {createCommandCodeProvider} from '../lib/providers/commandCode.js';
+
+const CREDITS = {
+    credits: {monthlyCredits: 41.5},
+    windowLimits: {
+        fiveHour: {used: 30, cap: 120, resetAt: 1790000000000},
+        weekly: {used: 800, cap: 1000, resetAt: 1790500000000},
+    },
+};
+
+test('command code: the credits reply becomes two percent metrics and a balance', () => {
+    const {metrics} = parseCredits(CREDITS);
+    assertEqual(metrics.map(m => m.id), ['five-hour', 'weekly', 'monthly-credits']);
+    assertEqual([metrics[0].percentUsed, metrics[0].window, metrics[0].resetsAt], [25, 'session', 1790000000000]);
+    assertEqual([metrics[1].percentUsed, metrics[1].windowSecs], [80, 604800]);
+    assertEqual([metrics[2].kind, metrics[2].balance], ['money', 41.5]);
+});
+
+test('command code: a missing or broken field is dropped, never shown as zero', () => {
+    const partial = parseCredits({windowLimits: {fiveHour: {used: 'x', cap: 10}, weekly: {used: 5, cap: 0}}, credits: {monthlyCredits: 3}});
+    assertEqual(partial.metrics.map(m => m.id), ['monthly-credits']);
+    assertEqual(parseCredits({windowLimits: {weekly: {used: 2000, cap: 1000}}}).metrics[0].percentUsed, 100);
+    for (const body of [null, 'text', 42, {}, {windowLimits: {}}, {credits: {monthlyCredits: -1}}]) {
+        let code = '';
+        try {
+            parseCredits(body);
+        } catch (error) {
+            code = error.code;
+        }
+        assertEqual([JSON.stringify(body), code], [JSON.stringify(body), 'provider_changed']);
+    }
+});
+
+test('http statuses map to provider states', () => {
+    assertEqual(errorForStatus(200), null);
+    assertEqual(errorForStatus(204), null);
+    assertEqual([errorForStatus(401).code, errorForStatus(403).code], ['auth_required', 'auth_required']);
+    assertEqual([errorForStatus(404).code, errorForStatus(500).code, errorForStatus(302).code], ['provider_changed', 'network', 'network']);
+    const limited = errorForStatus(429, '90');
+    assertEqual([limited.code, limited.retryAfterMs], ['rate_limited', 90000]);
+    assertEqual(errorForStatus(429, 'Wed, 21 Oct 2026 07:28:00 GMT').retryAfterMs, undefined);
+});
+
+function commandCode({key = 'secret-key', reply = {status: 200, retryAfter: null, json: CREDITS}, keyError = false} = {}) {
+    const calls = [];
+    const provider = createCommandCodeProvider({
+        http: {get: async (url, options) => { calls.push({url, options}); return reply; }},
+        getKey: async () => { if (keyError) throw new Error('locked'); return key; },
+    });
+    return {provider, calls};
+}
+
+async function failureOf(promise) {
+    try {
+        await promise;
+    } catch (error) {
+        return error;
+    }
+    return null;
+}
+
+test('command code provider: sends the key as a bearer token to one https endpoint', async () => {
+    const {provider, calls} = commandCode();
+    const body = await provider.fetch({isCancelled: () => false});
+    assertEqual(body.metrics.length, 3);
+    assertEqual(calls.length, 1);
+    assertEqual(calls[0].url, 'https://api.commandcode.ai/alpha/billing/credits');
+    assertEqual(calls[0].options.headers.Authorization, 'Bearer secret-key');
+});
+
+test('command code provider: no key, a locked keyring and bad replies are explicit failures', async () => {
+    const ctx = {isCancelled: () => false};
+    assertEqual((await failureOf(commandCode({key: null}).provider.fetch(ctx))).code, 'auth_required');
+    assertEqual((await failureOf(commandCode({keyError: true}).provider.fetch(ctx))).code, 'auth_required');
+    assertEqual((await failureOf(commandCode({reply: {status: 401, json: null}}).provider.fetch(ctx))).code, 'auth_required');
+    assertEqual((await failureOf(commandCode({reply: {status: 200, json: {nothing: true}}}).provider.fetch(ctx))).code, 'provider_changed');
+    const limited = await failureOf(commandCode({reply: {status: 429, retryAfter: '30', json: null}}).provider.fetch(ctx));
+    assertEqual([limited.code, limited.retryAfterMs], ['rate_limited', 30000]);
+    // the key never appears in an error message
+    const rejected = await failureOf(commandCode({reply: {status: 401, json: null}}).provider.fetch(ctx));
+    assertTrue(!rejected.message.includes('secret-key'));
+    assertTrue(rejected instanceof ProviderError);
 });

@@ -68,6 +68,21 @@
       <summary>Open cards that need attention</summary>
       <description>Cards in warning, critical or error states open on their own; the choice you make by hand is kept until the state changes.</description>
     </key>
+    <key name="data-source" type="s">
+      <choices>
+        <choice value="live"/>
+        <choice value="demo"/>
+      </choices>
+      <default>'live'</default>
+      <summary>Data source</summary>
+      <description>live asks the real providers that have credentials; demo shows made-up data for development.</description>
+    </key>
+    <key name="credentials-revision" type="i">
+      <range min="0" max="2147483647"/>
+      <default>0</default>
+      <summary>Credentials revision</summary>
+      <description>The preferences window raises this number whenever a credential is stored or removed, so the running extension asks the providers again. It holds no secret.</description>
+    </key>
     <key name="demo-scenario" type="s">
       <choices>
         <choice value="steady"/>
