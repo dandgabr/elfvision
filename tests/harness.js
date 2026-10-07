@@ -18,11 +18,17 @@ export function assertTrue(value, message = 'expected a truthy value') {
         throw new Error(message);
 }
 
-export function runAll() {
+/** Let queued promise callbacks run (a few rounds, for chained awaits). */
+export async function flush(rounds = 10) {
+    for (let i = 0; i < rounds; i++)
+        await Promise.resolve();
+}
+
+export async function runAll() {
     let failed = 0;
     for (const {name, fn} of tests) {
         try {
-            fn();
+            await fn();
             print(`ok    ${name}`);
         } catch (error) {
             failed++;

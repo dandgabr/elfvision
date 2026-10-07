@@ -2,5 +2,6 @@
 import System from 'system';
 import {runAll} from './harness.js';
 import './core.test.js';
+import './scheduler.test.js';
 
-System.exit(runAll() ? 1 : 0);
+System.exit(await runAll() ? 1 : 0);

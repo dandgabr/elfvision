@@ -7,8 +7,10 @@ extension.js        entry point (enable and disable)
 prefs.js            preferences window (GTK 4, libadwaita)
 metadata.json       uuid gnome-ai-quota@dandgabr.github.io, shell 50
 stylesheet.css      the default theme (sistema-gnome), classes prefixed gaq-
-lib/core/           pure JavaScript: contract helpers, severity, pacing,
-                    selection, fitting, formatting, view models, demo fixtures
+lib/core/           pure JavaScript: contract, scheduler, cache format, severity,
+                    pacing, selection, fitting, formatting, view models, fixtures
+lib/providers/      provider errors and the demo providers (real ones come in M2+)
+lib/services/       GLib and Gio glue: timers, cache file, the quota controller
 lib/ui/             St widgets: meter, bar item, provider card, indicator
 icons/              symbolic SVG icons, one per provider id
 po/                 gettext template and translations
@@ -31,6 +33,14 @@ The extension needs `schemas/gschemas.compiled` and `locale/` to run from a
 checkout. Neither is committed. Run the build after cloning and after changing
 `schemas/` or `po/`.
 
+## Demo scenarios
+
+Until real providers exist, the `demo-scenario` setting picks what the demo
+providers do: `steady` (everything fine, polled every 5 minutes), `flaky` (a
+network error, a rate limit, a signed-out provider and a bad response, every 15
+seconds) and `drift` (usage climbs toward the limits every 10 seconds). Change it
+with `gsettings --schemadir schemas set org.gnome.shell.extensions.gnome-ai-quota demo-scenario flaky`.
+
 ## Tests
 
 ```sh
@@ -49,8 +59,9 @@ session, settings and extensions are not touched.
 tools/headless-shell.sh
 
 # Also evaluate JavaScript inside the shell (org.gnome.Shell.Eval, enabled by
-# --unsafe-mode). Scripts run in order, one and a half seconds apart.
-tools/headless-shell.sh open-popup.js screenshot.js
+# --unsafe-mode). Scripts run in order, one and a half seconds apart; an argument
+# such as sleep:20 waits that many seconds (for the polling scenarios).
+tools/headless-shell.sh open-popup.js sleep:20 screenshot.js
 ```
 
 Useful snippets for the scripts: `Main.panel.statusArea[uuid].menu.open(false)`

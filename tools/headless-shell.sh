@@ -2,7 +2,7 @@
 # Run the extension in a throwaway headless GNOME Shell and execute a JS
 # snippet inside it, without touching your real session or settings.
 #
-#   tools/headless-shell.sh [script.js ...]
+#   tools/headless-shell.sh [script.js | sleep:SECONDS ...]
 #
 # The shell runs on its own D-Bus session with an in-memory GSettings backend
 # and a temporary XDG_DATA_HOME that links this checkout as the only user
@@ -49,6 +49,9 @@ dbus-run-session -- bash -c '
         --method org.gnome.Shell.Extensions.GetExtensionInfo "$UUID" | tr "," "\n" | grep -E "state|error|enabled" || true
     while IFS= read -r script; do
         [ -n "$script" ] || continue
+        case "$script" in
+            sleep:*) sleep "${script#sleep:}"; continue ;;
+        esac
         echo "--- result of $script"
         code="$(cat "$script")"
         gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \

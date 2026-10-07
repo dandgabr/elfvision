@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-06 23:13-0300\n"
+"POT-Creation-Date: 2026-10-06 23:27-0300\n"
 "PO-Revision-Date: 2026-10-06 21:45-0300\n"
 "Last-Translator: gnome-ai-quota authors\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -40,22 +40,27 @@ msgid "M"
 msgstr "M"
 
 #: lib/core/viewmodel.js:96
+#, javascript-format
 msgid "%s: not signed in"
 msgstr "%s: sem login"
 
 #: lib/core/viewmodel.js:98
+#, javascript-format
 msgid "%s: connection problem"
 msgstr "%s: problema de conexão"
 
 #: lib/core/viewmodel.js:100
+#, javascript-format
 msgid "%s: data out of date"
 msgstr "%s: dados desatualizados"
 
 #: lib/core/viewmodel.js:102
+#, javascript-format
 msgid "%s: %s left"
 msgstr "%s: restam %s"
 
 #: lib/core/viewmodel.js:106
+#, javascript-format
 msgid "%s: %s%% of %s used"
 msgstr "%s: %s%% usado (%s)"
 
@@ -84,6 +89,7 @@ msgid "Offline"
 msgstr "Sem conexão"
 
 #: lib/core/viewmodel.js:137
+#, javascript-format
 msgid "%s ago"
 msgstr "há %s"
 
@@ -92,14 +98,17 @@ msgid "Out of date"
 msgstr "Desatualizado"
 
 #: lib/core/viewmodel.js:160
+#, javascript-format
 msgid "%s%% used"
 msgstr "%s%% usado"
 
 #: lib/core/viewmodel.js:163
+#, javascript-format
 msgid "resets in %s"
 msgstr "reinicia em %s"
 
 #: lib/core/viewmodel.js:172
+#, javascript-format
 msgid "Expected by now: %s%%"
 msgstr "Esperado até agora: %s%%"
 
@@ -111,95 +120,122 @@ msgstr "restam"
 msgid "Account not connected. Connect it in Preferences."
 msgstr "Conta não conectada. Conecte-a nas Preferências."
 
-#: lib/core/viewmodel.js:213
+#: lib/core/viewmodel.js:214
+msgid "The last data is more than a day old."
+msgstr "Os últimos dados têm mais de um dia."
+
+#: lib/core/viewmodel.js:215
 msgid "No quota data yet."
 msgstr "Ainda sem dados de cota."
 
-#: lib/core/viewmodel.js:221
+#: lib/core/viewmodel.js:223
 msgid "Budget spent"
 msgstr "Orçamento gasto"
 
-#: lib/core/viewmodel.js:223
+#: lib/core/viewmodel.js:225
+#, javascript-format
 msgid "of %s · %s%%"
 msgstr "de %s · %s%%"
 
-#: lib/core/viewmodel.js:225
+#: lib/core/viewmodel.js:227
 msgid "No reset: prepaid balance"
 msgstr "Sem reinício: saldo pré-pago"
 
-#: lib/core/viewmodel.js:251
+#: lib/core/viewmodel.js:253
+#, javascript-format
 msgid "%s: %d point ahead of an even pace"
 msgid_plural "%s: %d points ahead of an even pace"
 msgstr[0] "%s: %d ponto acima do ritmo uniforme"
 msgstr[1] "%s: %d pontos acima do ritmo uniforme"
 
-#: lib/core/viewmodel.js:256
+#: lib/core/viewmodel.js:258
 msgid "Data is out of date."
 msgstr "Dado desatualizado."
 
-#: lib/core/viewmodel.js:258
+#: lib/core/viewmodel.js:260
 msgid "Connection problem. Showing the last known value."
 msgstr "Problema de conexão. Mostrando o último valor conhecido."
 
-#: lib/core/viewmodel.js:282
+#: lib/core/viewmodel.js:284
+#, javascript-format
 msgid "%d ok"
 msgstr "%d ok"
 
-#: lib/core/viewmodel.js:283
+#: lib/core/viewmodel.js:285
+#, javascript-format
 msgid "%d warning"
 msgstr "%d em atenção"
 
-#: lib/core/viewmodel.js:284
+#: lib/core/viewmodel.js:286
+#, javascript-format
 msgid "%d critical"
 msgid_plural "%d critical"
 msgstr[0] "%d crítico"
 msgstr[1] "%d críticos"
 
-#: lib/core/viewmodel.js:285
+#: lib/core/viewmodel.js:287
+#, javascript-format
 msgid "%d with a problem"
 msgstr "%d com problema"
 
-#: lib/core/viewmodel.js:297
+#: lib/core/viewmodel.js:299
+#, javascript-format
 msgid "Updated %d min ago"
 msgstr "Atualizado há %d min"
 
-#: lib/core/viewmodel.js:297
+#: lib/core/viewmodel.js:299
 msgid "Updated just now"
 msgstr "Atualizado agora"
 
-#: lib/ui/indicator.js:146
+#: lib/ui/indicator.js:152
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: lib/ui/indicator.js:147
+#: lib/ui/indicator.js:153
 msgid "Preferences"
 msgstr "Preferências"
 
-#: lib/ui/indicator.js:180
+#: lib/ui/indicator.js:186
 msgid "Refreshing…"
 msgstr "Atualizando…"
 
-#: lib/ui/indicator.js:378
+#: lib/ui/indicator.js:235
+msgid "Not updated yet"
+msgstr "Ainda não atualizado"
+
+#: lib/ui/indicator.js:269
+msgid "Waiting for the first update…"
+msgstr "Aguardando a primeira atualização…"
+
+#: lib/ui/indicator.js:386
+msgid "Waiting for the first update"
+msgstr "Aguardando a primeira atualização"
+
+#: lib/ui/indicator.js:408
+#, javascript-format
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] "mais %d provedor (abra para ver)"
 msgstr[1] "mais %d provedores (abra para ver)"
 
-#: lib/ui/indicator.js:393
+#: lib/ui/indicator.js:423
 msgid "On the bar"
 msgstr "Na barra"
 
-#: lib/ui/indicator.js:395
+#: lib/ui/indicator.js:425
+#, javascript-format
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] "Oculto da barra (%d)"
 msgstr[1] "Ocultos da barra (%d)"
 
 #: lib/ui/providerCard.js:114
+#, javascript-format
 msgid "Collapse %s"
 msgstr "Recolher %s"
 
 #: lib/ui/providerCard.js:114
+#, javascript-format
 msgid "Expand %s"
 msgstr "Expandir %s"
 
@@ -215,7 +251,9 @@ msgstr "Barra superior"
 msgid ""
 "The bar shrinks, then shows fewer providers, when other extensions leave it "
 "little room."
-msgstr "A barra encolhe e depois mostra menos provedores quando outras extensões deixam pouco espaço."
+msgstr ""
+"A barra encolhe e depois mostra menos provedores quando outras extensões "
+"deixam pouco espaço."
 
 #: prefs.js:51
 msgid "Left"
@@ -243,7 +281,9 @@ msgstr "Provedores na barra"
 
 #: prefs.js:59
 msgid "The most providers shown, from 1 to 5."
-msgstr "O máximo de provedores exibidos, de 1 a 5. Os mais críticos aparecem primeiro."
+msgstr ""
+"O máximo de provedores exibidos, de 1 a 5. Os mais críticos aparecem "
+"primeiro."
 
 #: prefs.js:66
 msgid "Automatic"
@@ -271,4 +311,6 @@ msgstr "Versão de demonstração"
 
 #: prefs.js:83
 msgid "More settings arrive in later milestones. This build shows demo data."
-msgstr "Mais configurações chegam em marcos futuros. Esta versão mostra dados de demonstração."
+msgstr ""
+"Mais configurações chegam em marcos futuros. Esta versão mostra dados de "
+"demonstração."

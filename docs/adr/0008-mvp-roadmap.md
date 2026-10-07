@@ -9,7 +9,7 @@ Each milestone runs in a nested shell: `dbus-run-session gnome-shell --devkit --
 1. **M0, skeleton.** `metadata.json` (shell 50), `extension.js` with a panel button and a
    static popup (three fake cards), `stylesheet.css`, color tokens, the bar with the
    pacing tick. No network.
-2. **M1, core.** The `ProviderSnapshot` contract (pure JS, testable with `gjs`), the
+2. **M1, core (in progress; the data layer is done).** The `ProviderSnapshot` contract (pure JS, testable with `gjs`), the
    scheduler (interval, jitter, backoff, stale), severity and pacing, the disk cache,
    a deterministic fake provider and `gjs` tests. Theme loader with `sistema-gnome`.
 3. **M2, Command Code.** First real provider (API key). Minimal preferences with a key

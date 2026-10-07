@@ -29,5 +29,15 @@
       <summary>Compact mode</summary>
       <description>auto: shrink the bar only when space runs out. always: always compact. never: never drop the percent sign and window suffix (providers may still be hidden).</description>
     </key>
+    <key name="demo-scenario" type="s">
+      <choices>
+        <choice value="steady"/>
+        <choice value="flaky"/>
+        <choice value="drift"/>
+      </choices>
+      <default>'steady'</default>
+      <summary>Demo scenario (development)</summary>
+      <description>Until real providers exist, the demo providers act out a scenario. steady: everything fine. flaky: errors, a rate limit and a signed-out provider, every 15 seconds. drift: usage climbs toward the limits every 10 seconds.</description>
+    </key>
   </schema>
 </schemalist>
