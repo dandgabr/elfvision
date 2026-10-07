@@ -456,3 +456,13 @@ test('a balance beside percent windows is a plain labeled line without a meter',
     assertEqual([rows[1].valueText, rows[1].noMeter, rows[1].percentText], ['$41.50 left', true, '']);
     assertEqual(view.hero ?? view.heroText, view.heroText);
 });
+
+test('sign-in failures: expired, refused and missing setup each get their own words', () => {
+    const view = reason => cardView({id: 'codex', name: 'Codex', plan: '', state: 'auth_required', reason, source: {kind: 'stale'}, metrics: []}, {nowMs: 0});
+    const expired = view('expired');
+    assertEqual([expired.pill.text, expired.configureText, expired.message],
+        ['⊘ Sign-in expired', 'Reconnect', 'Your Codex sign-in expired or was revoked. Connect again to keep seeing this quota.']);
+    assertEqual([view('refused').pill.text, view('refused').message], ['⊘ Access refused', 'Codex refused access. Check your account on its site.']);
+    assertEqual([view('no_config').pill.text, view('no_config').configureText], ['⊘ Setup needed', 'Open Preferences']);
+    assertEqual(['expired', 'refused', 'no_config'].map(reason => accountStatus({state: 'auth_required', reason})), ['expired', 'refused', 'no_config']);
+});

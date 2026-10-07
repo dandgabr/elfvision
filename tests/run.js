@@ -9,5 +9,6 @@ import './structure.test.js';
 import './oauth.test.js';
 import './tokenManager.test.js';
 import './localConfig.test.js';
+import './controller.test.js';
 
 System.exit(await runAll() ? 1 : 0);
