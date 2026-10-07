@@ -418,6 +418,45 @@
     background-color: {{p:fg@0.2}};
 }
 
+/* ---------- legend and the providers that are not tracked ---------- */
+
+.gaq-legend {
+    spacing: 8px;
+    padding-top: 6px;
+}
+
+.gaq-legend-row {
+    spacing: 10px;
+}
+
+.gaq-legend-mark {
+    min-width: 22px;
+    text-align: center;
+}
+
+.gaq-untracked {
+    spacing: 4px;
+}
+
+.gaq-untracked-toggle {
+    padding: 2px 0;
+    border-radius: {{radius-sm}};
+}
+
+.gaq-untracked-toggle:hover,
+.gaq-untracked-toggle:focus {
+    background-color: {{p:fg@0.08}};
+}
+
+.gaq-untracked-list {
+    spacing: 6px;
+    padding-left: 4px;
+}
+
+.gaq-untracked-row {
+    spacing: 8px;
+}
+
 /* ---------- tooltip ---------- */
 
 .gaq-tooltip {
