@@ -30,7 +30,8 @@ Structure:
   (with a critical `!` pill in the header if any is critical), then **Not tracked**
   (a grey line with a Track button). Cards never jump by severity.
 - Card: icon, name, plan, state pill, hero value (highest percentage, or the money
-  balance) and a `⋯` menu. One row per window: label, percentage, a thin bar with a
+  balance) with the window it belongs to (`97 % · week`) and a `⋯` menu (later). The
+  whole header is the toggle button, so Enter and Space work on the focused header. One row per window: label, percentage, a thin bar with a
   **pacing tick** (a straight 2 px line that protrudes 3 px above and below the bar),
   and the reset in two forms (relative, absolute). Pool sub-headings for providers
   with pools. A single pacing line is shown only when the deviation is relevant.

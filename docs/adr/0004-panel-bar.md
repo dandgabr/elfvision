@@ -12,13 +12,13 @@ Advice came from UI, UX, motion and frontend reviews.
 
 **Variation A.** Per provider, the item shows: a monochrome 16 px icon, the number
 (14 px, weight 700, tabular), a subordinate `%` (11 px, 70% opacity), a window
-suffix (`·5h`, `·S`, `·M`) and a 3 px bar under the item (track at 20% opacity).
+suffix (`·5h`, `·W`, `·M`; `W` shows as `S` in Portuguese) and a 3 px bar under the item (track at 20% opacity).
 
 - **Number shown:** the highest percentage among the provider's windows.
 - **State without relying on color:**
   - warning (80% and above): weight 800 and a `▲` glyph;
   - critical (95% and above): a pill with a border and a trailing `!`;
-  - stale: `~` prefix, italic, 60% opacity, no fill;
+  - stale: `~` prefix, italic, 60% opacity, the last value's fill kept;
   - not signed in: `–` with a key glyph, icon at 50%;
   - network error: last value dimmed with a `⚠` glyph.
 - **Count:** 1 to 5 providers, user configurable (default 3).
@@ -34,7 +34,7 @@ suffix (`·5h`, `·S`, `·M`) and a 3 px bar under the item (track at 20% opacit
   `·C/G 5h`, about 18 px wider for that item only). The tooltip lists every metric
   and highlights the displayed one.
 - **Money providers:** the number is the remaining balance (`$12.40`, `$124`,
-  `$1.2k`), the bar is the share of the budget spent. In headline mode, money is
+  `$1.2K`), the bar is the share of the budget spent. In headline mode, money is
   shown only when it is the worst case; a configured dollar floor counts as
   "warning" when choosing the worst.
 - **Degradation:** full, then compact (no `%`), then headline with `+N`. Budget

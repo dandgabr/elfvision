@@ -11,7 +11,7 @@ import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/ex
  * @param {Array<[string, string]>} choices - [value, label] pairs
  * @param {string} title
  * @param {string} subtitle
- * @returns {Adw.ComboRow}
+ * @returns {{row: Adw.ComboRow, sync: Function}} the row and a function that re-reads the setting
  */
 function choiceRow(settings, key, choices, title, subtitle) {
     const row = new Adw.ComboRow({
@@ -25,9 +25,12 @@ function choiceRow(settings, key, choices, title, subtitle) {
             row.selected = index;
     };
     sync();
-    row.connect('notify::selected', () => settings.set_string(key, choices[row.selected][0]));
-    settings.connect(`changed::${key}`, sync);
-    return row;
+    row.connect('notify::selected', () => {
+        const choice = choices[row.selected];
+        if (choice)
+            settings.set_string(key, choice[0]);
+    });
+    return {row, sync};
 }
 
 export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
@@ -44,11 +47,12 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
             title: _('Top bar'),
             description: _('The bar shrinks, then shows fewer providers, when other extensions leave it little room.'),
         });
-        bar.add(choiceRow(settings, 'position', [
+        const position = choiceRow(settings, 'position', [
             ['left', _('Left')],
             ['center', _('Center')],
             ['right', _('Right')],
-        ], _('Position'), _('Where the quota items sit on the top bar.')));
+        ], _('Position'), _('Where the quota items sit on the top bar.'));
+        bar.add(position.row);
 
         const count = new Adw.SpinRow({
             title: _('Providers on the bar'),
@@ -58,11 +62,20 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         settings.bind('bar-count', count, 'value', 0);
         bar.add(count);
 
-        bar.add(choiceRow(settings, 'compact-mode', [
+        const compact = choiceRow(settings, 'compact-mode', [
             ['auto', _('Automatic')],
             ['always', _('Always compact')],
             ['never', _('Never compact')],
-        ], _('Compact mode'), _('Compact drops the percent sign and the window suffix.')));
+        ], _('Compact mode'), _('Compact drops the percent sign and the window suffix.'));
+        bar.add(compact.row);
+
+        // Follow outside changes (dconf, another window) while this window is open.
+        const ids = ['position', 'compact-mode'].map((key, i) =>
+            settings.connect(`changed::${key}`, [position, compact][i].sync));
+        window.connect('close-request', () => {
+            ids.forEach(id => settings.disconnect(id));
+            return false;
+        });
         page.add(bar);
 
         const demo = new Adw.PreferencesGroup({

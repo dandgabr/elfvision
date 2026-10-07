@@ -15,17 +15,20 @@ set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 "$root/tools/build.sh" >/dev/null
 uuid="$(python3 -I -c 'import json,sys;print(json.load(open(sys.argv[1]))["uuid"])' "$root/metadata.json")"
-scripts="$*"
 work="$(mktemp -d)"
 log="${LOG:-$work/shell.log}"
-trap 'rm -rf "$work/data"' EXIT
+# Remove the whole scratch directory, but keep the log when LOG points elsewhere.
+trap 'rm -rf "$work"' EXIT
 
-mkdir -p "$work/data/gnome-shell/extensions"
+mkdir -p "$work/data/gnome-shell/extensions" "$work/config" "$work/cache"
 ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 
-export XDG_DATA_HOME="$work/data"
+# Keep data, config and cache away from the real session.
+export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
 export GSETTINGS_BACKEND=memory
-export UUID="$uuid" SCRIPTS="$scripts" LOGFILE="$log" ROOT="$root" SKIP_ENABLE="${SKIP_ENABLE:-}"
+# One script path per line, so names with spaces survive.
+SCRIPTS="$(printf '%s\n' "$@")"
+export UUID="$uuid" SCRIPTS LOGFILE="$log" ROOT="$root" SKIP_ENABLE="${SKIP_ENABLE:-}"
 
 dbus-run-session -- bash -c '
     gnome-shell --headless --wayland --unsafe-mode --virtual-monitor 1280x800 >"$LOGFILE" 2>&1 &
@@ -44,13 +47,14 @@ dbus-run-session -- bash -c '
     echo "--- extension info"
     gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions \
         --method org.gnome.Shell.Extensions.GetExtensionInfo "$UUID" | tr "," "\n" | grep -E "state|error|enabled" || true
-    for script in $SCRIPTS; do
+    while IFS= read -r script; do
+        [ -n "$script" ] || continue
         echo "--- result of $script"
         code="$(cat "$script")"
         gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
             --method org.gnome.Shell.Eval "$code"
         sleep 1.5
-    done
+    done <<< "$SCRIPTS"
     kill "$shell" 2>/dev/null || true
     wait "$shell" 2>/dev/null || true
 '

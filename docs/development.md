@@ -76,6 +76,21 @@ directory is not committed.
 
 ## Pitfalls found so far
 
+- **A non-reactive item greys all its text.** The popup lives in a
+  `PopupBaseMenuItem` with `reactive: false`; St then applies `:insensitive`, and
+  the theme's `.popup-inactive-menu-item:insensitive` colors everything `#9b9b9d`.
+  Set `color` on the popup root (`.gaq-popup`). Measure pixels when a screenshot
+  "looks dim": a review took the grey for a stale state.
+- **Use `connectObject` for signals on foreign objects.** A manual `disconnect` in
+  `destroy()` fails with criticals when the emitter (a panel box at shell
+  teardown) is already disposed. `emitter.connectObject(signal, cb, this)` ties
+  the connection to the button. Read JS fields (`this._cleaned`) before GObject
+  properties (`this.mapped`) in callbacks that can run during destruction.
+- **Detach before re-adding.** A card moving from one container to another must be
+  removed from the first before `add_child`, or Clutter warns about a parent.
+- **Focus rings need a border.** An inset `box-shadow` did not draw on `St.Button`;
+  a transparent border that turns blue on `:focus` does.
+
 - **BinLayout centers children that do not expand.** An `x_align` or `y_align` of
   start or end is ignored unless the child (or one of its descendants) has the
   matching `x_expand` or `y_expand`. A meter fill with `x_align: START` was drawn

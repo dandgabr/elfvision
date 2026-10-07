@@ -129,9 +129,9 @@ test('card view: windows, pace and reset text', () => {
     const view = cardView(byId(demo(), 'claude'), {nowMs: NOW, locale: 'en'});
     assertEqual(view.groups.length, 1);
     const week = view.groups[0].rows[1];
-    assertEqual([week.label, week.percentText, week.mark, week.resetText], ['Week', '97', '! ', 'resets in 2d 2h']);
+    assertEqual([week.label, week.percentText, week.valueText, week.mark, week.resetText], ['Week', '97', '97% used', '! ', 'resets in 2d 2h']);
     // 50 h of a 168 h window remain, so 70% should be used; the card is at 97%.
-    assertEqual(view.paceText, 'Pace: 27 points above expected');
+    assertEqual(view.paceText, 'Week: 27 points ahead of an even pace');
     assertEqual([week.paceTip, view.groups[0].rows[0].paceTip], ['Expected by now: 70%', 'Expected by now: 37%']);
 });
 
@@ -201,4 +201,63 @@ test('fit: the sticky choice does not flip on small width changes', () => {
     assertEqual(choose(299, '3|false|false'), '3|true|false');
     // With no current layout it behaves like chooseLayout.
     assertEqual(choose(150, null), '2|true|false');
+});
+
+test('robustness: a provider without metrics does not break the card or the bar', () => {
+    const empty = {id: 'x', name: 'X', state: 'ok', source: {kind: 'fresh'}, metrics: []};
+    const card = cardView(empty, {nowMs: NOW});
+    assertEqual([card.groups.length, card.message, card.heroSmall], [0, 'No quota data yet.', '']);
+    assertEqual(barView(empty).accessibleName, 'X');
+    assertEqual(cardView({...empty, state: 'network'}, {nowMs: NOW}).message, 'No quota data yet.');
+});
+
+test('robustness: a window without a reset time still renders', () => {
+    const snapshot = {id: 'x', name: 'X', state: 'ok', source: {kind: 'fresh'},
+        metrics: [{id: 'm', kind: 'percent', window: 'week', windowSecs: 604800, percentUsed: 50}]};
+    const row = cardView(snapshot, {nowMs: NOW}).groups[0].rows[0];
+    assertEqual([row.resetText, row.absoluteText, row.pace, row.paceTip], ['', '', null, null]);
+});
+
+test('robustness: out-of-range and invalid numbers are clamped', () => {
+    assertEqual([formatPercent(130), formatPercent(-5), formatPercent(NaN)], ['100', '0', '0']);
+    assertEqual(formatDuration(NaN), '–');
+    assertEqual(formatMoney(NaN, 'USD', 'en'), '–');
+    assertEqual(formatMoney(5, 'NOT-A-CODE', 'en'), '5.00 NOT-A-CODE');
+    assertEqual(formatMoney(-12.4, 'USD', 'en'), '-$12.40');
+});
+
+test('robustness: selection survives a bad count and odd manual lists', () => {
+    assertEqual(selectForBar(demo(), {count: NaN}).onBar.length, 3);
+    const manual = selectForBar(demo(), {count: 3, mode: 'manual', manual: ['nope', 'claude', 'claude', 'codex']});
+    assertEqual(manual.onBar.map(s => s.id), ['codex', 'claude']);
+});
+
+test('clock: the weekday loses its dot, a dotted time does not', () => {
+    const date = new Date(2026, 9, 4, 18, 46); // a Sunday
+    const pt = formatClock(date, {locale: 'pt-BR', weekday: true});
+    assertTrue(!pt.includes('.') && pt.includes('18:46'), pt);
+    assertTrue(formatClock(date, {locale: 'fi'}).includes('18.46'), 'fi time keeps its dot');
+    assertEqual(formatClock(new Date(NaN)), '');
+});
+
+test('view model: hero names the window, labels read as used, severity is spoken', () => {
+    const claude = byId(demo(), 'claude');
+    assertEqual(cardView(claude, {nowMs: NOW}).heroSmall, '% · week');
+    assertEqual(barView(claude).accessibleName, 'Claude: 97% of week used, critical');
+    assertEqual(barView(byId(demo(), 'codex')).accessibleName, 'Codex: 82% of 5 hours used, warning');
+});
+
+test('view model: a stale provider without a timestamp says so', () => {
+    const snapshot = {...byId(demo(), 'codex'), source: {kind: 'stale'}};
+    assertEqual(cardView(snapshot, {nowMs: NOW}).pill.text, 'Out of date');
+});
+
+test('view model: the weekday appears when the reset is on another calendar day', () => {
+    const noon = new Date(2026, 9, 6, 12, 0).getTime();
+    const metric = hours => ({id: 'm', kind: 'percent', window: 'session', windowSecs: 18000, percentUsed: 10,
+        resetsAt: noon + hours * 3600000});
+    const rowFor = hours => cardView({id: 'x', name: 'X', state: 'ok', source: {kind: 'fresh'}, metrics: [metric(hours)]},
+        {nowMs: noon, locale: 'en'}).groups[0].rows[0];
+    assertEqual(rowFor(2).absoluteText, '14:00');
+    assertTrue(rowFor(20).absoluteText.startsWith('Wed'), rowFor(20).absoluteText);
 });

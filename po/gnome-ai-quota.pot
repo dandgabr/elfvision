@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-06 22:52-0300\n"
+"POT-Creation-Date: 2026-10-06 23:13-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,44 +18,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: lib/core/viewmodel.js:42
+#: lib/core/viewmodel.js:40
 msgid "5 hours"
 msgstr ""
 
-#: lib/core/viewmodel.js:43
+#: lib/core/viewmodel.js:41
 msgid "Week"
 msgstr ""
 
-#: lib/core/viewmodel.js:44
+#: lib/core/viewmodel.js:42
 msgid "Month"
 msgstr ""
 
-#: lib/core/viewmodel.js:52
+#: lib/core/viewmodel.js:50
 msgctxt "window suffix"
 msgid "W"
 msgstr ""
 
-#: lib/core/viewmodel.js:53
+#: lib/core/viewmodel.js:51
 msgctxt "window suffix"
 msgid "M"
 msgstr ""
 
-#: lib/core/viewmodel.js:98
+#: lib/core/viewmodel.js:96
 #, javascript-format
 msgid "%s: not signed in"
 msgstr ""
 
-#: lib/core/viewmodel.js:100
+#: lib/core/viewmodel.js:98
 #, javascript-format
 msgid "%s: connection problem"
 msgstr ""
 
-#: lib/core/viewmodel.js:102
+#: lib/core/viewmodel.js:100
 #, javascript-format
 msgid "%s: data out of date"
 msgstr ""
 
-#: lib/core/viewmodel.js:104
+#: lib/core/viewmodel.js:102
 #, javascript-format
 msgid "%s: %s left"
 msgstr ""
@@ -65,195 +65,231 @@ msgstr ""
 msgid "%s: %s%% of %s used"
 msgstr ""
 
-#: lib/core/viewmodel.js:125
+#: lib/core/viewmodel.js:109
+msgid "critical"
+msgstr ""
+
+#: lib/core/viewmodel.js:111
+msgid "warning"
+msgstr ""
+
+#: lib/core/viewmodel.js:130
 msgid "Critical"
 msgstr ""
 
-#: lib/core/viewmodel.js:126
+#: lib/core/viewmodel.js:131
 msgid "Warning"
 msgstr ""
 
-#: lib/core/viewmodel.js:127
+#: lib/core/viewmodel.js:132
 msgid "Signed out"
 msgstr ""
 
-#: lib/core/viewmodel.js:128
+#: lib/core/viewmodel.js:133
 msgid "Offline"
 msgstr ""
 
-#: lib/core/viewmodel.js:131
+#: lib/core/viewmodel.js:137
 #, javascript-format
 msgid "%s ago"
 msgstr ""
 
-#: lib/core/viewmodel.js:149
+#: lib/core/viewmodel.js:138
+msgid "Out of date"
+msgstr ""
+
+#: lib/core/viewmodel.js:160
+#, javascript-format
+msgid "%s%% used"
+msgstr ""
+
+#: lib/core/viewmodel.js:163
 #, javascript-format
 msgid "resets in %s"
 msgstr ""
 
-#: lib/core/viewmodel.js:156
+#: lib/core/viewmodel.js:172
 #, javascript-format
 msgid "Expected by now: %s%%"
 msgstr ""
 
-#: lib/core/viewmodel.js:181
+#: lib/core/viewmodel.js:198
 msgid "left"
 msgstr ""
 
-#: lib/core/viewmodel.js:190
-msgid "Account not connected. Sign in to resume tracking this quota."
+#: lib/core/viewmodel.js:208
+msgid "Account not connected. Connect it in Preferences."
 msgstr ""
 
-#: lib/core/viewmodel.js:198
+#: lib/core/viewmodel.js:213
+msgid "No quota data yet."
+msgstr ""
+
+#: lib/core/viewmodel.js:221
 msgid "Budget spent"
 msgstr ""
 
-#: lib/core/viewmodel.js:200
+#: lib/core/viewmodel.js:223
 #, javascript-format
 msgid "of %s · %s%%"
 msgstr ""
 
-#: lib/core/viewmodel.js:202
+#: lib/core/viewmodel.js:225
 msgid "No reset: prepaid balance"
 msgstr ""
 
-#: lib/core/viewmodel.js:227
+#: lib/core/viewmodel.js:251
 #, javascript-format
-msgid "Pace: %d point above expected"
-msgid_plural "Pace: %d points above expected"
+msgid "%s: %d point ahead of an even pace"
+msgid_plural "%s: %d points ahead of an even pace"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/core/viewmodel.js:232
+#: lib/core/viewmodel.js:256
 msgid "Data is out of date."
 msgstr ""
 
-#: lib/core/viewmodel.js:234
+#: lib/core/viewmodel.js:258
 msgid "Connection problem. Showing the last known value."
 msgstr ""
 
-#: lib/core/viewmodel.js:258
+#: lib/core/viewmodel.js:282
 #, javascript-format
 msgid "%d ok"
 msgstr ""
 
-#: lib/core/viewmodel.js:259
+#: lib/core/viewmodel.js:283
 #, javascript-format
 msgid "%d warning"
 msgstr ""
 
-#: lib/core/viewmodel.js:260
+#: lib/core/viewmodel.js:284
 #, javascript-format
 msgid "%d critical"
-msgstr ""
+msgid_plural "%d critical"
+msgstr[0] ""
+msgstr[1] ""
 
-#: lib/core/viewmodel.js:261
+#: lib/core/viewmodel.js:285
 #, javascript-format
 msgid "%d with a problem"
 msgstr ""
 
-#: lib/core/viewmodel.js:273
+#: lib/core/viewmodel.js:297
 #, javascript-format
 msgid "Updated %d min ago"
 msgstr ""
 
-#: lib/core/viewmodel.js:273
+#: lib/core/viewmodel.js:297
 msgid "Updated just now"
 msgstr ""
 
-#: lib/ui/indicator.js:125
+#: lib/ui/indicator.js:146
 msgid "Refresh"
 msgstr ""
 
-#: lib/ui/indicator.js:126
+#: lib/ui/indicator.js:147
 msgid "Preferences"
 msgstr ""
 
-#: lib/ui/indicator.js:327
+#: lib/ui/indicator.js:180
+msgid "Refreshing…"
+msgstr ""
+
+#: lib/ui/indicator.js:378
+#, javascript-format
+msgid "%d more provider"
+msgid_plural "%d more providers"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/ui/indicator.js:393
 msgid "On the bar"
 msgstr ""
 
-#: lib/ui/indicator.js:329
+#: lib/ui/indicator.js:395
 #, javascript-format
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/providerCard.js:101
-msgid "Collapse"
+#: lib/ui/providerCard.js:114
+#, javascript-format
+msgid "Collapse %s"
 msgstr ""
 
-#: lib/ui/providerCard.js:101
-msgid "Expand"
+#: lib/ui/providerCard.js:114
+#, javascript-format
+msgid "Expand %s"
 msgstr ""
 
-#: prefs.js:39
+#: prefs.js:42
 msgid "Appearance"
 msgstr ""
 
-#: prefs.js:44
+#: prefs.js:47
 msgid "Top bar"
 msgstr ""
 
-#: prefs.js:45
+#: prefs.js:48
 msgid ""
 "The bar shrinks, then shows fewer providers, when other extensions leave it "
 "little room."
 msgstr ""
 
-#: prefs.js:48
+#: prefs.js:51
 msgid "Left"
 msgstr ""
 
-#: prefs.js:49
+#: prefs.js:52
 msgid "Center"
 msgstr ""
 
-#: prefs.js:50
+#: prefs.js:53
 msgid "Right"
 msgstr ""
 
-#: prefs.js:51
+#: prefs.js:54
 msgid "Position"
 msgstr ""
 
-#: prefs.js:51
+#: prefs.js:54
 msgid "Where the quota items sit on the top bar."
 msgstr ""
 
-#: prefs.js:54
+#: prefs.js:58
 msgid "Providers on the bar"
 msgstr ""
 
-#: prefs.js:55
+#: prefs.js:59
 msgid "The most providers shown, from 1 to 5."
 msgstr ""
 
-#: prefs.js:62
+#: prefs.js:66
 msgid "Automatic"
 msgstr ""
 
-#: prefs.js:63
+#: prefs.js:67
 msgid "Always compact"
 msgstr ""
 
-#: prefs.js:64
+#: prefs.js:68
 msgid "Never compact"
 msgstr ""
 
-#: prefs.js:65
+#: prefs.js:69
 msgid "Compact drops the percent sign and the window suffix."
 msgstr ""
 
-#: prefs.js:65
+#: prefs.js:69
 msgid "Compact mode"
 msgstr ""
 
-#: prefs.js:69
+#: prefs.js:82
 msgid "Demo build"
 msgstr ""
 
-#: prefs.js:70
+#: prefs.js:83
 msgid "More settings arrive in later milestones. This build shows demo data."
 msgstr ""

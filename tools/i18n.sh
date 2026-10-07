@@ -8,6 +8,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
+shopt -s nullglob
 
 DOMAIN=gnome-ai-quota
 POT="po/${DOMAIN}.pot"
