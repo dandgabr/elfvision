@@ -4,6 +4,7 @@
 # package (sudo dnf install mutter-devkit).
 #
 #   tools/nested-shell.sh [prefs]
+#   DATA_SOURCE=demo DEMO_SCENARIO=drift tools/nested-shell.sh   # made-up data that climbs to the limits
 #
 # The window is a throwaway session with in-memory settings. The extension is
 # enabled for you; with "prefs" the preferences window opens too. Close the
@@ -32,11 +33,15 @@ fi
 export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
 # A file backend, not "memory": the preferences window is another process and
 # must share the settings with the shell.
-# DATA_SOURCE=demo starts with made-up data instead of the real providers.
-if [ -n "${DATA_SOURCE:-}" ]; then
-    GSETTINGS_BACKEND=keyfile GSETTINGS_SCHEMA_DIR="$root/schemas" \
-        gsettings set org.gnome.shell.extensions.gnome-ai-quota data-source "$DATA_SOURCE"
-fi
+# DATA_SOURCE=demo starts with made-up data instead of the real providers, and DEMO_SCENARIO
+# (steady, flaky or drift) says what that data does: drift climbs toward the limits every ten
+# seconds, which is how the notifications are seen without any account.
+for pair in "data-source:${DATA_SOURCE:-}" "demo-scenario:${DEMO_SCENARIO:-}"; do
+    if [ -n "${pair#*:}" ]; then
+        GSETTINGS_BACKEND=keyfile GSETTINGS_SCHEMA_DIR="$root/schemas" \
+            gsettings set org.gnome.shell.extensions.gnome-ai-quota "${pair%%:*}" "${pair#*:}"
+    fi
+done
 export WORK="$work" GSETTINGS_BACKEND=keyfile GTK_A11Y=none UUID="$uuid" OPEN_PREFS="${1:-}"
 
 # The sign-in of a test goes to a throwaway keyring, never to your real one.
