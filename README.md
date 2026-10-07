@@ -192,7 +192,7 @@ design are in [docs/adr](docs/adr/README.md).
 | M0 | Skeleton: panel button, bar, popup with demo cards | done |
 | M1 | Data layer (contract, scheduler, cache), themes, appearance settings | done, in PR #1 |
 | M2 | Command Code with an API key stored in libsecret | done |
-| M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | planned |
+| M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | in progress, Codex done |
 | M4 | Notifications, connection alerts, polish | planned |
 
 Details in [ADR 0008](docs/adr/0008-mvp-roadmap.md).
