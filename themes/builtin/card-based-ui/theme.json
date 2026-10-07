@@ -1,8 +1,6 @@
 {
   "id": "card-based-ui",
   "name": "Card-based UI",
-  "group": "Limpo e funcional",
-  "description": "Tudo organizado em cartões modulares.",
   "nativeScheme": "light",
   "difficulty": "easy",
   "schemes": {

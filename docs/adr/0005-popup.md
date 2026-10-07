@@ -1,70 +1,76 @@
 # 0005. Popup design and defaults
 
-Status: accepted
+Status: accepted. The one-column popup, failure states and the settings below are
+implemented. Items marked planned arrive with real providers (M2 to M4).
 
 ## Context
 
-The popup follows the visual language of the *System Monitor* extension (dark rounded
+The popup follows the visual language of the System Monitor extension: rounded
 cards, an icon and a highlighted value in each title, thick bars, label and value
-rows, a footer with Refresh and Preferences). Layout, density, content and
-formatting were compared in an interactive mockup.
+rows, and a footer with Refresh and Preferences.
 
 ## Decision
 
-Defaults (every one of them is changeable in Preferences, Appearance):
+Defaults:
 
-| Option | Default | Alternative |
+| Option | Default | Setting |
 |---|---|---|
-| Layout | one column, collapsible cards (360 to 400 px) | two columns (440 to 520 px) |
-| Density | comfortable (hero 22 px, card padding 14 by 16) | compact (hero 18 px, padding 10 by 12) |
-| Warning and critical cards | open on their own; the user's "closed" holds until the state changes | always respect the user's choice |
-| Relative reset | `resets in 1h 20min` | `1h20` |
-| Clock | 24-hour | 12-hour |
-| Money providers | balance only | balance plus an estimated "lasts until" |
-| Providers on the bar | 3 (1 to 5) | |
-| "Hidden from the bar" section | only shown when something is hidden | |
+| Layout | one column of collapsible cards, 360 to 400 px | none |
+| Cards in warning, critical or error | open on their own; a card the user opens or closes by hand keeps that choice until its state changes | `auto-open` |
+| Relative reset | `resets in 1h 20min` (or `1h20`) | `reset-format` |
+| Clock | follow GNOME (12 or 24 hours) | `clock-format` |
+| Money providers | balance only | none |
+| Providers on the bar | 3 | `bar-count` |
+| "Hidden from the bar" section | shown only when something is hidden | none |
 
-Structure:
+A two-column layout (440 to 520 px), a compact density and a "lasts until" estimate
+for money balances are planned as options, not implemented.
 
-- Order: providers on the bar first (in bar order), then **Hidden from the bar**
-  (with a critical `!` pill in the header if any is critical), then **Not tracked**
-  (a grey line with a Track button). Cards never jump by severity.
-- Card: icon, name, plan, state pill, hero value (highest percentage, or the money
-  balance) with the window it belongs to (`97 % · week`) and a `⋯` menu (later). The
-  whole header is the toggle button, so Enter and Space work on the focused header. One row per window: label, percentage, a thin bar with a
-  **pacing tick** (a straight 2 px line that protrudes 3 px above and below the bar),
-  and the reset in two forms (relative, absolute). Pool sub-headings for providers
-  with pools. A single pacing line is shown only when the deviation is relevant.
-- Recovery actions live in the card body: **Connect**, **Try again**, **Track**.
-  Secondary and destructive actions live in `⋯`: Refresh this one, Do not track,
-  Remove connector (confirmed inline, no modal).
-- Stale and error states keep the last known value with its age visible.
-- Footer: "Updated N min ago", Refresh, Preferences. Maximum height is 70% of the
-  monitor with the scroll in the body only and the footer fixed.
-- Keyboard: Tab and arrows move between headers and buttons, Enter expands, Esc
-  closes. Color is never the only channel (glyphs, pills, italics, dashed borders).
+### Structure
 
-## Failure states (amended 2026-10-06)
+- **Order.** Providers on the bar first, in bar order, then "Hidden from the bar"
+  (with a critical `!` pill in its header if any hidden provider is critical). Cards
+  never jump by severity. A "Not tracked" section with a grey line and a Track button
+  is planned with the tracking controls.
+- **Card.** Icon, name, plan, state pill, and a hero value (the highest percentage,
+  or the money balance) with the window it belongs to (`97 % · week`). The whole
+  header is the toggle button, so Enter and Space work on the focused header. Each
+  window is a row: label, percentage, a thin bar with a **pacing tick** (a straight
+  2 px line that protrudes 3 px above and below the bar) and the reset in two forms,
+  relative and absolute. Providers with pools get a sub-heading per pool. A single
+  pacing line shows only when the deviation is relevant.
+- **Actions.** *Try again* lives in the card body of a provider that can recover by
+  retrying. Planned: *Connect* and *Track* in the body, and a `⋯` menu with Refresh
+  this one, Do not track and Remove connector (confirmed inline, no modal).
+- **Footer.** "Updated N min ago", with the number of providers in trouble next to
+  it, then Refresh and Preferences. The popup is at most 70% of the monitor height;
+  only the body scrolls and the footer stays fixed.
+- **Keyboard.** Tab and arrows move between headers and buttons, Enter expands and
+  Esc closes. Color is never the only channel: glyphs, pills, italics and borders
+  carry the same information.
+
+### Failure states
 
 Each snapshot state has its own pill, message and retry line, never a generic
-"connection problem": *No connection*, *Rate limited*, *Unexpected reply*,
-*Service changed* and *Signed out*. A failing provider keeps its last value,
-marked `~`, in italic and muted, with neutral meters, an orange border and the age
-of the value in the message; the retry line says when the next attempt happens.
-Providers that can recover by trying again get a **Try again** button; a
-rate-limited one does not, and a signed-out one has an inert header and no value.
-The footer says how many providers are in trouble next to the update time, and the
-summary line tells signed-out providers apart from failing ones. Until real
-accounts exist (M3) the signed-out message says that connecting accounts arrives
-in a later version.
+"connection problem": *No connection*, *Rate limited*, *Unexpected reply*, *Service
+changed* and *Signed out*.
+
+- A failing provider keeps its last value, marked `~` in italic and muted, with
+  neutral meters, an orange border and the age of the value in the message. The
+  retry line says when the next attempt happens.
+- A provider that can recover by retrying gets a **Try again** button. A
+  rate-limited one does not. A signed-out one has an inert header and no value.
+- The summary line tells signed-out providers apart from failing ones.
+- Until real accounts exist (M3), the signed-out message says that connecting
+  accounts arrives in a later version.
 
 ## Consequences
 
-- Implementation: one non-reactive `PopupBaseMenuItem` (`reactive: false`,
-  `can_focus: false`) holding the whole UI so inner buttons do not close the menu;
-  `Clutter.GridLayout` for columns; `St.ScrollView` with a JS-computed `max-height`;
-  the bar is an `St.Widget` with a fill and a tick; the tooltip is an `St.Label` in
-  `uiGroup`; refresh updates text, width and CSS class per card from a
-  `Map<providerId, CardView>`, never rebuilding the open menu.
-- To validate in a prototype: `max-height` of the `ScrollView` inside the popup,
-  right-to-left mirroring, and tabular numbers in CSS versus Pango.
+- One non-reactive `PopupBaseMenuItem` (`reactive: false`, `can_focus: false`) holds
+  the whole UI, so inner buttons do not close the menu.
+- The scroll area is an `St.ScrollView` whose `max-height` is computed in JavaScript
+  each time the menu opens.
+- The meter is an `St.Widget` with a fill and a tick placed from its allocation. The
+  tooltip is an `St.Label` in `uiGroup`.
+- A refresh updates text, width and CSS class per card from a
+  `Map<providerId, CardView>`. It never rebuilds an open menu.

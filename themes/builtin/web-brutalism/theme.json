@@ -1,8 +1,6 @@
 {
   "id": "web-brutalism",
   "name": "Web Brutalism & Data-Dense",
-  "group": "Brutalista e rebelde",
-  "description": "Crueza HTML, tabelas de alta densidade e estética de terminal.",
   "nativeScheme": "light",
   "difficulty": "medium",
   "schemes": {

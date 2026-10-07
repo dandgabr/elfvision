@@ -1,8 +1,6 @@
 {
   "id": "flat-design",
   "name": "Flat Design",
-  "group": "Limpo e funcional",
-  "description": "Cores sólidas, sem sombras nem gradientes.",
   "nativeScheme": "light",
   "difficulty": "easy",
   "schemes": {

@@ -1,82 +1,82 @@
-# 0004. Top-bar design (variation A)
+# 0004. Top-bar design
 
-Status: accepted
+Status: accepted. The bar, its states, selection and adaptive layout are
+implemented; notifications and motion are planned for M4.
 
 ## Context
 
-Three bar variations were compared in an interactive mockup: A (a 3 px mini bar
-under the number), B (number plus glyph, no bar) and C (a ring in place of the icon).
-Advice came from UI, UX, motion and frontend reviews.
+The bar competes for space with other extensions and must be readable at a glance.
+Three variations were drawn in an interactive mockup: a 3 px mini bar under the
+number, a number with a glyph and no bar, and a ring in place of the icon. The first
+won: it shows level and number at once and needs no custom drawing.
 
 ## Decision
 
-**Variation A.** Per provider, the item shows: a monochrome 16 px icon, the number
-(14 px, weight 700, tabular), a subordinate `%` (11 px, 70% opacity), a window
-suffix (`·5h`, `·W`, `·M`; `W` shows as `S` in Portuguese) and a 3 px bar under the item (track at 20% opacity).
+Per provider the item shows a monochrome 16 px icon, the number (14 px, weight 700,
+tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M`;
+`W` reads `S` in Portuguese) and a 3 px bar under the item (track at 20% opacity).
 
 - **Number shown:** the highest percentage among the provider's windows.
 - **State without relying on color:**
   - warning (80% and above): weight 800 and a `▲` glyph;
   - critical (95% and above): a pill with a border and a trailing `!`;
-  - stale: `~` prefix, italic, 60% opacity, the last value's fill kept;
-  - not signed in: `–` with a key glyph, icon at 50%;
-  - network error: last value dimmed with a `⚠` glyph.
-- **Count:** 1 to 5 providers, user configurable (default 3).
-- **Selection:** automatic (the N worst) or manual. Automatic ranks by severity
+  - stale: `~` prefix, italic, 60% opacity, the last fill kept;
+  - not signed in: `–` with a password icon, provider icon at 50%;
+  - failing (network, rate limit, bad reply): the last value with a `~` prefix and a
+    warning icon.
+- **Count:** 1 to 5 providers, setting `bar-count`, default 3.
+- **Selection:** automatic (the N worst) or manual. `lib/core/selection.js` supports
+  both, but no setting exposes manual selection yet. Automatic ranks by severity
   (critical, warning, error or not signed in, stale, normal; ties by the highest
-  percentage) but draws the selected items in the **fixed provider order** so the
-  bar does not jump.
-- **Failures compete as "warning".** Real critical and warning states still win
-  slots over failures.
-- **Providers with several metrics** (for example Antigravity with a Gemini pool
-  and a Claude/GPT pool, each with 5-hour and weekly windows): the bar shows the
-  most critical metric. The suffix names the window and the pool (`·G S`,
-  `·C/G 5h`, about 18 px wider for that item only). The tooltip lists every metric
-  and highlights the displayed one.
+  percentage) but draws the selected items in the fixed provider order, so the bar
+  does not jump. Failures compete as "warning": real critical and warning states
+  still win slots over failures.
+- **Providers with several metrics** (Antigravity has a Gemini pool and a
+  Claude/GPT pool, each with 5-hour and weekly windows): the bar shows the most
+  critical metric. The suffix names the window and the pool (`G S`, `C/G 5h`), about
+  18 px wider for that item. The tooltip lists every metric and marks the displayed
+  one.
 - **Money providers:** the number is the remaining balance (`$12.40`, `$124`,
-  `$1.2K`), the bar is the share of the budget spent. In headline mode, money is
-  shown only when it is the worst case; a configured dollar floor counts as
-  "warning" when choosing the worst.
-- **Degradation:** full, then compact (no `%`), then headline with `+N`. Budget
-  about 260 px. Never truncate a number with an ellipsis. Fixed item width
-  (tabular digits) so the bar does not shake.
-- **Adaptive layout (amended 2026-10-06):** the bar measures the room the panel
-  leaves it and picks the richest layout that fits, so other extensions never
-  clip it. Candidates in order: full, compact with N providers, compact with
-  N-1 down to 2, headline (the worst provider plus `+N`), then one compact
-  provider. The room is the side width the shell allocates, computed as
-  `(panel width - center natural width + work area offset) / 2`, minus what the
-  other items of the same panel box need. It is re-evaluated, debounced, when
-  children are added or removed in a panel box, when an allocation changes and
-  when monitors change. The popup lists as "Hidden from the bar" whatever the
-  bar does not show.
-- **Steady layout (amended 2026-10-06):** a neighbour that changes width every
-  second (a system monitor) made the first version flip between layouts and
-  shake the popup. The chosen layout is now sticky: the one in use is kept while
-  it fits, and a richer one is adopted only with 32 px to spare. Widths measured
-  by the last full pass are reused when only the panel changes, and the bar does
-  not re-fit while the popup is open (the pending fit runs on close). The popup
-  is anchored to an invisible copy of the button's box while open, so it does not
-  follow the button when neighbours resize.
-- **Settings (amended 2026-10-06):** `position` (`left`, `center`, `right`),
-  `bar-count` (1 to 5, default 3) and `compact-mode` (`auto`, `always`, `never`).
-  `never` keeps the `%` and the suffix and only drops providers. The button goes
-  after the Activities button in the left box, first in the right box.
-- **Notifications:** default threshold 95% (once per window, with 3 point
-  hysteresis), configurable per quota kind (session, weekly, monthly, credits;
-  any subset), with an optional dollar floor for credits. A separate **connection
-  alert** covers not signed in, persistent errors and long-stale data.
-- **Motion:** one 300 ms tween on the bar, a 150 ms cross-fade on the number, one
+  `$1.2K`) and the bar is the share of the budget spent. In headline mode, money
+  shows only when it is the worst case; a configured dollar floor counts as
+  "warning" for that choice.
+- **Adaptive layout.** The bar measures the room the panel leaves it and picks the
+  richest layout that fits, so other extensions never clip it. Candidates, in order:
+  full; compact with N providers; compact with N-1 down to 2; headline (the worst
+  provider plus `+N`); one compact provider. The room is the side width the shell
+  allocates, `(panel width - center natural width + work area offset) / 2`, minus
+  what the other items of the same panel box need. It is re-evaluated, debounced,
+  when children are added or removed in a panel box, when an allocation changes and
+  when monitors change. A number is never truncated with an ellipsis, and item
+  widths are fixed (tabular digits) so the bar does not shake. The popup lists as
+  "Hidden from the bar" whatever the bar does not show.
+- **Steady layout.** A neighbour that changes width every second, such as a system
+  monitor, would make the layout flip and the popup shake. The layout in use is
+  therefore sticky: it is kept while it fits, and a richer one is adopted only with
+  32 px to spare. Widths from the last full pass are reused when only the panel
+  changes. The bar does not re-fit while the popup is open; the pending fit runs on
+  close. While open, the popup is anchored to an invisible copy of the button's box,
+  so it stays put when neighbours resize.
+- **Settings:** `position` (`left`, `center`, `right`; default right), `bar-count`
+  and `compact-mode` (`auto`, `always`, `never`). `never` keeps the `%` and the
+  suffix and only drops providers. The button goes after the Activities button in
+  the left box and first in the right box.
+
+Planned for M4:
+
+- **Notifications.** Default threshold 95%, once per window with 3 points of
+  hysteresis, configurable per quota kind (session, weekly, monthly, credits; any
+  subset), with an optional dollar floor for credits. A separate connection alert
+  covers not signed in, persistent errors and long-stale data.
+- **Motion.** One 300 ms tween on the bar, a 150 ms cross-fade on the number, one
   pulse when crossing 80% (two at 95%), nothing looping, no timers at rest, and all
   durations zero when GNOME animations are off.
 
 ## Consequences
 
-- One `PanelMenu.Button` holding a `St.BoxLayout` of items (one menu, one focus
-  stop, one aggregated accessible name).
-- The mini bar is an `St.Widget` with a filled child; `St.DrawingArea` is only
-  needed for rings (not used).
-- States are CSS classes (`St` has no `var()`); the panel theme already applies
-  tabular numbers.
-- Items wider than the available space are clipped by the panel, hence the
-  compact and headline modes.
+- One `PanelMenu.Button` holds a `St.BoxLayout` of items: one menu, one focus stop,
+  one aggregated accessible name.
+- The mini bar is an `St.Widget` with a filled child. No `St.DrawingArea` is needed.
+- States are CSS classes, because St has no `var()`.
+- Items wider than the available space are clipped by the panel, hence the compact
+  and headline layouts.

@@ -1,8 +1,6 @@
 {
   "id": "linear-saas",
   "name": "Linear SaaS",
-  "group": "Limpo e funcional",
-  "description": "Dark UI refinada de produto SaaS, bordas sutis.",
   "nativeScheme": "dark",
   "difficulty": "easy",
   "schemes": {

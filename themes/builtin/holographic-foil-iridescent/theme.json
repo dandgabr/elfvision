@@ -1,8 +1,6 @@
 {
   "id": "holographic-foil-iridescent",
   "name": "Holographic Foil",
-  "group": "Superfície e materiais",
-  "description": "Reflexos perolizados, arco-íris prismático e cromo.",
   "nativeScheme": "dark",
   "difficulty": "hard",
   "schemes": {

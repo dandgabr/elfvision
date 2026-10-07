@@ -1,8 +1,6 @@
 {
   "id": "aurora-mesh-gradient",
   "name": "Aurora / Mesh Gradient",
-  "group": "Superfície e materiais",
-  "description": "Gradientes de malha em movimento suave.",
   "nativeScheme": "dark",
   "difficulty": "hard",
   "schemes": {

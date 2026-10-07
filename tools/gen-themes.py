@@ -7,7 +7,7 @@ contrast automatically, and writes one theme.json per style.
 
 Usage:
     python3 -I tools/gen-themes.py --styles /path/to/estilos-visuais \
-        --out themes/generated [--only themes/v1.txt]
+        --out themes/builtin [--only themes/v1.txt]
 
 Contrast targets (WCAG): text 7:1, secondary text and status colors 4.5:1,
 accent 3:1, text on accent 4.5:1, all measured against the card surface.
@@ -353,8 +353,6 @@ def build_theme(slug, tokens, meta):
     return {
         'id': slug,
         'name': info['name'],
-        'group': info['group'],
-        'description': info['description'],
         'nativeScheme': native,
         'difficulty': 'hard' if slug in HARD else ('medium' if slug in MEDIUM else 'easy'),
         'schemes': schemes,

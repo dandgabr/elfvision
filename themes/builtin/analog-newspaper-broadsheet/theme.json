@@ -1,8 +1,6 @@
 {
   "id": "analog-newspaper-broadsheet",
   "name": "Broadsheet Newspaper",
-  "group": "Tipografia e editorial",
-  "description": "Diagramação clássica de jornal diário, colunas estritas e capitulares.",
   "nativeScheme": "light",
   "difficulty": "medium",
   "schemes": {
