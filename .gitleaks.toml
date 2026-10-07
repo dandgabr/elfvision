@@ -1,0 +1,23 @@
+# Rules for gitleaks, on top of its defaults (docs/adr/0003, 0009).
+title = "gnome-ai-quota"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "google-desktop-client-secret"
+description = "A Google OAuth client secret"
+regex = '''GOCSPX-[A-Za-z0-9_-]{20,}'''
+
+[[rules]]
+id = "google-client-id"
+description = "A Google OAuth client id"
+regex = '''[0-9]{10,}-[a-z0-9]{20,}\.apps\.googleusercontent\.com'''
+
+[allowlist]
+description = "The pattern lives in the helper and in the docs; the values do not."
+paths = [
+  '''tools/check-secrets\.py''',
+  '''tools/import-client-ids\.py''',
+  '''\.gitleaks\.toml''',
+]

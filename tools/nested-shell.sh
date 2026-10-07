@@ -15,7 +15,10 @@ root="$(cd "$(dirname "$0")/.." && pwd)"
 "$root/tools/build.sh" >/dev/null
 uuid="$(python3 -I -c 'import json,sys;print(json.load(open(sys.argv[1]))["uuid"])' "$root/metadata.json")"
 work="$(mktemp -d)"
+# Removed on every way out, a signal included: the folder can hold a copy of the client ids.
 trap 'rm -rf "$work"' EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 mkdir -p "$work/data/gnome-shell/extensions"
 ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 
@@ -34,13 +37,16 @@ if [ -n "${DATA_SOURCE:-}" ]; then
     GSETTINGS_BACKEND=keyfile GSETTINGS_SCHEMA_DIR="$root/schemas" \
         gsettings set org.gnome.shell.extensions.gnome-ai-quota data-source "$DATA_SOURCE"
 fi
-export GSETTINGS_BACKEND=keyfile GTK_A11Y=none UUID="$uuid" OPEN_PREFS="${1:-}"
+export WORK="$work" GSETTINGS_BACKEND=keyfile GTK_A11Y=none UUID="$uuid" OPEN_PREFS="${1:-}"
 
 # The sign-in of a test goes to a throwaway keyring, never to your real one.
 unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK
 dbus-run-session -- bash -c '
     # A throwaway, unlocked keyring, so the provider keys of a test never touch yours.
-    gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1 || true
+    # Its own private runtime folder: it must not touch the control socket of your real keyring.
+    keyring_run="$WORK/keyring-run"
+    mkdir -m 700 "$keyring_run"
+    XDG_RUNTIME_DIR="$keyring_run" gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1 || true
     # Only the in-memory session collection exists; make it the default one so
     # libsecret does not ask to create a keyring.
     gdbus call --session --dest org.freedesktop.secrets --object-path /org/freedesktop/secrets \

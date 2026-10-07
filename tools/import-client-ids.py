@@ -60,7 +60,8 @@ def candidate_binaries(command):
     found = [real]
     # Only inside the tool's own package (the folder with its package.json), never a wide
     # folder such as /usr or the home directory.
-    package = next((folder for folder in real.parents if (folder / 'package.json').is_file()), None)
+    home = pathlib.Path.home()
+    package = next((folder for folder in real.parents if folder != home and (folder / 'package.json').is_file()), None)
     if package is None:
         return found
     for root, _dirs, files in os.walk(package):

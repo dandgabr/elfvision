@@ -40,3 +40,9 @@ coverage/
 *.swp
 .DS_Store
 Thumbs.db
+
+# Other tools keep their own state in the project folder.
+.commandcode/
+.claude/
+.codex/
+.gemini/
