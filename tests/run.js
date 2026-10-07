@@ -5,5 +5,6 @@ import './core.test.js';
 import './scheduler.test.js';
 import './theme.test.js';
 import './http.test.js';
+import './structure.test.js';
 
 System.exit(await runAll() ? 1 : 0);

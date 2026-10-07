@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 08:59-0300\n"
+"POT-Creation-Date: 2026-10-07 09:15-0300\n"
 "PO-Revision-Date: 2026-10-06 21:45-0300\n"
 "Last-Translator: gnome-ai-quota authors\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -286,6 +286,112 @@ msgid_plural "%s · %d with problems"
 msgstr[0] "%s · %d com problema"
 msgstr[1] "%s · %d com problemas"
 
+#: lib/prefs/accounts.js:23
+msgid "Accounts"
+msgstr "Contas"
+
+#: lib/prefs/accounts.js:35
+msgid "The key is kept in the system keyring and sent only to %s."
+msgstr "A chave fica no chaveiro do sistema e só é enviada a %s."
+
+#: lib/prefs/accounts.js:37
+msgid "Checking the keyring…"
+msgstr "Consultando o chaveiro…"
+
+#: lib/prefs/accounts.js:37
+msgid "Status"
+msgstr "Situação"
+
+#: lib/prefs/accounts.js:39
+msgid "Remove key"
+msgstr "Remover chave"
+
+#: lib/prefs/accounts.js:40
+msgid "Remove the %s key"
+msgstr "Remover a chave do %s"
+
+#: lib/prefs/accounts.js:46
+msgid "API key"
+msgstr "Chave de API"
+
+#: lib/prefs/accounts.js:58
+msgid ""
+"No keyring found. Unlock it in Passwords and Keys, or install a Secret "
+"Service provider."
+msgstr "Nenhum chaveiro encontrado. Desbloqueie-o em Senhas e Chaves ou instale um provedor de Secret Service."
+
+#: lib/prefs/accounts.js:62
+msgid "No key yet. Paste one below."
+msgstr "Ainda não há chave. Cole uma abaixo."
+
+#: lib/prefs/accounts.js:67
+msgid "Key accepted."
+msgstr "Chave aceita."
+
+#: lib/prefs/accounts.js:68
+msgid "The server rejected this key."
+msgstr "O servidor recusou esta chave."
+
+#: lib/prefs/accounts.js:69
+msgid "Key saved. The keyring is locked, so it was not checked."
+msgstr "Chave guardada. O chaveiro está bloqueado, então ela não foi verificada."
+
+#: lib/prefs/accounts.js:70
+msgid "Key saved. Could not reach the server."
+msgstr "Chave guardada. Não foi possível falar com o servidor."
+
+#: lib/prefs/accounts.js:71
+msgid "Key saved. The service replied in an unexpected way."
+msgstr "Chave guardada. O serviço respondeu de forma inesperada."
+
+#: lib/prefs/accounts.js:72
+msgid "Key saved. Not checked yet."
+msgstr "Chave guardada, ainda não verificada."
+
+#: lib/prefs/accounts.js:97
+msgid "That does not look like an API key."
+msgstr "Isso não parece uma chave de API."
+
+#: lib/prefs/accounts.js:104
+msgid "Key saved. Checking…"
+msgstr "Chave guardada. Verificando…"
+
+#: lib/prefs/accounts.js:111
+msgid "The keyring did not accept the key."
+msgstr "O chaveiro não aceitou a chave."
+
+#: lib/prefs/accounts.js:122
+msgid "Remove the %s key?"
+msgstr "Remover a chave do %s?"
+
+#: lib/prefs/accounts.js:123
+msgid "It is deleted from the keyring. The key stays valid on the %s site."
+msgstr "Ela é apagada do chaveiro. A chave continua válida no site do %s."
+
+#: lib/prefs/accounts.js:125
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: lib/prefs/accounts.js:126
+msgid "Remove"
+msgstr "Remover"
+
+#: lib/prefs/accounts.js:134
+msgid "The keyring is not available."
+msgstr "O chaveiro não está disponível."
+
+#: lib/prefs/accounts.js:150
+msgid "Your %s username"
+msgstr "Seu usuário no %s"
+
+#: lib/prefs/accounts.js:153
+msgid "Where do I get a key?"
+msgstr "Onde consigo uma chave?"
+
+#: lib/prefs/accounts.js:154
+msgid "Opens your keys page. Enter your %s username above first."
+msgstr "Abre a sua página de chaves. Informe antes o seu usuário no %s, no campo acima."
+
 #: lib/ui/indicator.js:159
 msgid "Refresh"
 msgstr "Atualizar"
@@ -438,324 +544,216 @@ msgstr "Uma interface de terminal em texto."
 msgid "Raw HTML and dense tables."
 msgstr "HTML cru e tabelas densas."
 
-#: prefs.js:87
+#: prefs.js:86
 msgid "Some themes could not be loaded"
 msgstr "Alguns temas não puderam ser carregados"
 
-#: prefs.js:111
+#: prefs.js:110
 msgid "System"
 msgstr "Sistema"
 
-#: prefs.js:111 prefs.js:377
+#: prefs.js:110 prefs.js:230
 msgid "Your themes"
 msgstr "Seus temas"
 
-#: prefs.js:118 prefs.js:352
+#: prefs.js:117 prefs.js:205
 msgid "System (GNOME)"
 msgstr "Sistema (GNOME)"
 
-#: prefs.js:122
+#: prefs.js:121
 msgid "Follows the GNOME accent color and the light or dark setting."
 msgstr "Segue a cor de destaque do GNOME e a configuração de claro ou escuro."
 
-#: prefs.js:151 prefs.js:357
+#: prefs.js:150 prefs.js:210
 msgid "Theme"
 msgstr "Tema"
 
-#: prefs.js:157
-msgid "Accounts"
-msgstr "Contas"
-
-#: prefs.js:160
-msgid ""
-"The key is kept in the system keyring and sent only to api.commandcode.ai."
-msgstr "A chave fica no chaveiro do sistema e só é enviada a api.commandcode.ai."
-
-#: prefs.js:162
-msgid "Checking the keyring…"
-msgstr "Consultando o chaveiro…"
-
-#: prefs.js:162
-msgid "Status"
-msgstr "Situação"
-
-#: prefs.js:164
-msgid "Remove key"
-msgstr "Remover chave"
-
-#: prefs.js:165
-msgid "Remove the Command Code key"
-msgstr "Remover a chave do Command Code"
-
-#: prefs.js:171
-msgid "API key"
-msgstr "Chave de API"
-
-#: prefs.js:173
-msgid "Your Command Code username"
-msgstr "Seu usuário no Command Code"
-
-#: prefs.js:176
-msgid "Where do I get a key?"
-msgstr "Onde consigo uma chave?"
-
-#: prefs.js:177
-msgid "Opens your keys page. Enter your Command Code username above first."
-msgstr "Abre a sua página de chaves. Informe antes o seu usuário no Command Code, no campo acima."
-
-#: prefs.js:206
-msgid ""
-"No keyring found. Unlock it in Passwords and Keys, or install a Secret "
-"Service provider."
-msgstr "Nenhum chaveiro encontrado. Desbloqueie-o em Senhas e Chaves ou instale um provedor de Secret Service."
-
-#: prefs.js:210
-msgid "No key yet. Paste one below."
-msgstr "Ainda não há chave. Cole uma abaixo."
-
-#: prefs.js:215
-msgid "Key accepted."
-msgstr "Chave aceita."
-
-#: prefs.js:216
-msgid "The server rejected this key."
-msgstr "O servidor recusou esta chave."
-
-#: prefs.js:217
-msgid "Key saved. The keyring is locked, so it was not checked."
-msgstr "Chave guardada. O chaveiro está bloqueado, então ela não foi verificada."
-
-#: prefs.js:218
-msgid "Key saved. Could not reach the server."
-msgstr "Chave guardada. Não foi possível falar com o servidor."
-
-#: prefs.js:219
-msgid "Key saved. The service replied in an unexpected way."
-msgstr "Chave guardada. O serviço respondeu de forma inesperada."
-
-#: prefs.js:220
-msgid "Key saved. Not checked yet."
-msgstr "Chave guardada, ainda não verificada."
-
-#: prefs.js:245
-msgid "That does not look like an API key."
-msgstr "Isso não parece uma chave de API."
-
-#: prefs.js:252
-msgid "Key saved. Checking…"
-msgstr "Chave guardada. Verificando…"
-
-#: prefs.js:259
-msgid "The keyring did not accept the key."
-msgstr "O chaveiro não aceitou a chave."
-
-#: prefs.js:270
-msgid "Remove the Command Code key?"
-msgstr "Remover a chave do Command Code?"
-
-#: prefs.js:271
-msgid ""
-"It is deleted from the keyring. The key stays valid on the Command Code site."
-msgstr "Ela é apagada do chaveiro. A chave continua válida no site do Command Code."
-
-#: prefs.js:273
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: prefs.js:274
-msgid "Remove"
-msgstr "Remover"
-
-#: prefs.js:282
-msgid "The keyring is not available."
-msgstr "O chaveiro não está disponível."
-
-#: prefs.js:310 prefs.js:342
+#: prefs.js:163 prefs.js:195
 msgid "Appearance"
 msgstr "Aparência"
 
-#: prefs.js:315
+#: prefs.js:168
 msgid "Top bar"
 msgstr "Barra superior"
 
-#: prefs.js:316
+#: prefs.js:169
 msgid ""
 "The bar shrinks, then shows fewer providers, when other extensions leave it "
 "little room."
 msgstr "A barra encolhe e depois mostra menos provedores quando outras extensões deixam pouco espaço."
 
-#: prefs.js:319
+#: prefs.js:172
 msgid "Left"
 msgstr "Esquerda"
 
-#: prefs.js:320
+#: prefs.js:173
 msgid "Center"
 msgstr "Centro"
 
-#: prefs.js:321
+#: prefs.js:174
 msgid "Right"
 msgstr "Direita"
 
-#: prefs.js:322
+#: prefs.js:175
 msgid "Position"
 msgstr "Posição"
 
-#: prefs.js:322
+#: prefs.js:175
 msgid "Where the quota items sit on the top bar."
 msgstr "Onde os itens de cota ficam na barra superior."
 
-#: prefs.js:326
+#: prefs.js:179
 msgid "Providers on the bar"
 msgstr "Provedores na barra"
 
-#: prefs.js:327
+#: prefs.js:180
 msgid "The most providers shown, from 1 to 5."
 msgstr "O máximo de provedores exibidos, de 1 a 5. Os mais críticos aparecem primeiro."
 
-#: prefs.js:334
+#: prefs.js:187
 msgid "Automatic"
 msgstr "Automático"
 
-#: prefs.js:335
+#: prefs.js:188
 msgid "Always compact"
 msgstr "Sempre compactar"
 
-#: prefs.js:336
+#: prefs.js:189
 msgid "Never compact"
 msgstr "Nunca compactar"
 
-#: prefs.js:337
+#: prefs.js:190
 msgid "Compact mode"
 msgstr "Modo compacto"
 
-#: prefs.js:337
+#: prefs.js:190
 msgid "Drops the percent sign and the window suffix."
 msgstr "Remove o sinal de % e o sufixo da janela."
 
-#: prefs.js:344 prefs.js:399
+#: prefs.js:197 prefs.js:252
 msgid "Follow the system"
 msgstr "Seguir o sistema"
 
-#: prefs.js:345
+#: prefs.js:198
 msgid "Light"
 msgstr "Claro"
 
-#: prefs.js:346
+#: prefs.js:199
 msgid "Dark"
 msgstr "Escuro"
 
-#: prefs.js:347
+#: prefs.js:200
 msgid "Applies to the popup. The top bar always stays dark."
 msgstr "Vale para o popup. A barra superior continua escura."
 
-#: prefs.js:347
+#: prefs.js:200
 msgid "Light or dark"
 msgstr "Claro ou escuro"
 
-#: prefs.js:353
+#: prefs.js:206
 msgid "%s (unavailable)"
 msgstr "%s (indisponível)"
 
-#: prefs.js:358
+#: prefs.js:211
 msgid "Each theme has a light and a dark variant."
 msgstr "Todo tema tem variante clara e escura."
 
-#: prefs.js:378
+#: prefs.js:231
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr "Uma pasta por tema, com um theme.json dentro: %s"
 
-#: prefs.js:381
+#: prefs.js:234
 msgid "Open folder"
 msgstr "Abrir pasta"
 
-#: prefs.js:383
+#: prefs.js:236
 msgid "Open the themes folder"
 msgstr "Abrir a pasta de temas"
 
-#: prefs.js:397
+#: prefs.js:250
 msgid "Popup"
 msgstr "Popup"
 
-#: prefs.js:400
+#: prefs.js:253
 msgid "12 hours"
 msgstr "12 horas"
 
-#: prefs.js:401
+#: prefs.js:254
 msgid "24 hours"
 msgstr "24 horas"
 
-#: prefs.js:402
+#: prefs.js:255
 msgid "Clock"
 msgstr "Relógio"
 
-#: prefs.js:402
+#: prefs.js:255
 msgid "How reset times are written."
 msgstr "Como os horários de reinício são escritos."
 
-#: prefs.js:405
+#: prefs.js:258
 msgid "1h 20min"
 msgstr "1h 20min"
 
-#: prefs.js:406
+#: prefs.js:259
 msgid "1h20"
 msgstr "1h20"
 
-#: prefs.js:407
+#: prefs.js:260
 msgid "How the countdown to a reset is written."
 msgstr "Como a contagem até o reinício é escrita."
 
-#: prefs.js:407
+#: prefs.js:260
 msgid "Time until reset"
 msgstr "Tempo até o reinício"
 
-#: prefs.js:410
+#: prefs.js:263
 msgid "Open cards that need attention"
 msgstr "Abrir cartões que pedem atenção"
 
-#: prefs.js:411
+#: prefs.js:264
 msgid "Cards in warning, critical or error states open on their own."
 msgstr "Cartões em atenção, críticos ou com erro abrem sozinhos."
 
-#: prefs.js:419
+#: prefs.js:272
 msgid "Advanced"
 msgstr "Avançado"
 
-#: prefs.js:420
+#: prefs.js:273
 msgid "Demo data, to try every state without an account."
 msgstr "Dados de demonstração, para ver todos os estados sem uma conta."
 
-#: prefs.js:423
+#: prefs.js:276
 msgid "Real providers"
 msgstr "Provedores reais"
 
-#: prefs.js:424
+#: prefs.js:277
 msgid "Demo data (made up)"
 msgstr "Dados de demonstração (fictícios)"
 
-#: prefs.js:425
+#: prefs.js:278
 msgid "Data source"
 msgstr "Fonte dos dados"
 
-#: prefs.js:425
+#: prefs.js:278
 msgid "Demo data queries no account."
 msgstr "Os dados de demonstração não consultam nenhuma conta."
 
-#: prefs.js:427
+#: prefs.js:280
 msgid "Steady"
 msgstr "Estável"
 
-#: prefs.js:428
+#: prefs.js:281
 msgid "Flaky"
 msgstr "Instável"
 
-#: prefs.js:429
+#: prefs.js:282
 msgid "Drifting"
 msgstr "Subindo"
 
-#: prefs.js:431
+#: prefs.js:284
 msgid "Demo scenario"
 msgstr "Cenário de demonstração"
 
-#: prefs.js:431
+#: prefs.js:284
 msgid "Steady: all fine. Flaky: errors come and go. Drifting: usage climbs."
 msgstr "Estável: tudo certo. Instável: erros vão e vêm. Subindo: o uso sobe."

@@ -90,6 +90,13 @@ code, never in this file. `providers.example.json` in the repository has
 placeholders. Without the file or the provider's entry the Connect button is off and
 shows the path; the shell reports `auth_required` with the reason `no_config`.
 
+Where the ids come from: a helper the user runs once looks for the client id each
+local AI tool uses (the id only, never a token or any credential file's contents) and
+writes it to this file; when none is found, the public id of that tool's open-source
+client is used; and the file can always be edited to use another. The extension itself
+never reads those tools' files while it runs (ADR 0002). The helper arrives with the
+OAuth step of each provider.
+
 Keeping client ids out of the repository: a local test searches the repository for
 every value of the local file; the gitleaks hook gets rules for the known formats;
 and a list of SHA-256 hashes of the known public ids lets a test flag one without the
@@ -116,7 +123,7 @@ id being in the repository.
 
 ### Bar and popup
 
-- A provider that was never connected is not on the bar or in the popup. With nothing
+- (Confirmed by the owner.) A provider that was never connected is not on the bar or in the popup. With nothing
   connected the bar shows the extension icon and the popup an empty state with an
   Add account button; with providers, a quiet "Add account" line ends the list until
   all are connected.
