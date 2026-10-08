@@ -24,10 +24,11 @@ combined. Each card shows the available plan,
 state, usage windows, progress bars and reset times. The pacing tick marks the usage
 expected at an even rate across the window; it is a guide, not a prediction.
 
-The bar prioritizes providers that need attention. The popup lists providers that
-could not fit under **Hidden from the bar**, and paused providers under **Not
-tracked** with a Resume action. Use **?** for the indicator legend, **Refresh** to
-request fresh data and **Preferences** to change settings.
+The bar prioritizes providers that need attention. The popup uses one list in the
+order chosen under **General → Popup → Connector order and visibility**. Cards
+hidden there still update, notify and may appear in the bar. Paused providers
+appear under **Not tracked** with a Resume action. Use **?** for the indicator
+legend, **Refresh** to request fresh data and **Preferences** to change settings.
 
 ## Settings
 
@@ -54,7 +55,7 @@ it, starts a sign-in or accepts terms for you. Only an explicit Connect action d
 | Page and group | Option | What it does |
 |---|---|---|
 | Accounts | Add connector… | Choose a provider and a local name. Several connectors may use the same provider; creation does not sign in. |
-| Accounts, each connector | Configure | Opens the editor to rename, save a Command Code key, or connect with OAuth. Check configuration again retries loading public OAuth configuration. |
+| Accounts, each connector | Configure | Opens the editor to rename, save the provider’s required API key, or connect with OAuth. Check configuration again retries loading public OAuth configuration. |
 | Accounts, each connector | Remove connector… | After confirmation, removes only this connector, its local credential, and its quota/alert data. Other connectors stay saved. A failure keeps the row available for retry. |
 | Accounts, recovery | Recover list… | Appears when the connector list is invalid. After confirmation, rebuilds metadata from saved credential identities without reading or deleting secret values. Local names may need to be entered again. |
 | Accounts, Demo connectors | Simulate connect / disconnect | Changes a fictional account's state without a provider request, browser, or keyring. Add and remove use the separate demo connector list. |
@@ -71,6 +72,9 @@ it, starts a sign-in or accepts terms for you. Only an explicit Connect action d
 | General, Colors and theme | Transparency | Allows transparent backgrounds. Off keeps reading surfaces and backgrounds opaque. Default: on. |
 | General, Colors and theme | Material | Follows the theme or selects opaque, translucent, decorative glass, or frost for any built-in theme. Transparency must be on for a transparent material. Default: follow the theme. |
 | General, Popup | Clock | Follows the GNOME clock setting, or forces 12 or 24 hours for reset times. |
+| General, Popup | Automatic width / Popup width | Automatic starts at 420 logical pixels. Turn it off to choose a width. The monitor clamps the displayed size without rewriting the requested value. |
+| General, Popup | Automatic height / Maximum popup height | Automatic limits the whole popup to 70% of the current monitor's work area. A custom limit includes the footer and native chrome; a short list may use less height. |
+| General, Popup | Connector order and visibility | Show/hide cards and move them up/down. These choices are separate for Live and Demo; hiding never pauses collection, alerts or panel eligibility. New connectors append to the order. |
 | General, Popup | Time until reset | Writes the countdown as `1h 20min` or `1h20`. |
 | General, Popup | Open cards that need attention | Opens cards in a warning, critical or error state on their own. A card you open or close by hand keeps that choice until its state changes. |
 | General, Advanced | Data source, Demo scenario | Switches to made-up providers (`steady`, `flaky` or `drift`) so every state can be seen without an account. The popup says when the data is made up. |
@@ -81,6 +85,11 @@ it, starts a sign-in or accepts terms for you. Only an explicit Connect action d
 | Notifications | Send a test notification | Sends one notification that says it is a test, to check the banner and Do Not Disturb. |
 | Notifications, Quotas | 5-hour, weekly, monthly, credits | Each kind has a critical threshold (default 95%) and an optional earlier warning (default 80%, off). Warning must be lower than critical. |
 | Notifications, Connection | Notify about connection problems | Notifies once when an account is rejected or its data stops arriving. Never for a provider you stopped tracking. |
+
+Custom size controls start at 320 pixels wide and 240 pixels high. The runtime
+also keeps space for measured native chrome and at least 40 pixels of scrolling
+content, subject to the monitor's available space. This prevents unusably small
+saved values from hiding the controls; it never rewrites the saved preference.
 
 ## Notifications
 
@@ -117,6 +126,11 @@ confirmation. All connectors are tracked again; setup becomes available. The
 connector list, credentials, terms acknowledgements, public client configuration,
 custom themes, fonts, selected data source, and demo scenario stay saved. Demo
 mode remains Demo.
+
+Popup dimensions, card order and visibility also return to defaults. This reset
+is not part of an upgrade: installing a new extension ZIP with `--force` preserves
+all these preferences and saved connector identities. A new login loads the new
+code on Wayland; replacing files alone does not reload the running Shell.
 
 **Remove connector…** in an editor deletes only that connector's local credential,
 quota snapshots, and alert history, then removes its list entry. Other connectors, including

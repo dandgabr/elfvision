@@ -1,0 +1,215 @@
+{
+  "fonts": {
+    "finished": true,
+    "cases": [
+      {
+        "id": "analog-newspaper-broadsheet",
+        "scheme": "light",
+        "display": {
+          "requested": "DejaVu Serif Bold 16px",
+          "resolved": "DejaVu Serif Bold 12"
+        },
+        "body": {
+          "requested": "DejaVu Serif 12px",
+          "resolved": "DejaVu Serif 9"
+        },
+        "hero": {
+          "requested": "DejaVu Serif Bold 22px",
+          "resolved": "DejaVu Serif Bold 16.5"
+        }
+      },
+      {
+        "id": "hand-drawn-sketch",
+        "scheme": "light",
+        "display": {
+          "requested": "Z003 Bold 16px",
+          "resolved": "Z003 Bold Italic 12"
+        },
+        "body": {
+          "requested": "DejaVu Sans 12px",
+          "resolved": "DejaVu Sans 9"
+        },
+        "hero": {
+          "requested": "DejaVu Sans Bold 22px",
+          "resolved": "DejaVu Sans Bold 16.5"
+        }
+      },
+      {
+        "id": "mid-century-modern",
+        "scheme": "light",
+        "display": {
+          "requested": "Noto Sans Bold 15px",
+          "resolved": "Noto Sans Bold 11.25"
+        },
+        "body": {
+          "requested": "Noto Serif 12px",
+          "resolved": "Noto Serif 9"
+        },
+        "hero": {
+          "requested": "Noto Sans Bold 22px",
+          "resolved": "Noto Sans Bold 16.5"
+        }
+      },
+      {
+        "id": "web-brutalism",
+        "scheme": "light",
+        "display": {
+          "requested": "Noto Serif Bold 13px",
+          "resolved": "Noto Serif Bold 9.75"
+        },
+        "body": {
+          "requested": "Noto Serif 12px",
+          "resolved": "Noto Serif 9"
+        },
+        "hero": {
+          "requested": "Noto Serif Bold 26px",
+          "resolved": "Noto Serif Bold 19.5"
+        }
+      },
+      {
+        "id": "analog-newspaper-broadsheet",
+        "scheme": "dark",
+        "display": {
+          "requested": "DejaVu Serif Bold 16px",
+          "resolved": "DejaVu Serif Bold 12"
+        },
+        "body": {
+          "requested": "DejaVu Serif 12px",
+          "resolved": "DejaVu Serif 9"
+        },
+        "hero": {
+          "requested": "DejaVu Serif Bold 22px",
+          "resolved": "DejaVu Serif Bold 16.5"
+        }
+      },
+      {
+        "id": "hand-drawn-sketch",
+        "scheme": "dark",
+        "display": {
+          "requested": "Z003 Bold 16px",
+          "resolved": "Z003 Bold Italic 12"
+        },
+        "body": {
+          "requested": "DejaVu Sans 12px",
+          "resolved": "DejaVu Sans 9"
+        },
+        "hero": {
+          "requested": "DejaVu Sans Bold 22px",
+          "resolved": "DejaVu Sans Bold 16.5"
+        }
+      },
+      {
+        "id": "mid-century-modern",
+        "scheme": "dark",
+        "display": {
+          "requested": "Noto Sans Bold 15px",
+          "resolved": "Noto Sans Bold 11.25"
+        },
+        "body": {
+          "requested": "Noto Serif 12px",
+          "resolved": "Noto Serif 9"
+        },
+        "hero": {
+          "requested": "Noto Sans Bold 22px",
+          "resolved": "Noto Sans Bold 16.5"
+        }
+      },
+      {
+        "id": "web-brutalism",
+        "scheme": "dark",
+        "display": {
+          "requested": "Noto Serif Bold 13px",
+          "resolved": "Noto Serif Bold 9.75"
+        },
+        "body": {
+          "requested": "Noto Serif 12px",
+          "resolved": "Noto Serif 9"
+        },
+        "hero": {
+          "requested": "Noto Serif Bold 26px",
+          "resolved": "Noto Serif Bold 19.5"
+        }
+      }
+    ],
+    "largeFont": {
+      "bounds": {},
+      "paintSize": [
+        420,
+        520
+      ],
+      "summary": [
+        380,
+        16
+      ],
+      "footer": [
+        396,
+        66
+      ]
+    }
+  },
+  "largeReading": {
+    "finished": true,
+    "cases": [],
+    "largeFont": {
+      "bounds": {
+        "topEnd": 73,
+        "bottomStart": 375
+      },
+      "readers": [
+        {
+          "name": "gaq-summary",
+          "visible": true,
+          "allocated": true,
+          "pos": [
+            795,
+            50
+          ],
+          "size": [
+            380,
+            61
+          ]
+        },
+        {
+          "name": "gaq-footer",
+          "visible": true,
+          "allocated": true,
+          "pos": [
+            795,
+            413
+          ],
+          "size": [
+            396,
+            133
+          ]
+        }
+      ],
+      "decAllocated": true,
+      "state": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 0,
+        "pendingLayoutSources": 0,
+        "particles": 0,
+        "blurEffects": 0,
+        "actors": 2,
+        "material": "decorative-glass",
+        "updates": 0,
+        "callbackUsec": 0,
+        "generation": 6
+      },
+      "paintSize": [
+        420,
+        520
+      ],
+      "summary": [
+        380,
+        61
+      ],
+      "footer": [
+        396,
+        133
+      ]
+    }
+  }
+}

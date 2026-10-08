@@ -23,6 +23,7 @@ waits=("sleep:$seconds")
 # Wait for completion instead of racing its asynchronous final position rebuild.
 if [[ ${1:-quick} == matrix ]]; then waits+=("wait-for:global.gaqEffectsBenchmark?.finished"); fi
 if [[ ${1:-quick} == quick ]]; then waits+=("wait-for:global.gaqEffectsResult?.finished"); fi
+if [[ ${1:-quick} == lifecycle ]]; then waits+=("wait-for:global.gaqEffectsLifecycle?.finished"); fi
 if ! DATA_SOURCE=demo SKIP_ENABLE='' LOG="$scratch/shell.log" GAQ_TEST_MONITOR=1280x800 timeout --kill-after=5s "$limit" tools/headless-shell.sh tools/demo-connectors-fixture.js "tools/$probe.js" "${waits[@]}" "tools/$verify.js" > "$scratch/result" 2>&1; then
     cat "$scratch/result"; exit 1
 fi

@@ -1,0 +1,25 @@
+{
+  "light-all.json": {
+    "finished": true,
+    "error": "",
+    "captures": 154,
+    "themes": 22,
+    "maxParticles": 8,
+    "maxBlurEffects": 1,
+    "minScrollbarGap": 14
+  },
+  "dark-all.json": {
+    "finished": true,
+    "error": "",
+    "captures": 154,
+    "themes": 22,
+    "maxParticles": 8,
+    "maxBlurEffects": 1,
+    "minScrollbarGap": 14
+  },
+  "files": {
+    "light-all.json": "08887d3d8ef8cd0c1c7afcc1c4cb7e433c8e1d8fda3c275b1f10adcbeae30f2a",
+    "dark-all.json": "a25b0de66ac47555db556e7727229b45dd3a364a903e15ea3d4b82a6478b50e0",
+    "native-font-reading-proof.json": "cfdf84d453d4905e0aa2ebef57719f276aed052787f823288260832a54f5286c"
+  }
+}

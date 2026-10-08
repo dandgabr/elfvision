@@ -2,7 +2,7 @@
 """Generate gnome-ai-quota theme files from the estilos-visuais style gallery.
 
 Each gallery style defines design tokens for its native color scheme.
-This tool reads those tokens, derives the missing scheme in OKLCH, corrects
+This tool reads those tokens, applies individually authored shipped variants, corrects
 contrast automatically, and writes one theme.json per style.
 
 Usage:
@@ -120,6 +120,118 @@ def tune(big_l, chroma, hue, against, target, toward):
         if big_l in (0, 1):
             break
     return from_oklch(big_l, chroma, hue)
+
+
+# Reviewed light/dark reading surfaces. Each tuple is bg, card, inset, ink,
+# secondary ink, border, accent. See docs/temp/theme-evolution-research.md.
+# Status colors remain distinct shared semantics, corrected against each card.
+def authored(values, shadow='none'):
+    keys = ('bg', 'surface', 'surface-2', 'fg', 'muted', 'border', 'accent')
+    return dict(zip(keys, values.split()), shadow=shadow)
+
+
+AUTHORED_VARIANTS = {
+    'ai-native-generative-ui': {
+        'light': authored('#f0f4ff #ffffff #e7edff #14213b #4e5c76 #b0bdd4 #5144bb'),
+        'dark': authored('#10182c #192640 #243453 #f0f4ff #aebbd6 #687d9e #a9a2ff'),
+    },
+    'analog-newspaper-broadsheet': {
+        'light': authored('#eee7d7 #fbf5e8 #e7dfcc #211e19 #575047 #62594c #693f53'),
+        'dark': authored('#211f1b #302c25 #3d372e #f6eedb #c9bea7 #b3a48b #dca5b5'),
+    },
+    'aurora-mesh-gradient': {
+        'light': authored('#e8e9fa #f7f5ff #e3dcf5 #272047 #615571 #ada2ca #6c42a6', '0 1px 3px rgba(51,30,92,.18)'),
+        'dark': authored('#18152f #2a2147 #3c2d60 #f8f1ff #c5b6de #8e78b1 #c2a4ff', '0 1px 3px rgba(0,0,0,.35)'),
+    },
+    'bento-grid': {
+        'light': authored('#edeae4 #fffaf0 #eee2cc #262323 #625954 #b5a68d #624bba'),
+        'dark': authored('#24221f #39332c #4a4033 #fff5df #d1c2aa #958269 #c3b1ff'),
+    },
+    'card-based-ui': {
+        'light': authored('#edf1f5 #ffffff #e7edf3 #16283a #536578 #99aabd #17618b', '0 1px 3px rgba(17,35,53,.2)'),
+        'dark': authored('#111b26 #203247 #2b415b #edf6ff #aec2d7 #738ba4 #8dcfff', '0 1px 3px rgba(0,0,0,.4)'),
+    },
+    'cyberpunk': {
+        'light': authored('#d8e3ed #edf5fa #cbdde8 #122a38 #3b586b #3e687c #005975', '3px 3px 0 rgba(20,32,51,.18)'),
+        'dark': authored('#090f16 #101e2b #1a2e40 #e9faff #a3bfce #497b91 #62e4ff', '2px 2px 0 rgba(48,179,208,.3)'),
+    },
+    'de-stijl': {
+        'light': authored('#eeeee6 #fffef6 #e2e3db #141414 #51514c #141414 #234ec0'),
+        'dark': authored('#14171b #24292e #343b42 #f7f3df #c4c3b8 #f7f3df #96b5ff'),
+    },
+    'expressive-variable-typography': {
+        'light': authored('#f2e8ef #fff8fc #eed8e8 #321c32 #695169 #987b97 #72377e'),
+        'dark': authored('#26152b #3b2040 #512a56 #fff0fe #ddb8d8 #a978a4 #f0a9ed'),
+    },
+    'flat-design': {
+        'light': authored('#eaf3f8 #ffffff #dcebf2 #183142 #4d6576 #94afbf #00637a'),
+        'dark': authored('#132b35 #1d3c49 #2a5060 #edfaff #b2d0dc #719cac #75d5eb'),
+    },
+    'glassmorphism': {
+        'light': authored('#e3edf2 #f3faff #dceaf2 #16364a #4d697b #88a8bc #286394', '0 1px 3px rgba(24,52,75,.2)'),
+        'dark': authored('#101e30 #1c304a #2b4160 #f0f7ff #b6c8df #7596bb #9dccff', '0 1px 3px rgba(0,0,0,.35)'),
+    },
+    'hand-drawn-sketch': {
+        'light': authored('#f4ecd9 #fff9e8 #f4e3a4 #272219 #66583e #514430 #3a6698', '2px 2px 0 rgba(34,30,22,.3)'),
+        'dark': authored('#29261f #3b3529 #504531 #fff5db #d5c5a2 #dac8a3 #a5c8f5', '2px 2px 0 rgba(0,0,0,.4)'),
+    },
+    'holographic-foil-iridescent': {
+        'light': authored('#e8eff5 #f7faff #e7e6f8 #26364b #54677f #99b0c6 #4e5bb0', '0 1px 3px rgba(45,58,90,.2)'),
+        'dark': authored('#152337 #233a53 #354b69 #eefaff #b7d0e5 #80a7c6 #b3caff', '0 1px 3px rgba(0,0,0,.35)'),
+    },
+    'isometric': {
+        'light': authored('#e7eef8 #f8fbff #d8e4f4 #16365b #48658a #7394bc #205ba1', '2px 2px 0 rgba(35,70,115,.35)'),
+        'dark': authored('#10243b #193958 #254d70 #edf7ff #acc9e2 #729cbd #9accff', '2px 2px 0 rgba(0,0,0,.5)'),
+    },
+    'linear-saas': {
+        'light': authored('#f0f0f3 #fafaff #e8e8f1 #252433 #5c5b6e #b1afc2 #6053a8'),
+        'dark': authored('#17161e #242330 #302e3e #f4f2fa #bdb9cf #706c85 #b4a8f3'),
+    },
+    'lunarpunk': {
+        'light': authored('#eae5f2 #f8f2ff #e1d4ee #35203e #725477 #b19abb #754289'),
+        'dark': authored('#171126 #2e1d3e #422954 #fff0ff #d3afd9 #94739e #d8a1ed'),
+    },
+    'mid-century-modern': {
+        'light': authored('#eaddbf #fff2d7 #e0c99e #362b21 #6c5744 #967957 #276b70'),
+        'dark': authored('#28241d #3a3327 #504632 #fff0cc #d1bb92 #a38b63 #a0d2c9'),
+    },
+    'nanopunk': {
+        'light': authored('#e5eceb #f6fffc #d4e6e1 #163a37 #496963 #6b9990 #00665a'),
+        'dark': authored('#081e1c #13352e #204c42 #ebfff4 #acd4bc #5eaa91 #81e6c5'),
+    },
+    'organic-biophilic': {
+        'light': authored('#efe9d8 #fcf8e9 #e0e5cf #283825 #59674d #97a37d #386841'),
+        'dark': authored('#19291f #293d2c #3b5134 #f0f3dc #c1cfaa #819b70 #a0d6a5'),
+    },
+    'solarpunk': {
+        'light': authored('#f1ebca #fffbe5 #e5e6ba #2e3b26 #606b45 #a1ab73 #356a60'),
+        'dark': authored('#202d24 #344530 #495b37 #fff5ce #d1d3a1 #99aa70 #a6dbb5'),
+    },
+    'terminal-tui': {
+        'light': authored('#e2eee2 #f3fff2 #cedfcf #12341b #42604b #497655 #14623b'),
+        'dark': authored('#081009 #101d13 #1b2c1e #d2fbd3 #92bf96 #49784d #7ce39a'),
+    },
+    'web-brutalism': {
+        'light': authored('#ffffff #ffffff #eeeeee #000000 #444444 #000000 #0000bb'),
+        'dark': authored('#000000 #121212 #292929 #ffffff #bbbbbb #ffffff #acbaff'),
+    },
+}
+
+# Native-compatible dimensions and typography: identity survives effects off.
+AUTHORED_GEOMETRY = {
+    'bento-grid': {'card': '24px', 'control': '12px'},
+    'card-based-ui': {'card': '8px', 'control': '6px'},
+    'analog-newspaper-broadsheet': {'card': '0px', 'control': '0px', 'border': 'strong',
+                                  'body': "'Newsreader','DejaVu Serif',serif", 'display': "'Newsreader','DejaVu Serif',serif"},
+    'hand-drawn-sketch': {'card': '12px', 'control': '8px', 'border': 'strong',
+                          'body': "'Patrick Hand','Comic Sans MS','DejaVu Sans',cursive",
+                          'display': "'Caveat','Comic Sans MS',cursive"},
+    'isometric': {'card': '2px', 'control': '2px', 'border': 'strong'},
+    'cyberpunk': {'card': '2px', 'control': '2px', 'border': 'strong'},
+    'terminal-tui': {'card': '0px', 'control': '0px', 'border': 'strong'},
+    'web-brutalism': {'card': '0px', 'control': '0px', 'border': 'strong'},
+    'de-stijl': {'card': '0px', 'control': '0px', 'border': 'strong'},
+}
 
 
 # ---------------------------------------------------------------- input
@@ -376,17 +488,14 @@ def build_theme(slug, tokens, meta):
     schemes = {native: scheme_native, other: scheme_derived}
     adjusted = {native: fixed_native, other: fixed_derived}
 
-    if slug == 'cyberpunk':
-        # A daylight instrument panel needs graphite framing, rather than the
-        # generic near-white inversion of a neon-on-black gallery palette.
-        schemes['light'].update({
-            'bg': '#e8eef6', 'surface': '#f9fbff', 'surface-2': '#dae5f2',
-            'fg': '#142033', 'muted': '#415570', 'border': '#63738f',
-            'accent': '#006f91', 'accent-fg': '#ffffff', 'ok': '#14623f',
-            'warn': '#7b5400', 'danger': '#a02e55', 'error': '#8b3f61',
-            'shadow': '3px 3px 0 rgba(20,32,51,.18)',
-        })
-        adjusted['light'] = refine(schemes['light']) + fix_contrast(schemes['light'])
+    # Both shipped variants are deliberately authored. Contrast repair is still
+    # applied after the override, so style identity cannot weaken readability.
+    for name, palette in AUTHORED_VARIANTS.get(slug, {}).items():
+        schemes[name].update(palette)
+        adjusted[name] = refine(schemes[name]) + fix_contrast(schemes[name])
+
+    geometry = AUTHORED_GEOMETRY.get(slug, {})
+    strong_border = geometry.get('border', 'strong' if strong_border else 'hairline') == 'strong'
 
     def audit(scheme):
         s = parse(scheme['surface'])
@@ -412,12 +521,13 @@ def build_theme(slug, tokens, meta):
         'adjusted': adjusted,
         'audit': {k: audit(v) for k, v in schemes.items()},
         'fonts': {
-            'body': tokens.get('font-body', 'system-ui,sans-serif'),
-            'display': tokens.get('font-display', tokens.get('font-body', 'system-ui,sans-serif')),
+            'body': geometry.get('body', tokens.get('font-body', 'system-ui,sans-serif')),
+            'display': geometry.get('display', tokens.get('font-display', tokens.get('font-body', 'system-ui,sans-serif'))),
             'mono': tokens.get('font-mono', DEFAULT_MONO),
             'googleFontsUrl': imports[0] if imports else '',
         },
-        'radius': {'card': tokens.get('radius', '10px'), 'control': tokens.get('radius-sm', '6px')},
+        'radius': {'card': geometry.get('card', tokens.get('radius', '10px')),
+                   'control': geometry.get('control', tokens.get('radius-sm', '6px'))},
         'border': 'strong' if strong_border else 'hairline',
         'hardShadow': is_hard_shadow(shadow_native),
     }

@@ -220,7 +220,6 @@
 /* ---------- popup ---------- */
 
 .gaq-popup {
-    width: 380px;
     spacing: 12px;
     /* The popup item is not reactive, so the theme paints inherited text in its
      * insensitive grey (#9b9b9d). Set the text color explicitly. */
@@ -233,8 +232,13 @@
 
 .gaq-cards {
     spacing: 12px;
-    /* Outer shadows need space inside the ScrollView clip, per theme. */
+    /* Constant compact paint budget; theme shadows never narrow content. */
     padding: {{shadow-gutter}};
+}
+
+/* Visible clearance is independent of the card shadow paint gutter. */
+.gaq-scroll StScrollBar {
+    margin-left: 8px;
 }
 
 .gaq-summary {
@@ -647,6 +651,7 @@
 }
 
 .gaq-theme-analog-newspaper-broadsheet .gaq-card {
+    border-radius: 0;
     border-top-width: 3px;
     border-bottom-width: 3px;
     box-shadow: none;
@@ -683,12 +688,25 @@
     padding-top: 8px;
 }
 
+/* Uneven ink silhouette survives missing fonts and disabled decoration. */
+.gaq-theme-hand-drawn-sketch .gaq-card {
+    border-top-width: 2px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
+    border-right-width: 1px;
+    border-radius: 11px;
+}
 .gaq-theme-hand-drawn-sketch .gaq-section {
     {{font-display-decl}}
     font-size: 15px;
     letter-spacing: 0;
     border-bottom: 2px solid {{p:fg}};
     padding-bottom: 4px;
+}
+.gaq-theme-hand-drawn-sketch .gaq-hero {
+    /* Script is expressive in titles; numbers retain the stable reading face. */
+    {{font-body-decl}}
+    font-weight: 700;
 }
 .gaq-theme-hand-drawn-sketch .gaq-card-name {
     {{font-display-decl}}

@@ -5,33 +5,33 @@
   "difficulty": "medium",
   "schemes": {
     "light": {
-      "bg": "#f4ede0",
-      "surface": "#fffaf0",
-      "surface-2": "#ebe0cb",
-      "fg": "#2b2118",
-      "muted": "#5e4b3a",
-      "border": "#d6c7ab",
-      "accent": "#2a7f7f",
+      "bg": "#eaddbf",
+      "surface": "#fff2d7",
+      "surface-2": "#e0c99e",
+      "fg": "#362b21",
+      "muted": "#6c5744",
+      "border": "#967957",
+      "accent": "#276b70",
       "accent-fg": "#ffffff",
       "ok": "#1f6b4a",
       "warn": "#8a5200",
       "danger": "#a5402b",
-      "shadow": "0 6px 0 rgba(107,68,35,.12)",
+      "shadow": "none",
       "error": "#8b4a9a"
     },
     "dark": {
-      "bg": "#130f07",
-      "surface": "#1d1910",
-      "surface-2": "#28231b",
-      "fg": "#f1eee9",
-      "muted": "#afaaa1",
-      "border": "#3a362f",
-      "accent": "#5daeae",
+      "bg": "#28241d",
+      "surface": "#3a3327",
+      "surface-2": "#504632",
+      "fg": "#fff0cc",
+      "muted": "#d1bb92",
+      "border": "#a38b63",
+      "accent": "#a0d2c9",
       "accent-fg": "#0d0d12",
       "ok": "#87d0aa",
       "warn": "#fbbc7b",
       "danger": "#fc8e76",
-      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "shadow": "none",
       "error": "#e59ff6"
     }
   },
@@ -40,30 +40,29 @@
       "error"
     ],
     "dark": [
-      "error",
-      "border"
+      "error"
     ]
   },
   "audit": {
     "light": {
-      "fg": 15.1,
-      "muted": 7.9,
-      "accent": 4.5,
-      "accent-fg": 4.7,
-      "ok": 6.2,
-      "warn": 6.1,
-      "danger": 6.0,
-      "error": 5.7
+      "fg": 12.4,
+      "muted": 6.1,
+      "accent": 5.5,
+      "accent-fg": 6.1,
+      "ok": 5.8,
+      "warn": 5.8,
+      "danger": 5.6,
+      "error": 5.3
     },
     "dark": {
-      "fg": 15.1,
-      "muted": 7.6,
-      "accent": 6.8,
-      "accent-fg": 7.5,
-      "ok": 9.7,
-      "warn": 10.5,
-      "danger": 7.7,
-      "error": 8.9
+      "fg": 11.0,
+      "muted": 6.7,
+      "accent": 7.5,
+      "accent-fg": 11.6,
+      "ok": 6.9,
+      "warn": 7.5,
+      "danger": 5.5,
+      "error": 6.3
     }
   },
   "fonts": {

@@ -7,6 +7,6 @@
   ],
   "url": "https://github.com/dandgabr/gnome-ai-quota",
   "gettext-domain": "gnome-ai-quota",
-  "version-name": "0.1.1",
+  "version-name": "0.2.0",
   "settings-schema": "org.gnome.shell.extensions.gnome-ai-quota"
 }

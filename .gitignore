@@ -2,6 +2,8 @@
 node_modules/
 dist/
 build/
+# Legacy native probes write disposable synthetic captures here.
+.superpowers/sdd/
 *.zip
 *.shell-extension.zip
 

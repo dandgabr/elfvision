@@ -20,13 +20,17 @@
         Main.uiGroup.add_child(parent);
         const engine = new ThemeEffects({backgroundActor: background, decorationActor: decoration, extensionPath: root});
         const theme = {origin: 'builtin', profile: {material: 'translucent', motion: 'leaves', texture: 'botanical', particleCount: 8,
-            opacity: {light: 0.8, dark: 0.8}}, colors: {bg: '#242c24', surface: '#303b30', accent: '#86a874', border: '#739568'}, radius: {card: 14}};
+            opacity: {light: 0.8, dark: 0.8}}, colors: {bg: '#242c24', surface: '#303b30', fg: '#ffffff', muted: '#ffffff', accent: '#86a874', border: '#739568'}, radius: {card: 14}};
         engine.apply({policy: {motion: 'ambient', material: 'translucent', particleCount: 8}, theme, scheme: 'dark'});
         engine.setOpen(true);
         await wait(150);
         check(engine.inspect().sources === 1 && engine.inspect().particles === 8, 'eight leaves use one bounded source');
         check(background.opacity === 255 && decoration.opacity === 255, 'only background tint supplies alpha');
         check(decoration.get_children().every(actor => !actor.reactive), 'decoration never captures input');
+        const protection = decoration.get_children().filter(actor => actor._isReadingVeil);
+        check(protection.length === 2, 'tall popup uses two bounded cached reading edge surfaces');
+        check(protection.reduce((sum, actor) => sum + actor.height, 0) < background.height,
+            'reading safety must not blend the transparent center quad');
         engine.setOpen(false);
         check(engine.inspect().sources === 0 && engine.inspect().particles === 0 && engine.inspect().blurEffects === 0, 'closed popup frees ambient and material resources');
         for (let i = 0; i < 100; i++) { engine.setOpen(true); engine.setOpen(false); }
@@ -51,6 +55,8 @@
             await wait(100);
             check(box.opacity === 255 && bg.opacity === 255 && bg.style.includes('0.8)'), 'background-only bounded alpha');
             check(effects.inspect().material === material, `material ${material} is actually applied`);
+            check(deco.get_children().filter(actor => actor._isReadingVeil).length === 1,
+                'short popup merges overlapping reading protection into one actor');
             check(effects.inspect().blurEffects === (material === 'frosted-glass' ? 1 : 0), 'one native backdrop only for frost');
             check(bg.clip_to_allocation && deco.clip_to_allocation, 'materials and decorations clip locally');
             if (material === 'frosted-glass') {
@@ -123,9 +129,10 @@
         result.cases.push('cached optical primitives');
         indicator._settings.set_string('theme', 'glassmorphism');
         indicator._settings.set_string('effects-mode', 'off');
-        check(indicator._effects.inspect().sources === 0 && indicator._effects.inspect().actors === 0
+        check(indicator._effects.inspect().sources === 0 && indicator._effects.inspect().actors <= 2
+            && indicator._effectDecoration.get_children().every(actor => ['gaq-reading-veil', 'gaq-reading-veil-bottom'].includes(actor.name))
             && indicator._effects.inspect().active && indicator._effects.inspect().blurEffects === 1,
-            'effects-off removes decorations while the requested frost remains live');
+            'effects-off removes decoration, allowing only static material reading protection while frost remains live');
         indicator.menu.close(false);
         for (let i = 0; i < 100; i++) { indicator.menu.open(false); indicator.menu.close(false); }
         check(indicator._effects.inspect().sources === 0 && indicator._effects.inspect().actors === 0, 'actual popup100cycles leave zero resources');
@@ -253,4 +260,5 @@
     } finally {
         result.finished = true;
     }
-})()
+})();
+'GAQ_EFFECTS_STARTED';

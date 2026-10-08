@@ -101,6 +101,7 @@ shell_loads() {
 
 step "build" tools/build.sh
 step "unit tests" gjs -m tests/run.js
+step "authored theme variants" python3 -I tools/test-theme-generation.py
 step "cross-process disconnect" timeout 90 tests/disconnectDisk.sh
 step "private keyring disconnect" timeout 90 tests/disconnectSecrets.sh
 step "cross-process connector removal" timeout 90 tests/connectorsDisk.sh

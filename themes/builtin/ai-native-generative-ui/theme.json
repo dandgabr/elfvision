@@ -5,66 +5,64 @@
   "difficulty": "hard",
   "schemes": {
     "light": {
-      "bg": "#fbfaff",
+      "bg": "#f0f4ff",
       "surface": "#ffffff",
-      "surface-2": "#f1eefc",
-      "fg": "#17152b",
-      "muted": "#5d5a78",
-      "border": "#d8d4eb",
-      "accent": "#6d4aff",
+      "surface-2": "#e7edff",
+      "fg": "#14213b",
+      "muted": "#4e5c76",
+      "border": "#b0bdd4",
+      "accent": "#5144bb",
       "accent-fg": "#ffffff",
       "ok": "#0f7a4a",
       "warn": "#8f5600",
       "danger": "#bd2630",
-      "shadow": "0 1px 2px rgba(60,40,160,.06), 0 8px 24px rgba(60,40,160,.07)",
+      "shadow": "none",
       "error": "#8b4a9a"
     },
     "dark": {
-      "bg": "#0f0f12",
-      "surface": "#19191c",
-      "surface-2": "#232427",
-      "fg": "#edeef4",
-      "muted": "#a9aab4",
-      "border": "#36363a",
-      "accent": "#938efc",
+      "bg": "#10182c",
+      "surface": "#192640",
+      "surface-2": "#243453",
+      "fg": "#f0f4ff",
+      "muted": "#aebbd6",
+      "border": "#687d9e",
+      "accent": "#a9a2ff",
       "accent-fg": "#0d0d12",
       "ok": "#79d59f",
       "warn": "#fcbc79",
       "danger": "#fc8c87",
-      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "shadow": "none",
       "error": "#e59ff6"
     }
   },
   "adjusted": {
     "light": [
-      "error",
-      "border"
+      "error"
     ],
     "dark": [
-      "error",
-      "border"
+      "error"
     ]
   },
   "audit": {
     "light": {
-      "fg": 17.8,
-      "muted": 6.6,
-      "accent": 5.2,
-      "accent-fg": 5.2,
+      "fg": 16.0,
+      "muted": 6.7,
+      "accent": 7.3,
+      "accent-fg": 7.3,
       "ok": 5.4,
       "warn": 6.0,
       "danger": 6.0,
       "error": 5.9
     },
     "dark": {
-      "fg": 15.2,
-      "muted": 7.6,
-      "accent": 6.3,
-      "accent-fg": 6.9,
-      "ok": 9.9,
-      "warn": 10.5,
-      "danger": 7.7,
-      "error": 8.9
+      "fg": 13.7,
+      "muted": 7.8,
+      "accent": 6.7,
+      "accent-fg": 8.6,
+      "ok": 8.5,
+      "warn": 9.1,
+      "danger": 6.6,
+      "error": 7.6
     }
   },
   "fonts": {

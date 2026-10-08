@@ -16,6 +16,12 @@
     <key name="connectors" type="s"><default>'{"version":1,"connectors":[]}'</default><summary>Saved connector registry</summary><description>Versioned nonsecret connector metadata. Starts empty; accounts are created explicitly by the user.</description></key>
     <key name="demo-connectors" type="s"><default>'{"version":1,"connectors":[]}'</default><summary>Fictional connector registry</summary><description>Starts empty. Separate synthetic connector metadata; never selects real credentials.</description></key>
     <key name="demo-connected-connectors" type="as"><default>[]</default><summary>Connected fictional accounts</summary><description>Connector identifiers with simulated authentication, separate from real accounts.</description></key>
+    <key name="popup-width" type="i"><range min="0" max="8192"/><default>0</default><summary>Popup width in logical pixels, or zero for automatic</summary></key>
+    <key name="popup-max-height" type="i"><range min="0" max="8192"/><default>0</default><summary>Maximum height of the complete popup in logical pixels, or zero for automatic</summary></key>
+    <key name="popup-connector-order" type="as"><default>[]</default><summary>Preferred popup connector order</summary></key>
+    <key name="popup-hidden-connectors" type="as"><default>[]</default><summary>Connectors hidden only from the popup</summary></key>
+    <key name="demo-popup-connector-order" type="as"><default>[]</default><summary>Preferred popup connector order</summary></key>
+    <key name="demo-popup-hidden-connectors" type="as"><default>[]</default><summary>Connectors hidden only from the popup</summary></key>
     <key name="position" enum="org.gnome.shell.extensions.gnome-ai-quota.Position">
       <default>'right'</default>
       <summary>Panel position</summary>
