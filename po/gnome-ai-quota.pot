@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-08 14:56-0300\n"
+"POT-Creation-Date: 2026-10-08 15:48-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -309,7 +309,7 @@ msgid ""
 "%s is not set up yet. Open Preferences and follow the steps for this account."
 msgstr ""
 
-#: lib/core/viewmodel.js:247 lib/ui/indicator.js:492
+#: lib/core/viewmodel.js:247
 msgid "Open Preferences to connect this account."
 msgstr ""
 
@@ -396,7 +396,7 @@ msgstr ""
 msgid "Reconnect"
 msgstr ""
 
-#: lib/core/viewmodel.js:376 lib/core/viewmodel.js:390 lib/ui/indicator.js:495
+#: lib/core/viewmodel.js:376 lib/core/viewmodel.js:390
 #: lib/ui/providerCard.js:229
 msgid "Open Preferences"
 msgstr ""
@@ -618,8 +618,8 @@ msgid ""
 "source stays the same."
 msgstr ""
 
-#: lib/prefs/about.js:94 lib/prefs/accounts.js:61 lib/prefs/accounts.js:220
-#: lib/prefs/accounts.js:256 lib/prefs/accounts.js:373
+#: lib/prefs/about.js:94 lib/prefs/accounts.js:61 lib/prefs/accounts.js:221
+#: lib/prefs/accounts.js:257 lib/prefs/accounts.js:374
 #: lib/prefs/disconnectDialog.js:38 lib/prefs/oauthGroup.js:58
 #: lib/prefs/oauthGroup.js:150 lib/prefs/suggestedFonts.js:17
 #: lib/prefs/suggestedFonts.js:34 lib/prefs/termsDialog.js:33
@@ -708,7 +708,8 @@ msgid ""
 "with the same provider."
 msgstr ""
 
-#: lib/prefs/accounts.js:43 lib/prefs/accounts.js:208 lib/prefs/accounts.js:220
+#: lib/prefs/accounts.js:43 lib/prefs/accounts.js:209 lib/prefs/accounts.js:221
+#: lib/ui/indicator.js:184
 msgid "Add connector"
 msgstr ""
 
@@ -730,7 +731,7 @@ msgid ""
 "provider request is used."
 msgstr ""
 
-#: lib/prefs/accounts.js:49 lib/ui/indicator.js:499
+#: lib/prefs/accounts.js:49 lib/ui/indicator.js:495
 msgid "Connector configuration is unavailable"
 msgstr ""
 
@@ -792,11 +793,11 @@ msgstr ""
 msgid "Paused"
 msgstr ""
 
-#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:299
+#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:300
 msgid "Demo connected"
 msgstr ""
 
-#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:299
+#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:300
 msgid "Demo not connected"
 msgstr ""
 
@@ -813,198 +814,198 @@ msgstr ""
 msgid "Configure %s"
 msgstr ""
 
-#: lib/prefs/accounts.js:208
+#: lib/prefs/accounts.js:209
 msgid ""
 "Choose a provider and a name that helps you distinguish this account. "
 "Creating a connector does not sign in."
 msgstr ""
 
-#: lib/prefs/accounts.js:211
+#: lib/prefs/accounts.js:212
 msgid "Provider"
 msgstr ""
 
-#: lib/prefs/accounts.js:212 lib/prefs/accounts.js:238
+#: lib/prefs/accounts.js:213 lib/prefs/accounts.js:239
 msgid "Connector name"
 msgstr ""
 
-#: lib/prefs/accounts.js:227
+#: lib/prefs/accounts.js:228
 msgid ""
 "The connector could not be created. Check the name and the number of "
 "connectors."
 msgstr ""
 
-#: lib/prefs/accounts.js:241
+#: lib/prefs/accounts.js:242
 msgid "Enter a valid connector name."
 msgstr ""
 
-#: lib/prefs/accounts.js:250
+#: lib/prefs/accounts.js:251
 msgid ""
 "Delete this connector and its local credential. Other accounts are kept."
 msgstr ""
 
-#: lib/prefs/accounts.js:250
+#: lib/prefs/accounts.js:251
 msgid "Delete this fictional connector. Other fictional accounts are kept."
 msgstr ""
 
-#: lib/prefs/accounts.js:250 lib/prefs/accounts.js:256
+#: lib/prefs/accounts.js:251 lib/prefs/accounts.js:257
 msgid "Remove connector"
 msgstr ""
 
-#: lib/prefs/accounts.js:251
+#: lib/prefs/accounts.js:252
 msgid "Remove…"
 msgstr ""
 
-#: lib/prefs/accounts.js:254
+#: lib/prefs/accounts.js:255
 #, javascript-format
 msgid "Remove %s?"
 msgstr ""
 
-#: lib/prefs/accounts.js:255
+#: lib/prefs/accounts.js:256
 msgid ""
 "Its local credential and quota data are removed. Access may remain valid on "
 "the provider’s site. Other connectors are kept."
 msgstr ""
 
-#: lib/prefs/accounts.js:255
+#: lib/prefs/accounts.js:256
 msgid ""
 "This removes only this fictional connector. No real credential is changed."
 msgstr ""
 
-#: lib/prefs/accounts.js:270
+#: lib/prefs/accounts.js:271
 msgid ""
 "The credential was removed, but the connector list could not be updated. "
 "Retry removing the connector."
 msgstr ""
 
-#: lib/prefs/accounts.js:270
+#: lib/prefs/accounts.js:271
 msgid ""
 "The fictional connector list could not be updated. Retry removing the "
 "connector."
 msgstr ""
 
-#: lib/prefs/accounts.js:272
+#: lib/prefs/accounts.js:273
 msgid ""
 "The credential could not be removed. The connector was kept. Unlock the "
 "keyring and retry."
 msgstr ""
 
-#: lib/prefs/accounts.js:272
+#: lib/prefs/accounts.js:273
 msgid ""
 "The fictional connector could not be removed. Retry removing the connector."
 msgstr ""
 
-#: lib/prefs/accounts.js:294
+#: lib/prefs/accounts.js:295
 msgid "Simulation only. No real account, browser or keyring is used."
 msgstr ""
 
-#: lib/prefs/accounts.js:295 lib/prefs/accounts.js:313
+#: lib/prefs/accounts.js:296 lib/prefs/accounts.js:314
 #: lib/prefs/oauthGroup.js:56
 msgid "Status"
 msgstr ""
 
-#: lib/prefs/accounts.js:300
+#: lib/prefs/accounts.js:301
 msgid "Simulate connect"
 msgstr ""
 
-#: lib/prefs/accounts.js:300
+#: lib/prefs/accounts.js:301
 msgid "Simulate disconnect"
 msgstr ""
 
-#: lib/prefs/accounts.js:311
+#: lib/prefs/accounts.js:312
 #, javascript-format
 msgid "The key is kept in the system keyring and sent only to %s."
 msgstr ""
 
-#: lib/prefs/accounts.js:313 lib/prefs/oauthGroup.js:56
+#: lib/prefs/accounts.js:314 lib/prefs/oauthGroup.js:56
 msgid "Checking the keyring…"
 msgstr ""
 
-#: lib/prefs/accounts.js:315
+#: lib/prefs/accounts.js:316
 msgid "Remove key"
 msgstr ""
 
-#: lib/prefs/accounts.js:316
+#: lib/prefs/accounts.js:317
 #, javascript-format
 msgid "Remove the %s key"
 msgstr ""
 
-#: lib/prefs/accounts.js:322 lib/prefs/accounts.js:481
+#: lib/prefs/accounts.js:323 lib/prefs/accounts.js:482
 msgid "API key"
 msgstr ""
 
-#: lib/prefs/accounts.js:331
+#: lib/prefs/accounts.js:332
 msgid ""
 "Use an organization Admin API key. A personal inference key cannot read "
 "organization costs."
 msgstr ""
 
-#: lib/prefs/accounts.js:332
+#: lib/prefs/accounts.js:333
 msgid ""
 "Use a Team Admin API key. A personal subscription sign-in cannot read team "
 "spending."
 msgstr ""
 
-#: lib/prefs/accounts.js:370
+#: lib/prefs/accounts.js:371
 #, javascript-format
 msgid "Remove the %s key?"
 msgstr ""
 
-#: lib/prefs/accounts.js:371
+#: lib/prefs/accounts.js:372
 #, javascript-format
 msgid "It is deleted from the keyring. The key stays valid on the %s site."
 msgstr ""
 
-#: lib/prefs/accounts.js:374
+#: lib/prefs/accounts.js:375
 msgid "Remove"
 msgstr ""
 
-#: lib/prefs/accounts.js:420
+#: lib/prefs/accounts.js:421
 #, javascript-format
 msgid "Track %s"
 msgstr ""
 
-#: lib/prefs/accounts.js:421
+#: lib/prefs/accounts.js:422
 msgid ""
 "Off stops fetching and hides it from the bar. Your credentials stay saved."
 msgstr ""
 
-#: lib/prefs/accounts.js:442
+#: lib/prefs/accounts.js:443
 msgid "Open the provider’s API key settings."
 msgstr ""
 
-#: lib/prefs/accounts.js:442 lib/prefs/accounts.js:450
+#: lib/prefs/accounts.js:443 lib/prefs/accounts.js:451
 msgid "Where do I get a key?"
 msgstr ""
 
-#: lib/prefs/accounts.js:447
+#: lib/prefs/accounts.js:448
 #, javascript-format
 msgid "Your %s username"
 msgstr ""
 
-#: lib/prefs/accounts.js:451
+#: lib/prefs/accounts.js:452
 #, javascript-format
 msgid "Opens your keys page. Enter your %s username above first."
 msgstr ""
 
-#: lib/prefs/accounts.js:480
+#: lib/prefs/accounts.js:481
 msgid "Dashboard only"
 msgstr ""
 
-#: lib/prefs/accounts.js:482
+#: lib/prefs/accounts.js:483
 msgid "Fictional account"
 msgstr ""
 
-#: lib/prefs/accounts.js:483
+#: lib/prefs/accounts.js:484
 msgid "OAuth 2"
 msgstr ""
 
-#: lib/prefs/accounts.js:488
+#: lib/prefs/accounts.js:489
 msgid ""
 "Automatic quota reporting is unavailable for this service. No API key is "
 "requested or stored. Check usage in the provider dashboard."
 msgstr ""
 
-#: lib/prefs/accounts.js:489
+#: lib/prefs/accounts.js:490
 msgid "Open provider dashboard"
 msgstr ""
 
@@ -2003,10 +2004,6 @@ msgstr ""
 msgid "Raw HTML and dense tables."
 msgstr ""
 
-#: lib/ui/indicator.js:184 lib/ui/indicator.js:495
-msgid "Add account"
-msgstr ""
-
 #: lib/ui/indicator.js:224
 msgid "Refresh"
 msgstr ""
@@ -2031,48 +2028,48 @@ msgstr ""
 msgid "Waiting for the first update…"
 msgstr ""
 
-#: lib/ui/indicator.js:489
+#: lib/ui/indicator.js:488
 msgid "Nothing connected yet."
 msgstr ""
 
-#: lib/ui/indicator.js:489
+#: lib/ui/indicator.js:488
 msgid "Nothing is being tracked."
 msgstr ""
 
-#: lib/ui/indicator.js:491
+#: lib/ui/indicator.js:490
 msgid "Resume a provider below to see its quota."
 msgstr ""
 
-#: lib/ui/indicator.js:493
-msgid "Add an account in Preferences to see your quotas here."
+#: lib/ui/indicator.js:491
+msgid "Add or configure a connector in Accounts to see your quotas here."
 msgstr ""
 
-#: lib/ui/indicator.js:500
+#: lib/ui/indicator.js:496
 msgid ""
 "Open Preferences to recover the connector list. Saved credentials have not "
 "been changed."
 msgstr ""
 
-#: lib/ui/indicator.js:632
+#: lib/ui/indicator.js:628
 msgid "Nothing connected yet"
 msgstr ""
 
-#: lib/ui/indicator.js:638
+#: lib/ui/indicator.js:634
 msgid "Waiting for the first update"
 msgstr ""
 
-#: lib/ui/indicator.js:665
+#: lib/ui/indicator.js:661
 #, javascript-format
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/indicator.js:675
+#: lib/ui/indicator.js:671
 msgid "On the bar"
 msgstr ""
 
-#: lib/ui/indicator.js:678
+#: lib/ui/indicator.js:674
 #, javascript-format
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"

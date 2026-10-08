@@ -21,15 +21,17 @@
         const {createConnectorStore} = await import(`file://${path}/lib/services/connectorStore.js`);
         const {createDemoAccountController} = await import(`file://${path}/lib/prefs/demoAccountController.js`);
         const {deleteDemoConnectors, disconnectAll} = await import(`file://${path}/lib/services/disconnectAll.js`);
+        check(current()._connectorEntries().length === 0 && settings.get_strv('demo-connected-connectors').length === 0,
+            'fresh demo has no implicit connectors or authentication');
         deleteDemoConnectors(settings);
         await until(() => current()._emptyBox.visible && current()._cards.size === 0);
-        check(current()._addAccount.label === 'Add account', 'truly empty registry offers Add account');
+        check(current()._addAccount.label === 'Add connector', 'truly empty registry offers Add connector');
         const store = createConnectorStore(settings, {demo: true});
         for (const providerId of ['codex', 'example-credits']) {
             const entry = store.add(providerId, 'Renamed connector');
             await wait(300);
             check(current()._connectorEntries().some(c => c.id === entry.id), `${providerId}: saved registry recognized immediately`);
-            check(current()._emptyBox.visible && current()._addAccount.label === 'Open Preferences', `${providerId}: saved disconnected account offers connection instead of adding another`);
+            check(current()._emptyBox.visible && current()._addAccount.label === 'Add connector', `${providerId}: disconnected account keeps explicit Accounts action`);
             check(!current()._emptyHint.text.includes('Add an account'), `${providerId}: saved account has no contradictory add-account hint`);
             const extension = current()._extension;
             const openPreferences = extension.openPreferences;
@@ -37,7 +39,7 @@
             try {
                 extension.openPreferences = () => opened++;
                 current()._addAccount.emit('clicked', 1);
-                check(opened === 1 && settings.get_string('prefs-target') === entry.id, `${providerId}: action opens the existing connector editor`);
+                check(opened === 1 && settings.get_string('prefs-target') === 'accounts', `${providerId}: action opens Accounts without selecting a provider`);
             } finally { extension.openPreferences = openPreferences; settings.set_string('prefs-target', ''); }
             const account = createDemoAccountController({connectorId: entry.id, settings});
             await account.connect();
@@ -55,10 +57,12 @@
         }
         store.dispose();
         settings.set_string('data-source', 'live'); await wait(500);
+        check(current()._connectorEntries().length === 0 && current()._cards.size === 0,
+            'fresh live mode has no implicit connectors or monitored accounts');
         await disconnectAll({settings});
         const liveStore = createConnectorStore(settings);
         const live = liveStore.add('codex', 'Synthetic invalid token');
-        await until(() => current()._addAccount.label === 'Open Preferences');
+        await until(() => current()._connectorEntries().some(entry => entry.id === live.id));
         current().menu.open(false);
         // Deliberately invalid encoding is stored only in the throwaway keyring. It
         // exercises actual credential lookup while preventing any provider HTTP call.

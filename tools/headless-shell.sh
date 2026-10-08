@@ -3,6 +3,8 @@
 # snippet inside it, without touching your real session or settings.
 #
 #   tools/headless-shell.sh [script.js | sleep:SECONDS | wait-for:EXPRESSION ...]
+# Visual probes needing sample accounts must pass tools/demo-connectors-fixture.js first.
+# Fresh-start probes omit it, so the product defaults remain under test.
 #
 # The shell runs on its own D-Bus session with an in-memory GSettings backend
 # and a temporary XDG_DATA_HOME that links this checkout as the only user
@@ -120,8 +122,14 @@ dbus-run-session -- bash -c '
         esac
         echo "--- result of $script"
         code="$(cat "$script")" || exit 1
-        gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
-            --method org.gnome.Shell.Eval "$code"
+        verdict="$(gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
+            --method org.gnome.Shell.Eval "$code")"
+        printf "%s\n" "$verdict"
+        if [[ "$verdict" != "(true,"* ]]; then
+            kill "$shell" 2>/dev/null || true
+            wait "$shell" 2>/dev/null || true
+            exit 1
+        fi
         sleep 1.5
     done <<< "$SCRIPTS"
     kill "$shell" 2>/dev/null || true

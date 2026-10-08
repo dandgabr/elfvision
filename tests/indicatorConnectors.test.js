@@ -15,14 +15,14 @@ function actualMethod(name, args, globals = {}) {
     return new Function(...Object.keys(globals), `return function(${args}) {${body}}`)(...Object.values(globals));
 }
 
-test('indicator connectors: Add account closes the popup and opens the actual Add connector target', () => {
+test('indicator connectors: Add connector opens Accounts even with a disconnected legacy target', () => {
     const body = source.match(/this\._addAccount = this\._button\([\s\S]*?, \(\) => \{([\s\S]*?)\n {8}\}\);/)[1];
     const action = new Function(`return function() {${body}}`)();
     const calls = [];
-    action.call({menu: {close: () => calls.push('close')},
+    action.call({_accountTarget: 'command-code', menu: {close: () => calls.push('close')},
         _settings: {set_string: (key, value) => calls.push([key, value])},
         _extension: {openPreferences: () => calls.push('open')}});
-    assertEqual(calls, ['close', ['prefs-target', 'add'], 'open']);
+    assertEqual(calls, ['close', ['prefs-target', 'accounts'], 'open']);
 });
 
 test('indicator connectors: local labels stay out of snapshots used by panel tooltips', () => {

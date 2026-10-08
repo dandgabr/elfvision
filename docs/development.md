@@ -237,7 +237,7 @@ tools/headless-shell.sh
 # Also evaluate JavaScript inside the shell (org.gnome.Shell.Eval, enabled by
 # --unsafe-mode). Scripts run in order, 1.5 seconds apart; sleep:20 waits that
 # many seconds, useful for the polling scenarios.
-tools/headless-shell.sh open-popup.js sleep:20 screenshot.js
+tools/headless-shell.sh tools/demo-connectors-fixture.js open-popup.js sleep:20 screenshot.js
 ```
 
 For an asynchronous private probe, `wait-for:EXPRESSION` polls its completion
@@ -567,7 +567,7 @@ Header readings occupy their own rows inside the same focusable card button.
 For paired shadow evidence, run the following in a private demo session:
 
 ```sh
-LOG=/tmp/gaq-card-shadow.log DATA_SOURCE=demo tools/headless-shell.sh \
+LOG=/tmp/gaq-card-shadow.log DATA_SOURCE=demo tools/headless-shell.sh tools/demo-connectors-fixture.js \
   tools/card-shadow-probe.js sleep:8 tools/card-shadow-verify.js
 python3 tools/card-shadow-image-check.py
 ```

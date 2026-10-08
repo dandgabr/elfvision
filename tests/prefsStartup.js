@@ -28,11 +28,20 @@ app.connect('activate', () => {
     app.hold();
     (async () => {
         const {default: Preferences} = await import(`file://${root}/prefs.js`);
-        for (const mode of ['fresh', 'target', 'demo', 'dismissed']) {
+        for (const mode of ['fresh', 'accounts', 'target', 'demo', 'dismissed']) {
             const s = Gio.Settings.new_full(source.lookup('org.gnome.shell.extensions.gnome-ai-quota', false), Gio.memory_settings_backend_new(), null);
-            if (mode === 'target') s.set_string('prefs-target', 'claude');
+            if (mode === 'target') {
+                s.set_string('connectors', JSON.stringify({version: 1, connectors: [{id: 'claude', providerId: 'claude', label: '', username: ''}]}));
+                s.set_string('prefs-target', 'claude');
+            }
+            if (mode === 'accounts') s.set_string('prefs-target', 'accounts');
             if (mode === 'demo') s.set_string('data-source', 'demo');
             if (mode === 'dismissed') s.set_boolean('first-use-done', true);
+            if (['fresh', 'demo', 'accounts'].includes(mode)) {
+                for (const key of ['connectors', 'demo-connectors'])
+                    check(JSON.parse(s.get_string(key)).connectors.length === 0, `${mode}: ${key} starts empty`);
+                check(s.get_strv('demo-connected-connectors').length === 0, `${mode}: no implicit synthetic authentication`);
+            }
             const preferences = new Preferences(metadata);
             preferences.getSettings = () => s;
             preferences.gettext = x => x;
@@ -45,8 +54,20 @@ app.connect('activate', () => {
             }
             const hasSetup = walk(window).some(w => w instanceof Adw.NavigationPage && w.title === 'Welcome');
             check(hasSetup === (mode === 'fresh'), `${mode}: correct automatic setup policy`);
+            if (mode === 'accounts') {
+                check(s.get_string('prefs-target') === '', 'Accounts target consumed');
+                check(window.get_visible_page().title === 'Accounts', 'popup action opens Accounts');
+                check(window.get_visible_dialog() === null, 'Accounts action opens no provider chooser');
+                check(!walk(window).some(w => w instanceof Adw.NavigationPage && w.title === 'Command Code'), 'Accounts target never opens Command Code editor');
+                check(walk(window).some(w => w instanceof Gtk.Button && w.label === 'Add connector…'), 'Accounts offers explicit connector creation');
+                walk(window).find(w => w instanceof Gtk.Button && w.label === 'Add connector…').emit('clicked');
+                await wait();
+                check(window.get_visible_dialog() !== null, 'explicit Add opens chooser');
+                s.set_string('prefs-target', 'accounts'); await wait();
+                check(window.get_visible_dialog() === null, 'Accounts action dismisses a previously open chooser');
+            }
             if (mode === 'fresh') {
-                s.set_string('prefs-target', 'claude');
+                s.set_string('prefs-target', 'accounts');
                 await wait();
                 check(s.get_boolean('first-use-done') && s.get_string('prefs-target') === '', 'target dismisses setup and is consumed');
                 check(!walk(window).some(w => w instanceof Adw.NavigationPage && w.title === 'Welcome'), 'target removes setup');

@@ -33,6 +33,13 @@ request fresh data and **Preferences** to change settings.
 
 Open them from the popup (Preferences) or with `gnome-extensions prefs gnome-ai-quota@dandgabr.github.io`.
 
+Live and Demo both start with an empty connector list. Use **Add connector** in
+the popup to open **Accounts**, then choose **Add connector…** and a provider.
+This action does not select Command Code or another provider automatically, and
+does not open setup. Existing connectors are configured from their own Accounts
+rows. Recovering an invalid registry only restores identities actually present
+in the extension's keyring namespace; it never creates empty provider slots.
+
 For a new live-data user with no accounts, Preferences opens a setup assistant once:
 Welcome, Providers, Connect, Top bar, Notifications and a summary. Every provider is optional;
 choosing one never connects it. Skip, Escape or closing dismisses setup. General → Set up again
