@@ -1,0 +1,42 @@
+[
+  {
+    "mutant": "success-reload-context",
+    "exit": 1,
+    "tail": "value rejects the obsolete context\n\n  expected: \"disconnected\"\n  actual:   \"new-access\"\nassertEqual@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/harness.js:17:15\n@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/tokenManager.test.js:242:28\n\nok    tokens: reset during success refresh reload failure rejects the obsolete context\n\n1 passed, 1 failed\n"
+  },
+  {
+    "mutant": "rejected-reload-context",
+    "exit": 1,
+    "tail": "alue rejects the obsolete context\n\n  expected: \"disconnected\"\n  actual:   \"new-access\"\nassertEqual@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/harness.js:17:15\n@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/tokenManager.test.js:242:28\n\nok    tokens: reset during rejected refresh reload failure rejects the obsolete context\n\n1 passed, 1 failed\n"
+  },
+  {
+    "mutant": "pending-load-error-context",
+    "exit": 1,
+    "tail": "FAIL  tokens: reset during pending-load-failure never returns the old renewed access\n\n  expected: \"disconnected\"\n  actual:   \"rotated-access\"\nassertEqual@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/harness.js:17:15\n@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/tokenManager.test.js:268:24\n\n\n0 passed, 1 failed\n"
+  },
+  {
+    "mutant": "save-error-context",
+    "exit": 1,
+    "tail": "FAIL  tokens: reset during save-failure never returns the old renewed access\n\n  expected: \"disconnected\"\n  actual:   \"rotated-access\"\nassertEqual@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/harness.js:17:15\n@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/tokenManager.test.js:268:24\n\n\n0 passed, 1 failed\n"
+  },
+  {
+    "mutant": "cas-generation-check",
+    "exit": 1,
+    "tail": "FAIL  tokens: conditional credential replacement rejects a new generation even when refresh is unchanged\n\n  expected: [false,0]\n  actual:   [true,1]\nassertEqual@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/harness.js:17:15\n@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/tokenManager.test.js:282:16\n\n\n0 passed, 1 failed\n"
+  },
+  {
+    "mutant": "attempt-http-ownership",
+    "exit": 1,
+    "tail": "old attempt must never close the new HTTP client\n  expected: [1,0]\n  actual:   [1,1]\nassertEqual@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/harness.js:17:15\nassertReplacementLive@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/accounts.test.js:607:20\n@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/accounts.test.js:626:15\n\n\n0 passed, 1 failed\n"
+  },
+  {
+    "mutant": "login-finalizer-ownership",
+    "exit": 1,
+    "tail": "p/gaq-security-mutants-jbgvuq6f/tests/harness.js:17:15\nassertReplacementLive@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/accounts.test.js:606:20\n@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/accounts.test.js:626:15\n\nok    oauth controller: obsolete connecting failure cannot release a replacement consent/login reservation\n\n1 passed, 2 failed\n"
+  },
+  {
+    "mutant": "connect-finally-ownership",
+    "exit": 1,
+    "tail": "roller: obsolete connecting failure cannot release a replacement consent/login reservation\nthe replacement still owns confirmation and the shared gate\n  expected: 2\n  actual:   3\nassertEqual@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/harness.js:17:15\n@file:///tmp/gaq-security-mutants-jbgvuq6f/tests/accounts.test.js:673:20\n\n\n0 passed, 1 failed\n"
+  }
+]

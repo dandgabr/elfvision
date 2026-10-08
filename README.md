@@ -135,22 +135,27 @@ it, starts a sign-in or accepts terms for you. Only an explicit Connect action d
 |---|---|---|
 | Accounts, each provider | Status, key or Connect | Shows the key field (Command Code) or Connect, Cancel and Disconnect (the others), with what the last check said. |
 | Accounts, each provider | Track | When off, stops fetching and hides the provider from the bar and the popup. Your credentials stay saved. |
+| Accounts, Local account data | Disconnect all accounts… | After confirmation, removes extension credentials, live quota snapshots and alert history. Settings, themes, fonts and terms stay saved. Cancel is the default; provider sessions are not revoked. |
 | General, Top bar | Position | Puts the items in the left, center or right box of the panel. Default: right. |
 | General, Top bar | Providers on the bar | Shows up to this many, 1 to 5, the most critical first. Default: 3. |
 | General, Top bar | Compact mode | Automatic shrinks the bar only when space runs out; always compact drops the `%` and the suffix; never compact hides providers instead. |
 | General, Colors and theme | Light or dark | Follows the system, or forces light or dark for the popup. The top bar is always dark. |
 | General, Colors and theme | Theme | Opens the theme picker. Default: System (GNOME). |
 | General, Colors and theme | Your themes | Opens the folder for your own themes. |
+| General, Suggested fonts | Install suggested fonts… | Reviews four licensed Poppins, Inter and JetBrains Mono files before an optional download. Cancel is the default; theme selection never installs fonts. |
+| General, Colors and theme | Effects | Off, Subtle or Full. Default: Subtle. Full enables ambient effects on compatible built-in themes; the system animation preference takes precedence. |
+| General, Colors and theme | Transparency | Allows transparent backgrounds. Off keeps reading surfaces and backgrounds opaque. Default: on. |
+| General, Colors and theme | Material | Follows the theme, or chooses translucency, decorative glass or frost where the theme supports it. Default: follow the theme. |
 | General, Popup | Clock | Follows the GNOME clock setting, or forces 12 or 24 hours for reset times. |
 | General, Popup | Time until reset | Writes the countdown as `1h 20min` or `1h20`. |
 | General, Popup | Open cards that need attention | Opens cards in a warning, critical or error state on their own. A card you open or close by hand keeps that choice until its state changes. |
 | General, Advanced | Data source, Demo scenario | Switches to made-up providers (`steady`, `flaky` or `drift`) so every state can be seen without an account. The popup says when the data is made up. |
 | General, last group | Set up again | Reopens the optional setup assistant. Its dismissal is stored in `first-use-done`, which Restore defaults keeps. |
 | General, last group | About | Shows the version, the license and the links. |
-| General, last group | Restore defaults | After a confirmation, puts the look, the bar, the popup, the theme, the notifications and the data source back to their defaults. Accounts, tracked providers and your terms acknowledgements are never touched. |
+| General, last group | Restore defaults | After a confirmation, puts the look, the bar, the popup, the theme and the notifications back to their defaults. The selected data source, accounts, tracked providers and your terms acknowledgements are preserved. |
 | Notifications | Send notifications | Is the master switch. It also silences the connection alert. Off leaves the bar and the popup as they are. |
 | Notifications | Send a test notification | Sends one notification that says it is a test, to check the banner and Do Not Disturb. |
-| Notifications, Quotas | 5-hour, weekly, monthly, credits | Gives each kind of quota a switch and a threshold (the usage that triggers it; default 95%). |
+| Notifications, Quotas | 5-hour, weekly, monthly, credits | Each kind has a critical threshold (default 95%) and an optional earlier warning (default 80%, off). Warning must be lower than critical. |
 | Notifications, Connection | Notify about connection problems | Notifies once when an account is rejected or its data stops arriving. Never for a provider you stopped tracking. |
 
 ## Notifications
@@ -159,9 +164,7 @@ The extension sends a system notification when a quota reaches its threshold (95
 separately for the 5-hour, weekly, monthly and credit quotas) and when an account is rejected or its
 data stops arriving. The rules keep it quiet:
 
-- A quota notifies once when it crosses its threshold. It notifies again only after its usage falls
-  3 points below the threshold or the quota resets. A value that was already high when the extension
-  started is shown on the bar and in the popup but not announced.
+- Each enabled warning/critical level notifies once on crossing. A jump over both sends only critical; a later critical crossing can follow a warning. Each level rearms after usage falls 3 points below its threshold or the quota resets. Existing high values, migrated records and configuration changes establish a quiet baseline. Warning notices are opt-in; existing critical thresholds and notification choices are preserved.
 - At most three quota notifications are sent an hour. The rest become one "several quotas need
   attention".
 - A rejected sign-in notifies after ten minutes. Missing data notifies after at least fifteen minutes
@@ -184,8 +187,9 @@ data stops arriving. The rules keep it quiet:
 
 ## Themes
 
-The extension ships 20 themes, each with a light and a dark variant; the default, System (GNOME),
-follows the shell. You can add your own by putting a `theme.json` in
+The extension ships 22 themes, each with a light and a dark variant; the default, System (GNOME),
+follows the shell. Organic/Biophilic adds warm paper and botanical forms; Glassmorphism
+offers the supported glass materials. You can add your own by putting a `theme.json` in
 `~/.local/share/gnome-ai-quota/themes/<id>/`. The format, the tokens and the validation rules are in
 [docs/themes.md](docs/themes.md).
 
@@ -224,6 +228,9 @@ design are in [docs/adr](docs/adr/README.md).
 | M2 | Command Code with an API key stored in libsecret | done |
 | M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | done |
 | M4 | Notifications and polish | done |
+| M5 | Indicator model, coalescing, keyboard behavior, CI lint and tabular numbers | implemented |
+| M6 | Native effects and 22 theme profiles | implemented; frost hardware gates open |
+| M7 | Optional WebGL study and product proposals | documented; product decisions open |
 
 What each milestone holds, and which follow-up items remain, is in [ADR 0008](docs/adr/0008-mvp-roadmap.md).
 

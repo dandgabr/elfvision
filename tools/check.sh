@@ -25,7 +25,7 @@ step() {
 
 syntax() {
     local file
-    for file in tools/*.sh .githooks/pre-commit; do
+    for file in tools/*.sh tests/*.sh .githooks/pre-commit; do
         bash -n "$file" || return 1
     done
     for file in tools/*.py; do
@@ -38,7 +38,15 @@ lint() {
         echo "(shellcheck is not installed: skipped)"
         return 0
     fi
-    shellcheck -S warning tools/*.sh .githooks/pre-commit
+    shellcheck -S warning tools/*.sh tests/*.sh .githooks/pre-commit
+}
+
+js_lint() {
+    if [ ! -x node_modules/.bin/eslint ]; then
+        echo "ESLint dependencies are not installed; skipped (run npm ci --ignore-scripts)"
+        return 0
+    fi
+    npm run lint
 }
 
 template_in_step() {
@@ -93,8 +101,11 @@ shell_loads() {
 
 step "build" tools/build.sh
 step "unit tests" gjs -m tests/run.js
+step "cross-process disconnect" timeout 90 tests/disconnectDisk.sh
+step "private keyring disconnect" timeout 90 tests/disconnectSecrets.sh
 step "script syntax" syntax
 step "javascript syntax" js_syntax
+step "eslint" js_lint
 step "extension enables in a shell" shell_loads
 step "shellcheck" lint
 step "schemas" glib-compile-schemas --strict --dry-run schemas

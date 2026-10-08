@@ -1,0 +1,94 @@
+{
+  "id": "organic-biophilic",
+  "name": "Organic / Biophilic",
+  "nativeScheme": "light",
+  "difficulty": "hard",
+  "schemes": {
+    "light": {
+      "bg": "#f3ecdc",
+      "surface": "#fbf7ec",
+      "surface-2": "#e4ead3",
+      "fg": "#2b3a1f",
+      "muted": "#55603f",
+      "border": "#c5ceac",
+      "accent": "#3f6b34",
+      "accent-fg": "#fbf7ec",
+      "ok": "#2d6a32",
+      "warn": "#8a5a12",
+      "danger": "#a23b2a",
+      "shadow": "0 10px 24px -12px rgba(63,80,36,.35)",
+      "error": "#8b4a9a"
+    },
+    "dark": {
+      "bg": "#130f06",
+      "surface": "#1d190f",
+      "surface-2": "#282419",
+      "fg": "#f1eee9",
+      "muted": "#aeaaa1",
+      "border": "#3a362e",
+      "accent": "#7ead73",
+      "accent-fg": "#0d0d12",
+      "ok": "#91d093",
+      "warn": "#f5bf7f",
+      "danger": "#fd8d78",
+      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "error": "#e59ff6"
+    }
+  },
+  "adjusted": {
+    "light": [
+      "error"
+    ],
+    "dark": [
+      "error",
+      "border"
+    ]
+  },
+  "audit": {
+    "light": {
+      "fg": 11.4,
+      "muted": 6.3,
+      "accent": 5.8,
+      "accent-fg": 5.8,
+      "ok": 6.1,
+      "warn": 5.5,
+      "danger": 6.1,
+      "error": 5.5
+    },
+    "dark": {
+      "fg": 15.1,
+      "muted": 7.6,
+      "accent": 6.8,
+      "accent-fg": 7.5,
+      "ok": 9.7,
+      "warn": 10.6,
+      "danger": 7.7,
+      "error": 8.9
+    }
+  },
+  "fonts": {
+    "body": "'Nunito', system-ui, sans-serif",
+    "display": "'Fraunces', Georgia, serif",
+    "mono": "ui-monospace, monospace",
+    "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,500&family=Nunito:wght@400;600;700&display=swap"
+  },
+  "radius": {
+    "card": "28px 40px 26px 44px / 40px 26px 44px 28px",
+    "control": "18px"
+  },
+  "border": "hairline",
+  "hardShadow": false,
+  "effects": {
+    "material": "opaque",
+    "motion": "leaves",
+    "texture": "paper",
+    "particleCount": 8,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  }
+}

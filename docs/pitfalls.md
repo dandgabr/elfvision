@@ -80,3 +80,21 @@ Things that cost time and are not obvious from the St or GNOME Shell sources.
   headless shell (`tools/check.sh` does this) after every change to `lib/ui` or `extension.js`.
 - `String.prototype.format` exists in the preferences process and in the shell, but not in a plain `gjs`
   program; use `fmt` from `lib/core/viewmodel.js` so the same code runs under the tests.
+- St applies theme text attributes when a label is mapped or restyled and can replace a manually
+  installed Pango feature. Apply `tnum=1` after the `style-changed` default handler and after text
+  changes, copying the foreground attributes and using `AttrList.change()` to replace rather than
+  accumulate the feature. Unsupported `font-feature-settings` CSS does not establish native figures.
+- Shell can destroy popup children from C before the panel button's final cleanup runs. Mark a
+  destroyed effect sibling before cleanup; stop its source without reading disposed actors. Timer
+  ownership tests must include panel-position rebuild and extension disable, not only menu close.
+- On the tested Shell 50 / Shell-18 API, native `BlurEffect` uses `radius` and `BlurMode.BACKGROUND`.
+  Current online API documentation may describe newer properties. Check the installed GI namespace.
+  Callback cadence and callback elapsed work exclude compositor/GPU processing duration and cannot certify a frame-time gate.
+
+- A decorative actor with zero preferred size still needs an explicit full sibling allocation.
+  Implicit BinLayout can leave its clipped parent unallocated in devkit even when headless
+  optical-child assertions pass. Measure controls only, allocate all siblings to the same finite
+  box, and inspect actual allocations/paint surfaces in both backends.
+- BoxPointer may allocate before a newly added invisible popup anchor. Allocate the finite
+  captured anchor box before setPosition; a fresh Clutter.Actor's allocation/extents may be NaN
+  even when x/y/width/height properties look valid. Reject Clutter criticals in native test logs.

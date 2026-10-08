@@ -1,0 +1,9 @@
+{
+  "package": "dist/gnome-ai-quota@dandgabr.github.io.shell-extension.zip",
+  "sha256": "2f823b68b92f8ec834925553159d807b2c1d838100c411bcc442dad0200fec9d",
+  "checkedSourceFiles": 116,
+  "missing": [],
+  "different": [],
+  "excludedDevelopmentFilesPresent": [],
+  "webKitRuntimeImports": []
+}

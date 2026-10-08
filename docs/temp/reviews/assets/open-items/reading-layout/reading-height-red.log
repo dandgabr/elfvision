@@ -1,0 +1,112 @@
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.a11y.Bus' requested by ':1.1' (uid=1000 pid=1470585 comm="gdbus call --session --dest org.a11y.Bus --object-" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.a11y.Bus'
+dbus-daemon[1470594]: Failed to write data to pipe!
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=1470595 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.Shell.Extensions' requested by ':1.6' (uid=1000 pid=1470633 comm="gdbus call --session --dest org.gnome.Shell.Extens" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.freedesktop.portal.Desktop' requested by ':1.9' (uid=1000 pid=1470638 comm="/usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.S" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.freedesktop.impl.portal.PermissionStore' requested by ':1.10' (uid=1000 pid=1470659 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.PermissionStore'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.freedesktop.portal.Documents' requested by ':1.10' (uid=1000 pid=1470659 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gnome' requested by ':1.10' (uid=1000 pid=1470659 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+
+** (xdg-desktop-portal-gnome:1470682): WARNING **: 02:02:31.857: Failed to open service channel Wayland connection, portals dialogs may missbehave (Cannot invoke method; proxy is for the well-known name org.gnome.Mutter.ServiceChannel without an owner, and proxy was constructed with the G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START flag).
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.Settings.GlobalShortcutsProvider' requested by ':1.13' (uid=1000 pid=1470682 comm="/usr/libexec/xdg-desktop-portal-gnome" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+
+** (process:1470704): WARNING **: 02:02:31.985: Failed to open service channel Wayland connection, portal dialogs may misbehave (Cannot invoke method; proxy is for the well-known name org.gnome.Mutter.ServiceChannel without an owner, and proxy was constructed with the G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START flag).
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.Settings.GlobalShortcutsProvider'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gnome'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gtk' requested by ':1.10' (uid=1000 pid=1470659 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gtk'
+
+(/usr/libexec/xdg-desktop-portal:1470659): xdg-desktop-portal-WARNING **: 02:02:32.152: Failed to connect to PipeWire: Couldn't connect to PipeWire
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.freedesktop.portal.Desktop'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.Shell.Extensions'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.Shell.Screencast' requested by ':1.5' (uid=1000 pid=1470613 comm="gnome-shell --headless --wayland --unsafe-mode --w" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.Shell.CalendarServer' requested by ':1.5' (uid=1000 pid=1470613 comm="gnome-shell --headless --wayland --unsafe-mode --w" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.evolution.dataserver.Sources5' requested by ':1.22' (uid=1000 pid=1470772 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.Shell.Notifications' requested by ':1.5' (uid=1000 pid=1470613 comm="gnome-shell --headless --wayland --unsafe-mode --w" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.OnlineAccounts' requested by ':1.24' (uid=1000 pid=1470779 comm="/usr/libexec/evolution-source-registry" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.Sources5'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.freedesktop.portal.IBus' requested by ':1.25' (uid=1000 pid=1470806 comm="ibus-daemon --panel disable" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.Shell.Notifications'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.freedesktop.portal.IBus'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.evolution.dataserver.Calendar8' requested by ':1.22' (uid=1000 pid=1470772 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.Shell.CalendarServer'
+goa-daemon-Message: 02:02:33.481: goa-daemon version 3.58.1 starting
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.Identity' requested by ':1.30' (uid=1000 pid=1470826 comm="/usr/libexec/goa-daemon" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.OnlineAccounts'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.Identity'
+
+(process:1470882): libgoaidentity-WARNING **: 02:02:33.497: GoaKerberosIdentityManager: Using polling for change notification for credential cache type 'KCM'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.Calendar8'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.evolution.dataserver.AddressBook10' requested by ':1.32' (uid=1000 pid=1470869 comm="/usr/libexec/evolution-calendar-factory" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.AddressBook10'
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.freedesktop.portal.IBus' requested by ':1.39' (uid=1000 pid=1471696 comm="ibus-daemon --panel disable -r --xim" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.freedesktop.portal.IBus'
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.Shell.Screencast'
+--- extension info
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Activating service name='org.gnome.Shell.Extensions' requested by ':1.45' (uid=1000 pid=1472007 comm="gdbus call --session --dest org.gnome.Shell.Extens" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1470581]: [session uid=1000 pid=1470581 pidfd=5] Successfully activated service 'org.gnome.Shell.Extensions'
+ 'state': <1.0>
+ 'enabled': <true>
+ 'error': <''>
+--- result of tools/layout-probe.js
+(true, '"layout probe started"')
+--- result of tools/layout-verify.js
+(false, 'Error: {"finished":true,"cases":["LTR/normal/normal-font","LTR/normal/large-font","LTR/expanded/normal-font"],"labels":156,"actions":27,"error":"primary reading clipped: % · week·· text=46/60 actor=46/40"}')
+--- shell log (/tmp/tmp.9E42ANmGZv/shell.log)
+gnome-shell-calendar-server[1470772]: Lost (or failed to acquire) the name org.gnome.Shell.CalendarServer - exiting
+libmutter-Message: 02:02:33.104: Using Wayland display name 'gaq-headless-1470582'
+GNOME Shell-Message: 02:02:33.590: Error looking up permission: GDBus.Error:org.freedesktop.portal.Error.NotFound: No entry for geolocation
+Errors from xkbcomp are not fatal to the X server
+(gnome-shell:1470613): Gjs-WARNING **: 02:02:36.188: The GObject property St.BoxLayout.vertical is deprecated.
+0 update() ["file:///tmp/tmp.UT2RcGuvNc/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/lib/ui/providerCard.js":162:17]
+1 _syncCard() ["file:///tmp/tmp.UT2RcGuvNc/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/lib/ui/indicator.js":753:18]
+2 _syncCards() ["file:///tmp/tmp.UT2RcGuvNc/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/lib/ui/indicator.js":713:22]
+3 _syncPopup() ["file:///tmp/tmp.UT2RcGuvNc/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/lib/ui/indicator.js":639:14]
+4 _fit() ["file:///tmp/tmp.UT2RcGuvNc/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/lib/ui/indicator.js":565:18]
+5 _relayout() ["file:///tmp/tmp.UT2RcGuvNc/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/lib/ui/indicator.js":495:14]
+6 _renderSnapshots() ["file:///tmp/tmp.UT2RcGuvNc/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/lib/ui/indicator.js":474:14]
+7 _onSnapshots/this._renderSource<() ["file:///tmp/tmp.UT2RcGuvNc/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/lib/ui/indicator.js":450:22]
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:37.984: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:37.984: Can't update stage views actor unnamed [Gjs_ui_meter_GaqMeterBar] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:37.984: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:37.984: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:37.984: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:37.984: Can't update stage views actor unnamed [Gjs_ui_meter_GaqMeterBar] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:37.984: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:37.984: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [Gjs_ui_providerCard_GaqProviderCard] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [Gjs_ui_meter_GaqMeterBar] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [Gjs_ui_meter_GaqMeterBar] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.267: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.624: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.625: Can't update stage views actor unnamed [Gjs_ui_providerCard_GaqProviderCard] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.625: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.625: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.625: Can't update stage views actor unnamed [Gjs_ui_meter_GaqMeterBar] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.625: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.625: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.625: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:1470613): Clutter-WARNING **: 02:02:38.625: Can't update stage views actor unnamed [Gjs_ui_meter_GaqMeterBar] is on because it needs an allocation.

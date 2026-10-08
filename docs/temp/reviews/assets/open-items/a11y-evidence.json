@@ -1,0 +1,297 @@
+{
+  "finished": false,
+  "error": "atspi_error:  (1)",
+  "focused": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "controls": [
+    {
+      "name": "Effects",
+      "role": "combo box",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Effects",
+      "role": "label",
+      "enabled": false,
+      "focusable": false
+    },
+    {
+      "name": "Transparency",
+      "role": "switch",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Transparency",
+      "role": "label",
+      "enabled": false,
+      "focusable": false
+    },
+    {
+      "name": "Transparency",
+      "role": "switch",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Material",
+      "role": "combo box",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Material",
+      "role": "label",
+      "enabled": false,
+      "focusable": false
+    },
+    {
+      "name": "Install suggested fonts\u2026",
+      "role": "list item",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Install suggested fonts\u2026",
+      "role": "label",
+      "enabled": false,
+      "focusable": false
+    },
+    {
+      "name": "Effects",
+      "role": "combo box",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Effects",
+      "role": "label",
+      "enabled": false,
+      "focusable": false
+    },
+    {
+      "name": "Transparency",
+      "role": "switch",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Transparency",
+      "role": "label",
+      "enabled": false,
+      "focusable": false
+    },
+    {
+      "name": "Transparency",
+      "role": "switch",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Material",
+      "role": "combo box",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Material",
+      "role": "label",
+      "enabled": false,
+      "focusable": false
+    },
+    {
+      "name": "Install suggested fonts\u2026",
+      "role": "list item",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Install suggested fonts\u2026",
+      "role": "label",
+      "enabled": false,
+      "focusable": false
+    },
+    {
+      "name": "Notifications",
+      "role": "panel",
+      "enabled": false,
+      "focusable": false
+    },
+    {
+      "name": "Notifications",
+      "role": "page tab",
+      "enabled": false,
+      "focusable": true
+    },
+    {
+      "name": "Notifications",
+      "role": "label",
+      "enabled": false,
+      "focusable": false
+    }
+  ],
+  "shellControls": [],
+  "shellKeyboard": [
+    "Space opens legend",
+    "first Escape hides legend",
+    "second Escape closes popup"
+  ],
+  "gtkFocused": [
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 2
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 3
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 4
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 5
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 6
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 7
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 8
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 9
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 10
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 11
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 12
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 13
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 14
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 15
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 16
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 17
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 18
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 19
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 20
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 21
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 22
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 23
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 24
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 25
+    },
+    {
+      "name": "API key",
+      "active": true,
+      "keys": 26
+    }
+  ],
+  "gtkDistinct": [
+    "API key"
+  ],
+  "keyboardTraversalIncomplete": true,
+  "reverseFocus": []
+}

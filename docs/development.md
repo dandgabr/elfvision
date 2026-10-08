@@ -26,6 +26,21 @@ The extension needs `schemas/gschemas.compiled` and `locale/` to run from a
 checkout. Neither is committed. Run `tools/build.sh` after cloning and after
 changing `schemas/` or `po/`.
 
+ESLint is optional local developer tooling and required in the lint CI job. It does not run
+inside the extension or add a product build step. Use Node.js 24 LTS (CI pins 24.21.0);
+Node.js 22.13 or newer on the 22 LTS branch is also supported. Install the exact locked
+development dependencies, then lint without starting GNOME Shell:
+
+```sh
+npm ci --ignore-scripts
+npm run lint
+```
+
+The pinned ESLint 10.12.0 supports Node `^20.19.0`, `^22.13.0` or `>=24` according to its
+[official prerequisites](https://eslint.org/docs/latest/use/getting-started#prerequisites).
+This project selects the maintained 22 and 24 LTS branches; the
+[Node release schedule](https://nodejs.org/en/about/previous-releases) identifies their support status.
+
 ## Layout
 
 ```text
@@ -46,7 +61,7 @@ lib/prefs/          account controllers and views, the setup assistant, Notifica
 lib/ui/             St widgets (St is the shell's widget toolkit): meter, bar item, provider card, indicator, tooltip, the
                     notifier (the only code that makes notifications), legend and the
                     not-tracked list
-themes/builtin/     the 20 built-in themes, one folder each with a theme.json
+themes/builtin/     the 22 built-in themes, one folder each with a theme.json
 themes/v1.txt       the style slugs that tools/gen-themes.py generates
 schemas/            GSettings schema
 icons/              symbolic SVG icons, one per provider id, and the application icon
@@ -115,19 +130,31 @@ tests whose name contains `<text>`.
 
 1. The build: the compiled schema and the catalogs, which some tests read.
 2. The unit tests.
-3. The syntax of the shell scripts, and of every JavaScript module.
-4. **The extension enabled in a headless GNOME Shell.** It reads the extension's state and fails on an
+3. Cross-process disconnect and private synthetic keyring tests.
+4. The syntax of the shell scripts, and of every JavaScript module.
+5. ESLint, when the checkout has its local npm dependencies. It detects undefined names and other
+   correctness errors using `eslint.config.js`. Without dependencies, this local step reports a skip;
+   the separate CI lint job always runs `npm ci --ignore-scripts` and `npm run lint`.
+6. **The extension enabled in a headless GNOME Shell.** It reads the extension's state and fails on an
    error. It is skipped when `gnome-shell` is not installed.
-5. ShellCheck.
-6. The schemas.
-7. The translation template and the catalogs, including that every placeholder survives translation.
-8. Whitespace.
+7. ShellCheck.
+8. The schemas.
+9. The translation template and the catalogs, including that every placeholder survives translation.
+10. Whitespace.
+
+The local gate also runs `tests/disconnectDisk.sh` and `tests/disconnectSecrets.sh`.
+They exercise durable cross-process fencing and exact-scope deletion in a private
+state directory, D-Bus session and synthetic keyring. Shell syntax and ShellCheck
+include these test scripts. Missing prerequisites fail these gates.
 
 Run it before a commit. For preferences or layout changes, also run:
 
 ```sh
 tools/prefs-smoke.sh  # 360px setup traversal, RTL, text inflation, larger fonts and closing paths
 tools/layout-check.sh # popup allocations and mirrored meters in an isolated demo shell
+tools/effects-check.sh lifecycle # 100 actual effect cycles, geometry and teardown
+tools/effects-check.sh matrix # 264 current policy/resource combinations; no timing claims
+tools/effects-check.sh frames # four 60-second serialized CPU/GPU-finish paint samples
 ```
 
 The preferences probe injects fake account controllers for traversal, counts their subscriptions
@@ -161,6 +188,19 @@ All three leave your session, settings and extensions alone.
 with an in-memory GSettings backend and a temporary `XDG_DATA_HOME` that links
 this checkout as the only user extension. It enables the extension, prints its state
 and the shell errors that mention it.
+
+All graphical helpers isolate data, configuration, cache, state and runtime;
+`XDG_STATE_HOME` must never fall back to the user's disconnect metadata. They also
+use a distinct Wayland socket and `GIO_USE_VFS=local`. Set
+`GAQ_TEST_MONITORS=1280x800,1600x900` for two virtual monitors. Monitor probes apply
+only temporary configurations on that private display.
+
+Run frame profiling without other graphical/scanning jobs. It forces identical
+redraw cadence and uses Shell's `glFinish` timestamp, which changes normal
+scheduling; this is CPU submission plus GPU-finish wall time, not a pure GPU
+timer or presentation latency. The verifier rejects invisible viewports,
+insufficient samples and exceeded budgets. Accessibility tools expose partial
+metadata/virtual-key evidence and retain explicit limits; they do not certify Orca.
 
 ```sh
 # Boot, enable the extension, print its state and any shell errors.
@@ -221,7 +261,8 @@ For the interface, run it and look. Methods:
 - The bar, the popup and the notifications: `DATA_SOURCE=demo DEMO_SCENARIO=drift
   tools/nested-shell.sh` (see [Nested shell](#nested-shell)). Close the window to end it.
 - Scripted checks and screenshots: [`tools/headless-shell.sh`](#headless-shell) with a script. Notes:
-  - The `Eval` scope has `Main`, `Gio`, `GLib` and `Shell`, but not `Clutter`. Use `imports.gi.Clutter`.
+  - The `Eval` scope has `Main`, `Gio`, `GLib` and `Shell`, but not `Clutter`.
+    Inside an async probe, use `const {default: Clutter} = await import('gi://Clutter')`.
   - A fresh shell shows the Fedora welcome dialog and the overview. Close the dialogs in
     `Main.layoutManager.modalDialogGroup` and call `Main.overview.hide()` first.
   - A virtual pointer that starts at the top-left corner triggers the hot corner. Move it to the middle of
@@ -234,6 +275,39 @@ For the interface, run it and look. Methods:
   session mode), so `Main.screenShield.lock(false)` in a test makes `disable()` run.
 - When a change adds a setting, run `tools/build.sh` (or `tools/check.sh`) first: some tests read the
   compiled schema, and an old one does not know the new key.
+
+### Native effect checks
+
+The effect harness needs the same installed GNOME Shell/GJS environment as the
+headless shell. Its visual analyzer additionally needs Python Pillow (Fedora:
+`python3-pillow`); this is development tooling, not a packaged runtime dependency.
+
+```sh
+tools/effects-check.sh quick       # policy, native resources, numbers and lifecycle
+tools/effects-check.sh visual      # synthetic backdrop and semantic pixel comparisons
+GAQ_EFFECTS_SCHEME=dark tools/effects-check.sh visual
+tools/effects-check.sh inventory   # actual 22-theme light/dark native captures
+tools/effects-check.sh benchmark   # three separate 60-second measurements
+```
+
+These commands start private demo sessions and create their evidence under
+`.superpowers/sdd/2026-10-07-post-mvp-execution/`. Captures contain demo data and
+synthetic content. Run benchmark without another rendering test at the same time.
+The wrapper bounds execution and checks native errors; its temporary session is
+removed on exit. Retained screenshots and metrics are ignored by git.
+
+Both Shell helpers use private runtime directories. The interactive nested helper
+preserves the parent Wayland/PipeWire preview endpoints before isolating its own
+sockets and crash marker. `LOCAL_CONFIG_FILE=/path/to/dummy.json` lets a scripted
+nested check use dummy public-client configuration; absent that override, its
+existing read-only copy of app configuration remains the manual sign-in workflow.
+
+Pixel comparisons verify local blur, changed backing content and decoration.
+Resource policy combinations and screenshot coverage are separate evidence.
+Callback elapsed work time, callback cadence and synchronous menu-open work do not measure GPU
+frame duration or first-painted latency. Hardware performance, fractional scaling,
+multiple monitors, physical keyboard and Orca gates remain explicit in the
+[validation record](temp/reviews/2026-10-07-post-mvp-validation.md).
 
 ## Static analysis
 
@@ -248,6 +322,20 @@ GitHub Actions run these on every push to `main`, every pull request and once a 
 | sast | Semgrep (`p/javascript`, `p/security-audit`, `p/secrets`) | the JavaScript and secrets |
 | sast | ShellCheck | the shell scripts and the hook |
 | sast | zizmor | the workflows themselves |
+| lint | ESLint | GJS modules, tests and Shell Eval probes; no running desktop needed |
+
+`eslint.config.js` uses ESLint's recommended correctness rules with `no-undef` enabled for
+`typeof` expressions too. Globals follow the file context: Shell `global` belongs to shell UI
+and the theme manager; `Main`, GI shortcuts and `imports` belong to the `tools/*-probe.js` and
+`tools/*-verify.js` Eval scripts; `print`, `printerr` and `ARGV` belong to their GJS test runners.
+Text codecs and logging are declared only in the module groups that use them. Browser and Node
+globals are not granted to runtime modules. GI callback arguments prefixed with `_` may be unused.
+Unused caught errors are allowed for deliberate best-effort operations; test fixtures may retain
+unused callback parameters. Only the theme validator and alert-text tests allow control-byte regexes,
+because those expressions explicitly reject or strip controls.
+When adding a script that runs in a different context, declare its actual globals explicitly rather
+than enabling a browser or Node environment. Dependencies and Node are development-only;
+`tools/pack.sh` does not include the npm manifest, lockfile or `node_modules` in the extension ZIP.
 
 CodeQL is not a workflow file here: the repository uses GitHub's own *default setup* (Settings, Code
 security, Code scanning), set to the extended suite for `javascript-typescript`, `python` and `actions`.
@@ -293,7 +381,7 @@ because St has no `var()`.
 3. Add its group and description to `lib/prefs/themeCatalog.js` so the picker can
    translate them, then run `tools/i18n.sh all`.
 4. Run the tests. They validate and compile every built-in theme, and one of them
-   asserts the count of twenty, so update it when the set changes.
+   asserts the exact expected slug set, so update that set when adding a theme.
 
 To try a theme without opening Preferences:
 
@@ -307,11 +395,15 @@ instead; the picker rescans that folder whenever it opens.
 
 ### Generated themes
 
-19 of the 20 built-in themes come from a gallery of visual styles
+21 of the 22 built-in themes come from a gallery of visual styles
 (`dandgabr/estilos-visuais`). `tools/gen-themes.py` reads the gallery's design
 tokens, derives the missing light or dark scheme in OKLCH, corrects contrast to
 WCAG targets (text 7:1, secondary text and status colors 4.5:1, accent 3:1) and
-writes one `theme.json` per style. It exits with status 1 if a scheme still fails.
+writes one `theme.json` per style. Reviewed effect presets come from
+`tools/theme-effect-profiles.json`, independently of the gallery's executable effect
+files. The generator validates that canonical source and copies each selected profile
+after compiling the tokens. It rejects an invalid profile before writing output, and
+exits with status 1 if a scheme still fails contrast.
 
 ```sh
 python3 -I tools/gen-themes.py --styles <path to an estilos-visuais clone> \
@@ -319,8 +411,12 @@ python3 -I tools/gen-themes.py --styles <path to an estilos-visuais clone> \
 ```
 
 `themes/v1.txt` lists the slugs. `sistema-gnome` is written by hand and the tool
-does not touch it. Review the diff after regenerating, since the output replaces
-the files.
+does not touch it; keep its manually authored effect profile in agreement with the
+canonical source. Do not edit generated JSON by hand: change the reviewed profile
+source or the generator, regenerate, then review the diff. `--effect-profiles <file>`
+selects an explicit canonical source for developer checks. The generator and its
+profile source are development tools; shipped theme files already contain their
+validated effect data.
 
 ## Translations
 
@@ -402,3 +498,25 @@ committed.
   (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`).
 - Clean up in `disable()` and avoid synchronous I/O in the shell process.
 - Never commit credentials. See the security note in the README.
+
+### Complete primary readings and card shadows
+
+`tools/layout-check.sh` checks twelve private native cases: LTR/RTL, normal and
+expanded translations, enlarged fonts, and long currency in both shadow-heavy
+materials. Primary value and suffix layouts must fit both the width and height
+of their actors; disabling ellipsis alone does not prove complete text painting.
+Header readings occupy their own rows inside the same focusable card button.
+
+For paired shadow evidence, run the following in a private demo session:
+
+```sh
+LOG=/tmp/gaq-card-shadow.log DATA_SOURCE=demo tools/headless-shell.sh \
+  tools/card-shadow-probe.js sleep:8 tools/card-shadow-verify.js
+python3 tools/card-shadow-image-check.py
+```
+
+The paired captures retain geometry and compare left and right strips with the
+original shadow versus no shadow. Reject native criticals and failed Eval results
+as well as failed pixel checks. Decoration allocation changes are coalesced into
+an owned idle source, outside the parent's allocation callback. Inspection counts
+that pending source; close and destroy cancel it along with animation sources.

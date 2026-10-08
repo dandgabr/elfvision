@@ -1,0 +1,19 @@
+{
+  "popupRegion": [
+    802,
+    94,
+    6,
+    472
+  ],
+  "popupTranslucentEdge": 1.729271114539144,
+  "popupFrostEdge": 0.023139220979560355,
+  "popupDecorativeDifference": 11.692090395480227,
+  "popupFrostDifference": 15.834745762711865,
+  "popupMovingWindowDifference": 16.42702448210923,
+  "leafPhaseDifference": 5.897598870056497,
+  "outsideBlurDifference": 0.0,
+  "controlTranslucentEdge": 4.862910008410429,
+  "controlFrostEdge": 0.03784693019343986,
+  "controlMovingWindowDifference": 7.655787037037037,
+  "controlOutsideDifference": 0.0
+}

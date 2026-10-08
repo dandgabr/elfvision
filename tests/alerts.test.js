@@ -2,7 +2,7 @@ import {assertEqual, assertTrue, test} from './harness.js';
 import {
     AUTH_ALERT_AFTER_MS, DEFAULT_ALERT_SETTINGS, MAX_ALERT_STATE_BYTES, MAX_PER_HOUR, OUTAGE_ALERT_AFTER_MS,
     RESET_JITTER_MS, RESUME_GRACE_MS, emptyAlertState, evaluate, forgetProvider, normalizeAlertSettings,
-    parseAlertState, serializeAlertState,
+    parseAlertState, serializeAlertState, parseAlertRuleBackup, serializeAlertRuleBackup,
 } from '../lib/core/alerts.js';
 
 const MIN = 60 * 1000;
@@ -59,7 +59,7 @@ test('alerts: a window that resets re-arms the alert, even if the usage did not 
 test('alerts: the threshold and the switch are per quota type', () => {
     const week = (percent, id = 'week') => snap(percent, {metrics: [{id, kind: 'percent', window: 'week', windowSecs: 604800, percentUsed: percent}]});
     const settings = {thresholds: {week: {enabled: true, percent: 80}, session: {enabled: false, percent: 95}}};
-    assertEqual(run([[week(70), T0], [week(82), T0 + MIN]], {settings}).events[0].level, 'warning');
+    assertEqual(run([[week(70), T0], [week(82), T0 + MIN]], {settings}).events[0].level, 'critical');
     assertEqual(run([[snap(90), T0], [snap(99), T0 + MIN]], {settings}).events, []);      // session is off
     const credits = percent => snap(percent, {metrics: [{id: 'usd', kind: 'money', balance: 1, budget: 100, currency: 'USD', percentUsed: percent}]});
     assertEqual(run([[credits(90), T0], [credits(96), T0 + MIN]]).events[0].crossings[0].type, 'credits');
@@ -153,7 +153,7 @@ test('alerts: events carry no text from the provider, and the input state is not
 
 test('alerts: settings are re-checked, because dconf can be edited by hand', () => {
     const odd = normalizeAlertSettings({thresholds: {session: {enabled: 'yes', percent: 400}, week: {percent: -5}, month: {percent: 'x'}}, hysteresis: 99});
-    assertEqual([odd.thresholds.session, odd.thresholds.week.percent, odd.thresholds.month.percent, odd.hysteresis], [{enabled: true, percent: 100}, 1, 95, 20]);
+    assertEqual([odd.thresholds.session, odd.thresholds.week.percent, odd.thresholds.month.percent, odd.hysteresis], [{enabled: true, percent: 100, warningEnabled: false, warningPercent: 80}, 1, 95, 20]);
     assertEqual(normalizeAlertSettings(undefined), JSON.parse(JSON.stringify(DEFAULT_ALERT_SETTINGS)));
 });
 
@@ -172,7 +172,7 @@ test('alerts: the saved state survives a restart, and a bad file is an empty one
         connection: {codex: {cause: 'auth', since: T0, alerted: true}, claude: {cause: 'bogus', since: T0}, 'x y': {cause: 'auth', since: T0}},
         sent: [T0, 'x', null], capped: 'no',
     }));
-    assertEqual(dirty.state, {version: 1, levels: {'claude|five': {fired: false, resetsAt: null, at: 0}}, connection: {codex: {cause: 'auth', since: T0, alerted: true}}, sent: [T0], capped: 0});
+    assertEqual(dirty.state, {version: 2, levels: {'claude|five': {fired: false, warningFired: false, baseline: true, resetsAt: null, at: 0}}, connection: {codex: {cause: 'auth', since: T0, alerted: true}}, sent: [T0], capped: 0});
 });
 
 test('alerts: a threshold exactly at the limit, and the edges of the hysteresis', () => {
@@ -240,4 +240,96 @@ test('alerts: a metric that is briefly missing keeps its memory, and a removed p
 
 test('alerts: a state this module does not know is never an outage', () => {
     assertEqual(run([[snap(10, {state: 'loading', metrics: []}), T0], [snap(10, {state: 'loading', metrics: []}), T0 + 3600_000]]).events, []);
+});
+
+const dual = {thresholds: {session: {enabled: true, percent: 95, warningEnabled: true, warningPercent: 80}}};
+test('alerts: warning escalates once to critical; jumping both announces only critical', () => {
+    assertEqual(run([[snap(70), T0], [snap(80), T0+MIN], [snap(95), T0+2*MIN], [snap(96), T0+3*MIN]], {settings: dual}).events.map(e=>e.level), ['warning','critical']);
+    assertEqual(run([[snap(70), T0], [snap(98), T0+MIN], [snap(99), T0+2*MIN]], {settings: dual}).events.map(e=>e.level), ['critical']);
+});
+test('alerts: independent warning and critical hysteresis rearms each level', () => {
+    assertEqual(run([[snap(70),T0],[snap(95),T0+MIN],[snap(92.1),T0+2*MIN],[snap(95),T0+3*MIN],[snap(92),T0+4*MIN],[snap(95),T0+5*MIN]], {settings:dual}).events.map(e=>e.level),['critical','critical']);
+    assertEqual(run([[snap(70),T0],[snap(80),T0+MIN],[snap(77.1),T0+2*MIN],[snap(80),T0+3*MIN],[snap(77),T0+4*MIN],[snap(80),T0+5*MIN]], {settings:dual}).events.map(e=>e.level),['warning','warning']);
+});
+test('alerts: settings edits seed a fresh baseline instead of announcing backlog', () => {
+    const first=evaluate({snapshot:snap(70),state:emptyAlertState(),settings:dual,now:T0});
+    const edited={thresholds:{session:{enabled:true,percent:75,warningEnabled:true,warningPercent:60}}};
+    const baseline=evaluate({snapshot:snap(80),state:first.state,settings:edited,now:T0+MIN});
+    assertEqual(baseline.events,[]);
+    assertEqual(evaluate({snapshot:snap(81),state:baseline.state,settings:edited,now:T0+2*MIN}).events,[]);
+});
+test('alerts: v1 migration retains cap/connection and suppresses initial backlog', () => {
+    const old={version:1,levels:{'claude|five':{fired:false,resetsAt:T0+3600_000,at:T0}},connection:{codex:{cause:'auth',since:T0,alerted:true}},sent:[T0],capped:T0};
+    const migrated=parseAlertState(JSON.stringify(old));
+    assertEqual(migrated.problems,[]);assertEqual(migrated.state.version,2);
+    assertEqual([migrated.state.sent,migrated.state.capped,migrated.state.connection],[old.sent,old.capped,old.connection]);
+    assertEqual(run([[snap(98),T0+MIN],[snap(99),T0+2*MIN]],{state:migrated.state,settings:dual}).events,[]);
+});
+test('alerts: invalid enabled pair keeps previous valid thresholds', () => {
+    const previous=normalizeAlertSettings(dual);
+    const bad=normalizeAlertSettings({thresholds:{session:{enabled:true,percent:70,warningEnabled:true,warningPercent:80}}},previous);
+    assertEqual([bad.thresholds.session.percent,bad.thresholds.session.warningPercent],[95,80]);
+});
+
+test('alerts: stale input cannot establish a settings baseline or create warning backlog', () => {
+    const low=evaluate({snapshot:snap(70),state:emptyAlertState(),settings:dual,now:T0});
+    const changed={thresholds:{session:{enabled:true,percent:90,warningEnabled:true,warningPercent:60}}};
+    const stale=evaluate({snapshot:snap(99,{source:{kind:'stale',fetchedAt:T0}}),state:low.state,settings:changed,now:T0+MIN});
+    assertEqual(stale.state.levels,low.state.levels);
+    assertEqual(evaluate({snapshot:snap(99),state:stale.state,settings:changed,now:T0+2*MIN}).events,[]);
+});
+test('alerts: saved dual latches dedupe after restart and window reset rearms both', () => {
+    const fired=run([[snap(70),T0],[snap(96),T0+MIN]],{settings:dual});
+    const saved=parseAlertState(serializeAlertState(fired.state));
+    assertEqual(run([[snap(99),T0+2*MIN]],{settings:dual,state:saved.state}).events,[]);
+    const reset=snap(96,{metrics:[metric(96,{resetsAt:T0+7200_000})]});
+    assertEqual(run([[reset,T0+3*MIN]],{settings:dual,state:saved.state}).events.map(e=>e.level),['critical']);
+});
+test('alerts: several metrics coalesce at the highest newly crossed level', () => {
+    const s=(a,b)=>snap(a,{metrics:[metric(a),metric(b,{id:'other'})]});
+    const result=run([[s(70,70),T0],[s(82,96),T0+MIN]],{settings:dual});
+    assertEqual(result.events.length,1);assertEqual(result.events[0].level,'critical');
+    assertEqual(result.events[0].crossings.map(c=>c.level),['warning','critical']);
+});
+test('alerts: live records remain bounded even for many valid synthetic metrics', () => {
+    const metrics=Array.from({length:400},(_,i)=>metric(50,{id:`m${i}`}));
+    const result=evaluate({snapshot:snap(50,{metrics}),state:emptyAlertState(),settings:dual,now:T0});
+    assertEqual(Object.keys(result.state.levels).length,256);
+    assertTrue(serializeAlertState(result.state)!==null);
+});
+
+test('alerts: invalid warning enable preserves a critical-only custom threshold of one', () => {
+    const previous=normalizeAlertSettings({thresholds:{session:{percent:1,warningEnabled:false,warningPercent:80}}});
+    const next=normalizeAlertSettings({thresholds:{session:{percent:1,warningEnabled:true,warningPercent:80}}},previous);
+    assertEqual(next.thresholds.session,previous.thresholds.session);
+});
+
+test('alerts: migrated fired latch belongs only to its known reset window', () => {
+    const old=parseAlertState(JSON.stringify({version:1,levels:{'claude|five':{fired:true,resetsAt:T0+3600_000,at:T0}}})).state;
+    const newWindow=(percent)=>snap(percent,{metrics:[metric(percent,{resetsAt:T0+7200_000})]});
+    assertEqual(run([[newWindow(94),T0+MIN],[newWindow(95),T0+2*MIN]],{state:old,settings:dual}).events.map(e=>e.level),['critical']);
+});
+
+test('alerts: invalid warning pair preserves customized critical on restart without previous state', () => {
+    const rule=normalizeAlertSettings({thresholds:{session:{enabled:true,percent:1,warningEnabled:true,warningPercent:80}}}).thresholds.session;
+    assertEqual(rule,{enabled:true,percent:1,warningEnabled:false,warningPercent:80});
+});
+test('alerts: missing malformed or impossible v2 rule signatures require a quiet fresh baseline', () => {
+    for (const rules of [undefined,'bad','999|true|999','95|true|95','0|false|80','95|false|0','95|true|080']) {
+        const state=parseAlertState(JSON.stringify({version:2,levels:{'claude|five':{fired:false,warningFired:false,rules,resetsAt:T0+3600_000,at:T0}}})).state;
+        assertEqual(state.levels['claude|five'].baseline,true);
+        assertEqual(evaluate({snapshot:snap(96),state,settings:dual,now:T0+MIN}).events,[]);
+    }
+});
+
+test('alerts: persisted valid rule backup is canonical bounded and rejects foreign/invalid data', () => {
+    const rules=normalizeAlertSettings(dual);
+    const text=serializeAlertRuleBackup(rules);
+    assertEqual(serializeAlertRuleBackup(parseAlertRuleBackup(text)),text);
+    for(const bad of ['',null,'null','[]','x'.repeat(2049),JSON.stringify({session:rules.thresholds.session})])
+        assertEqual(parseAlertRuleBackup(bad),null);
+    for(const [key,value] of [['percent',0],['percent',101],['percent',2.5],['warningPercent',0],['warningPercent',100],['warningEnabled','true'],['enabled',1],['script','x']]) {
+        const copy=JSON.parse(text);copy.session[key]=value;assertEqual(parseAlertRuleBackup(JSON.stringify(copy)),null);
+    }
+    const invalid=JSON.parse(text);invalid.session.percent=75;assertEqual(parseAlertRuleBackup(JSON.stringify(invalid)),null);
 });

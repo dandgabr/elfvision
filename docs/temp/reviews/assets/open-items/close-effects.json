@@ -1,0 +1,392 @@
+{
+  "finished": true,
+  "cases": [
+    {
+      "theme": "bento-grid",
+      "action": "outside-click",
+      "openedX": 780,
+      "openedCenterX": 1001,
+      "anchor": true,
+      "visible": true,
+      "open": true,
+      "buttonPosition": [
+        855,
+        0
+      ],
+      "buttonSize": [
+        293,
+        32
+      ],
+      "buttonAllocated": true,
+      "buttonMapped": true,
+      "samples": [
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 616,
+          "opacity": 255,
+          "open": false
+        },
+        {
+          "x": 781.78515625,
+          "y": 30.7890625,
+          "width": 438.4296875,
+          "height": 585.234375,
+          "opacity": 203,
+          "open": false
+        },
+        {
+          "x": 783.4609375,
+          "y": 29.65234375,
+          "width": 435.078125,
+          "height": 580.7578125,
+          "opacity": 155,
+          "open": false
+        },
+        {
+          "x": 784.91015625,
+          "y": 28.66796875,
+          "width": 432.1796875,
+          "height": 576.88671875,
+          "opacity": 113,
+          "open": false
+        },
+        {
+          "x": 786.06640625,
+          "y": 27.8828125,
+          "width": 429.8671875,
+          "height": 573.80078125,
+          "opacity": 79,
+          "open": false
+        },
+        {
+          "x": 787.078125,
+          "y": 27.1953125,
+          "width": 427.84375,
+          "height": 571.109375,
+          "opacity": 50,
+          "open": false
+        },
+        {
+          "x": 787.859375,
+          "y": 26.66796875,
+          "width": 426.28125,
+          "height": 569.01953125,
+          "opacity": 28,
+          "open": false
+        },
+        {
+          "x": 788.38671875,
+          "y": 26.30859375,
+          "width": 425.2265625,
+          "height": 567.61328125,
+          "opacity": 13,
+          "open": false
+        },
+        {
+          "x": 788.7265625,
+          "y": 26.078125,
+          "width": 424.546875,
+          "height": 566.703125,
+          "opacity": 3,
+          "open": false
+        }
+      ],
+      "closed": true
+    },
+    {
+      "theme": "bento-grid",
+      "action": "other-popup",
+      "openedX": 780,
+      "openedCenterX": 1001,
+      "anchor": true,
+      "visible": true,
+      "open": true,
+      "buttonPosition": [
+        855,
+        0
+      ],
+      "buttonSize": [
+        293,
+        32
+      ],
+      "buttonAllocated": true,
+      "buttonMapped": true,
+      "samples": [
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 616,
+          "opacity": 255,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 255,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 155,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 113,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 79,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 50,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 28,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 13,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 3,
+          "open": false
+        }
+      ],
+      "closed": true,
+      "otherPopupClicks": 2
+    },
+    {
+      "theme": "glassmorphism",
+      "action": "outside-click",
+      "openedX": 780,
+      "openedCenterX": 1001,
+      "anchor": true,
+      "visible": true,
+      "open": true,
+      "buttonPosition": [
+        855,
+        0
+      ],
+      "buttonSize": [
+        293,
+        32
+      ],
+      "buttonAllocated": true,
+      "buttonMapped": true,
+      "samples": [
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 616,
+          "opacity": 255,
+          "open": false
+        },
+        {
+          "x": 781.78515625,
+          "y": 30.7890625,
+          "width": 438.4296875,
+          "height": 585.234375,
+          "opacity": 203,
+          "open": false
+        },
+        {
+          "x": 783.4609375,
+          "y": 29.65234375,
+          "width": 435.078125,
+          "height": 580.7578125,
+          "opacity": 155,
+          "open": false
+        },
+        {
+          "x": 784.91015625,
+          "y": 28.66796875,
+          "width": 432.1796875,
+          "height": 576.88671875,
+          "opacity": 113,
+          "open": false
+        },
+        {
+          "x": 786.06640625,
+          "y": 27.8828125,
+          "width": 429.8671875,
+          "height": 573.80078125,
+          "opacity": 79,
+          "open": false
+        },
+        {
+          "x": 787.078125,
+          "y": 27.1953125,
+          "width": 427.84375,
+          "height": 571.109375,
+          "opacity": 50,
+          "open": false
+        },
+        {
+          "x": 787.859375,
+          "y": 26.66796875,
+          "width": 426.28125,
+          "height": 569.01953125,
+          "opacity": 28,
+          "open": false
+        },
+        {
+          "x": 788.38671875,
+          "y": 26.30859375,
+          "width": 425.2265625,
+          "height": 567.61328125,
+          "opacity": 13,
+          "open": false
+        },
+        {
+          "x": 788.7265625,
+          "y": 26.078125,
+          "width": 424.546875,
+          "height": 566.703125,
+          "opacity": 3,
+          "open": false
+        }
+      ],
+      "closed": true
+    },
+    {
+      "theme": "glassmorphism",
+      "action": "other-popup",
+      "openedX": 780,
+      "openedCenterX": 1001,
+      "anchor": true,
+      "visible": true,
+      "open": true,
+      "buttonPosition": [
+        855,
+        0
+      ],
+      "buttonSize": [
+        293,
+        32
+      ],
+      "buttonAllocated": true,
+      "buttonMapped": true,
+      "samples": [
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 616,
+          "opacity": 255,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 255,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 200,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 152,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 113,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 78,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 49,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 28,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 12,
+          "open": false
+        },
+        {
+          "x": 780,
+          "y": 32,
+          "width": 442,
+          "height": 590,
+          "opacity": 2,
+          "open": false
+        }
+      ],
+      "closed": true,
+      "otherPopupClicks": 2
+    }
+  ],
+  "error": ""
+}

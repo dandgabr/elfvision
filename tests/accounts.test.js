@@ -37,6 +37,7 @@ function setup({provider = 'claude', configured = true, secret = null, confirm =
     let stored = secret;
     const login = fakeLogin();
     const deps = {
+        gate: null,
         lookupSecret: async () => { if (stored === 'ERROR') throw new Error('no keyring'); return stored; },
         storeSecret: async (id, kind, value) => { calls.stored.push([id, kind]); stored = value; },
         clearSecret: async id => { calls.cleared.push(id); stored = null; },
@@ -138,12 +139,13 @@ test('oauth controller: a busy port falls back to the client\'s own port, once',
     const fallback = meta.oauth.defaultRedirect.fallbackPort;
     const t = setup({provider: 'codex', settings: fakeSettings({'terms-acknowledged': ['codex']})});
     let attempts = 0;
-    const deps = {};
+    const deps = {
+        gate: null,};
     // Rebuild with a start that refuses the first port.
     const calls = [];
     const controller = createOAuthController({
         meta, settings: fakeSettings({'terms-acknowledged': ['codex']}), gettext: _, confirmTerms: async () => true,
-        deps: {
+        deps: {gate: null,
             readLocalConfig: () => ({providers: {codex: {clientId: 'c'}}, problems: []}),
             lookupSecret: async () => null, createHttp: () => ({}), createPkce: () => ({}), randomBytes: n => new Uint8Array(n),
             timers: {after: () => 1, every: () => 2, cancel() {}},
@@ -220,7 +222,7 @@ function apiSetup({secret = null, failStore = false} = {}) {
     let stored = secret;
     const controller = createApiKeyController({
         meta, settings: fakeSettings(), gettext: _, toast: t => calls.toasts.push(t),
-        deps: {
+        deps: {gate: null,
             lookupSecret: async () => stored,
             storeSecret: async (id, kind, value) => { if (failStore) throw new Error('locked'); calls.stored.push([id, kind]); stored = value; },
             clearSecret: async id => { calls.cleared.push(id); stored = null; },
@@ -296,7 +298,7 @@ test('oauth controller: the browser failure exposes paste immediately', async ()
     const meta = t.meta;
     const login = fakeLogin();
     const controller = createOAuthController({meta, settings: t.settings, gettext: _, confirmTerms: async () => true,
-        deps: {
+        deps: {gate: null,
             readLocalConfig: () => ({providers: {claude: {clientId: 'c'}}, problems: []}),
             lookupSecret: async () => null, createHttp: () => ({}), createPkce: () => ({}),
             startLogin: options => { options.onBrowserFailed(); return login; },
@@ -311,7 +313,7 @@ test('oauth controller: the browser failure exposes paste immediately', async ()
 test('oauth controller: an older keyring lookup cannot overwrite a newer one', async () => {
     const pending = [];
     const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings(), gettext: _, confirmTerms: async () => false,
-        deps: {lookupSecret: () => new Promise(resolve => pending.push(resolve))}});
+        deps: {gate: null,lookupSecret: () => new Promise(resolve => pending.push(resolve))}});
     const old = controller.refresh();
     const latest = controller.refresh();
     pending[1](encodeSecret({gen: 'g', ...TOKENS}));
@@ -351,7 +353,7 @@ test('api key controller: failed saving remains visible until successful retry w
     let fail = true;
     const key = `user_${'a1b2c3d4'.repeat(6)}`;
     const controller = createApiKeyController({meta: providerMeta('command-code'), settings: fakeSettings(), gettext: _,
-        deps: {lookupSecret: async () => null, storeSecret: async () => { if (fail) throw new Error(key); }, announceChange() {}}});
+        deps: {gate: null,lookupSecret: async () => null, storeSecret: async () => { if (fail) throw new Error(key); }, announceChange() {}}});
     await controller.save(key);
     await controller.refresh();
     const failed = controller.snapshot();
@@ -366,7 +368,7 @@ test('api key controller: failed saving remains visible until successful retry w
 test('api key controller: newer lookup wins when an old success or failure arrives late', async () => {
     const pending = [];
     const controller = createApiKeyController({meta: providerMeta('command-code'), settings: fakeSettings(), gettext: _,
-        deps: {lookupSecret: () => new Promise((resolve, reject) => pending.push({resolve, reject}))}});
+        deps: {gate: null,lookupSecret: () => new Promise((resolve, reject) => pending.push({resolve, reject}))}});
     const first = controller.refresh();
     const second = controller.refresh();
     pending[1].resolve('stored'); await second;
@@ -383,7 +385,7 @@ test('oauth controller: snapshots never read configuration and async recheck rec
     let reads = 0;
     let down = true;
     const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings(), gettext: _, confirmTerms: async () => false,
-        deps: {readLocalConfig: async () => { reads++; return {providers: {claude: {clientId: 'c'}}, problems: []}; },
+        deps: {gate: null,readLocalConfig: async () => { reads++; return {providers: {claude: {clientId: 'c'}}, problems: []}; },
             lookupSecret: async () => { if (down) throw new Error('locked'); return null; }}});
     controller.snapshot(); controller.snapshot();
     assertEqual(reads, 0);
@@ -400,7 +402,7 @@ test('oauth controller: snapshots never read configuration and async recheck rec
 test('oauth controller: stale async configuration cannot overwrite the latest recheck', async () => {
     const pending = [];
     const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings(), gettext: _, confirmTerms: async () => false,
-        deps: {readLocalConfig: () => new Promise(resolve => pending.push(resolve)), lookupSecret: async () => null}});
+        deps: {gate: null,readLocalConfig: () => new Promise(resolve => pending.push(resolve)), lookupSecret: async () => null}});
     const older = controller.recheck();
     const latest = controller.recheck();
     pending[1]({providers: {claude: {clientId: 'c'}}, problems: []}); await latest;
@@ -414,7 +416,7 @@ test('oauth controller: cancellation during async configuration cannot open cons
     let asked = 0;
     const gate = createLoginGate();
     const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings(), gettext: _, loginGate: gate,
-        confirmTerms: async () => { asked++; return true; }, deps: {readLocalConfig: () => new Promise(resolve => { resolveConfig = resolve; })}});
+        confirmTerms: async () => { asked++; return true; }, deps: {gate: null,readLocalConfig: () => new Promise(resolve => { resolveConfig = resolve; })}});
     const pending = controller.connect();
     controller.cancel();
     resolveConfig({providers: {claude: {clientId: 'c'}}, problems: []});
@@ -431,7 +433,7 @@ for (const action of ['cancel', 'dispose']) {
         let disposedHttp = 0;
         const login = fakeLogin();
         const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings({'terms-acknowledged': ['claude']}), gettext: _, confirmTerms: async () => true,
-            deps: {readLocalConfig: () => ({providers: {claude: {clientId: 'c'}}, problems: []}), lookupSecret: async () => null,
+            deps: {gate: null,readLocalConfig: () => ({providers: {claude: {clientId: 'c'}}, problems: []}), lookupSecret: async () => null,
                 createHttp: () => ({dispose() { disposedHttp++; }}), createPkce: () => ({}), randomBytes: n => new Uint8Array(n),
                 startLogin: () => login, timers: {after: () => 1, every: () => 2, cancel() {}},
                 storeSecret: () => { writes++; return new Promise(resolve => { resolveStore = resolve; }); }, announceChange() { announced++; }}});
@@ -450,7 +452,7 @@ test('oauth controller: each failed start and fallback owns a disposable HTTP cl
     let clients = 0;
     let disposedClients = 0;
     const controller = createOAuthController({meta: providerMeta('codex'), settings: fakeSettings({'terms-acknowledged': ['codex']}), gettext: _, confirmTerms: async () => true,
-        deps: {readLocalConfig: () => ({providers: {codex: {clientId: 'c'}}, problems: []}),
+        deps: {gate: null,readLocalConfig: () => ({providers: {codex: {clientId: 'c'}}, problems: []}),
             createHttp: () => { clients++; return {dispose() { disposedClients++; }}; }, createPkce: () => ({}),
             startLogin: () => { throw Object.assign(new Error('busy'), {code: 'port_busy'}); }}});
     await controller.connect();
@@ -462,7 +464,7 @@ test('oauth controller: dispose during async configuration drops the late result
     let resolveConfig;
     let asked = 0;
     const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings(), gettext: _,
-        confirmTerms: async () => { asked++; return true; }, deps: {readLocalConfig: () => new Promise(resolve => { resolveConfig = resolve; })}});
+        confirmTerms: async () => { asked++; return true; }, deps: {gate: null,readLocalConfig: () => new Promise(resolve => { resolveConfig = resolve; })}});
     const pending = controller.connect();
     controller.dispose();
     resolveConfig({providers: {claude: {clientId: 'c'}}, problems: []});
@@ -475,7 +477,7 @@ for (const outcome of ['success', 'failure', 'cancel']) {
         let disposedClients = 0;
         const login = fakeLogin();
         const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings({'terms-acknowledged': ['claude']}), gettext: _, confirmTerms: async () => true,
-            deps: {readLocalConfig: () => ({providers: {claude: {clientId: 'c'}}, problems: []}), lookupSecret: async () => null,
+            deps: {gate: null,readLocalConfig: () => ({providers: {claude: {clientId: 'c'}}, problems: []}), lookupSecret: async () => null,
                 storeSecret: async () => {}, announceChange() {}, createHttp: () => ({dispose() { disposedClients++; }}),
                 createPkce: () => ({}), randomBytes: n => new Uint8Array(n), startLogin: () => login,
                 timers: {after: () => 1, every: () => 2, cancel() {}}}});
@@ -495,7 +497,7 @@ test('oauth controller: disposal never starts another configuration or credentia
     let credentialReads = 0;
     const login = fakeLogin();
     const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings({'terms-acknowledged': ['claude']}), gettext: _, confirmTerms: async () => true,
-        deps: {readLocalConfig: async () => { configReads++; return {providers: {claude: {clientId: 'c'}}, problems: []}; },
+        deps: {gate: null,readLocalConfig: async () => { configReads++; return {providers: {claude: {clientId: 'c'}}, problems: []}; },
             lookupSecret: async () => { credentialReads++; return null; }, createHttp: () => ({dispose() {}}), createPkce: () => ({}),
             startLogin: () => login, timers: {after: () => 1, every: () => 2, cancel() {}}}});
     await controller.connect();
@@ -511,7 +513,7 @@ test('oauth controller: token exchange completion closes HTTP before a pending k
     let disposedClients = 0;
     const login = fakeLogin();
     const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings({'terms-acknowledged': ['claude']}), gettext: _, confirmTerms: async () => true,
-        deps: {readLocalConfig: () => ({providers: {claude: {clientId: 'c'}}, problems: []}), lookupSecret: async () => null,
+        deps: {gate: null,readLocalConfig: () => ({providers: {claude: {clientId: 'c'}}, problems: []}), lookupSecret: async () => null,
             storeSecret: () => new Promise(resolve => { resolveStore = resolve; }), announceChange() {},
             createHttp: () => ({dispose() { disposedClients++; }}), createPkce: () => ({}), randomBytes: n => new Uint8Array(n),
             startLogin: () => login, timers: {after: () => 1, every: () => 2, cancel() {}}}});
@@ -532,7 +534,7 @@ test('api key controller: started save completes after disposal without starting
     let announcements = 0;
     let changes = 0;
     const controller = createApiKeyController({meta: providerMeta('command-code'), settings: fakeSettings(), gettext: _,
-        deps: {storeSecret: () => { writes++; return new Promise(resolve => { resolveStore = resolve; }); },
+        deps: {gate: null,storeSecret: () => { writes++; return new Promise(resolve => { resolveStore = resolve; }); },
             lookupSecret: async () => { lookups++; return null; }, announceChange() { announcements++; }}});
     controller.subscribe(() => { changes++; });
     const pending = controller.save(`user_${'a1b2c3d4'.repeat(6)}`);
@@ -542,4 +544,137 @@ test('api key controller: started save completes after disposal without starting
     assertEqual(await pending, 'saved');
     await controller.refresh();
     assertEqual([writes, announcements, lookups, changes], [1, 1, 0, before]);
+});
+
+for (const action of ['cancel', 'dispose']) {
+    for (const boundary of ['terms', 'begin', 'store']) {
+        test(`oauth controller: ${action} during gate assertion prevents late ${boundary}`, async () => {
+            let release, enteredResolve;
+            const entered = new Promise(resolve => { enteredResolve = resolve; });
+            const hold = new Promise(resolve => { release = resolve; });
+            let assertions = 0, starts = 0, stores = 0;
+            const settings = fakeSettings(boundary === 'terms' ? {} : {'terms-acknowledged': ['claude']});
+            const login = fakeLogin();
+            const gate = {
+                capture: async () => ({epoch: 'synthetic', provider: 'claude'}),
+                assertCurrent: async () => {
+                    assertions++;
+                    if (assertions === (boundary === 'store' ? 2 : 1)) { enteredResolve(); await hold; }
+                },
+                subscribe: () => () => {}, registerCanceller: () => () => {}, isBlocked: () => false,
+            };
+            const controller = createOAuthController({meta: providerMeta('claude'), settings, gettext: _, confirmTerms: async () => true,
+                deps: {gate, readLocalConfig: async () => ({providers: {claude: {clientId: 'synthetic'}}, problems: []}),
+                    lookupSecret: async () => null, storeSecret: async () => { stores++; }, announceChange() {},
+                    createHttp: () => ({dispose() {}}), createPkce: () => ({}), randomBytes: n => new Uint8Array(n),
+                    startLogin: () => { starts++; return login; }, timers: {after: () => 1, every: () => 2, cancel() {}}}});
+            const connecting = controller.connect();
+            if (boundary === 'store') { await connecting; login.finish(TOKENS); }
+            await entered;
+            controller[action]();
+            release(); await connecting; await flush(60);
+            assertEqual(stores, 0, 'no storage may start after cancellation');
+            assertEqual(starts, boundary === 'store' ? 1 : 0, 'no login may start after cancellation');
+            if (boundary === 'terms') assertEqual(settings.values['terms-acknowledged'], [], 'late Yes must not acknowledge cancelled attempt');
+            controller.dispose();
+        });
+    }
+}
+
+function replacementOAuthFixture() {
+    let cancelFromGate, nextLogin = 0, timerId = 0, writes = 0, announcements = 0, resolveStore, rejectStore;
+    const timers = new Map(), disposedClients = [0, 0];
+    const logins = [fakeLogin(), fakeLogin()];
+    logins.forEach((login, index) => {
+        login.authUrl = `https://auth.example/synthetic-attempt-${index}`;
+        // A backend can settle after cancellation; retain control over that reply.
+        login.cancel = () => { login.cancelled++; };
+    });
+    const loginGate = createLoginGate();
+    const gate = {capture: async () => ({epoch: 'synthetic', provider: 'claude'}), assertCurrent: async () => {},
+        subscribe: () => () => {}, isBlocked: () => false,
+        registerCanceller: fn => { cancelFromGate = fn; return () => {}; }};
+    const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings({'terms-acknowledged': ['claude']}), gettext: _, confirmTerms: async () => true,
+        loginGate, deps: {gate, readLocalConfig: async () => ({providers: {claude: {clientId: 'synthetic'}}, problems: []}), lookupSecret: async () => null,
+            createHttp: () => { const index = nextLogin; return {dispose() { disposedClients[index]++; }}; }, createPkce: () => ({}), randomBytes: n => new Uint8Array(n),
+            startLogin: () => logins[nextLogin++],
+            storeSecret: () => { writes++; return new Promise((resolve, reject) => { resolveStore = resolve; rejectStore = reject; }); },
+            announceChange: () => { announcements++; }, timers: {after: (_seconds, fn) => { timers.set(++timerId, fn); return timerId; },
+                every: (_seconds, fn) => { timers.set(++timerId, fn); return timerId; }, cancel: id => timers.delete(id)}}});
+    const assertReplacementLive = () => {
+        const state = controller.snapshot();
+        assertEqual([state.busy, state.authUrl, state.lastFailure], [true, logins[1].authUrl, '']);
+        assertEqual(disposedClients, [1, 0], 'an old attempt must never close the new HTTP client');
+        assertEqual([...timers.keys()], [3, 4], 'an old attempt must never cancel the new timers');
+        assertEqual(loginGate.acquire('codex'), false, 'the replacement still owns the shared sign-in gate');
+    };
+    return {controller, logins, assertReplacementLive, cancelFromGate: () => cancelFromGate(),
+        writes: () => writes, announcements: () => announcements,
+        settleStore: accepted => accepted ? resolveStore() : rejectStore(new Error('synthetic rejected store'))};
+}
+
+for (const outcome of ['success', 'failure']) {
+    test(`oauth controller: obsolete ${outcome} after gate cancellation cannot tear down a replacement attempt`, async () => {
+        const t = replacementOAuthFixture();
+        try {
+            await t.controller.connect();
+            t.cancelFromGate();
+            await t.controller.connect();
+            t.assertReplacementLive();
+            if (outcome === 'success') t.logins[0].finish(TOKENS); else t.logins[0].fail(new Error('synthetic old failure'));
+            await flush(60);
+            t.assertReplacementLive();
+            assertEqual([t.writes(), t.announcements()], [0, 0]);
+        } finally { t.controller.dispose(); }
+    });
+}
+
+for (const accepted of [true, false]) {
+    test(`oauth controller: already issued store ${accepted ? 'success' : 'failure'} cannot clobber a replacement attempt`, async () => {
+        const t = replacementOAuthFixture();
+        try {
+            await t.controller.connect();
+            t.logins[0].finish(TOKENS);
+            await flush(60);
+            assertEqual(t.writes(), 1);
+            t.cancelFromGate();
+            await t.controller.connect();
+            t.assertReplacementLive();
+            t.settleStore(accepted);
+            await flush(60);
+            t.assertReplacementLive();
+            assertEqual([t.writes(), t.announcements()], [1, accepted ? 1 : 0], 'issued storage still settles and announces once');
+        } finally { t.controller.dispose(); }
+    });
+}
+
+test('oauth controller: obsolete connecting failure cannot release a replacement consent/login reservation', async () => {
+    let cancelFromGate, enteredResolve, rejectOld, releaseNew, captures = 0, assertions = 0, starts = 0;
+    const entered = new Promise(resolve => { enteredResolve = resolve; });
+    const oldAssertion = new Promise((_resolve, reject) => { rejectOld = reject; });
+    const newCapture = new Promise(resolve => { releaseNew = resolve; });
+    const gate = {capture: async () => ++captures === 2 ? newCapture : {epoch: 'synthetic'},
+        assertCurrent: async () => { if (++assertions === 1) { enteredResolve(); await oldAssertion; } },
+        registerCanceller: fn => { cancelFromGate = fn; return () => {}; }, subscribe: () => () => {}, isBlocked: () => false};
+    const loginGate = createLoginGate(), login = fakeLogin();
+    const controller = createOAuthController({meta: providerMeta('claude'), settings: fakeSettings({'terms-acknowledged': ['claude']}), gettext: _, confirmTerms: async () => true,
+        loginGate, deps: {gate, readLocalConfig: async () => ({providers: {claude: {clientId: 'synthetic'}}, problems: []}), lookupSecret: async () => null,
+            createHttp: () => ({dispose() {}}), createPkce: () => ({}), startLogin: () => { starts++; return login; },
+            timers: {after: () => 1, every: () => 2, cancel() {}}}});
+    try {
+        const old = controller.connect();
+        await entered;
+        cancelFromGate();
+        const replacement = controller.connect();
+        await flush();
+        rejectOld(new Error('synthetic obsolete assertion'));
+        await old;
+        await controller.connect();
+        assertEqual(captures, 2, 'the replacement still owns confirmation and the shared gate');
+        releaseNew({epoch: 'synthetic-new'});
+        await replacement;
+        const state = controller.snapshot();
+        assertEqual([starts, state.busy, state.lastFailure], [1, true, '']);
+        assertEqual(loginGate.acquire('codex'), false);
+    } finally { controller.dispose(); }
 });

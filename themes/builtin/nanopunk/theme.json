@@ -77,5 +77,18 @@
     "control": "3px"
   },
   "border": "hairline",
-  "hardShadow": false
+  "hardShadow": false,
+  "effects": {
+    "material": "opaque",
+    "motion": "pulse",
+    "texture": "grid",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  }
 }

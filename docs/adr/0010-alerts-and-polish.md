@@ -34,9 +34,8 @@ English msgids. There is no language setting, no language step in the assistant 
 - The controller reports changes, not only that something changed: `subscribeChanges(({previous,
   next}) => ...)`. It seeds its previous values from the cache, so the first poll after a shell
   restart is not taken for a crossing.
-- Coalescing the updates of several providers that answer together into one redraw was planned and
-  is not done; what was done instead is that a bar item or a card whose view did not change is
-  not redrawn (see "Pending").
+- M4 avoided redrawing an unchanged bar item or card. M5 additionally coalesces
+  provider responses in one event-loop burst, retaining the newest snapshots.
 
 ### Quota notifications
 
@@ -127,9 +126,10 @@ English msgids. There is no language setting, no language step in the assistant 
   `https://` links and an own application icon in `icons/hicolor`. No paths or user name.
 - **Restore defaults:** every schema key is classified as reset or kept, and a test fails for an
   unclassified key. It resets appearance, bar, popup, notification and threshold settings, the theme
-  and the data source (someone stuck in demo data would take a restore that leaves it for a bug), and
-  keeps accounts, tracking state, terms acknowledgements, `account-status`, the credentials revision,
-  the demo scenario and the messages between the two processes. The dialog says "your accounts are
+  and keeps the selected data source, accounts, tracking state, terms acknowledgements,
+  `account-status`, the credentials revision, the demo scenario and the messages between the two
+  processes. Preserving the data source also keeps a demo session from appearing disconnected after
+  the reset switches to an empty live keyring. The dialog says "your accounts are
   not changed" (not "stay connected": a rejected account stays rejected) and names what changes;
   Cancel is the default. The reset is one batch (`delay` and `apply`), so the shell reacts once, and a
   toast confirms it. It does not start the assistant again.
@@ -216,18 +216,25 @@ monitor. Tooltip labels are reused across focus changes and destroyed during cle
 
 ## Pending
 
-Follow-up work outside the MVP scope:
+The M5 follow-ups are implemented: the bar model lives in pure `lib/core`,
+provider response bursts coalesce, keyboard focus opens bar tooltips, the first
+Escape hides the legend, and CI runs scoped ESLint without a desktop. Validation
+and remaining release checks are recorded in the
+[post-MVP execution plan](../temp/plans/2026-10-07-post-mvp-execution.md).
 
-- **Indicator:** move its bar model to `lib/core` and coalesce the redraws of providers that answer
-  together.
-- **Bar items on the keyboard:** the tooltip on the bar shows on hover only; Escape closes the popup
-  before the legend.
-- **ESLint** (`no-undef` and the like) in CI: today the shell step of `tools/check.sh` covers it
-  locally, and CI does not run the shell.
+The owner accepted the three product follow-ups on 2026-10-07. Accounts now has
+a separate Cancel-default disconnect-all action with durable coordination and
+truthful retryable failures; Restore defaults still preserves accounts. See the
+[disconnect review](../temp/reviews/2026-10-07-disconnect-all.md).
 
-Open questions:
+Quota categories retain the existing critical threshold, default 95%, and add
+an independently optional warning, default 80% and disabled initially. Each
+level has its own latch and three-point hysteresis; a jump across both emits only
+critical. Migration, restart and configuration edits establish a quiet baseline
+while preserving notification choices, old latches and the global cap. Invalid
+pairs retain the last valid effective pair across restarts through the bounded
+nonsecret `alert-valid-rules` setting.
 
-- Whether "Disconnect all accounts and delete local data" is wanted as a separate action.
-- Whether the pt-BR text needs a reader other than the owner.
-- A warning and a critical level share one threshold per kind of quota. The text says which level was
-  reached, but a second threshold is not offered.
+The [accepted product decisions](../temp/plans/2026-10-07-post-mvp-product-decisions.md)
+also cover explicit licensed font installation. Human/Orca and real-account
+certification remain separate participation checks; synthetic tests cannot certify them.

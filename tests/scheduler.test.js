@@ -415,6 +415,38 @@ test('scheduler: new credentials during a fetch in flight cause one more fetch',
     await clock.advance(0);
 });
 
+for (const outcome of ['success', 'failure']) {
+    test(`scheduler: credential changes suppress an old ${outcome} and cancel its context`, async () => {
+        const pending = [];
+        const provider = {id: 'codex', name: 'Codex', intervalMs: MINUTE,
+            fetch(context) {
+                return new Promise((resolve, reject) => pending.push({context, resolve, reject}));
+            }};
+        const {clock, scheduler, emitted, problems} = setup([provider]);
+        const first = scheduler.refresh('codex');
+        await flush();
+        assertTrue(!pending[0].context.isCancelled());
+        scheduler.credentialsChanged('codex');
+        const oldContextCancelled = pending[0].context.isCancelled();
+        if (outcome === 'success')
+            pending[0].resolve(body(7));
+        else
+            pending[0].reject(new ProviderError('auth_required', 'old account rejected'));
+        await first;
+        await flush();
+        assertEqual(emitted, [], 'old quota or auth status must never reach snapshot/cache listeners');
+        assertTrue(oldContextCancelled, 'the previous credential is obsolete immediately');
+        assertEqual(problems, []);
+        assertEqual(pending.length, 2, 'the replacement fetch starts after old work settles');
+        assertTrue(!pending[1].context.isCancelled());
+        pending[1].resolve(body(91));
+        await clock.advance(0);
+        assertEqual(emitted.map(snapshot => [snapshot.state, snapshot.metrics[0].percentUsed]), [['ok', 91]]);
+        assertEqual(scheduler.snapshots(), emitted);
+        assertEqual(clock.pending, 0, 'a stopped scheduler leaves no polling timer');
+    });
+}
+
 test('scheduler: a bad interval cannot make a tight loop, a huge retry hint is capped', async () => {
     const zero = scripted('zero', [body(1)], 0);
     const nan = scripted('nan', [body(1)], NaN);

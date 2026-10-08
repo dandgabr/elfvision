@@ -34,7 +34,23 @@
       "shadow": "none"
     }
   },
-  "radius": {"card": 14, "control": 8},
+  "radius": {
+    "card": 14,
+    "control": 8
+  },
   "border": "hairline",
-  "fonts": {}
+  "fonts": {},
+  "effects": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  }
 }

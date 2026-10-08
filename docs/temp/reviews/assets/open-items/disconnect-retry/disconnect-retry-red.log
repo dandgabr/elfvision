@@ -1,0 +1,9 @@
+FAIL  disconnect: retry removes credentials and published data recreated after partial success
+complete must mean no newly reconnected credential remains
+  expected: []
+  actual:   ["command-code:api-key"]
+assertEqual@file:///home/daniel/Code/gnome-ai-quota-post-mvp/tests/harness.js:17:15
+@file:///home/daniel/Code/gnome-ai-quota-post-mvp/tests/disconnect.test.js:117:16
+
+
+0 passed, 1 failed

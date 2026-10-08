@@ -44,6 +44,32 @@
       <summary>Light or dark</summary>
       <description>system follows the GNOME light or dark preference; light and dark force one.</description>
     </key>
+    <key name="effects-mode" type="s">
+      <choices>
+        <choice value="off"/>
+        <choice value="subtle"/>
+        <choice value="full"/>
+      </choices>
+      <default>'subtle'</default>
+      <summary>Effects</summary>
+      <description>off disables theme effects; subtle allows short interactions and static decoration; full allows ambient motion in compatible built-in themes. System animation preferences take priority.</description>
+    </key>
+    <key name="effect-material" type="s">
+      <choices>
+        <choice value="theme"/>
+        <choice value="translucent"/>
+        <choice value="decorative-glass"/>
+        <choice value="frosted-glass"/>
+      </choices>
+      <default>'theme'</default>
+      <summary>Material</summary>
+      <description>Follow the theme, or select translucent, decorative glass or frosted glass backgrounds only in themes declaring that material compatible. Transparency off takes priority.</description>
+    </key>
+    <key name="transparency-enabled" type="b">
+      <default>true</default>
+      <summary>Transparency</summary>
+      <description>Allow translucent and glass backgrounds in compatible built-in themes. Turning this off keeps reading surfaces opaque.</description>
+    </key>
     <key name="clock-format" type="s">
       <choices>
         <choice value="system"/>
@@ -134,6 +160,17 @@
       <summary>Notify for five-hour quotas</summary>
       <description>Whether a five-hour quota that crosses its threshold sends a notification.</description>
     </key>
+    <key name="alert-session-warning-enabled" type="b">
+      <default>false</default>
+      <summary>Enable early session quota warnings</summary>
+      <description>Opt in to a separate warning before the critical threshold. Existing notification choices remain unchanged.</description>
+    </key>
+    <key name="alert-session-warning-percent" type="i">
+      <range min="1" max="99"/>
+      <default>80</default>
+      <summary>Warning threshold for session quotas</summary>
+      <description>Used percentage for the early warning; must be lower than the critical threshold.</description>
+    </key>
     <key name="alert-session-percent" type="i">
       <range min="1" max="100"/>
       <default>95</default>
@@ -144,6 +181,17 @@
       <default>true</default>
       <summary>Notify for weekly quotas</summary>
       <description>Whether a weekly quota that crosses its threshold sends a notification.</description>
+    </key>
+    <key name="alert-week-warning-enabled" type="b">
+      <default>false</default>
+      <summary>Enable early week quota warnings</summary>
+      <description>Opt in to a separate warning before the critical threshold. Existing notification choices remain unchanged.</description>
+    </key>
+    <key name="alert-week-warning-percent" type="i">
+      <range min="1" max="99"/>
+      <default>80</default>
+      <summary>Warning threshold for week quotas</summary>
+      <description>Used percentage for the early warning; must be lower than the critical threshold.</description>
     </key>
     <key name="alert-week-percent" type="i">
       <range min="1" max="100"/>
@@ -156,6 +204,17 @@
       <summary>Notify for monthly quotas</summary>
       <description>Whether a monthly quota that crosses its threshold sends a notification.</description>
     </key>
+    <key name="alert-month-warning-enabled" type="b">
+      <default>false</default>
+      <summary>Enable early month quota warnings</summary>
+      <description>Opt in to a separate warning before the critical threshold. Existing notification choices remain unchanged.</description>
+    </key>
+    <key name="alert-month-warning-percent" type="i">
+      <range min="1" max="99"/>
+      <default>80</default>
+      <summary>Warning threshold for month quotas</summary>
+      <description>Used percentage for the early warning; must be lower than the critical threshold.</description>
+    </key>
     <key name="alert-month-percent" type="i">
       <range min="1" max="100"/>
       <default>95</default>
@@ -167,6 +226,17 @@
       <summary>Notify for credit quotas</summary>
       <description>Whether a credit quota that crosses its threshold sends a notification.</description>
     </key>
+    <key name="alert-credits-warning-enabled" type="b">
+      <default>false</default>
+      <summary>Enable early credits quota warnings</summary>
+      <description>Opt in to a separate warning before the critical threshold. Existing notification choices remain unchanged.</description>
+    </key>
+    <key name="alert-credits-warning-percent" type="i">
+      <range min="1" max="99"/>
+      <default>80</default>
+      <summary>Warning threshold for credits quotas</summary>
+      <description>Used percentage for the early warning; must be lower than the critical threshold.</description>
+    </key>
     <key name="alert-credits-percent" type="i">
       <range min="1" max="100"/>
       <default>95</default>
@@ -177,6 +247,11 @@
       <default>true</default>
       <summary>Notify about connection problems</summary>
       <description>Tell you once when an account has been rejected, or its data has been missing, for a while. Providers you stopped tracking never notify.</description>
+    </key>
+    <key name="alert-valid-rules" type="s">
+      <default>''</default>
+      <summary>Last valid notification thresholds</summary>
+      <description>Bounded, validated notification configuration used to retain the previous valid pair after invalid external edits and restart. Contains no account data.</description>
     </key>
     <key name="demo-scenario" type="s">
       <choices>

@@ -10,6 +10,7 @@ import {DEFAULT_THEME, scanThemes} from './lib/services/themeFiles.js';
 import {buildAboutGroup} from './lib/prefs/about.js';
 import {buildAccountsPage} from './lib/prefs/accounts.js';
 import {buildNotificationsPage} from './lib/prefs/notifications.js';
+import {createSuggestedFontsGroup} from './lib/prefs/suggestedFonts.js';
 import {builtinCatalog} from './lib/prefs/themeCatalog.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
@@ -232,6 +233,22 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         }));
         look.add(themeRow);
 
+        const effects = choiceRow(settings, 'effects-mode', [
+            ['off', _('Off')], ['subtle', _('Subtle')], ['full', _('Full')],
+        ], _('Effects'), _('Subtle adds short transitions and static decoration. Full adds background motion where the theme supports it. System animation preferences take priority.'), handlerIds);
+        look.add(effects);
+        const transparency = new Adw.SwitchRow({
+            title: _('Transparency'),
+            subtitle: _('Allows translucent and glass backgrounds in compatible themes. Off keeps backgrounds opaque.'),
+        });
+        settings.bind('transparency-enabled', transparency, 'active', Gio.SettingsBindFlags.DEFAULT);
+        look.add(transparency);
+        const material = choiceRow(settings, 'effect-material', [
+            ['theme', _('Follow the theme')], ['translucent', _('Translucent')],
+            ['decorative-glass', _('Decorative glass')], ['frosted-glass', _('Frosted glass')],
+        ], _('Material'), _('Applies only where the theme supports this material. Transparency off keeps the background opaque.'), handlerIds);
+        look.add(material);
+
         const folder = GLib.build_filenamev([GLib.get_user_data_dir(), 'gnome-ai-quota', 'themes']);
         const folderRow = new Adw.ActionRow({
             title: _('Your themes'),
@@ -253,6 +270,9 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         if (problems)
             look.add(problems);
         page.add(look);
+        const fonts = createSuggestedFontsGroup({window, gettext: _});
+        page.add(fonts.group);
+        window.connect('close-request', () => { fonts.destroy(); return false; });
 
         const popup = new Adw.PreferencesGroup({title: _('Popup')});
         const clock = choiceRow(settings, 'clock-format', [

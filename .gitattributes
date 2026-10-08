@@ -1,0 +1,4 @@
+# Preserve byte-exact upstream OFL licenses verified by fontInstaller hashes.
+# These two pinned files include an upstream space at the end of line 21.
+licenses/fonts/inter-OFL.txt whitespace=-blank-at-eol
+licenses/fonts/poppins-OFL.txt whitespace=-blank-at-eol

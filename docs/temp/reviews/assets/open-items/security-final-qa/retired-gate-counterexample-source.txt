@@ -1,0 +1,19 @@
+import {storeSecret} from './secrets.js';
+import {getDisconnectGate,activeCount,createdCount} from './disconnectGate.js';
+let release;const pending=new Promise(resolve=>{release=resolve;});
+const owned=getDisconnectGate();await owned.ready();
+const retired=owned.retire(pending);
+await storeSecret('codex','oauth-token','synthetic-pair','synthetic',{ticket:{epoch:'synthetic',provider:'codex'}});
+release();await retired;
+print(JSON.stringify({scenario:'accepted-rotation-save-after-disable-retire',created:createdCount(),activeAfterOwnedRetirement:activeCount(),expectedActive:0}));
+
+// synthetic injected gate dependency
+import {createDisconnectFacade} from 'file:///home/daniel/Code/gnome-ai-quota-post-mvp/lib/services/disconnectGate.js';
+let singleton=null, n=0;const active=new Set();
+export const activeCount=()=>active.size;
+export const createdCount=()=>n;
+export function getDisconnectGate(){
+if(singleton)return singleton;
+const id=++n;
+singleton=createDisconnectFacade({detach:facade=>{if(singleton===facade)singleton=null;},initialize:async()=>({ready:async()=>{active.add(id);},close:async()=>{active.delete(id);},subscribe:()=>()=>{},registerCanceller:()=>()=>{},withCredentialWrite:async(_provider,_ticket,fn)=>fn()})});return singleton;
+}

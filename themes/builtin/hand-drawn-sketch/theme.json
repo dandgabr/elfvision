@@ -79,5 +79,18 @@
     "control": "15px 225px 15px 255px/255px 15px 225px 15px"
   },
   "border": "strong",
-  "hardShadow": true
+  "hardShadow": true,
+  "effects": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "strokes",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  }
 }

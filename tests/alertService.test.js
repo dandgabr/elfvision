@@ -30,12 +30,15 @@ function fakeSettings(values = {}) {
     let next = 1;
     const settings = {
         reads: 0,
-        get_boolean: key => { settings.reads++; return all[key] ?? true; },
-        get_int: key => { settings.reads++; return all[key] ?? 95; },
+        get_boolean: key => { settings.reads++; return all[key] ?? !key.endsWith('-warning-enabled'); },
+        get_int: key => { settings.reads++; return all[key] ?? (key.endsWith('-warning-percent') ? 80 : 95); },
         connect: (_signal, fn) => { handlers.set(next, fn); return next++; },
         disconnect: id => handlers.delete(id),
         handlers,
-        change: (key, value) => { all[key] = value; handlers.forEach(fn => fn()); },
+        get_string: key => all[key] ?? '',
+        set_string: (key, value) => { all[key] = value; handlers.forEach(fn => fn(settings, key)); },
+        change: (key, value) => { all[key] = value; handlers.forEach(fn => fn(settings, key)); },
+        changeMany: values => { Object.assign(all, values); handlers.forEach(fn => fn(settings, Object.keys(values)[0])); },
     };
     return settings;
 }
@@ -70,6 +73,15 @@ test('alert service: a crossing reported by the controller is announced once', a
     controller.emit(ok(97, timers.now()));
     assertEqual(events.map(e => [e.kind, e.providerId, e.level]), [['threshold', 'claude', 'critical']]);
     service.stop();
+});
+
+test('alert service: disconnect stop does not flush or later recreate erased alert state', async () => {
+    const {controller, files, timers, service} = await setup();
+    controller.emit(ok(80, timers.now()));
+    service.stop({flush: false});
+    timers.advance(10 * MIN);
+    assertEqual(files.saved, []);
+    assertEqual(controller.listeners.size, 0);
 });
 
 test('alert service: a rejected sign-in produces one snapshot, and the timer is what announces it', async () => {
@@ -225,4 +237,64 @@ test('power: a stop while the bus is being reached, or no bus at all, is harmles
     const broken = new PowerWatcher({bus: async () => { throw new Error('no bus'); }, onResume() {}});
     await broken.start();                       // only a warning
     broken.stop();
+});
+
+test('alert service: rapid invalid pair edits retain cached valid rules without backlog', async () => {
+    const settings=fakeSettings({'alert-session-warning-enabled':true,'alert-session-warning-percent':80,'alert-session-percent':95});
+    const {controller,events,service,timers}=await setup(settings);
+    controller.emit(ok(70,timers.time));
+    settings.change('alert-session-percent',75);
+    controller.emit(ok(81,timers.time+MIN));
+    assertEqual(events.map(e=>e.level),['warning']); // invalid75 critical did not replace95
+    settings.change('alert-session-warning-percent',60);
+    controller.emit(ok(81,timers.time+2*MIN));
+    assertEqual(events.map(e=>e.level),['warning']); // now valid60/75 is seeded quietly
+    controller.emit(ok(70,timers.time+3*MIN));
+    controller.emit(ok(76,timers.time+4*MIN));
+    assertEqual(events.map(e=>e.level),['warning','critical']);
+    service.stop();
+});
+
+test('alert service: migrated v1 records and warning opt-in seed without startup notifications', async () => {
+    const {parseAlertState}=await import('../lib/core/alerts.js');
+    const old=parseAlertState(JSON.stringify({version:1,levels:{'claude|five':{fired:false,resetsAt:T0+3600_000,at:T0}},connection:{},sent:[T0],capped:T0})).state;
+    const settings=fakeSettings();
+    const {controller,events,service,timers,files}=await setup(settings,old);
+    controller.emit(ok(97,timers.time));
+    settings.change('alert-session-warning-enabled',true);
+    controller.emit(ok(99,timers.time+MIN));
+    assertEqual(events,[]);
+    service.stop();
+    assertEqual(files.saved.at(-1).sent,[T0]);assertEqual(files.saved.at(-1).capped,T0);
+});
+
+test('alert service: valid settings persist before any snapshot and invalid edits survive six restarts', async () => {
+    const settings=fakeSettings({'alert-session-warning-enabled':true,'alert-session-warning-percent':60,'alert-session-percent':90});
+    let running=await setup(settings);
+    settings.change('alert-session-warning-percent',65);
+    const backup=settings.get_string('alert-valid-rules');
+    assertTrue(backup.includes('65'),'valid edit saved immediately before snapshot');
+    settings.change('alert-session-warning-percent',80);
+    settings.change('alert-session-percent',75);
+    const saved=settings.get_string('alert-valid-rules');
+    running.service.stop();
+    for(let i=0;i<6;i++) {
+        running=await setup(settings);
+        running.controller.emit(ok(70,T0));
+        assertEqual(running.service._quotaRules.thresholds.session,{enabled:true,percent:90,warningEnabled:true,warningPercent:80});
+        assertEqual(settings.get_string('alert-valid-rules'),saved);
+        running.service.stop();
+    }
+});
+
+test('alert service: atomic invalid dconf pair retains exact persisted sixty/ninety across restart', async () => {
+    const settings=fakeSettings({'alert-session-warning-enabled':true,'alert-session-warning-percent':60,'alert-session-percent':90});
+    const first=await setup(settings);
+    settings.changeMany({'alert-session-warning-percent':80,'alert-session-percent':75});
+    assertEqual(first.service._quotaRules.thresholds.session,{enabled:true,percent:90,warningEnabled:true,warningPercent:60});
+    first.service.stop();
+    const next=await setup(settings);
+    assertEqual(next.service._quotaRules.thresholds.session,first.service._quotaRules.thresholds.session);
+    next.controller.emit(ok(96,T0));assertEqual(next.events,[]);
+    next.service.stop();
 });

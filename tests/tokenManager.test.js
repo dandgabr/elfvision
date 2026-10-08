@@ -192,3 +192,92 @@ test('tokens: invalidate during a running renewal does not force a second one', 
     assertEqual(await manager.accessToken(), 'a2');
     assertEqual(state.refreshCalls.length, 1);
 });
+
+test('tokens: conditional replacement includes original generation and refresh and rejects a superseded write', async () => {
+    const original = {gen: 'synthetic-old', access: 'old-access', refresh: 'old-refresh', expiresAt: 0, scope: ''};
+    let savedExpected = null, calls = 0;
+    const manager = createTokenManager({now: () => 1, load: async () => original,
+        refreshCall: async () => { calls++; return reply('rotated-access', 'rotated-refresh', HOUR); },
+        save: async (_tokens, _ticket, expected) => { savedExpected = expected; return false; }});
+    const error = await failure(manager.accessToken());
+    assertEqual(savedExpected, {gen: original.gen, refresh: original.refresh});
+    assertEqual(error?.code, 'disconnected', 'superseded replacement must not return the old rotation');
+    assertEqual(calls, 1);
+});
+
+for (const change of ['login', 'delete']) {
+    test(`tokens: pre-save comparison losing to ${change} never returns the old rotated access token`, async () => {
+        const original = {gen: 'old', access: 'old-access', refresh: 'old-refresh', expiresAt: 0, scope: ''};
+        const newer = {...original, gen: 'new', access: 'new-access', refresh: 'new-refresh', expiresAt: HOUR};
+        let reads = 0, writes = 0;
+        const manager = createTokenManager({now: () => 1,
+            load: async () => ++reads < 3 ? original : change === 'login' ? newer : null,
+            refreshCall: async () => reply('rotated-access', 'rotated-refresh', HOUR),
+            save: async () => { writes++; }});
+        const outcome = await manager.accessToken().catch(error => error.code);
+        assertEqual(outcome, 'disconnected', 'a comparison loss must not return stale renewed access');
+        assertEqual(writes, 0);
+        assertEqual(await manager.accessToken().catch(error => error.code), change === 'login' ? 'new-access' : 'not_connected');
+    });
+}
+
+for (const branch of ['success', 'rejected']) {
+    for (const intervention of ['reset', 'stale-ticket']) {
+        for (const reload of ['value', 'failure']) {
+            test(`tokens: ${intervention} during ${branch} refresh reload ${reload} rejects the obsolete context`, async () => {
+                let enteredResolve, release, rejectLoad, reads = 0, writes = 0, epoch = 0;
+                const entered = new Promise(resolve => { enteredResolve = resolve; });
+                const hold = new Promise((resolve, reject) => { release = resolve; rejectLoad = reject; });
+                const original = {gen: 'old', access: 'old-access', refresh: 'old-refresh', expiresAt: 0, scope: ''};
+                const newer = {...original, gen: 'new', access: 'new-access', refresh: 'new-refresh', expiresAt: HOUR};
+                const manager = createTokenManager({now: () => 1, captureTicket: async () => epoch,
+                    assertTicket: async ticket => { if (ticket !== epoch) throw new Error('stale ticket'); },
+                    load: async () => { if (++reads === 1) return original; if (reads === 2) { enteredResolve(); return hold; } return newer; },
+                    save: async () => { writes++; },
+                    refreshCall: async () => { if (branch === 'rejected') throw new OAuthError('invalid_grant', 400); return reply('rotated-access', 'rotated-refresh', HOUR); }});
+                const outcome = manager.accessToken().catch(error => error.code);
+                await entered;
+                if (intervention === 'reset') manager.reset(); else epoch++;
+                if (reload === 'value') release(newer); else rejectLoad(new Error('synthetic lookup failed'));
+                assertEqual(await outcome, 'disconnected');
+                assertEqual(writes, 0);
+                assertEqual(await manager.accessToken(), 'new-access', 'a fresh context must not retry the obsolete pending pair');
+            });
+        }
+    }
+}
+
+for (const boundary of ['pending-load-failure', 'save-failure']) {
+    for (const intervention of ['reset', 'stale-ticket']) {
+        test(`tokens: ${intervention} during ${boundary} never returns the old renewed access`, async () => {
+            let enteredResolve, rejectBoundary, reads = 0, epoch = 0, changed = false;
+            const entered = new Promise(resolve => { enteredResolve = resolve; });
+            const hold = new Promise((_resolve, reject) => { rejectBoundary = reject; });
+            const original = {gen: 'old', access: 'old-access', refresh: 'old-refresh', expiresAt: 0, scope: ''};
+            const newer = {...original, gen: 'new', access: 'new-access', refresh: 'new-refresh', expiresAt: HOUR};
+            const manager = createTokenManager({now: () => 1, captureTicket: async () => epoch,
+                assertTicket: async ticket => { if (ticket !== epoch) throw new Error('stale ticket'); },
+                load: async () => { if (changed) return newer; if (++reads === 3 && boundary === 'pending-load-failure') { enteredResolve(); return hold; } return original; },
+                save: async () => { enteredResolve(); return hold; },
+                refreshCall: async () => reply('rotated-access', 'rotated-refresh', HOUR)});
+            const outcome = manager.accessToken().catch(error => error.code);
+            await entered;
+            changed = true;
+            if (intervention === 'reset') manager.reset(); else epoch++;
+            rejectBoundary(new Error('synthetic keyring failure'));
+            assertEqual(await outcome, 'disconnected');
+            assertEqual(await manager.accessToken(), 'new-access');
+        });
+    }
+}
+
+test('tokens: conditional credential replacement rejects a new generation even when refresh is unchanged', async () => {
+    const {createCredentialMutator} = await import('../lib/services/secrets.js');
+    const newer = {gen: 'new', access: 'new-access', refresh: 'same-refresh', expiresAt: HOUR, scope: ''};
+    let writes = 0;
+    const mutator = createCredentialMutator({gate: {withCredentialWrite: async (_provider, _ticket, fn) => fn()},
+        lookup: async () => encodeSecret(newer), store: async () => { writes++; }, erase: async () => true});
+    const accepted = await mutator.storeSecret('codex', 'oauth-token', 'synthetic-obsolete-pair', 'synthetic',
+        {ticket: {epoch: 'synthetic'}, expected: {gen: 'old', refresh: newer.refresh}});
+    assertEqual([accepted, writes], [false, 0]);
+});

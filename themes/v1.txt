@@ -20,3 +20,5 @@ bento-grid
 card-based-ui
 flat-design
 linear-saas
+organic-biophilic
+glassmorphism

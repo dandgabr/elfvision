@@ -1,0 +1,293 @@
+{
+  "ai-native-generative-ui": {
+    "material": "opaque",
+    "motion": "gradient",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "analog-newspaper-broadsheet": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "paper",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "aurora-mesh-gradient": {
+    "material": "decorative-glass",
+    "motion": "gradient",
+    "texture": "grain",
+    "particleCount": 0,
+    "opacity": {
+      "light": 0.96,
+      "dark": 0.9
+    },
+    "compatibleMaterials": [
+      "decorative-glass",
+      "frosted-glass"
+    ]
+  },
+  "bento-grid": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "card-based-ui": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "cyberpunk": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "chamfer",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "de-stijl": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "expressive-variable-typography": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "flat-design": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "glassmorphism": {
+    "material": "frosted-glass",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 0.9,
+      "dark": 0.82
+    },
+    "compatibleMaterials": [
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
+    ]
+  },
+  "hand-drawn-sketch": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "strokes",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "holographic-foil-iridescent": {
+    "material": "decorative-glass",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "decorative-glass"
+    ]
+  },
+  "isometric": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "grid",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "linear-saas": {
+    "material": "translucent",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 0.96,
+      "dark": 0.94
+    },
+    "compatibleMaterials": [
+      "opaque",
+      "translucent"
+    ]
+  },
+  "lunarpunk": {
+    "material": "translucent",
+    "motion": "motes",
+    "texture": "none",
+    "particleCount": 4,
+    "opacity": {
+      "light": 0.94,
+      "dark": 0.88
+    },
+    "compatibleMaterials": [
+      "translucent",
+      "frosted-glass"
+    ]
+  },
+  "mid-century-modern": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "grain",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "nanopunk": {
+    "material": "opaque",
+    "motion": "pulse",
+    "texture": "grid",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "organic-biophilic": {
+    "material": "opaque",
+    "motion": "leaves",
+    "texture": "paper",
+    "particleCount": 8,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "sistema-gnome": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "solarpunk": {
+    "material": "opaque",
+    "motion": "leaves",
+    "texture": "botanical",
+    "particleCount": 8,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "terminal-tui": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "scanlines",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  },
+  "web-brutalism": {
+    "material": "opaque",
+    "motion": "none",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  }
+}

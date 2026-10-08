@@ -20,12 +20,35 @@ Provider order: Command Code, Codex, Claude, Antigravity.
 
 M0 to M4 are complete. M4 audit findings and their verified fixes are recorded in the
 [original-plan conformance audit](../temp/reviews/2026-10-07-m4-plan-conformance.md).
-Follow-up work that is outside the MVP is in the "Pending" list of
-[ADR 0010](0010-alerts-and-polish.md), including indicator redraw coalescing, keyboard tooltips and
-CI linting. Real-account checks and the providers' current terms remain owner checks (ADR 0009).
+The implemented M5 follow-ups and accepted product decisions are in
+[ADR 0010](0010-alerts-and-polish.md). Real-account checks and the providers'
+current behavior remain owner checks (ADR 0009); official terms were rechecked
+and linked in the [provider validation record](../temp/reviews/2026-10-07-provider-validation.md).
 
-## Open items
+## Post-MVP execution
 
-- Which of the other gallery styles become installable themes.
-- Whether the N3 theme effects (ADR 0006) get built, and in which order.
-- Validate tabular numbers in CSS versus Pango.
+The owner approved the [integrated execution plan](../temp/plans/2026-10-07-post-mvp-execution.md)
+and its [visual design](../temp/plans/2026-10-07-post-mvp-design.md).
+These extend the general roadmap without reopening M4.
+
+| Milestone | Deliverables | Status |
+|---|---|---|
+| M5 | Pure bar model, redraw coalescing, keyboard tooltips, legend Escape ordering, CI lint and numeric-font validation. | implemented |
+| M6 | Reusable native effects: leaves, translucency, decorative glass and real frosted glass; 22 theme profiles including Organic/Biophilic and Glassmorphism; motion/transparency/material controls and lifecycle checks. | implemented; frost hardware release gates remain open |
+| M7 | Optional WebGL/preview study; explicit licensed font installation, durable disconnect-all/local deletion and separate opt-in warning/critical thresholds. | product decisions accepted and implemented; fresh closure gates recorded separately |
+
+Use shared particle, texture, motion and material primitives where the visuals
+actually share behavior. Theme profiles stay declarative; specialized geometry
+can remain separate. Parallel theme work uses disjoint profile fragments with one
+generator/catalog integrator. Every milestone requires independent review and
+fresh validation; real frost remains open if its compatibility/performance gate
+fails. The accepted M7 actions still require their own explicit in-app consent;
+theme selection and Restore defaults do not authorize deletion or font downloads.
+
+The [validation record](../temp/reviews/2026-10-07-post-mvp-validation.md) links
+native screenshots, independent reviews, measured resources and exact acceptance
+limits. The [closure validation](../temp/reviews/2026-10-07-open-items-validation.md)
+adds CPU/GPU-finish processing measurements, fractional virtual monitor checks,
+synthetic keyring races and reviewed product implementations. Physical monitor,
+Orca and real-account certification remain separate participation limits;
+callback timing alone is never GPU evidence.

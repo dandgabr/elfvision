@@ -1,7 +1,9 @@
 import GLib from 'gi://GLib';
 
 import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
-import {compileTheme, pickScheme, swatches, systemAccent, validateTheme} from '../lib/core/theme.js';
+import {effectPolicy, validateEffectProfile} from '../lib/core/themeEffects.js';
+import {builtinCatalog} from '../lib/prefs/themeCatalog.js';
+import {compileTheme, pickScheme, swatches, systemAccent, validateTheme, resolvedColors} from '../lib/core/theme.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
 const read = path => new TextDecoder().decode(GLib.file_get_contents(`${root}/${path}`)[1]);
@@ -15,10 +17,17 @@ const builtinIds = () => {
 };
 const loadTheme = id => validateTheme(JSON.parse(read(`themes/builtin/${id}/theme.json`)));
 
-test('themes: the v1 set ships twenty themes and each one validates', () => {
+const EXPECTED_THEME_IDS = [
+    'ai-native-generative-ui', 'analog-newspaper-broadsheet', 'aurora-mesh-gradient',
+    'bento-grid', 'card-based-ui', 'cyberpunk', 'de-stijl', 'expressive-variable-typography',
+    'flat-design', 'glassmorphism', 'hand-drawn-sketch', 'holographic-foil-iridescent',
+    'isometric', 'linear-saas', 'lunarpunk', 'mid-century-modern', 'nanopunk',
+    'organic-biophilic', 'sistema-gnome', 'solarpunk', 'terminal-tui', 'web-brutalism',
+];
+
+test('themes: the reviewed inventory ships the exact expected theme slugs and each validates', () => {
     const ids = builtinIds();
-    assertEqual(ids.length, 20);
-    assertTrue(ids.includes('sistema-gnome'));
+    assertEqual(ids, EXPECTED_THEME_IDS);
     for (const id of ids) {
         const {theme, problems} = loadTheme(id);
         assertEqual([id, problems, theme?.id], [id, [], id]);
@@ -226,4 +235,199 @@ test('themes: swatches give four hex colors per scheme, even for the system acce
         for (const colors of [light, dark])
             assertTrue(colors.length === 4 && colors.every(c => /^#[0-9a-f]{6}$/i.test(c) || /^#[0-9a-f]{3}$/i.test(c)), `${id}: ${colors}`);
     }
+});
+
+test('themes: optional effects validate without weakening hex colors or old theme compatibility', () => {
+    const raw = JSON.parse(read('themes/builtin/linear-saas/theme.json'));
+    const legacy = {...raw};
+    delete legacy.effects;
+    assertEqual(validateTheme(legacy).theme.effects.motion, 'none');
+    const good = validateTheme({...raw, effects: {material: 'frosted-glass', motion: 'leaves', opacity: {light: 0.8, dark: 0.9}}});
+    assertEqual(good.problems, []);
+    assertEqual([good.theme.effects.material, good.theme.effects.particleCount], ['frosted-glass', 8]);
+    const bad = validateTheme({...raw, effects: {shader: 'void main(){}'}});
+    assertTrue(bad.theme !== null && bad.problems.some(p => p.includes('effects')));
+    assertEqual(bad.theme.effects.motion, 'none');
+    const alphaColor = {...raw, schemes: {...raw.schemes, light: {...raw.schemes.light, bg: '#ffffffcc'}}};
+    assertEqual(validateTheme(alphaColor).theme, null);
+});
+
+test('theme files: origin is loader-owned and a user override never gains builtin provenance', () => {
+    const dir = sandbox();
+    const userDirectory = tmpDir();
+    const raw = JSON.parse(goodJson('mine'));
+    raw.effects = {material: 'frosted-glass', motion: 'leaves'};
+    raw.origin = 'builtin';
+    writeTheme(dir, 'mine', JSON.stringify(raw));
+    const options = {userDirectory};
+    const trusted = loadThemeFile(dir, 'mine', options);
+    assertEqual(trusted.theme.origin, 'builtin');
+    GLib.mkdir_with_parents(`${userDirectory}/mine`, 0o700);
+    GLib.file_set_contents(`${userDirectory}/mine/theme.json`, JSON.stringify(raw));
+    const overridden = loadThemeFile(dir, 'mine', options);
+    assertEqual(overridden.theme.origin, 'user');
+    assertEqual(scanThemes(dir, options).themes.find(t => t.id === 'mine').builtin, false);
+    assertEqual(scanThemes(dir, options).themes.find(t => t.id === 'mine').origin, 'user');
+});
+
+
+test('themes: renderer colors are resolved hex values detached from theme data', () => {
+    const {theme} = loadTheme('sistema-gnome');
+    const colors = resolvedColors(theme, 'light', 'teal');
+    assertEqual(colors.accent, '#2190a4');
+    assertTrue(Object.values(colors).every(c => /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(c)));
+    colors.bg = '#000';
+    assertEqual(resolvedColors(theme, 'light', 'teal').bg, '#fafafa');
+});
+
+
+const canonicalProfiles = () => {
+    assertTrue(GLib.file_test(`${root}/tools/theme-effect-profiles.json`, GLib.FileTest.IS_REGULAR), 'canonical effect-profile source must exist');
+    return JSON.parse(read('tools/theme-effect-profiles.json'));
+};
+
+test('themes: every reviewed source profile validates exactly and matches the shipped effect data', () => {
+    const profiles = canonicalProfiles();
+    assertEqual(Object.keys(profiles).sort(), EXPECTED_THEME_IDS);
+    const catalog = builtinCatalog(text => text);
+    assertEqual(Object.keys(catalog.byId).sort(), EXPECTED_THEME_IDS.filter(id => id !== 'sistema-gnome'));
+    for (const id of EXPECTED_THEME_IDS) {
+        const {profile, problems} = validateEffectProfile(profiles[id]);
+        assertEqual([id, problems, profile], [id, [], profiles[id]]);
+        assertEqual(JSON.parse(read(`themes/builtin/${id}/theme.json`)).effects, profile);
+        const options = {origin: 'builtin', profile, mode: 'full', animationsEnabled: true, transparencyEnabled: true, popupOpen: true};
+        for (const override of [{mode: 'off'}, {origin: 'user'}, {popupOpen: false}])
+            assertEqual(effectPolicy({...options, ...override}), {motion: 'none', material: 'opaque', particleCount: 0});
+        assertEqual(effectPolicy({...options, animationsEnabled: false}).motion, 'none');
+        assertEqual(effectPolicy({...options, mode: 'subtle'}).particleCount, 0);
+        assertEqual(effectPolicy({...options, transparencyEnabled: false}).material, 'opaque');
+        for (const materialPreference of profile.compatibleMaterials)
+            assertEqual(effectPolicy({...options, materialPreference}).material, materialPreference);
+        if (profile.compatibleMaterials.every(material => material === 'opaque'))
+            assertEqual(effectPolicy({...options, materialPreference: 'frosted-glass'}).material, 'opaque');
+    }
+    assertEqual(profiles['glassmorphism'].compatibleMaterials, ['translucent', 'decorative-glass', 'frosted-glass']);
+    for (const id of ['analog-newspaper-broadsheet', 'de-stijl', 'flat-design', 'terminal-tui'])
+        assertEqual(profiles[id].compatibleMaterials, ['opaque']);
+    assertEqual(profiles['sistema-gnome'].particleCount, 0);
+    assertEqual(profiles['sistema-gnome'].texture, 'none');
+});
+
+function runGenerator({fixture, output, profiles}) {
+    const [, stdout, stderr, status] = GLib.spawn_sync(root, ['python3', '-I', 'tools/gen-themes.py',
+        '--styles', fixture, '--out', output, '--only', `${fixture}/wanted.txt`, '--effect-profiles', profiles],
+    null, GLib.SpawnFlags.SEARCH_PATH, null);
+    return {stdout: new TextDecoder().decode(stdout), stderr: new TextDecoder().decode(stderr), status};
+}
+
+function galleryFixture() {
+    const fixture = tmpDir();
+    GLib.mkdir_with_parents(`${fixture}/styles`, 0o755);
+    GLib.file_set_contents(`${fixture}/styles/linear-saas.css`, '#stage[data-style="linear-saas"] { --bg: #101018; --surface: #202028; --fg: #fafafa; --accent: #9090ff; }');
+    GLib.file_set_contents(`${fixture}/styles/registry.js`, '');
+    GLib.file_set_contents(`${fixture}/wanted.txt`, 'linear-saas');
+    return fixture;
+}
+
+test('themes: generator applies the canonical valid profile deterministically', () => {
+    const fixture = galleryFixture();
+    const profiles = `${root}/tools/theme-effect-profiles.json`;
+    const first = runGenerator({fixture, output: `${fixture}/first`, profiles});
+    assertEqual(first.status, 0, first.stderr);
+    const second = runGenerator({fixture, output: `${fixture}/second`, profiles});
+    assertEqual(second.status, 0, second.stderr);
+    const text = path => new TextDecoder().decode(GLib.file_get_contents(path)[1]);
+    const firstText = text(`${fixture}/first/linear-saas/theme.json`);
+    assertEqual(firstText, text(`${fixture}/second/linear-saas/theme.json`));
+    assertEqual(JSON.parse(firstText).effects, canonicalProfiles()['linear-saas']);
+});
+
+test('themes: generator rejects unknown profile fields and presets before writing output', () => {
+    const fixture = galleryFixture();
+    const profile = canonicalProfiles()['linear-saas'];
+    for (const [name, change, reason] of [
+        ['preset', {motion: 'unknown'}, 'effects.motion'],
+        ['field', {shader: 'not executable'}, 'unknown fields'],
+        ['materials', {compatibleMaterials: ['opaque', 'unknown']}, 'compatibleMaterials'],
+    ]) {
+        const source = `${fixture}/${name}.json`;
+        GLib.file_set_contents(source, JSON.stringify({'linear-saas': {...profile, ...change}}));
+        const output = `${fixture}/${name}`;
+        const result = runGenerator({fixture, output, profiles: source});
+        assertTrue(result.status !== 0, `${name} must be rejected`);
+        assertTrue(result.stderr.includes(reason), result.stderr);
+        assertTrue(!GLib.file_test(output, GLib.FileTest.EXISTS), 'invalid profiles must not write output');
+    }
+});
+
+
+test('themes: effect headings expose the material while reading cards and controls remain opaque', () => {
+    const properties = (css, selector) => {
+        const result = {};
+        for (const rule of css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+            if (!rule[1].split(',').map(value => value.trim()).includes(selector)) continue;
+            for (const declaration of rule[2].split(';')) {
+                const colon = declaration.indexOf(':');
+                if (colon > 0) result[declaration.slice(0, colon).trim()] = declaration.slice(colon + 1).trim();
+            }
+        }
+        return result;
+    };
+    for (const id of builtinIds()) {
+        const {theme} = loadTheme(id);
+        for (const scheme of ['light', 'dark']) {
+            const css = compileTheme(TEMPLATE, theme, {scheme});
+            const colors = resolvedColors(theme, scheme);
+            for (const selector of ['.gaq-effects-active .gaq-summary', '.gaq-effects-active .gaq-section']) {
+                const rule = properties(css, selector);
+                assertEqual(rule['background-color'], 'transparent', `${id}/${scheme} ${selector} hides the material behind a solid strip`);
+                assertEqual(rule.color, colors.fg, `${id}/${scheme} headings need readable primary text`);
+                assertTrue(rule['text-shadow']?.includes(colors.bg), `${id}/${scheme} heading contrast must be local to the text`);
+            }
+            assertEqual(properties(css, '.gaq-card')['background-color'], colors.surface, `${id}/${scheme} quota reading surface lost opacity`);
+            assertEqual(properties(css, '.gaq-effects-active .gaq-button')['background-color'], colors.surface, `${id}/${scheme} controls lost opacity`);
+        }
+    }
+});
+
+
+test('themes: card scroll gutters reserve the validated shadow footprint without changing its identity', () => {
+    for (const id of builtinIds()) {
+        const {theme} = loadTheme(id);
+        for (const scheme of ['light', 'dark']) {
+            const shadow = theme.schemes[scheme].shadow;
+            const css = compileTheme(TEMPLATE, theme, {scheme});
+            const padding = css.match(/\.gaq-cards\s*\{[^}]*padding:\s*([^;]+);/s)?.[1]?.trim();
+            let expected = [0, 0, 0, 0];
+            if (shadow !== 'none' && !shadow.startsWith('inset ')) {
+                const values = shadow.match(/^((?:-?[\d.]+px|0)(?: (?:-?[\d.]+px|0)){1,3}) /)[1].split(' ').map(parseFloat);
+                const [x, y, blur = 0, spread = 0] = values;
+                const radius = Math.max(0, blur) + spread;
+                expected = [radius - y, radius + x, radius + y, radius - x]
+                    .map(value => Math.min(64, Math.max(0, Math.ceil(value))));
+            }
+            assertEqual(padding, expected.map(value => `${value}px`).join(' '), `${id}/${scheme} scroll clip must reserve its shadow footprint`);
+            assertTrue(css.includes(`box-shadow: ${shadow};`), `${id}/${scheme} shadow identity changed`);
+        }
+    }
+    const {theme} = loadTheme('glassmorphism');
+    assertTrue(compileTheme(TEMPLATE, theme, {scheme: 'dark'}).includes('padding: 24px 32px 40px 32px;'), 'dark glass needs the full 32px lateral blur extent');
+    for (const [shadow, padding] of [
+        ['none', '0px 0px 0px 0px'],
+        ['inset 0 0 999px #000', '0px 0px 0px 0px'],
+        ['INSET 0 0 10PX #000', '0px 0px 0px 0px'],
+        ['2PX -3PX 5PX 4PX #000', '12px 11px 6px 7px'],
+        ['-3px 4px 0 #000', '0px 0px 4px 3px'],
+        ['0 0 999px #000', '64px 64px 64px 64px'],
+        ['0 0 12px -6px #000', '6px 6px 6px 6px'],
+        ['2px -3px 5px 4px #000', '12px 11px 6px 7px'],
+        ['0.5px 0 1.25px #000', '2px 2px 2px 1px'],
+        ['0 0 12px #000; padding: 999px', '0px 0px 0px 0px'],
+    ]) {
+        const raw = JSON.parse(read('themes/builtin/glassmorphism/theme.json'));
+        raw.schemes.dark.shadow = shadow;
+        const {theme: custom} = validateTheme(raw);
+        assertTrue(compileTheme(TEMPLATE, custom, {scheme: 'dark'}).includes(`padding: ${padding};`), `${shadow} must reserve bounded safe geometry`);
+    }
+    assertTrue(!TEMPLATE.includes('clip-to-allocation: false'), 'gutters must not disable popup clipping');
 });

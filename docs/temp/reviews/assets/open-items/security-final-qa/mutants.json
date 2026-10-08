@@ -1,0 +1,17 @@
+[
+  {
+    "mutant": "cas-ignore-generation",
+    "exit": 0,
+    "output": "ok    disconnect: conditional rotation compares inside provider exclusion after login\nok    disconnect: conditional rotation compares inside provider exclusion after delete\nok    disconnect: conditional rotation compares inside provider exclusion after unchanged\n\n3 passed, 0 failed\n"
+  },
+  {
+    "mutant": "scheduler-context-ignores-revision",
+    "exit": 1,
+    "output": "success and cancel its context\nthe previous credential is obsolete immediately\nassertTrue@file:///tmp/gaq-final-qa-yb_szizi/tests/harness.js:22:15\n@file:///tmp/gaq-final-qa-yb_szizi/tests/scheduler.test.js:438:19\n\nFAIL  scheduler: credential changes suppress an old failure and cancel its context\nthe previous credential is obsolete immediately\nassertTrue@file:///tmp/gaq-final-qa-yb_szizi/tests/harness.js:22:15\n@file:///tmp/gaq-final-qa-yb_szizi/tests/scheduler.test.js:438:19\n\n\n0 passed, 2 failed\n"
+  },
+  {
+    "mutant": "scheduler-coalescing-rerun-disabled",
+    "exit": 1,
+    "output": "old work settles\n  expected: 2\n  actual:   1\nassertEqual@file:///tmp/gaq-final-qa-yb_szizi/tests/harness.js:17:15\n@file:///tmp/gaq-final-qa-yb_szizi/tests/scheduler.test.js:440:20\n\nFAIL  scheduler: credential changes suppress an old failure and cancel its context\nthe replacement fetch starts after old work settles\n  expected: 2\n  actual:   1\nassertEqual@file:///tmp/gaq-final-qa-yb_szizi/tests/harness.js:17:15\n@file:///tmp/gaq-final-qa-yb_szizi/tests/scheduler.test.js:440:20\n\n\n0 passed, 2 failed\n"
+  }
+]

@@ -18,25 +18,51 @@ uuid="$(python3 -I -c 'import json,sys;print(json.load(open(sys.argv[1]))["uuid"
 work="$(mktemp -d)"
 log="${LOG:-$work/shell.log}"
 # Remove the whole scratch directory, but keep the log when LOG points elsewhere.
-trap 'rm -rf "$work"' EXIT
+# shellcheck source=tools/private-session-cleanup.sh
+source "$root/tools/private-session-cleanup.sh"
+trap 'cleanup_private_session "$work"' EXIT
 
-mkdir -p "$work/data/gnome-shell/extensions" "$work/config" "$work/cache"
+mkdir -p "$work/data/gnome-shell/extensions" "$work/config" "$work/cache" "$work/state"
+mkdir -m 700 "$work/runtime"
 ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 
-# Keep data, config and cache away from the real session.
+# Keep data, config, cache and runtime away from the real session.
 export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
+export XDG_STATE_HOME="$work/state" GIO_USE_VFS=local
+# Shell stores its extension crash sentinel and Wayland sockets here. A shared
+# host runtime directory lets concurrent throwaway shells remove each other's marker.
+export XDG_RUNTIME_DIR="$work/runtime"
 export GSETTINGS_BACKEND=memory
 export GAQ_TEST_MONITOR="${GAQ_TEST_MONITOR:-1280x800}"
-if [[ ! "$GAQ_TEST_MONITOR" =~ ^[0-9]+x[0-9]+$ ]]; then
-    echo 'GAQ_TEST_MONITOR must be WIDTHxHEIGHT' >&2
+export GAQ_TEST_MONITORS="${GAQ_TEST_MONITORS:-$GAQ_TEST_MONITOR}"
+if [[ ! "$GAQ_TEST_MONITORS" =~ ^[0-9]+x[0-9]+(,[0-9]+x[0-9]+){0,2}$ ]]; then
+    echo 'GAQ_TEST_MONITORS must contain one to three WIDTHxHEIGHT values separated by commas' >&2
     exit 1
 fi
 # One script path per line, so names with spaces survive.
 SCRIPTS="$(printf '%s\n' "$@")"
 export WORK="$work" DATA_SOURCE="${DATA_SOURCE:-demo}" UUID="$uuid" SCRIPTS LOGFILE="$log" ROOT="$root" SKIP_ENABLE="${SKIP_ENABLE:-}"
 
-unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK
+unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK AT_SPI_BUS_ADDRESS
 dbus-run-session -- bash -c '
+    # Launch on this private bus/runtime: D-Bus activation may be denied by
+    # the host security policy even when direct execution is permitted.
+    if [ -x /usr/libexec/at-spi-bus-launcher ]; then
+        /usr/libexec/at-spi-bus-launcher --launch-immediately >"$WORK/a11y.log" 2>&1 &
+        if [ -x /usr/libexec/at-spi2-registryd ]; then
+            for _ in $(seq 1 50); do
+                gdbus call --session --dest org.a11y.Bus --object-path /org/a11y/bus \
+                    --method org.a11y.Bus.GetAddress --timeout 1 >"$WORK/a11y-address" 2>/dev/null && break
+                sleep 0.02
+            done
+            if [ -s "$WORK/a11y-address" ]; then
+                AT_SPI_BUS_ADDRESS="$(python3 -I -c "import ast,sys; print(ast.literal_eval(open(sys.argv[1]).read())[0])" "$WORK/a11y-address")"
+                export AT_SPI_BUS_ADDRESS
+                /usr/libexec/at-spi2-registryd >"$WORK/a11y-registry.log" 2>&1 &
+            fi
+        fi
+    fi
+    export WAYLAND_DISPLAY="gaq-headless-$$"
     # A throwaway, unlocked keyring, so the provider keys of a test never touch yours.
     # Its own private runtime folder: it must not touch the control socket of your real keyring.
     keyring_run="$WORK/keyring-run"
@@ -46,7 +72,10 @@ dbus-run-session -- bash -c '
     # libsecret does not ask to create a keyring.
     gdbus call --session --dest org.freedesktop.secrets --object-path /org/freedesktop/secrets \
         --method org.freedesktop.Secret.Service.SetAlias default /org/freedesktop/secrets/collection/session >/dev/null 2>&1 || true
-    gnome-shell --headless --wayland --unsafe-mode --virtual-monitor "$GAQ_TEST_MONITOR" >"$LOGFILE" 2>&1 &
+    IFS=, read -r -a monitor_sizes <<< "$GAQ_TEST_MONITORS"
+    monitor_args=()
+    for size in "${monitor_sizes[@]}"; do monitor_args+=(--virtual-monitor "$size"); done
+    gnome-shell --headless --wayland --unsafe-mode --wayland-display "$WAYLAND_DISPLAY" "${monitor_args[@]}" >"$LOGFILE" 2>&1 &
     shell=$!
     for _ in $(seq 1 50); do
         sleep 0.3
