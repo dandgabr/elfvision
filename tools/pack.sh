@@ -6,7 +6,7 @@
 # gnome-extensions pack takes extension.js, prefs.js, metadata.json, the schema and the
 # translations by itself; everything else the extension needs at run time is added here.
 # Tests, development tools, docs and hooks are left out; the client-id helper is included. Install the result with
-#   gnome-extensions install --force dist/<uuid>.shell-extension.zip
+#   gnome-extensions install --force dist/elfvision-gnome.shell-extension.zip
 # and then log out and in (the shell loads extensions at login on Wayland).
 set -euo pipefail
 
@@ -31,7 +31,10 @@ gnome-extensions pack --force --quiet \
     --out-dir=dist \
     .
 
-zip="dist/$uuid.shell-extension.zip"
+# GNOME names its intermediate archive after the persistent installation UUID.
+# The public artifact uses the product name without changing account identity.
+zip="dist/elfvision-gnome.shell-extension.zip"
+mv -- "dist/$uuid.shell-extension.zip" "$zip"
 # Preferences copies a command with this exact installed path. Ship only this helper,
 # not the development tools; zip preserves its tools/ directory.
 zip -q "$zip" tools/import-client-ids.py
