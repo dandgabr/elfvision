@@ -100,3 +100,11 @@ loaded from its actual installed directory in a new private Shell.
 five initial demo cards. [Package audit](assets/provider-expansion/package-audit.json)
 records 141 packaged files, the archive SHA-256 and metadata. All fourteen recorded
 frame-source hashes were checked against the final source.
+
+## Pull request security gate
+
+The first remote CodeQL aggregate flagged two URL substring assertions in the
+About source test. The test now compares complete constant declarations for all
+three external report and author destinations. Runtime destinations remain fixed;
+the change strengthens the test rather than suppressing the security queries.
+The unit suite and ESLint were rerun before pushing this follow-up.

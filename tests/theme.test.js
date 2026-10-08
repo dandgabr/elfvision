@@ -575,9 +575,13 @@ test('About: author attribution and explicit public/private report actions use f
     assertTrue(source.includes("developers: ['Daniel G. Araujo']"));
     assertTrue(source.includes("copyright: '© 2026 Daniel G. Araujo'"));
     assertTrue(source.includes('dialog.add_credit_section(') && source.includes('dialog.add_link('));
-    assertTrue(source.includes('https://github.com/dandgabr'));
-    assertTrue(source.includes('https://github.com/dandgabr/gnome-ai-quota/issues/new?template=bug_report.yml'));
-    assertTrue(source.includes('https://github.com/dandgabr/gnome-ai-quota/security/advisories/new'));
+    const declarations = source.split('\n');
+    assertEqual(declarations.find(line => line.startsWith('const AUTHOR = ')),
+        "const AUTHOR = 'https://github.com/dandgabr';");
+    assertEqual(declarations.find(line => line.startsWith('const BUG_REPORT = ')),
+        "const BUG_REPORT = 'https://github.com/dandgabr/gnome-ai-quota/issues/new?template=bug_report.yml';");
+    assertEqual(declarations.find(line => line.startsWith('const VULNERABILITY_REPORT = ')),
+        "const VULNERABILITY_REPORT = 'https://github.com/dandgabr/gnome-ai-quota/security/advisories/new';");
     assertTrue(source.includes("_('Report a bug')") && source.includes("_('Report a vulnerability')"));
     assertTrue(source.includes("_('Restore configuration')"));
     assertTrue(source.includes('Gio.AppInfo.launch_default_for_uri(url, null)'));
