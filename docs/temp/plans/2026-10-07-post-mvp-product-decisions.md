@@ -1,6 +1,8 @@
 # Post-MVP product decision proposals — 2026-10-07
 
-Status: proposals for explicit product acceptance. This document delivers the decision work, not disconnect-all, font downloads or two-threshold notifications. Current Restore defaults preserves accounts, current themes use installed-font fallbacks, and notifications retain the existing single threshold. ADRs 0006/0008/0010 remain unchanged until the respective decision is accepted.
+Status: accepted and implemented after the owner's request to resolve all open items on 2026-10-07. The sections below preserve the original proposals for traceability; the [closure plan](2026-10-07-open-items-closure.md) records the final choices and the implementation reviews record evidence.
+
+Final choices: disconnect-all preserves terms/tracking/configuration/themes/fonts and performs local deletion only, with no remote-revocation promise. The durable generation/lease gate is shared by Shell and preferences. Same-boot orphan keyring operations fail closed until a computer restart. Font installation is explicit, limited to four pinned licensed files and never initiated by selecting a theme. Warning is opt-in at 80% for both new and existing users; critical keeps its existing default 95% and custom values. Invalid pairs retain their last valid effective values across restart. Restore defaults continues to preserve accounts. No browser dependency or WebGL runtime bridge is added to Shell.
 
 ## Separate disconnect-all action
 
@@ -19,7 +21,9 @@ Coordination remains an architectural prerequisite, not an existing guarantee: c
 
 Acceptance tests: Cancel/escape performs zero writes; late OAuth exchange/API save/refresh cannot recreate deleted entries; an active cache save cannot recreate erased caches; two preference windows and Shell restart honor the same gate; keyring denial produces truthful partial results; re-enable does not resurrect sessions; exact-scope fake keyring/files prove unrelated entries survive. No test reads real credential values.
 
-Open decision: accept action and default scope, select cross-process gate ownership, and decide whether optional terms/tracking clearing belongs in this first iteration.
+Resolved: the accepted action uses a durable shared generation/lease gate and
+preserves terms/tracking. Optional clearing of those choices and remote revocation
+are excluded from this iteration; the confirmation states the local-only scope.
 
 ## Optional font installation
 
@@ -31,7 +35,10 @@ Use cancellable async download to a private staging directory; cancellation/clos
 
 Acceptance tests: theme selection performs zero network/filesystem installation; denied consent and cancellation leave no installed/partial file; offline rendering stays readable; size/hash/redirect controls fail safely; existing user fonts survive; stale completion cannot install after cancellation; large text, RTL and missing glyph fallback remain usable.
 
-Open decision: whether downloads are worth the dependency/support cost, supported licensed sources and revocation/update policy. Current font behavior is unchanged.
+Resolved: explicit installation uses four licensed Google Fonts files pinned to a
+reviewed revision. Updating the manifest requires developer source/license/hash
+review; no automatic replacement or broad removal is offered. Existing themes
+keep installed-font fallbacks.
 
 ## Independent warning and critical thresholds
 
@@ -45,7 +52,10 @@ Migration proposal: bump alert-state version and explicitly migrate the old latc
 
 Acceptance tests: invalid ordering, exact boundary/hysteresis, reset jitter, stale data, one jump over both thresholds, warning→critical escalation, rapid oscillation, restart dedupe, migration from enabled/disabled/custom thresholds, configuration edits and several providers crossing together. Keep cache bounded and data-only.
 
-Open decision: warning opt-in/migration, default pair, minimum separation and whether independent per-level disabling is needed. Today's single threshold remains delivered behavior.
+Resolved: warning is opt-in for every installation, default80%, below existing
+critical95% or its custom value by at least one point. Warning has its own switch;
+the existing category switch still disables the category. The last valid pair is
+persisted so external invalid edits cannot change behavior after restart.
 
 ## Human/account validation still open
 

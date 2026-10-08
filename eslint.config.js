@@ -43,7 +43,7 @@ export default defineConfig([
         rules: {'no-control-regex': 'off'},
     },
     {
-        files: ['tests/run.js', 'tests/prefs*.js'],
+        files: ['tests/run.js', 'tests/disconnectRun.js', 'tests/prefs*.js'],
         languageOptions: {globals: {ARGV: 'readonly'}},
     },
     {

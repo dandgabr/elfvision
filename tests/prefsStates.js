@@ -1,4 +1,7 @@
 // Stateful GTK regressions. Run only in tools/prefs-smoke.sh's private display and memory settings.
+import {buildDisconnectGroup} from '../lib/prefs/disconnectDialog.js';
+import {createSuggestedFontsGroup} from '../lib/prefs/suggestedFonts.js';
+import {buildNotificationsPage} from '../lib/prefs/notifications.js';
 import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
@@ -261,6 +264,122 @@ app.connect('activate', () => {
                         dialog.close(); await wait();
                     } finally { view.dispose(); window.close(); }
                 }
+            }
+        });
+        await run('disconnect-all confirmation is inert until explicit confirmation and defaults to Cancel', async () => {
+            for (const action of ['cancel', 'dispose', 'confirm']) {
+                const window = newWindow(); const s = settings(); let calls = 0;
+                let transaction = null, failNext = false; const listeners = new Set();
+                const gate = {snapshot: () => ({ready: true, blocked: false, transaction}),
+                    subscribe: fn => { listeners.add(fn); return () => listeners.delete(fn); }};
+                const view = buildDisconnectGroup({window, settings: s, gettext: _, gate, run: async () => {
+                    calls++; if (failNext) throw Object.assign(new Error('synthetic restart guard'), {code: 'restart-computer-required'});
+                    transaction = {phase: 'complete'}; for (const fn of [...listeners]) fn(); return transaction;
+                }});
+                const page = new Adw.PreferencesPage(); page.add(view.group); window.add(page); window.present(); await wait();
+                try {
+                    view.button.emit('clicked'); await wait(); const dialog = window.get_visible_dialog();
+                    check(calls === 0, 'opening disconnect confirmation performs no deletion');
+                    check(dialog.default_response === 'cancel' && dialog.close_response === 'cancel', 'disconnect defaults and closes to Cancel');
+                    containment(window, dialog, 'disconnect-all dialog');
+                    if (action === 'dispose') view.dispose();
+                    dialog.emit('response', action === 'cancel' ? 'cancel' : 'disconnect'); dialog.close(); await wait();
+                    check(calls === (action === 'confirm' ? 1 : 0), `${action}: only live explicit confirmation deletes`);
+                    if (action === 'confirm') {
+                        check(view.row.subtitle.includes('removed') && view.button.sensitive, 'verified completion shown and action available');
+                        transaction = {phase: 'failed', problem: 'orphaned-write'}; for (const fn of [...listeners]) fn();
+                        check(view.row.subtitle.includes('Restart the computer'), 'orphan restart requirement is explicit');
+                        transaction = {phase: 'failed', problem: 'drain-timeout'}; for (const fn of [...listeners]) fn();
+                        check(view.row.subtitle.includes('Close other Preferences windows') && !view.row.subtitle.includes('Unlock'), 'drain timeout explains acknowledgement instead of keyring absence');
+                        transaction = {phase: 'failed', problem: 'deletion-incomplete', files: {snapshots: 'failed', alerts: 'absent'}, status: 'cleared'}; for (const fn of [...listeners]) fn();
+                        check(view.row.subtitle.includes('cache directory') && !view.row.subtitle.includes('Unlock'), 'cache failure has a storage-specific explanation');
+                        transaction = {phase: 'complete'}; for (const fn of [...listeners]) fn();
+                        failNext = true; view.button.emit('clicked'); await wait();
+                        const retryDialog = window.get_visible_dialog(); retryDialog.emit('response', 'disconnect'); retryDialog.close(); await wait();
+                        check(view.row.subtitle.includes('Restart the computer') && !view.row.subtitle.includes('removed'), 'failed attempt cannot reuse prior success message');
+                        transaction = {phase: 'failed', problem: 'orphaned-write'}; for (const fn of [...listeners]) fn();
+                        check(view.button.label === _('Retry disconnection') && view.button.sensitive,
+                            'persisted failure offers an enabled, localized retry action');
+                    }
+                } finally { view.dispose(); window.close(); }
+                check(listeners.size === 0, 'disconnect view releases gate subscriptions');
+            }
+        });
+        await run('suggested fonts review preserves consent and cancellation at narrow width', async () => {
+            for (const action of ['cancel', 'close', 'dispose', 'install', 'busy-cancel']) {
+                const window = newWindow(); let installed = 0, cancelled = 0, destroyed = 0; const hold = deferred();
+                let requested = [];
+                const installer = {install: async ids => {
+                    installed++; requested = [...ids];
+                    return action === 'busy-cancel' ? hold.promise : {restartRequired: true};
+                }, cancel() { cancelled++; }, destroy() { destroyed++; }};
+                const view = createSuggestedFontsGroup({window, gettext: _, installer});
+                const page = new Adw.PreferencesPage(); page.add(view.group); window.add(page); window.present(); await wait();
+                const row = walk(view.group).find(w => w instanceof Adw.ActionRow);
+                try {
+                    check(installed === 0, 'constructing font preferences performs no installation');
+                    button(view.group, 'Review…').emit('clicked'); await wait(); const dialog = window.get_visible_dialog();
+                    check(installed === 0, 'opening font review performs no installation');
+                    check(dialog.default_response === 'cancel' && dialog.close_response === 'cancel', 'font review defaults and closes to Cancel');
+                    containment(window, dialog, 'font review dialog');
+                    for (const widget of walk(dialog).filter(w => w.get_mapped() &&
+                        ((w instanceof Gtk.Button && w.label) || (w instanceof Gtk.Label && w.label))))
+                        containment(window, widget, 'font review mapped text/action');
+                    if (action === 'dispose') { view.destroy(); dialog.emit('response', 'install'); }
+                    else if (action === 'close') dialog.close(); // Escape maps to the declared close response.
+                    else { dialog.emit('response', action === 'cancel' ? 'cancel' : 'install'); dialog.close(); }
+                    await wait();
+                    check(installed === (['install', 'busy-cancel'].includes(action) ? 1 : 0), `${action}: only explicit live consent invokes one installation`);
+                    if (action === 'install') {
+                        check(requested.length === 4 && new Set(requested).size === 4, 'one install receives exactly the maintained four file IDs');
+                        check(row.subtitle.includes('Fonts installed') && row.subtitle.includes('Reopen applications'), 'verified installation reports refresh/restart guidance');
+                    } else if (action === 'busy-cancel') {
+                        const cancel = button(view.group, 'Cancel'); check(cancel.visible, 'busy installation exposes Cancel');
+                        cancel.emit('clicked'); hold.resolve({restartRequired: true}); await wait();
+                        check(cancelled > 0 && row.subtitle.includes('Cancelled') && !row.subtitle.includes('Fonts installed'), 'cancelled pending installation cannot publish late installed success');
+                    }
+                } finally { view.destroy(); window.close(); }
+                check(destroyed === 1, 'font installer is destroyed exactly once');
+            }
+        });
+        await run('warning and critical controls reject invalid pairs and expose external invalid configuration', async () => {
+            for (const externalBad of [false, true]) {
+                const window = newWindow(), s = settings(), ids = [];
+                s.set_boolean('notifications-enabled', true); s.set_boolean('alert-session-enabled', true);
+                s.set_boolean('alert-session-warning-enabled', true);
+                s.set_int('alert-session-warning-percent', 80); s.set_int('alert-session-percent', externalBad ? 80 : 95);
+                const page = buildNotificationsPage({settings: s, gettext: _, handlerIds: ids});
+                window.add(page); window.present(); await wait();
+                const quota = walk(page).find(w => w instanceof Adw.ExpanderRow && w.title === _('5-hour window'));
+                quota.expanded = true; await wait();
+                const critical = walk(quota).find(w => w instanceof Adw.SpinRow && w.title === _('Critical threshold'));
+                const warning = walk(quota).find(w => w instanceof Adw.SpinRow && w.title === _('Warning threshold'));
+                const error = walk(quota).find(w => w instanceof Adw.ActionRow && w.title === _('Warning must be lower than critical'));
+                try {
+                    check(critical && warning && error, 'paired threshold and error controls exist');
+                    if (externalBad) {
+                        check(error.visible, 'invalid pair from external settings is visible immediately');
+                        check(s.get_int('alert-session-percent') === 80, 'opening preferences does not silently rewrite external settings');
+                        critical.value = 95; await wait();
+                        check(!error.visible && s.get_int('alert-session-percent') === 95, 'valid user correction clears error');
+                    } else {
+                        critical.value = 80; await wait();
+                        check(critical.value === 95 && s.get_int('alert-session-percent') === 95 && error.visible,
+                            `invalid critical edit reverts and exposes error: row=${critical.value} saved=${s.get_int('alert-session-percent')} error=${error.visible}`);
+                        warning.value = 96; await wait();
+                        check(warning.value === 80 && s.get_int('alert-session-warning-percent') === 80 && error.visible,
+                            `invalid warning edit reverts and exposes error: row=${warning.value} saved=${s.get_int('alert-session-warning-percent')} error=${error.visible}`);
+                        critical.value = 94; await wait();
+                        check(critical.value === 94 && s.get_int('alert-session-percent') === 94 && !error.visible,
+                            'a valid critical edit persists and clears rejection feedback');
+                        critical.value = 80; await wait();
+                        check(critical.value === 94 && s.get_int('alert-session-percent') === 94 && error.visible,
+                            'a repeated invalid critical edit preserves the latest valid pair and feedback');
+                        warning.value = 79; await wait();
+                        check(!error.visible && s.get_int('alert-session-warning-percent') === 79, 'valid pair clears error and persists');
+                    }
+                    for (const widget of [critical, warning]) containment(window, widget, 'paired threshold row');
+                } finally { for (const id of ids) s.disconnect(id); window.close(); }
             }
         });
         print(`Preferences state matrix: ${rtl ? 'RTL' : 'LTR'}, ${ARGV.includes('expanded') ? 'expanded' : 'normal'}${ARGV.includes('large-font') ? ', Sans 22' : ''}, ${failed ? 'failed' : 'passed'}`);

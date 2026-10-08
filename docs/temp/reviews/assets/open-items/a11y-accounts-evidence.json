@@ -1,0 +1,185 @@
+{
+  "finished": true,
+  "error": "",
+  "focused": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ],
+  "controls": [
+    {
+      "name": "Notifications",
+      "role": "panel",
+      "enabled": false,
+      "focusable": false
+    }
+  ],
+  "shellControls": [],
+  "shellKeyboard": [
+    "Space opens legend",
+    "first Escape hides legend",
+    "second Escape closes popup"
+  ],
+  "gtkFocused": [
+    {
+      "name": "",
+      "active": true,
+      "keys": 2
+    },
+    {
+      "name": "",
+      "active": true,
+      "keys": 2
+    },
+    {
+      "name": "Status",
+      "active": true,
+      "keys": 4
+    },
+    {
+      "name": "Track Codex",
+      "active": true,
+      "keys": 5
+    },
+    {
+      "name": "Copy command",
+      "active": true,
+      "keys": 6
+    },
+    {
+      "name": "Status",
+      "active": true,
+      "keys": 7
+    },
+    {
+      "name": "Status",
+      "active": true,
+      "keys": 7
+    },
+    {
+      "name": "Track Claude",
+      "active": true,
+      "keys": 8
+    },
+    {
+      "name": "Status",
+      "active": true,
+      "keys": 10
+    },
+    {
+      "name": "Track Antigravity",
+      "active": true,
+      "keys": 11
+    },
+    {
+      "name": "Copy command",
+      "active": true,
+      "keys": 12
+    },
+    {
+      "name": "Disconnect all accounts",
+      "active": true,
+      "keys": 13
+    },
+    {
+      "name": "Disconnect all",
+      "active": true,
+      "keys": 14
+    },
+    {
+      "name": "",
+      "active": true,
+      "keys": 15
+    },
+    {
+      "name": "",
+      "active": true,
+      "keys": 15
+    },
+    {
+      "name": "Accounts",
+      "active": true,
+      "keys": 16
+    },
+    {
+      "name": "",
+      "active": true,
+      "keys": 18
+    },
+    {
+      "name": "Where do I get a key?",
+      "active": true,
+      "keys": 19
+    },
+    {
+      "name": "",
+      "active": true,
+      "keys": 20
+    },
+    {
+      "name": "",
+      "active": true,
+      "keys": 21
+    },
+    {
+      "name": "Track Command Code",
+      "active": true,
+      "keys": 22
+    },
+    {
+      "name": "Track Command Code",
+      "active": true,
+      "keys": 22
+    },
+    {
+      "name": "Track Codex",
+      "active": true,
+      "keys": 24
+    },
+    {
+      "name": "Copy command",
+      "active": true,
+      "keys": 25
+    },
+    {
+      "name": "Status",
+      "active": true,
+      "keys": 26
+    }
+  ],
+  "gtkDistinct": [
+    "Accounts",
+    "Copy command",
+    "Disconnect all",
+    "Disconnect all accounts",
+    "Status",
+    "Track Antigravity",
+    "Track Claude",
+    "Track Codex",
+    "Track Command Code",
+    "Where do I get a key?"
+  ],
+  "reverseFocus": []
+}

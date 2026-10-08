@@ -126,9 +126,10 @@ English msgids. There is no language setting, no language step in the assistant 
   `https://` links and an own application icon in `icons/hicolor`. No paths or user name.
 - **Restore defaults:** every schema key is classified as reset or kept, and a test fails for an
   unclassified key. It resets appearance, bar, popup, notification and threshold settings, the theme
-  and the data source (someone stuck in demo data would take a restore that leaves it for a bug), and
-  keeps accounts, tracking state, terms acknowledgements, `account-status`, the credentials revision,
-  the demo scenario and the messages between the two processes. The dialog says "your accounts are
+  and keeps the selected data source, accounts, tracking state, terms acknowledgements,
+  `account-status`, the credentials revision, the demo scenario and the messages between the two
+  processes. Preserving the data source also keeps a demo session from appearing disconnected after
+  the reset switches to an empty live keyring. The dialog says "your accounts are
   not changed" (not "stay connected": a rejected account stays rejected) and names what changes;
   Cancel is the default. The reset is one batch (`delay` and `apply`), so the shell reacts once, and a
   toast confirms it. It does not start the assistant again.
@@ -221,15 +222,19 @@ Escape hides the legend, and CI runs scoped ESLint without a desktop. Validation
 and remaining release checks are recorded in the
 [post-MVP execution plan](../temp/plans/2026-10-07-post-mvp-execution.md).
 
-Open questions:
+The owner accepted the three product follow-ups on 2026-10-07. Accounts now has
+a separate Cancel-default disconnect-all action with durable coordination and
+truthful retryable failures; Restore defaults still preserves accounts. See the
+[disconnect review](../temp/reviews/2026-10-07-disconnect-all.md).
 
-- Whether "Disconnect all accounts and delete local data" is wanted as a separate action.
-- A second agent reviewed the new pt-BR copy; an independent human/Orca pass
-  remains an owner check.
-- A warning and a critical level share one threshold per kind of quota. The text says which level was
-  reached, but a second threshold is not offered.
+Quota categories retain the existing critical threshold, default 95%, and add
+an independently optional warning, default 80% and disabled initially. Each
+level has its own latch and three-point hysteresis; a jump across both emits only
+critical. Migration, restart and configuration edits establish a quiet baseline
+while preserving notification choices, old latches and the global cap. Invalid
+pairs retain the last valid effective pair across restarts through the bounded
+nonsecret `alert-valid-rules` setting.
 
-Concrete proposals, including optional font installation and safe coordination
-of account deletion, are in the
-[product decision record](../temp/plans/2026-10-07-post-mvp-product-decisions.md).
-Those proposals do not change current account or notification behavior.
+The [accepted product decisions](../temp/plans/2026-10-07-post-mvp-product-decisions.md)
+also cover explicit licensed font installation. Human/Orca and real-account
+certification remain separate participation checks; synthetic tests cannot certify them.

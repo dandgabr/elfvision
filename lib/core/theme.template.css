@@ -7,7 +7,7 @@
  *   p:NAME        a color of the popup scheme (light or dark, follows the system)
  *   b:NAME        a color of the dark scheme; the top bar always sits on the dark panel
  *   p:NAME@0.3    the same color with an alpha
- *   radius, radius-sm, pill-radius, menu-radius, bw, shadow   shape tokens
+ *   radius, radius-sm, pill-radius, menu-radius, bw, shadow, shadow-gutter   shape tokens
  *   font-body-decl, font-display-decl     font-family lines, or nothing
  * (Do not write a real token inside this comment: the compiler would replace it.)
  *
@@ -223,6 +223,8 @@
 
 .gaq-cards {
     spacing: 12px;
+    /* Outer shadows need space inside the ScrollView clip, per theme. */
+    padding: {{shadow-gutter}};
 }
 
 .gaq-summary {
@@ -527,7 +529,8 @@
 /* Fixed across effect modes, so decoration does not move control/hit geometry. */
 .gaq-popup-frame { padding: 12px; }
 
-/* Native material is a separate background sibling. Reading zones stay opaque. */
+/* Native material is a separate background sibling. Quota reading zones and
+ * controls stay opaque; headings expose the material with a local text outline. */
 .popup-menu-boxpointer.gaq-menu.gaq-effects-active {
     -arrow-background-color: transparent;
     -arrow-border-color: transparent;
@@ -538,7 +541,11 @@
     box-shadow: none;
 }
 .gaq-effects-active .gaq-summary,
-.gaq-effects-active .gaq-section,
+.gaq-effects-active .gaq-section {
+    background-color: transparent;
+    color: {{p:fg}};
+    text-shadow: 0 0 2px {{p:bg}};
+}
 .gaq-effects-active .gaq-footer,
 .gaq-effects-active .gaq-untracked-row,
 .gaq-effects-active .gaq-legend {

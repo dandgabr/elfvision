@@ -130,22 +130,31 @@ tests whose name contains `<text>`.
 
 1. The build: the compiled schema and the catalogs, which some tests read.
 2. The unit tests.
-3. The syntax of the shell scripts, and of every JavaScript module.
-4. ESLint, when the checkout has its local npm dependencies. It detects undefined names and other
+3. Cross-process disconnect and private synthetic keyring tests.
+4. The syntax of the shell scripts, and of every JavaScript module.
+5. ESLint, when the checkout has its local npm dependencies. It detects undefined names and other
    correctness errors using `eslint.config.js`. Without dependencies, this local step reports a skip;
    the separate CI lint job always runs `npm ci --ignore-scripts` and `npm run lint`.
-5. **The extension enabled in a headless GNOME Shell.** It reads the extension's state and fails on an
+6. **The extension enabled in a headless GNOME Shell.** It reads the extension's state and fails on an
    error. It is skipped when `gnome-shell` is not installed.
-6. ShellCheck.
-7. The schemas.
-8. The translation template and the catalogs, including that every placeholder survives translation.
-9. Whitespace.
+7. ShellCheck.
+8. The schemas.
+9. The translation template and the catalogs, including that every placeholder survives translation.
+10. Whitespace.
+
+The local gate also runs `tests/disconnectDisk.sh` and `tests/disconnectSecrets.sh`.
+They exercise durable cross-process fencing and exact-scope deletion in a private
+state directory, D-Bus session and synthetic keyring. Shell syntax and ShellCheck
+include these test scripts. Missing prerequisites fail these gates.
 
 Run it before a commit. For preferences or layout changes, also run:
 
 ```sh
 tools/prefs-smoke.sh  # 360px setup traversal, RTL, text inflation, larger fonts and closing paths
 tools/layout-check.sh # popup allocations and mirrored meters in an isolated demo shell
+tools/effects-check.sh lifecycle # 100 actual effect cycles, geometry and teardown
+tools/effects-check.sh matrix # 264 current policy/resource combinations; no timing claims
+tools/effects-check.sh frames # four 60-second serialized CPU/GPU-finish paint samples
 ```
 
 The preferences probe injects fake account controllers for traversal, counts their subscriptions
@@ -179,6 +188,19 @@ All three leave your session, settings and extensions alone.
 with an in-memory GSettings backend and a temporary `XDG_DATA_HOME` that links
 this checkout as the only user extension. It enables the extension, prints its state
 and the shell errors that mention it.
+
+All graphical helpers isolate data, configuration, cache, state and runtime;
+`XDG_STATE_HOME` must never fall back to the user's disconnect metadata. They also
+use a distinct Wayland socket and `GIO_USE_VFS=local`. Set
+`GAQ_TEST_MONITORS=1280x800,1600x900` for two virtual monitors. Monitor probes apply
+only temporary configurations on that private display.
+
+Run frame profiling without other graphical/scanning jobs. It forces identical
+redraw cadence and uses Shell's `glFinish` timestamp, which changes normal
+scheduling; this is CPU submission plus GPU-finish wall time, not a pure GPU
+timer or presentation latency. The verifier rejects invisible viewports,
+insufficient samples and exceeded budgets. Accessibility tools expose partial
+metadata/virtual-key evidence and retain explicit limits; they do not certify Orca.
 
 ```sh
 # Boot, enable the extension, print its state and any shell errors.
@@ -373,7 +395,7 @@ instead; the picker rescans that folder whenever it opens.
 
 ### Generated themes
 
-19 of the 22 built-in themes come from a gallery of visual styles
+21 of the 22 built-in themes come from a gallery of visual styles
 (`dandgabr/estilos-visuais`). `tools/gen-themes.py` reads the gallery's design
 tokens, derives the missing light or dark scheme in OKLCH, corrects contrast to
 WCAG targets (text 7:1, secondary text and status colors 4.5:1, accent 3:1) and
@@ -476,3 +498,25 @@ committed.
   (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`).
 - Clean up in `disable()` and avoid synchronous I/O in the shell process.
 - Never commit credentials. See the security note in the README.
+
+### Complete primary readings and card shadows
+
+`tools/layout-check.sh` checks twelve private native cases: LTR/RTL, normal and
+expanded translations, enlarged fonts, and long currency in both shadow-heavy
+materials. Primary value and suffix layouts must fit both the width and height
+of their actors; disabling ellipsis alone does not prove complete text painting.
+Header readings occupy their own rows inside the same focusable card button.
+
+For paired shadow evidence, run the following in a private demo session:
+
+```sh
+LOG=/tmp/gaq-card-shadow.log DATA_SOURCE=demo tools/headless-shell.sh \
+  tools/card-shadow-probe.js sleep:8 tools/card-shadow-verify.js
+python3 tools/card-shadow-image-check.py
+```
+
+The paired captures retain geometry and compare left and right strips with the
+original shadow versus no shadow. Reject native criticals and failed Eval results
+as well as failed pixel checks. Decoration allocation changes are coalesced into
+an owned idle source, outside the parent's allocation callback. Inspection counts
+that pending source; close and destroy cancel it along with animation sources.

@@ -25,8 +25,15 @@
                 `text/action outside monitor: ${actor.style_class} x=${x} width=${width}`);
             check(x >= px - 1 && x + width <= px + pw + 1,
                 `text/action outside parent: ${actor.style_class} x=${x} width=${width} parent=${px}/${pw}`);
-            if (actor instanceof St.Label)
+            if (actor instanceof St.Label) {
+                if (actor === [...Main.panel.statusArea[uuid]._cards.values()].find(card => card._hero === actor)?._hero ||
+                    actor.style_class?.includes('gaq-hero-small')) {
+                    const [textWidth, textHeight] = actor.clutter_text.get_layout().get_pixel_size();
+                    check(textWidth <= actor.width + 1 && textHeight <= actor.height + 1,
+                        `primary reading clipped: ${actor.text} text=${textWidth}/${textHeight} actor=${actor.width}/${actor.height}`);
+                }
                 global.gaqLayoutResult.labels++;
+            }
             if (actor instanceof St.Button)
                 global.gaqLayoutResult.actions++;
         }
@@ -74,6 +81,8 @@
                     for (const card of indicator._cards.values()) {
                         check(card.width > 0 && card.width <= menuWidth, 'card fits popup');
                         check(card._toggle.width > 0, 'card keyboard target allocated');
+                        check(!card._hero.clutter_text.get_layout().is_ellipsized(),
+                            `primary value must remain complete: ${card._name.text} ${card._hero.text}`);
                     }
                     const card = indicator._cards.values().next().value;
                     const [, textHeight] = card._hero.clutter_text.get_layout().get_pixel_size();
@@ -129,6 +138,40 @@
         }
         desktop.set_double('text-scaling-factor', 1);
         Object.assign(extension, original);
+        // Shadow gutters narrow these headers most. Exercise complete currency
+        // readings independently of the production demo's small balance.
+        const indicator = Main.panel.statusArea[uuid];
+        indicator._settings.set_string('color-scheme', 'dark');
+        for (const theme of ['glassmorphism', 'aurora-mesh-gradient']) {
+            indicator._settings.set_string('theme', theme);
+            indicator.menu.open(false);
+            await wait(300);
+            const moneyCard = [...indicator._cards.values()].find(item => JSON.parse(item._renderedKey)[0].money);
+            const [view, open] = JSON.parse(moneyCard._renderedKey);
+            for (const rtl of [false, true]) {
+                walk(indicator.menu.actor).forEach(actor => actor.set_text_direction(rtl ? Clutter.TextDirection.RTL : Clutter.TextDirection.LTR));
+                moneyCard.update({...view, heroText: 'US$ 1.234.567,89'}, {open});
+                moneyCard._hero.set_style('font-size: 33px;');
+                await wait(200);
+                const layout = moneyCard._hero.clutter_text.get_layout();
+                const [textWidth] = layout.get_pixel_size();
+                check(!layout.is_ellipsized(), `complete large currency in ${theme}`);
+                check(textWidth <= moneyCard._hero.width + 1, `wrapped currency fits ${theme}: ${textWidth}/${moneyCard._hero.width}`);
+                checkContents(indicator.menu.actor, Main.layoutManager.primaryMonitor);
+                moneyCard._toggle.grab_key_focus();
+                check(global.stage.get_key_focus() === moneyCard._toggle, 'monetary header retains one keyboard target');
+                if (theme === 'glassmorphism') {
+                    await wait(250);
+                    const path = `${GLib.getenv('ROOT')}/.superpowers/sdd/2026-10-07-open-items/money-${rtl ? 'rtl' : 'ltr'}-large.png`;
+                    const stream = Gio.File.new_for_path(path).replace(null, false, Gio.FileCreateFlags.NONE, null);
+                    try { await new Shell.Screenshot().screenshot(false, stream); }
+                    finally { stream.close(null); }
+                }
+                global.gaqLayoutResult.cases.push(`${theme}/${rtl ? 'RTL' : 'LTR'}/large-currency`);
+            }
+            moneyCard.update(view, {open});
+            indicator.menu.close(false);
+        }
         global.gaqLayoutResult.finished = true;
     })().catch(error => { global.gaqLayoutResult.error = error.message; global.gaqLayoutResult.finished = true; });
     return 'layout probe started';

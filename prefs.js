@@ -10,6 +10,7 @@ import {DEFAULT_THEME, scanThemes} from './lib/services/themeFiles.js';
 import {buildAboutGroup} from './lib/prefs/about.js';
 import {buildAccountsPage} from './lib/prefs/accounts.js';
 import {buildNotificationsPage} from './lib/prefs/notifications.js';
+import {createSuggestedFontsGroup} from './lib/prefs/suggestedFonts.js';
 import {builtinCatalog} from './lib/prefs/themeCatalog.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
@@ -269,6 +270,9 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         if (problems)
             look.add(problems);
         page.add(look);
+        const fonts = createSuggestedFontsGroup({window, gettext: _});
+        page.add(fonts.group);
+        window.connect('close-request', () => { fonts.destroy(); return false; });
 
         const popup = new Adw.PreferencesGroup({title: _('Popup')});
         const clock = choiceRow(settings, 'clock-format', [

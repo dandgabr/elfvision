@@ -31,7 +31,7 @@ scan() {
 scan bandit bandit --recursive --quiet tools
 scan semgrep semgrep scan --config p/javascript --config p/security-audit --config p/secrets \
     --metrics=off --error --quiet --exclude tests .
-scan shellcheck shellcheck --severity=warning tools/*.sh .githooks/pre-commit
+scan shellcheck shellcheck --severity=warning tools/*.sh tests/*.sh .githooks/pre-commit
 scan zizmor zizmor --format=plain --quiet .github
 scan gitleaks gitleaks git . --config .gitleaks.toml --redact --no-banner --log-level warn
 

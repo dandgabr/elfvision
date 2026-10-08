@@ -1,6 +1,8 @@
 // Callback elapsed-work/cadence and resource measurements; these are NOT GPU frame durations.
 (async () => {
     const result = global.gaqEffectsBenchmark = {finished: false, inventory: [], measurements: [], error: ''};
+    const matrixOnly = GLib.getenv('GAQ_RESOURCE_MATRIX_ONLY') === '1';
+    result.mode = matrixOnly ? 'resources' : 'callbacks';
     try {
         const indicator = Object.values(Main.panel.statusArea).find(actor => actor._extension?._themes);
         const root = indicator._extension.path;
@@ -38,7 +40,7 @@
         check(result.inventory.length === 22, 'all22builtinstyles tested');
         indicator._settings.set_boolean('transparency-enabled', true);
         manager._interface.set_boolean('enable-animations', true);
-        for (const [name, theme, mode, material] of [['static', 'solarpunk', 'off', 'theme'], ['leaves', 'solarpunk', 'full', 'theme'], ['frost', 'glassmorphism', 'full', 'frosted-glass']]) {
+        for (const [name, theme, mode, material] of (matrixOnly ? [] : [['static', 'solarpunk', 'off', 'theme'], ['leaves', 'solarpunk', 'full', 'theme'], ['frost', 'glassmorphism', 'full', 'frosted-glass']])) {
             indicator.menu.close(false);
             indicator._settings.set_string('theme', theme);
             indicator._settings.set_string('effects-mode', mode);

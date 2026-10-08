@@ -97,7 +97,12 @@
             && indicator._effectDecoration.get_preferred_height(-1).every(value => value === 0), 'decoration contributes zero preferred size');
         check(JSON.stringify(stack.get_preferred_width(-1)) === JSON.stringify(foreground.get_preferred_width(-1)),
             'stack width is measured from foreground controls alone');
-        check(indicator._summary.get_theme_node().get_background_color().alpha === 255, 'summary reading zone opaque');
+        for (const heading of [indicator._summary, indicator._onBarTitle]) {
+            check(heading.get_theme_node().get_background_color().alpha === 0,
+                'summary and section headings expose the material without opaque strips');
+            check(heading.opacity === 255 && heading.get_theme_node().get_foreground_color().alpha === 255,
+                'transparent headings retain opaque text');
+        }
         check(card.get_theme_node().get_background_color().alpha === 255 && card._hero.opacity === 255, 'card and text opaque');
         indicator._settings.set_boolean('transparency-enabled', false);
         check(indicator._effects.inspect().material === 'opaque' && indicator._effects.inspect().blurEffects === 0, 'live transparency-off removes native blur');

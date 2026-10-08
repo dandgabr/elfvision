@@ -1,0 +1,10 @@
+== bandit
+[tester]	WARNING	nosec encountered (B603), but no failed test on file tools/a11y-inspect.py:58
+[tester]	WARNING	nosec encountered (B603), but no failed test on file tools/a11y-inspect.py:75
+== semgrep
+== shellcheck
+== zizmor
+No findings to report. Good job!
+== gitleaks
+
+5 tool(s) ran

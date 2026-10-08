@@ -1,0 +1,153 @@
+{
+  "finished": true,
+  "measurements": [
+    {
+      "name": "static",
+      "durationMs": 60000.499,
+      "menuOpenWorkMs": 47.484,
+      "firstCompletedPaintMs": 114.064,
+      "sampleCount": 1762,
+      "p50Ms": 1.243,
+      "p95Ms": 3.937,
+      "p99Ms": 5.635,
+      "maxMs": 13.194,
+      "resources": {
+        "destroyed": false,
+        "open": true,
+        "active": false,
+        "sources": 0,
+        "particles": 0,
+        "blurEffects": 0,
+        "actors": 0,
+        "material": "opaque",
+        "updates": 0,
+        "callbackUsec": 0,
+        "generation": 9
+      }
+    },
+    {
+      "name": "leaves",
+      "durationMs": 60007.095,
+      "menuOpenWorkMs": 70.121,
+      "firstCompletedPaintMs": 86.325,
+      "sampleCount": 1762,
+      "p50Ms": 3.175,
+      "p95Ms": 5.911,
+      "p99Ms": 7.801,
+      "maxMs": 11.651,
+      "resources": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 1,
+        "particles": 8,
+        "blurEffects": 0,
+        "actors": 9,
+        "material": "opaque",
+        "updates": 1803,
+        "callbackUsec": 188374,
+        "generation": 14
+      }
+    },
+    {
+      "name": "static-glass",
+      "durationMs": 60014.095,
+      "menuOpenWorkMs": 78.732,
+      "firstCompletedPaintMs": 146.46,
+      "sampleCount": 1761,
+      "p50Ms": 1.3,
+      "p95Ms": 3.65,
+      "p99Ms": 4.749,
+      "maxMs": 9.97,
+      "resources": {
+        "destroyed": false,
+        "open": true,
+        "active": false,
+        "sources": 0,
+        "particles": 0,
+        "blurEffects": 0,
+        "actors": 0,
+        "material": "opaque",
+        "updates": 1803,
+        "callbackUsec": 188374,
+        "generation": 20
+      }
+    },
+    {
+      "name": "frost",
+      "durationMs": 60021.397,
+      "menuOpenWorkMs": 42.602,
+      "firstCompletedPaintMs": 59.003,
+      "sampleCount": 1762,
+      "p50Ms": 2.718,
+      "p95Ms": 5.22,
+      "p99Ms": 6.882,
+      "maxMs": 15.745,
+      "resources": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 0,
+        "particles": 0,
+        "blurEffects": 1,
+        "actors": 1,
+        "material": "frosted-glass",
+        "updates": 1803,
+        "callbackUsec": 188374,
+        "generation": 26
+      }
+    }
+  ],
+  "error": "",
+  "closed": {
+    "destroyed": false,
+    "open": false,
+    "active": false,
+    "sources": 0,
+    "particles": 0,
+    "blurEffects": 0,
+    "actors": 0,
+    "material": "opaque",
+    "updates": 1803,
+    "callbackUsec": 188374,
+    "generation": 28
+  },
+  "method": "Shell.PerfLog stagePaintStart -> paintCompletedTimestamp; Shell 50.5 frame-finish-timestamp performs cogl_context_flush + glFinish",
+  "limitations": "Serialized CPU submission plus GPU-finish wall duration; not pure GPU timer-query time, normal frame cadence or end-to-end presentation latency. Forced redraw every 34ms; private synthetic headless session only.",
+  "budgets": [
+    {
+      "name": "static",
+      "baseline": "static",
+      "p95Below60HzBudget": true,
+      "p95AddedMs": 0,
+      "p95AddedWithin2Ms": true
+    },
+    {
+      "name": "leaves",
+      "baseline": "static",
+      "p95Below60HzBudget": true,
+      "p95AddedMs": 1.9739999999999998,
+      "p95AddedWithin2Ms": true
+    },
+    {
+      "name": "static-glass",
+      "baseline": "static-glass",
+      "p95Below60HzBudget": true,
+      "p95AddedMs": 0,
+      "p95AddedWithin2Ms": true
+    },
+    {
+      "name": "frost",
+      "baseline": "static-glass",
+      "p95Below60HzBudget": true,
+      "p95AddedMs": 1.5699999999999998,
+      "p95AddedWithin2Ms": true
+    }
+  ],
+  "sourceHashes": {
+    "lib/ui/indicator.js": "4fb40228d762af6b37b3a27c150fd79aa6341c11a19722f871dfd5fe30a7fcd1",
+    "lib/ui/themeEffects.js": "4d281aa8abff6196f3e08b1d7ae956609aeb391956dd8c2174ff55ca0859b899",
+    "lib/ui/effects/frost.js": "d2e2554cd45590e518d17edf1e86e7c0c5cc89c9f99bd9367d3fee284b586889",
+    "tools/effects-frame-probe.js": "f14c5169791af327c034cc90533ea7fa17d3ddd11e7305c80a78ff09dc67bd3b"
+  }
+}

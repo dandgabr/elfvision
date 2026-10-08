@@ -19,5 +19,8 @@ import './accounts.test.js';
 import './firstUse.test.js';
 import './layout.test.js';
 import './barView.test.js';
+import './fontInstall.test.js';
+import './fontInstaller.test.js';
+import './disconnect.test.js';
 
 System.exit(await runAll(ARGV.filter(arg => arg !== '--')[0] ?? '') ? 1 : 0);

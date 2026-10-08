@@ -6,16 +6,24 @@ cd "$(dirname "$0")/.."
 tools/build.sh >/dev/null
 root="$(pwd)"
 scratch="$(mktemp -d)"
-trap 'rm -rf "$scratch"' EXIT
+# shellcheck source=tools/private-session-cleanup.sh
+source "$root/tools/private-session-cleanup.sh"
+trap 'cleanup_private_session "$scratch"' EXIT
 export GAQ_TEST_ROOT="$root" GAQ_TEST_SCRATCH="$scratch" GAQ_SMOKE_MODE="${1:-all}"
 export XDG_DATA_HOME="$scratch/data" XDG_CONFIG_HOME="$scratch/config" XDG_CACHE_HOME="$scratch/cache"
+export XDG_STATE_HOME="$scratch/state" GIO_USE_VFS=local
+mkdir -m 700 "$scratch/runtime"
+export XDG_RUNTIME_DIR="$scratch/runtime"
 export GTK_A11Y=none GSETTINGS_BACKEND=memory
 # Full prefs integration imports the installed extension app’s private Shew typelib.
 export GI_TYPELIB_PATH="/usr/lib64/gnome-shell/girepository-1.0${GI_TYPELIB_PATH:+:$GI_TYPELIB_PATH}"
-unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK
+unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK AT_SPI_BUS_ADDRESS
 # Explicit display name ensures tests never connect to the user's desktop.
 dbus-run-session -- bash -c '
     set -euo pipefail
+    if [ -x /usr/libexec/at-spi-bus-launcher ]; then
+        /usr/libexec/at-spi-bus-launcher --launch-immediately >"$GAQ_TEST_SCRATCH/a11y.log" 2>&1 &
+    fi
     # Full startup reads only this empty, private Secret Service session collection.
     mkdir -m 700 "$GAQ_TEST_SCRATCH/keyring"
     XDG_RUNTIME_DIR="$GAQ_TEST_SCRATCH/keyring" gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1

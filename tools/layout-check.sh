@@ -8,8 +8,8 @@ if ! LOG="$scratch/shell.log" GAQ_TEST_MONITOR=800x900 timeout 90 tools/headless
     cat "$scratch/result"
     exit 1
 fi
-if grep -q 'St-CRITICAL.*gaq-' "$scratch/shell.log"; then
-    grep 'St-CRITICAL.*gaq-' "$scratch/shell.log"
+if grep -Eq 'already disposed|JS ERROR|CRITICAL|Extension.*Error' "$scratch/shell.log" "$scratch/result"; then
+    grep -E 'already disposed|JS ERROR|CRITICAL|Extension.*Error' "$scratch/shell.log" "$scratch/result"
     exit 1
 fi
 if ! grep -q GAQ_LAYOUT_OK "$scratch/result" || grep -q '(false,' "$scratch/result"; then

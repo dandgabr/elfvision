@@ -103,6 +103,23 @@ chamfered corners, scanlines, textures, hand-drawn strokes) were outside that in
 They require `St.DrawingArea` or effects, as flags only built-in themes may
 request.
 
+### Card layout and shadow bounds
+
+The card list reserves each validated outer shadow's footprint inside the scroll
+clip, using blur, spread and signed offsets. Each gutter is bounded to64px;
+extreme custom shadows can exceed that bound and remain clipped. Inset shadows
+do not reserve outside space. The theme's original shadow token is unchanged.
+
+Every card places its primary reading and availability/window suffix below the
+provider identity, inside the same keyboard-activatable header. Identity, status,
+reading and budget labels wrap rather than hiding values behind an ellipsis.
+This deliberately changes the original single-row header so fixed-width popups
+can preserve complete values with shadow gutters, RTL and enlarged text. A
+monetary-only row change exposed incomplete quota suffix paint under enlarged
+text; the final arrangement applies the separate reading row to quota cards too.
+The native oracle checks Pango layout width and height against each reading's
+allocation, in addition to ellipsis and keyboard-target checks.
+
 ### Fonts
 
 Theme font stacks include sans-serif, serif, monospace and handwritten families
@@ -124,12 +141,17 @@ Related settings: `theme`, `color-scheme` (`system`, `light`, `dark`), `clock-fo
 
 ### Open work
 
-- Downloading a theme's fonts to `~/.local/share/fonts` from Preferences, on request
-  and after confirmation.
-- GPU frame-time acceptance, fractional scaling and multiple-monitor acceptance
-  remain unverified for frost. Native rendering and semantic pixel comparisons
-  are implemented; those measurements do not certify the hardware gates. See the
-  [validation record](../temp/reviews/2026-10-07-post-mvp-validation.md).
+- Optional suggested-font installation is implemented after explicit confirmation.
+  The maintained manifest pins four licensed Poppins/Inter/JetBrains Mono files,
+  exact bytes/hashes and source revision. Theme JSON never supplies downloads;
+  installed-font fallbacks remain available. Files and licenses publish atomically
+  into an app-owned user font directory without overwriting user files. See the
+  [font review](../temp/reviews/2026-10-07-font-installer.md).
+- Processing evidence now includes serialized CPU submission plus GPU-finish
+  timestamps; fractional scaling/nonzero-origin tests use two virtual monitors.
+  These do not certify physical monitor hardware, pure GPU timer-query cost or
+  end-to-end display latency. Fresh results and exact limits are in the
+  [closure validation](../temp/reviews/2026-10-07-open-items-validation.md).
 
 ## Consequences
 
@@ -172,9 +194,29 @@ Disable publishes the inactive policy and releases listeners.
 
 The renderer uses shared native particle, material, cached texture and optical
 primitives behind persistent controls. Eight reused leaf sprites have one bounded
-timer; static glass has none. One fixed-radius background blur supplies frost,
+timer; their time-based positions are quantized to device pixels and rotation
+to half degrees, with unchanged transforms skipped. Particle count, speed and
+34ms source cadence remain fixed; processing acceptance still requires native
+profile measurements. Static glass has no timer. One fixed-radius background blur supplies frost,
 with decorative glass as an unsupported-capability fallback. The owned popup's
-offscreen redirect permits actual backdrop sampling only for effective frost.
+offscreen redirect permits actual backdrop sampling only for effective frost,
+while opaque foreground controls retain a separate cache. Native BinLayout
+allocates the three siblings; the background's 2px request and decoration's zero
+request leave foreground controls in charge of popup measurement. Rebuilding
+decorative styles/children repairs an invalid decorative allocation once against
+its existing positive viewport, without pinning foreground dimensions or adding
+per-frame allocation work.
+Allocation notifications only queue one coalesced HIGH_IDLE layout update.
+Resizing decoration children synchronously inside those notifications invalidated
+the later foreground sibling during native allocation, leading to heading-shadow
+and offscreen criticals. The pending layout source carries the renderer generation,
+is cancelled on rebuild/teardown and participates in resource inspection.
+Tabular-number attributes are applied through coalesced idles, including initial
+construction, and skipped when the feature already exists. Synchronous attribute
+changes during St's lazy style/painter path invalidated text allocation and
+produced native shadow/offscreen errors. Pending label work is cancelled on
+destruction. Closing retains its fixed anchor and rendering policy until the
+popup is hidden, while decorative animation and blur work stop immediately.
 Close, Off, lock and disable remove owned work. Theme JSON cannot select arbitrary
 renderer code. Semantic pixel checks and the 22-theme light/dark inventory are
 recorded in the validation record; hardware performance remains a separate gate.

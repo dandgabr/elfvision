@@ -27,8 +27,10 @@ omitted effects are recorded in the [fidelity audit](2026-10-07-theme-fidelity.m
 
 M7 delivers the [isolated WebGL study](2026-10-07-webgl-feasibility.md) and
 [product proposals](../plans/2026-10-07-post-mvp-product-decisions.md).
-They introduce no required browser dependency, account-deletion action, font
-download or second notification threshold.
+At this report's original baseline they introduced no required browser dependency,
+account-deletion action, font download or second notification threshold. The
+owner subsequently accepted the product proposals; their implementations and
+fresh validation are recorded in [open-items validation](2026-10-07-open-items-validation.md).
 
 ## Independent review and corrections
 
@@ -144,13 +146,19 @@ backends' final strict quick and semantic runs contain no CRITICAL/JS/disposed-a
 errors. Earlier benchmark counts remain descriptive historical measurements;
 the fresh critical-rejecting benchmark passed after both geometry fixes. Its wrapper exited 0 with no CRITICAL/JS/disposed errors.
 
-The proposed GPU p95 processing gate is unmeasured. Callback elapsed work time and update
+At this report's original baseline, the proposed GPU p95 processing gate was unmeasured. Callback elapsed work time and update
 cadence do not establish frame-rendering cost. Frost's hardware performance,
 fractional scaling and multiple-monitor acceptance remain open; its implementation
 must not be described as fully release-certified on this evidence alone.
 Physical keyboard traversal, Orca, live-provider operation and current provider
 terms require owner participation. Automated tests use private demo sessions and
 synthetic content; they do not inspect real credentials.
+
+Follow-up work is recorded in the [open-items validation](2026-10-07-open-items-validation.md).
+That record supersedes the above pending processing, virtual-monitor and product
+proposal status, with fresh source-specific measurements and implementation
+reviews. This report's earlier callback measurements and render implementation
+remain historical evidence, not certification of the later allocation repair.
 
 Coordinator `tools/prefs-smoke.sh` exited 0: six traversal combinations (three
 runs each), lifecycle actions, six state matrices and full startup/target changes
@@ -191,3 +199,12 @@ different files. The package includes the new effects, leaf asset and both theme
 developer npm files, WebKit experiments, test probes, reports and screenshots are
 absent. No runtime file imports WebKit. Its compiled schema/catalog are covered by
 the successful build/schema/catalog checks.
+
+## Later regression closure
+
+The counts and package comparisons above describe the earlier implementation.
+The October 8 follow-up changes primary header layout, native allocation timing,
+credential coordination and product decisions. Its current results and remaining
+human-validation limits are recorded in
+[open-items validation](2026-10-07-open-items-validation.md) and
+[final release validation](2026-10-08-release-validation.md).

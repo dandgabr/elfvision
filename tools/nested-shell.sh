@@ -25,7 +25,9 @@ fi
 parent_pipewire="${PIPEWIRE_RUNTIME_DIR:-$parent_runtime}"
 work="$(mktemp -d)"
 # Removed on every way out, a signal included: the folder can hold a copy of the client ids.
-trap 'rm -rf "$work"' EXIT
+# shellcheck source=tools/private-session-cleanup.sh
+source "$root/tools/private-session-cleanup.sh"
+trap 'cleanup_private_session "$work"' EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 mkdir -p "$work/data/gnome-shell/extensions"
@@ -33,7 +35,7 @@ ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 
 # The client ids of your real configuration, copied (read only, private) so Connect works here.
 real_config="${LOCAL_CONFIG_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/gnome-ai-quota/providers.local.json}"
-if [ -r "$real_config" ]; then
+if [ -f "$real_config" ] && [ -r "$real_config" ]; then
     mkdir -p "$work/config/gnome-ai-quota" && chmod 700 "$work/config/gnome-ai-quota"
     install -m 600 "$real_config" "$work/config/gnome-ai-quota/providers.local.json"
 fi
@@ -45,6 +47,7 @@ if [ -n "$parent_wayland" ]; then export WAYLAND_DISPLAY="$parent_wayland"; fi
 # crash markers stay private. This does not expose the parent's configuration.
 if [ -n "$parent_pipewire" ]; then export PIPEWIRE_RUNTIME_DIR="$parent_pipewire"; fi
 export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
+export XDG_STATE_HOME="$work/state" GIO_USE_VFS=local
 # A file backend, not "memory": the preferences window is another process and
 # must share the settings with the shell.
 # DATA_SOURCE=demo starts with made-up data instead of the real providers, and DEMO_SCENARIO
@@ -59,7 +62,7 @@ done
 export WORK="$work" GSETTINGS_BACKEND=keyfile GTK_A11Y=none UUID="$uuid" OPEN_PREFS="${1:-}"
 
 # The sign-in of a test goes to a throwaway keyring, never to your real one.
-unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK
+unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK AT_SPI_BUS_ADDRESS
 dbus-run-session -- bash -c '
     # A throwaway, unlocked keyring, so the provider keys of a test never touch yours.
     # Its own private runtime folder: it must not touch the control socket of your real keyring.

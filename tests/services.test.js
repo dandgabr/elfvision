@@ -55,7 +55,7 @@ test('loopback: a foreign Host, another method and another path are turned away,
 
 test('cache: what is saved comes back, privately, and a missing file is not a problem', async () => {
     const directory = `${tmpDir()}/cache`;
-    const store = new CacheStore(directory);
+    const store = new CacheStore(directory, {gate: null});
     assertEqual(await store.load(), {snapshots: [], problems: []});
     const snapshot = normalizeSnapshot({id: 'a', name: 'A', plan: 'Pro', metrics: [{id: 'm', kind: 'percent', percentUsed: 42}],
         source: {kind: 'fresh', fetchedAt: Date.now()}}).snapshot;
@@ -68,7 +68,7 @@ test('cache: what is saved comes back, privately, and a missing file is not a pr
 
 test('cache: a huge file and a corrupt one are ignored, and the last write is the one that stays', async () => {
     const directory = tmpDir();
-    const store = new CacheStore(directory);
+    const store = new CacheStore(directory, {gate: null});
     GLib.file_set_contents(`${directory}/snapshots.json`, 'x'.repeat(MAX_CACHE_BYTES + 10));
     const huge = await store.load();
     assertEqual([huge.snapshots.length, huge.problems.length], [0, 1]);
@@ -87,10 +87,10 @@ test('cache: a huge file and a corrupt one are ignored, and the last write is th
 
 test('alert store: the state comes back, privately; a missing, huge or corrupt file is an empty state', async () => {
     const directory = `${tmpDir()}/state`;
-    const store = new AlertStore(directory);
+    const store = new AlertStore(directory, {gate: null});
     assertEqual(await store.load(), {state: emptyAlertState(), problems: []});
-    const state = {...emptyAlertState(), levels: {'claude|five': {fired: true, resetsAt: 123, at: 456}}};
-    store.save(state);
+    const state = {...emptyAlertState(), levels: {'claude|five': {fired: true, warningFired: false, rules: '95|false|80', resetsAt: 123, at: 456}}};
+    await store.save(state);
     assertEqual((await store.load()).state, state);
     const mode = path => Gio.File.new_for_path(path).query_info('unix::mode', Gio.FileQueryInfoFlags.NONE, null).get_attribute_uint32('unix::mode') & 0o777;
     assertEqual([mode(directory), mode(`${directory}/alerts.json`)], [0o700, 0o600]);
@@ -106,7 +106,7 @@ test('alert store: a symbolic link in place of the file is not followed', async 
     const directory = tmpDir();
     GLib.file_set_contents(`${directory}/elsewhere.json`, serializeText());
     Gio.File.new_for_path(`${directory}/alerts.json`).make_symbolic_link(`${directory}/elsewhere.json`, null);
-    const result = await new AlertStore(directory).load();
+    const result = await new AlertStore(directory, {gate: null}).load();
     assertEqual([result.state, result.problems.length], [emptyAlertState(), 1]);
 });
 
@@ -132,7 +132,7 @@ test('timers: a bad delay never fires at once or overflows, and a timer can be c
 import {restoreDefaults} from '../lib/prefs/about.js';
 import {KEPT_KEYS, RESET_KEYS} from '../lib/core/defaults.js';
 
-test('restore defaults: looks, notifications and the data source go back; every account-related setting stays', () => {
+test('restore defaults: looks and notifications reset while the data source and every account-related setting stay', () => {
     const source = Gio.SettingsSchemaSource.new_from_directory(`${GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')))}/schemas`, null, false);
     const settings = Gio.Settings.new_full(source.lookup('org.gnome.shell.extensions.gnome-ai-quota', false), Gio.memory_settings_backend_new(), null);
     // Change one of each kind that is restored, including the enum ones.
@@ -161,7 +161,7 @@ test('restore defaults: looks, notifications and the data source go back; every 
         assertTrue(settings.get_user_value(key) === null, `${key} was reset`);
     assertEqual([settings.get_string('position'), settings.get_string('compact-mode'), settings.get_int('bar-count'), settings.get_string('theme'),
         settings.get_boolean('notifications-enabled'), settings.get_int('alert-week-percent'), settings.get_boolean('alert-session-enabled'), settings.get_string('data-source')],
-    ['right', 'auto', 3, 'sistema-gnome', true, 95, true, 'live']);
+    ['right', 'auto', 3, 'sistema-gnome', true, 95, true, 'demo']);
     for (const key of KEPT_KEYS)
         assertTrue(settings.get_user_value(key) !== null, `${key} was kept`);
     assertEqual([settings.get_strv('untracked-providers'), settings.get_strv('terms-acknowledged'), settings.get_string('command-code-username'),
@@ -200,4 +200,72 @@ test('restore defaults: later edits and setup dismissal reach an independent obs
     assertEqual([observer.get_string('position'), observer.get_boolean('first-use-done')], ['right', true]);
     settings.set_int('bar-count', 5);
     assertEqual(observer.get_int('bar-count'), 5);
+});
+
+
+test('cache: creating a private owned directory preserves existing ancestor permissions', async () => {
+    const parent = `${tmpDir()}/public-parent`;
+    GLib.mkdir_with_parents(parent, 0o755); GLib.chmod(parent, 0o755);
+    const directory = `${parent}/new-parent/cache`;
+    await new CacheStore(directory, {gate: null}).save([]);
+    const mode = path => Gio.File.new_for_path(path).query_info('unix::mode', Gio.FileQueryInfoFlags.NONE, null).get_attribute_uint32('unix::mode') & 0o777;
+    assertEqual([mode(parent), mode(`${parent}/new-parent`), mode(directory)], [0o755, 0o700, 0o700]);
+});
+
+test('cache: a store retains its load ticket and cannot recreate a file after disconnection', async () => {
+    const directory = `${tmpDir()}/guarded-cache`; let epoch = 'old', captures = 0;
+    const check = ticket => { if (ticket.epoch !== epoch) throw Object.assign(new Error('stale'), {code: 'stale'}); };
+    const gate = {capture: async () => { captures++; return {epoch, provider: null}; },
+        assertCurrent: async ticket => check(ticket), guardFileWrite: async (ticket, fn) => { check(ticket); return fn(); }};
+    const store = new CacheStore(directory, {gate}); await store.load(); await store.save([]);
+    const file = Gio.File.new_for_path(`${directory}/snapshots.json`); file.delete(null); epoch = 'new';
+    await store.save([]);
+    assertEqual([captures, file.query_exists(null)], [1, false]);
+});
+
+
+test('credentials: retired rotation uses its captured gate without creating a replacement participant', async () => {
+    const {createCredentialMutator} = await import('../lib/services/secrets.js');
+    const {createDisconnectFacade} = await import('../lib/services/disconnectGate.js');
+    let singleton = null, created = 0, writes = 0, release;
+    const active = new Set(), leases = [];
+    const getGate = () => singleton ??= createDisconnectFacade({
+        detach: facade => { if (singleton === facade) singleton = null; },
+        initialize: async () => {
+            const id = ++created; active.add(id);
+            return {ready: async () => {}, subscribe: () => {}, registerCanceller: () => {},
+                withCredentialWrite: async (provider, ticket, fn) => { leases.push({provider, ticket}); return fn(); },
+                close: async () => { active.delete(id); }};
+        },
+    });
+    const captured = getGate(); await captured.ready();
+    const pending = new Promise(resolve => { release = resolve; });
+    const retirement = captured.retire(pending);
+    const ticket = {epoch: 'accepted', provider: 'claude'};
+    const service = createCredentialMutator({getGate, lookup: async () => null,
+        store: async () => { writes++; }, erase: async () => true});
+    try {
+        assertEqual(await service.storeSecret('claude', 'oauth-token', 'synthetic', 'test', {gate: captured, ticket}), true);
+        assertEqual([created, writes, leases], [1, 1, [{provider: 'claude', ticket}]]);
+    } finally { release(); await retirement; await singleton?.close(); }
+    assertEqual(active.size, 0);
+});
+
+test('credentials: lazy default gate and explicit delete gate retain conditional mutation semantics', async () => {
+    const {createCredentialMutator} = await import('../lib/services/secrets.js');
+    let defaults = 0, writes = 0; const calls = [];
+    const gate = name => ({withCredentialWrite: async (provider, ticket, fn, options) => {
+        calls.push({name, provider, ticket, operation: options?.operation ?? 'write'}); return fn();
+    }});
+    const captured = gate('captured'), fallback = gate('default');
+    const service = createCredentialMutator({getGate: () => { defaults++; return fallback; },
+        lookup: async () => JSON.stringify({v: 1, gen: 'new', refresh: 'same', access: 'synthetic', expiresAt: 1000}),
+        store: async () => { writes++; }, erase: async () => true});
+    const ticket = {epoch: 'accepted'};
+    assertEqual(await service.storeSecret('claude', 'oauth-token', 'synthetic', 'test',
+        {gate: captured, ticket, expected: {gen: 'old', refresh: 'same'}}), false);
+    await service.clearSecret('claude', 'oauth-token', {gate: captured, ticket});
+    await service.storeSecret('claude', 'api-key', 'synthetic', 'test');
+    assertEqual([defaults, writes, calls.map(call => [call.name, call.operation])],
+        [1, 1, [['captured', 'write'], ['captured', 'delete'], ['default', 'write']]]);
 });

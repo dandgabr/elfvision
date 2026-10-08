@@ -36,6 +36,12 @@ Colors must be hex values. Invalid themes are listed, with the reason, at the to
 of the picker. [ADR 0006](adr/0006-theming.md) lists every token and the
 validation rules.
 
+Font names remain local fallback choices. General → Suggested fonts offers a
+separate explicit installation of four maintained Poppins/Inter/JetBrains Mono
+files with pinned source, hashes and licenses. Choosing a theme never downloads
+fonts, and theme JSON cannot add download addresses. Missing fonts continue to
+use installed fallbacks; existing user files are preserved.
+
 
 ## Optional effect profiles
 

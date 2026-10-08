@@ -359,3 +359,75 @@ test('themes: generator rejects unknown profile fields and presets before writin
         assertTrue(!GLib.file_test(output, GLib.FileTest.EXISTS), 'invalid profiles must not write output');
     }
 });
+
+
+test('themes: effect headings expose the material while reading cards and controls remain opaque', () => {
+    const properties = (css, selector) => {
+        const result = {};
+        for (const rule of css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+            if (!rule[1].split(',').map(value => value.trim()).includes(selector)) continue;
+            for (const declaration of rule[2].split(';')) {
+                const colon = declaration.indexOf(':');
+                if (colon > 0) result[declaration.slice(0, colon).trim()] = declaration.slice(colon + 1).trim();
+            }
+        }
+        return result;
+    };
+    for (const id of builtinIds()) {
+        const {theme} = loadTheme(id);
+        for (const scheme of ['light', 'dark']) {
+            const css = compileTheme(TEMPLATE, theme, {scheme});
+            const colors = resolvedColors(theme, scheme);
+            for (const selector of ['.gaq-effects-active .gaq-summary', '.gaq-effects-active .gaq-section']) {
+                const rule = properties(css, selector);
+                assertEqual(rule['background-color'], 'transparent', `${id}/${scheme} ${selector} hides the material behind a solid strip`);
+                assertEqual(rule.color, colors.fg, `${id}/${scheme} headings need readable primary text`);
+                assertTrue(rule['text-shadow']?.includes(colors.bg), `${id}/${scheme} heading contrast must be local to the text`);
+            }
+            assertEqual(properties(css, '.gaq-card')['background-color'], colors.surface, `${id}/${scheme} quota reading surface lost opacity`);
+            assertEqual(properties(css, '.gaq-effects-active .gaq-button')['background-color'], colors.surface, `${id}/${scheme} controls lost opacity`);
+        }
+    }
+});
+
+
+test('themes: card scroll gutters reserve the validated shadow footprint without changing its identity', () => {
+    for (const id of builtinIds()) {
+        const {theme} = loadTheme(id);
+        for (const scheme of ['light', 'dark']) {
+            const shadow = theme.schemes[scheme].shadow;
+            const css = compileTheme(TEMPLATE, theme, {scheme});
+            const padding = css.match(/\.gaq-cards\s*\{[^}]*padding:\s*([^;]+);/s)?.[1]?.trim();
+            let expected = [0, 0, 0, 0];
+            if (shadow !== 'none' && !shadow.startsWith('inset ')) {
+                const values = shadow.match(/^((?:-?[\d.]+px|0)(?: (?:-?[\d.]+px|0)){1,3}) /)[1].split(' ').map(parseFloat);
+                const [x, y, blur = 0, spread = 0] = values;
+                const radius = Math.max(0, blur) + spread;
+                expected = [radius - y, radius + x, radius + y, radius - x]
+                    .map(value => Math.min(64, Math.max(0, Math.ceil(value))));
+            }
+            assertEqual(padding, expected.map(value => `${value}px`).join(' '), `${id}/${scheme} scroll clip must reserve its shadow footprint`);
+            assertTrue(css.includes(`box-shadow: ${shadow};`), `${id}/${scheme} shadow identity changed`);
+        }
+    }
+    const {theme} = loadTheme('glassmorphism');
+    assertTrue(compileTheme(TEMPLATE, theme, {scheme: 'dark'}).includes('padding: 24px 32px 40px 32px;'), 'dark glass needs the full 32px lateral blur extent');
+    for (const [shadow, padding] of [
+        ['none', '0px 0px 0px 0px'],
+        ['inset 0 0 999px #000', '0px 0px 0px 0px'],
+        ['INSET 0 0 10PX #000', '0px 0px 0px 0px'],
+        ['2PX -3PX 5PX 4PX #000', '12px 11px 6px 7px'],
+        ['-3px 4px 0 #000', '0px 0px 4px 3px'],
+        ['0 0 999px #000', '64px 64px 64px 64px'],
+        ['0 0 12px -6px #000', '6px 6px 6px 6px'],
+        ['2px -3px 5px 4px #000', '12px 11px 6px 7px'],
+        ['0.5px 0 1.25px #000', '2px 2px 2px 1px'],
+        ['0 0 12px #000; padding: 999px', '0px 0px 0px 0px'],
+    ]) {
+        const raw = JSON.parse(read('themes/builtin/glassmorphism/theme.json'));
+        raw.schemes.dark.shadow = shadow;
+        const {theme: custom} = validateTheme(raw);
+        assertTrue(compileTheme(TEMPLATE, custom, {scheme: 'dark'}).includes(`padding: ${padding};`), `${shadow} must reserve bounded safe geometry`);
+    }
+    assertTrue(!TEMPLATE.includes('clip-to-allocation: false'), 'gutters must not disable popup clipping');
+});

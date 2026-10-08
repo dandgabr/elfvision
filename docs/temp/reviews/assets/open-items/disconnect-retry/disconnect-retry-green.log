@@ -1,0 +1,36 @@
+ok    disconnect: durable cross-process gate is available
+ok    disconnect: completion rejects old login tickets and permits explicit new ones
+ok    disconnect: issued keyring write drains before deletion across two clients
+ok    disconnect: crashed issued write never expires within the same boot
+ok    disconnect: prior boot permits tombstone recovery and exact repeated deletion
+ok    disconnect: keyring refusal retains affected gate without false disconnected success
+ok    disconnect: retry removes credentials and published data recreated after partial success
+ok    disconnect: asynchronous cache commit holds serialization until completed
+ok    disconnect: cancellation callbacks run and stale file writers are fenced
+ok    disconnect: overlapping same-process deletion is rejected without replacing transaction
+ok    disconnect: crashed remote deletion holds tombstone until prior boot
+ok    disconnect: corrupt and unexpected metadata fields fail closed
+ok    disconnect: token rotation completion after reset cannot issue a credential store
+ok    disconnect: delayed OAuth configuration cannot start an old sign-in after completion
+ok    disconnect: API save holds a lease and its late completion cannot announce old credentials
+ok    disconnect: a live unacknowledged writer timeout is never treated as expired
+ok    disconnect: observed legacy Shell fence survives same-boot replacement and clears only on a new boot
+ok    disconnect: a closed issued writer retires its participant after settlement across reenables
+ok    disconnect: closing lazy facade detaches immediately and never erases its replacement singleton
+ok    disconnect: closing an issued deletion retires the coordinator participant after callbacks settle
+ok    disconnect: normal retirement keeps accepted writer operations alive until idle
+ok    disconnect: a replacement gate still cancels a retiring accepted rotation before late storage
+ok    disconnect: lazy retirement detaches singleton while idle work is still pending
+ok    disconnect: same-provider writes exclude each other across clients without blocking metadata or other providers
+ok    disconnect: conditional rotation compares inside provider exclusion after login
+ok    disconnect: conditional rotation compares inside provider exclusion after delete
+ok    disconnect: conditional rotation compares inside provider exclusion after unchanged
+ok    disconnect: old token manager cannot resurrect credentials after completed login before lease acquisition
+ok    disconnect: old token manager cannot resurrect credentials after completed delete before lease acquisition
+ok    disconnect: queued mutation rechecks epoch while disconnect enters drain
+ok    disconnect: same-boot orphaned store excludes later mutation without expiry
+ok    disconnect: same-boot orphaned delete excludes later mutation without expiry
+ok    disconnect: individual deletion registers a durable delete lease and settles before queued login
+ok    disconnect: a provider mutation wait times out without removing the accepted lease
+
+34 passed, 0 failed

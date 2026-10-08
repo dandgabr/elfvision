@@ -167,7 +167,7 @@ initially, time-based movement and a twelve-instance cap.
 - [x] Implement clipped background/decoration layers without replacing provider
   controls. Reuse leaf textures and actors; stop updates on close. Allow short
   native interaction transitions independently of ambient effects.
-- [ ] Run static versus leaves measurements for 60 seconds each and 100 lifecycle
+- [x] Run static versus leaves measurements for 60 seconds each and 100 lifecycle
   cycles; record frame-time evidence and retained resource counts. Run
   `tools/check.sh`, `tools/layout-check.sh` and `tools/nested-shell.sh`; commit.
 
@@ -182,7 +182,7 @@ initially, time-based movement and a twelve-instance cap.
 - [x] Implement background-only alpha and opaque reading surfaces. Implement
   decorative glass with cached internal gradients/specular borders; no desktop
   capture, browser process or ambient timer is needed for static glass.
-- [ ] Capture both materials on dark/light/detailed wallpapers with all controls
+- [x] Capture both materials on dark/light/detailed wallpapers with all controls
   and values identical. Test contrast, focus, RTL, enlarged text and transparency
   off. Run `tools/check.sh` and nested-shell probes; commit.
 
@@ -195,14 +195,14 @@ initially, time-based movement and a twelve-instance cap.
 - [x] Prototype inside `tools/nested-shell.sh` using installed Shell 50 APIs.
   Establish whether a native backdrop actor can be clipped and sample only the
   background under the popup. Record exact callable APIs and compatibility.
-- [ ] Establish failing visual checks: letters remain sharp; the desktop outside
+- [x] Establish failing visual checks: letters remain sharp; the desktop outside
   popup bounds remains sharp; moving a window behind the popup updates its frosted
   representation; no recursive popup capture; correct fractional scaling and
   multi-monitor origin. A frozen wallpaper-only imitation does not pass.
 - [x] Implement one backdrop surface behind controls, fixed blur radius, safe
   teardown and decorative-glass runtime fallback on unsupported capability.
   Avoid per-card blur, changing blur radius during animation and broad capture.
-- [ ] Measure 60-second static versus frost frame times, open latency and resource
+- [x] Measure 60-second static versus frost frame times, open latency and resource
   teardown. Apply the spec's budgets. If the implementation fails a gate, record
   the unresolved requirement and proposed architecture change; do not declare
   frost delivered or add a mandatory helper silently. Commit only tested results.
@@ -290,3 +290,15 @@ create `docs/temp/reviews/2026-10-07-post-mvp-validation.md`.
   open if its gate failed; keep optional studies and product decisions distinct.
   Prepare commits/PRs by milestone and await publication/merge instructions when
   not already authorized. Synchronize after confirmed merges.
+
+## Final follow-up evidence
+
+The October 8 regression closure passes 415 unit tests, private preferences and
+credential integrations, twelve primary-reading layouts, 264 resource combinations,
+44 theme captures, 100 lifecycle cycles, pointer close tests, fractional monitor
+pixel controls, paired lateral shadows and strict native-error rejection. The
+fresh four-condition 60-second processing profile passes with recorded source
+hashes; leaves remain close to the added-cost limit. See
+[final release validation](../reviews/2026-10-08-release-validation.md).
+Physical GPU/monitor, lock/suspend, human Orca and real-account certification remain
+explicit participation limits, separate from the completed synthetic gates.

@@ -8,6 +8,20 @@ const provider = (id, metrics = [{id: 'm', kind: 'percent', window: 'week', wind
 const cache = (snapshots = []) => ({load: async () => ({snapshots, problems: []}), save: () => {}});
 const cached = id => ({id, name: id, plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: Date.now()}, metrics: []});
 
+test('controller: disconnect stop cancels pending work without recreating the cache', async () => {
+    const saved = [];
+    const p = provider('a');
+    const controller = new QuotaController({providers: [p], cache: {
+        load: async () => ({snapshots: [cached('a')], problems: []}),
+        save: snapshots => saved.push(snapshots),
+    }});
+    await controller.start();
+    controller.stop({flush: false});
+    await flush();
+    assertEqual(saved, []);
+    assertTrue(p.disposed);
+});
+
 test('controller: providers can be added and removed while running, in display order', async () => {
     const controller = new QuotaController({providers: [provider('b')], cache: cache([cached('a'), cached('b')]), order: ['a', 'b', 'c']});
     await controller.start();
@@ -123,4 +137,23 @@ test('controller: a cached value that is hours old reaches the listeners as stal
     await controller.refresh();
     assertEqual(seen, ['stale']);
     controller.stop();
+});
+
+test('controller: stop returns settlement of accepted provider rotation without delaying disposal', async () => {
+    let resolve; const pending = new Promise(r => { resolve = r; }); let disposed = false, settled = false;
+    const p = {...provider('a'), dispose() { disposed = true; return pending; }};
+    const controller = new QuotaController({providers: [p], cache: cache()});
+    const stopping = controller.stop({flush: false});
+    assertTrue(disposed); assertTrue(typeof stopping?.then === 'function');
+    stopping.then(() => { settled = true; }); await flush(20); assertEqual(settled, false);
+    resolve(); await stopping; assertEqual(settled, true);
+});
+
+test('controller: stop also awaits a rotation from a provider already removed', async () => {
+    let resolve; const pending = new Promise(r => { resolve = r; }); let settled = false;
+    const p = {...provider('a'), dispose() { return pending; }};
+    const controller = new QuotaController({providers: [p], cache: cache()});
+    controller.removeProvider('a');
+    const stopping = controller.stop({flush: false}); stopping.then(() => { settled = true; });
+    await flush(20); assertEqual(settled, false); resolve(); await stopping; assertEqual(settled, true);
 });
