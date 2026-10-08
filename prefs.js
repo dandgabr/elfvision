@@ -11,7 +11,7 @@ import {buildAboutGroup} from './lib/prefs/about.js';
 import {buildAccountsPage} from './lib/prefs/accounts.js';
 import {buildNotificationsPage} from './lib/prefs/notifications.js';
 import {createSuggestedFontsGroup} from './lib/prefs/suggestedFonts.js';
-import {builtinCatalog, selectedThemeName, themePresentation} from './lib/prefs/themeCatalog.js';
+import {builtinCatalog, selectedThemeName, themeDefaultIndicators, themePresentation} from './lib/prefs/themeCatalog.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 /**
@@ -124,13 +124,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
                 activatable: true,
             });
             row.add_prefix(swatchStrip(theme.swatches[dark ? 'dark' : 'light'], name));
-            // Capacity belongs to the validated packaged profile, independent of current settings.
-            for (const [available, iconName, label] of [
-                [theme.capabilities.transparency, 'view-reveal-symbolic', _('Supports transparency')],
-                [theme.capabilities.effects, 'starred-symbolic', _('Supports visual effects')],
-            ]) {
-                if (!available)
-                    continue;
+            for (const {iconName, label} of themeDefaultIndicators(theme, _)) {
                 const icon = new Gtk.Image({icon_name: iconName, pixel_size: 16,
                     valign: Gtk.Align.CENTER, tooltip_text: label, focusable: false});
                 icon.update_property([Gtk.AccessibleProperty.LABEL], [label]);

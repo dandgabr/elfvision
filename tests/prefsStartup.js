@@ -6,6 +6,7 @@ import Gtk from 'gi://Gtk';
 import System from 'system';
 import {fmt} from '../lib/core/viewmodel.js';
 import {scanThemes} from '../lib/services/themeFiles.js';
+import {themeDefaultIndicators} from '../lib/prefs/themeCatalog.js';
 
 String.prototype.format = function (...args) { return fmt(String(this), ...args); };
 Gio.Resource.load('/usr/share/gnome-shell/org.gnome.Shell.Extensions.src.gresource')._register();
@@ -55,9 +56,16 @@ app.connect('activate', () => {
                 window.push_subpage(themePage); await wait();
                 const catalog = scanThemes(root).themes;
                 const icons = walk(themePage).filter(w => w instanceof Gtk.Image);
-                for (const [capability, label] of [['transparency', 'Supports transparency'], ['effects', 'Supports visual effects']])
-                    check(icons.filter(w => w.tooltip_text === label).length === catalog.filter(t => t.capabilities[capability]).length,
-                        `native theme picker: ${capability} icons reflect all validated profiles`);
+                const expected = catalog.flatMap(theme => themeDefaultIndicators(theme, text => text));
+                for (const {iconName, label} of expected)
+                    check(icons.some(w => w.icon_name === iconName && w.tooltip_text === label),
+                        `native theme picker: default background tooltip ${label}`);
+                check(icons.filter(w => ['view-reveal-symbolic', 'starred-symbolic'].includes(w.icon_name)).length === expected.length,
+                    'native theme picker: no icons for merely compatible materials or interaction-only themes');
+                check(icons.some(w => w.tooltip_text?.includes('Falling leaves')),
+                    'native theme picker: describes falling leaves');
+                check(icons.some(w => w.tooltip_text === 'Default transparency: frosted glass with background blur.'),
+                    'native theme picker: describes the frosted default material');
                 window.pop_subpage(); await wait();
             }
             window.close();

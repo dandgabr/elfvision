@@ -2,7 +2,7 @@ import GLib from 'gi://GLib';
 
 import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
 import {effectPolicy, validateEffectProfile} from '../lib/core/themeEffects.js';
-import {builtinCatalog} from '../lib/prefs/themeCatalog.js';
+import {builtinCatalog, themeDefaultIndicators} from '../lib/prefs/themeCatalog.js';
 import {ACCENTS, compileTheme, hexToRgb, pickScheme, swatches, systemAccent, validateTheme, resolvedColors} from '../lib/core/theme.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
@@ -523,39 +523,42 @@ test('themes: Cyberpunk light has visible structural framing on its reading surf
 });
 
 
-test('theme picker: validated capabilities follow built-in origin and preserve profiles', () => {
+test('theme picker: validated defaultFeatures follow built-in origin and preserve profiles', () => {
     const {themes} = scanThemes(root, {userDirectory: tmpDir()});
     const system = themes.find(theme => theme.id === 'sistema-gnome');
-    assertEqual(system.capabilities, {transparency: true, effects: true});
+    assertEqual(system.defaultFeatures, {transparency: false, effects: false});
     assertEqual(system.effects, loadTheme('sistema-gnome').theme.effects);
     const cyberpunk = themes.find(theme => theme.id === 'cyberpunk');
-    assertEqual(cyberpunk.capabilities, {transparency: true, effects: true});
+    assertEqual(cyberpunk.defaultFeatures, {transparency: false, effects: true});
 });
 
-test('theme picker: user claims never grant capabilities and malformed built-in effects fall back safely', () => {
+test('theme picker: user claims never grant defaultFeatures and malformed built-in effects fall back safely', () => {
     const dir = sandbox();
     const userDirectory = tmpDir();
     GLib.mkdir_with_parents(`${userDirectory}/custom`, 0o755);
     const userRaw = {...JSON.parse(goodJson('custom')), origin: 'builtin', builtin: true,
-        capabilities: {transparency: true, effects: true}};
+        defaultFeatures: {transparency: true, effects: true}};
     GLib.file_set_contents(`${userDirectory}/custom/theme.json`, JSON.stringify(userRaw));
     const custom = scanThemes(dir, {userDirectory}).themes[0];
     assertEqual(custom.origin, 'user');
-    assertEqual(custom.capabilities, {transparency: false, effects: false});
+    assertEqual(custom.defaultFeatures, {transparency: false, effects: false});
     const malformed = JSON.parse(goodJson('broken'));
     malformed.effects.motion = 'unreviewed-script';
     writeTheme(dir, 'broken', JSON.stringify(malformed));
-    assertEqual(scanThemes(dir, {userDirectory}).themes.find(theme => theme.id === 'broken').capabilities,
+    assertEqual(scanThemes(dir, {userDirectory}).themes.find(theme => theme.id === 'broken').defaultFeatures,
         {transparency: false, effects: false});
 });
 
-test('theme picker: capability metadata reflects transparent materials, motion and texture independently', () => {
+test('theme picker: defaults distinguish background effects from interaction and compatible overrides', () => {
     const dir = sandbox();
     const userDirectory = tmpDir();
     const cases = [
         ['opaque-static', {material: 'opaque', motion: 'none', texture: 'none'}, {transparency: false, effects: false}],
-        ['transparent-static', {material: 'opaque', motion: 'none', texture: 'none', compatibleMaterials: ['opaque', 'translucent']}, {transparency: true, effects: false}],
-        ['opaque-motion', {material: 'opaque', motion: 'interaction', texture: 'none'}, {transparency: false, effects: true}],
+        ['opaque-compatible', {material: 'opaque', motion: 'none', texture: 'none', compatibleMaterials: ['opaque', 'translucent']}, {transparency: false, effects: false}],
+        ['transparent-static', {material: 'translucent', motion: 'none', texture: 'none'}, {transparency: true, effects: false}],
+        ['interaction-only', {material: 'opaque', motion: 'interaction', texture: 'none'}, {transparency: false, effects: false}],
+        ['falling-leaves', {material: 'opaque', motion: 'leaves', texture: 'none'}, {transparency: false, effects: true}],
+        ['zero-particles', {material: 'opaque', motion: 'leaves', texture: 'none', particleCount: 0}, {transparency: false, effects: false}],
         ['opaque-texture', {material: 'opaque', motion: 'none', texture: 'paper'}, {transparency: false, effects: true}],
     ];
     for (const [id, effects] of cases) {
@@ -565,7 +568,30 @@ test('theme picker: capability metadata reflects transparent materials, motion a
     }
     const {themes} = scanThemes(dir, {userDirectory});
     for (const [id, _profile, expected] of cases)
-        assertEqual(themes.find(theme => theme.id === id).capabilities, expected, id);
+        assertEqual(themes.find(theme => theme.id === id).defaultFeatures, expected, id);
+});
+
+test('theme picker: default tooltips name actual background materials and effects', () => {
+    const {themes} = scanThemes(root, {userDirectory: tmpDir()});
+    const labels = id => themeDefaultIndicators(themes.find(theme => theme.id === id), text => text).map(item => item.label);
+    assertEqual(labels('sistema-gnome'), []);
+    assertEqual(labels('glassmorphism'), [
+        'Default transparency: frosted glass with background blur.',
+        'Default background effects: Glass highlights (with Subtle or Full effects).',
+    ]);
+    assertEqual(labels('holographic-foil-iridescent'), [
+        'Default transparency: decorative glass.',
+        'Default background effects: Pearlescent sheen (with Subtle or Full effects).',
+    ]);
+    assertEqual(labels('linear-saas'), ['Default transparency: translucent background.']);
+    assertEqual(labels('organic-biophilic'), [
+        'Default background effects: Falling leaves (with Full effects and system animations enabled); Paper texture (with Subtle or Full effects).',
+    ]);
+    assertEqual(labels('aurora-mesh-gradient'), [
+        'Default transparency: decorative glass.',
+        'Default background effects: Moving gradient (with Full effects and system animations enabled); Mesh gradient (with Subtle or Full effects); Fine grain (with Subtle or Full effects).',
+    ]);
+    assertEqual(themeDefaultIndicators({builtin: false, origin: 'user'}, text => text), []);
 });
 
 test('About: author attribution and explicit public/private report actions use fixed destinations', () => {
