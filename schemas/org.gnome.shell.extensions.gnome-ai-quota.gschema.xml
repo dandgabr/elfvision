@@ -54,6 +54,17 @@
       <summary>Effects</summary>
       <description>off disables theme effects; subtle allows short interactions and static decoration; full allows ambient motion in compatible built-in themes. System animation preferences take priority.</description>
     </key>
+    <key name="effect-material" type="s">
+      <choices>
+        <choice value="theme"/>
+        <choice value="translucent"/>
+        <choice value="decorative-glass"/>
+        <choice value="frosted-glass"/>
+      </choices>
+      <default>'theme'</default>
+      <summary>Material</summary>
+      <description>Follow the theme, or select translucent, decorative glass or frosted glass backgrounds only in themes declaring that material compatible. Transparency off takes priority.</description>
+    </key>
     <key name="transparency-enabled" type="b">
       <default>true</default>
       <summary>Transparency</summary>

@@ -61,7 +61,7 @@ lib/prefs/          account controllers and views, the setup assistant, Notifica
 lib/ui/             St widgets (St is the shell's widget toolkit): meter, bar item, provider card, indicator, tooltip, the
                     notifier (the only code that makes notifications), legend and the
                     not-tracked list
-themes/builtin/     the 20 built-in themes, one folder each with a theme.json
+themes/builtin/     the 22 built-in themes, one folder each with a theme.json
 themes/v1.txt       the style slugs that tools/gen-themes.py generates
 schemas/            GSettings schema
 icons/              symbolic SVG icons, one per provider id, and the application icon
@@ -239,7 +239,8 @@ For the interface, run it and look. Methods:
 - The bar, the popup and the notifications: `DATA_SOURCE=demo DEMO_SCENARIO=drift
   tools/nested-shell.sh` (see [Nested shell](#nested-shell)). Close the window to end it.
 - Scripted checks and screenshots: [`tools/headless-shell.sh`](#headless-shell) with a script. Notes:
-  - The `Eval` scope has `Main`, `Gio`, `GLib` and `Shell`, but not `Clutter`. Use `imports.gi.Clutter`.
+  - The `Eval` scope has `Main`, `Gio`, `GLib` and `Shell`, but not `Clutter`.
+    Inside an async probe, use `const {default: Clutter} = await import('gi://Clutter')`.
   - A fresh shell shows the Fedora welcome dialog and the overview. Close the dialogs in
     `Main.layoutManager.modalDialogGroup` and call `Main.overview.hide()` first.
   - A virtual pointer that starts at the top-left corner triggers the hot corner. Move it to the middle of
@@ -252,6 +253,39 @@ For the interface, run it and look. Methods:
   session mode), so `Main.screenShield.lock(false)` in a test makes `disable()` run.
 - When a change adds a setting, run `tools/build.sh` (or `tools/check.sh`) first: some tests read the
   compiled schema, and an old one does not know the new key.
+
+### Native effect checks
+
+The effect harness needs the same installed GNOME Shell/GJS environment as the
+headless shell. Its visual analyzer additionally needs Python Pillow (Fedora:
+`python3-pillow`); this is development tooling, not a packaged runtime dependency.
+
+```sh
+tools/effects-check.sh quick       # policy, native resources, numbers and lifecycle
+tools/effects-check.sh visual      # synthetic backdrop and semantic pixel comparisons
+GAQ_EFFECTS_SCHEME=dark tools/effects-check.sh visual
+tools/effects-check.sh inventory   # actual 22-theme light/dark native captures
+tools/effects-check.sh benchmark   # three separate 60-second measurements
+```
+
+These commands start private demo sessions and create their evidence under
+`.superpowers/sdd/2026-10-07-post-mvp-execution/`. Captures contain demo data and
+synthetic content. Run benchmark without another rendering test at the same time.
+The wrapper bounds execution and checks native errors; its temporary session is
+removed on exit. Retained screenshots and metrics are ignored by git.
+
+Both Shell helpers use private runtime directories. The interactive nested helper
+preserves the parent Wayland/PipeWire preview endpoints before isolating its own
+sockets and crash marker. `LOCAL_CONFIG_FILE=/path/to/dummy.json` lets a scripted
+nested check use dummy public-client configuration; absent that override, its
+existing read-only copy of app configuration remains the manual sign-in workflow.
+
+Pixel comparisons verify local blur, changed backing content and decoration.
+Resource policy combinations and screenshot coverage are separate evidence.
+Callback elapsed work time, callback cadence and synchronous menu-open work do not measure GPU
+frame duration or first-painted latency. Hardware performance, fractional scaling,
+multiple monitors, physical keyboard and Orca gates remain explicit in the
+[validation record](temp/reviews/2026-10-07-post-mvp-validation.md).
 
 ## Static analysis
 
@@ -325,7 +359,7 @@ because St has no `var()`.
 3. Add its group and description to `lib/prefs/themeCatalog.js` so the picker can
    translate them, then run `tools/i18n.sh all`.
 4. Run the tests. They validate and compile every built-in theme, and one of them
-   asserts the count of twenty, so update it when the set changes.
+   asserts the exact expected slug set, so update that set when adding a theme.
 
 To try a theme without opening Preferences:
 
@@ -339,11 +373,15 @@ instead; the picker rescans that folder whenever it opens.
 
 ### Generated themes
 
-19 of the 20 built-in themes come from a gallery of visual styles
+19 of the 22 built-in themes come from a gallery of visual styles
 (`dandgabr/estilos-visuais`). `tools/gen-themes.py` reads the gallery's design
 tokens, derives the missing light or dark scheme in OKLCH, corrects contrast to
 WCAG targets (text 7:1, secondary text and status colors 4.5:1, accent 3:1) and
-writes one `theme.json` per style. It exits with status 1 if a scheme still fails.
+writes one `theme.json` per style. Reviewed effect presets come from
+`tools/theme-effect-profiles.json`, independently of the gallery's executable effect
+files. The generator validates that canonical source and copies each selected profile
+after compiling the tokens. It rejects an invalid profile before writing output, and
+exits with status 1 if a scheme still fails contrast.
 
 ```sh
 python3 -I tools/gen-themes.py --styles <path to an estilos-visuais clone> \
@@ -351,8 +389,12 @@ python3 -I tools/gen-themes.py --styles <path to an estilos-visuais clone> \
 ```
 
 `themes/v1.txt` lists the slugs. `sistema-gnome` is written by hand and the tool
-does not touch it. Review the diff after regenerating, since the output replaces
-the files.
+does not touch it; keep its manually authored effect profile in agreement with the
+canonical source. Do not edit generated JSON by hand: change the reviewed profile
+source or the generator, regenerate, then review the diff. `--effect-profiles <file>`
+selects an explicit canonical source for developer checks. The generator and its
+profile source are development tools; shipped theme files already contain their
+validated effect data.
 
 ## Translations
 

@@ -523,3 +523,27 @@
     font-weight: 400;
     color: {{p:muted@0.85}};
 }
+
+/* Fixed across effect modes, so decoration does not move control/hit geometry. */
+.gaq-popup-frame { padding: 12px; }
+
+/* Native material is a separate background sibling. Reading zones stay opaque. */
+.popup-menu-boxpointer.gaq-menu.gaq-effects-active {
+    -arrow-background-color: transparent;
+    -arrow-border-color: transparent;
+}
+.popup-menu-boxpointer.gaq-menu.gaq-effects-active .popup-menu-content {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+.gaq-effects-active .gaq-summary,
+.gaq-effects-active .gaq-section,
+.gaq-effects-active .gaq-footer,
+.gaq-effects-active .gaq-untracked-row,
+.gaq-effects-active .gaq-legend {
+    background-color: {{p:bg}};
+}
+.gaq-effects-active .gaq-button {
+    background-color: {{p:surface}};
+}

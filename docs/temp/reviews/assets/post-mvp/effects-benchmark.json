@@ -1,0 +1,172 @@
+{
+  "finished": true,
+  "inventory": [
+    {
+      "id": "sistema-gnome",
+      "combinations": 12
+    },
+    {
+      "id": "ai-native-generative-ui",
+      "combinations": 12
+    },
+    {
+      "id": "aurora-mesh-gradient",
+      "combinations": 12
+    },
+    {
+      "id": "bento-grid",
+      "combinations": 12
+    },
+    {
+      "id": "analog-newspaper-broadsheet",
+      "combinations": 12
+    },
+    {
+      "id": "card-based-ui",
+      "combinations": 12
+    },
+    {
+      "id": "cyberpunk",
+      "combinations": 12
+    },
+    {
+      "id": "de-stijl",
+      "combinations": 12
+    },
+    {
+      "id": "flat-design",
+      "combinations": 12
+    },
+    {
+      "id": "glassmorphism",
+      "combinations": 12
+    },
+    {
+      "id": "hand-drawn-sketch",
+      "combinations": 12
+    },
+    {
+      "id": "holographic-foil-iridescent",
+      "combinations": 12
+    },
+    {
+      "id": "isometric",
+      "combinations": 12
+    },
+    {
+      "id": "linear-saas",
+      "combinations": 12
+    },
+    {
+      "id": "lunarpunk",
+      "combinations": 12
+    },
+    {
+      "id": "mid-century-modern",
+      "combinations": 12
+    },
+    {
+      "id": "nanopunk",
+      "combinations": 12
+    },
+    {
+      "id": "organic-biophilic",
+      "combinations": 12
+    },
+    {
+      "id": "solarpunk",
+      "combinations": 12
+    },
+    {
+      "id": "terminal-tui",
+      "combinations": 12
+    },
+    {
+      "id": "expressive-variable-typography",
+      "combinations": 12
+    },
+    {
+      "id": "web-brutalism",
+      "combinations": 12
+    }
+  ],
+  "measurements": [
+    {
+      "name": "static",
+      "elapsedUsec": 60007145,
+      "openSynchronousUsec": 38220,
+      "updates": 0,
+      "callbackUsec": 0,
+      "resources": {
+        "destroyed": false,
+        "open": true,
+        "active": false,
+        "sources": 0,
+        "particles": 0,
+        "blurEffects": 0,
+        "actors": 0,
+        "material": "opaque",
+        "updates": 0,
+        "callbackUsec": 0,
+        "generation": 1002
+      }
+    },
+    {
+      "name": "leaves",
+      "elapsedUsec": 60000348,
+      "openSynchronousUsec": 49524,
+      "updates": 1758,
+      "callbackUsec": 249964,
+      "resources": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 1,
+        "particles": 8,
+        "blurEffects": 0,
+        "actors": 9,
+        "material": "opaque",
+        "updates": 1767,
+        "callbackUsec": 251104,
+        "generation": 1007
+      }
+    },
+    {
+      "name": "frost",
+      "elapsedUsec": 60002193,
+      "openSynchronousUsec": 70915,
+      "updates": 0,
+      "callbackUsec": 0,
+      "resources": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 0,
+        "particles": 0,
+        "blurEffects": 1,
+        "actors": 1,
+        "material": "frosted-glass",
+        "updates": 1767,
+        "callbackUsec": 251104,
+        "generation": 1013
+      }
+    }
+  ],
+  "error": "",
+  "closed": {
+    "destroyed": false,
+    "open": false,
+    "active": false,
+    "sources": 0,
+    "particles": 0,
+    "blurEffects": 0,
+    "actors": 0,
+    "material": "opaque",
+    "updates": 1767,
+    "callbackUsec": 251104,
+    "generation": 1511
+  },
+  "frameProcessingDuration": "unmeasured: callback elapsed work time and open synchronous work exclude compositor/GPU frame processing; cadence is not frame cost",
+  "measurementClock": "GLib.get_monotonic_time (elapsed wall-time microseconds)",
+  "measurementNote": "callbackUsec and openSynchronousUsec measure elapsed work, not process CPU utilization or compositor/GPU duration"
+}

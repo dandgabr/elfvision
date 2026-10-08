@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 """Generate gnome-ai-quota theme files from the estilos-visuais style gallery.
 
-Each gallery style defines design tokens for ONE color scheme (33 dark, 39 light).
+Each gallery style defines design tokens for its native color scheme.
 This tool reads those tokens, derives the missing scheme in OKLCH, corrects
 contrast automatically, and writes one theme.json per style.
 
 Usage:
     python3 -I tools/gen-themes.py --styles /path/to/estilos-visuais \
-        --out themes/builtin [--only themes/v1.txt]
+        --out themes/builtin --only themes/v1.txt
+
+Effect profiles come from tools/theme-effect-profiles.json, never gallery JavaScript.
 
 Contrast targets (WCAG): text 7:1, secondary text and status colors 4.5:1,
 accent 3:1, text on accent 4.5:1, all measured against the card surface.
 The command exits with status 1 when any generated scheme still fails.
 """
 import argparse
+import copy
 import json
 import math
 import pathlib
@@ -233,6 +236,44 @@ def refine(scheme):
     return changed
 
 
+# Developer-owned preset data, deliberately independent of the gallery's executable effects.
+MATERIAL_PRESETS = {'opaque', 'translucent', 'decorative-glass', 'frosted-glass'}
+MOTION_PRESETS = {'none', 'interaction', 'leaves', 'gradient', 'motes', 'pulse'}
+TEXTURE_PRESETS = {'none', 'paper', 'grain', 'scanlines', 'grid', 'botanical', 'strokes', 'chamfer'}
+EFFECT_FIELDS = {'material', 'motion', 'texture', 'particleCount', 'opacity', 'compatibleMaterials'}
+
+
+def read_effect_profiles(path):
+    """Reject invalid canonical profiles instead of silently correcting developer data."""
+    profiles = json.loads(path.read_text(encoding='utf-8'))
+    if not isinstance(profiles, dict):
+        raise ValueError('effect profiles must be keyed by theme slug')
+    for slug, profile in profiles.items():
+        if not re.fullmatch(r'[a-z0-9-]+', slug):
+            raise ValueError('effect profiles has an unsafe slug')
+        if not isinstance(profile, dict) or set(profile) - EFFECT_FIELDS:
+            raise ValueError(f'{slug}: effects has unknown fields')
+        for key, presets in [('material', MATERIAL_PRESETS), ('motion', MOTION_PRESETS), ('texture', TEXTURE_PRESETS)]:
+            if not isinstance(profile.get(key), str) or profile[key] not in presets:
+                raise ValueError(f'{slug}: effects.{key} is not an allowed preset')
+        count = profile.get('particleCount')
+        if type(count) is not int or not 0 <= count <= 12:
+            raise ValueError(f'{slug}: effects.particleCount must be an integer from zero to twelve')
+        opacity = profile.get('opacity')
+        if not isinstance(opacity, dict) or set(opacity) != {'light', 'dark'}:
+            raise ValueError(f'{slug}: effects.opacity must contain light and dark numeric values')
+        for value in opacity.values():
+            if type(value) not in (int, float) or not math.isfinite(value) or not .72 <= value <= 1:
+                raise ValueError(f'{slug}: effects.opacity must be finite and between 0.72 and 1')
+        materials = profile.get('compatibleMaterials')
+        if not isinstance(materials, list) or not 1 <= len(materials) <= len(MATERIAL_PRESETS) or any(
+                not isinstance(material, str) or material not in MATERIAL_PRESETS for material in materials):
+            raise ValueError(f'{slug}: effects.compatibleMaterials must contain allowed materials')
+        if len(set(materials)) != len(materials):
+            raise ValueError(f'{slug}: effects.compatibleMaterials must be unique')
+    return profiles
+
+
 # ---------------------------------------------------------------- build
 
 def token(tokens, key, fallback):
@@ -382,6 +423,8 @@ def main():
     parser.add_argument('--styles', required=True, type=pathlib.Path, help='path to a clone of estilos-visuais')
     parser.add_argument('--out', required=True, type=pathlib.Path, help='output directory for theme.json files')
     parser.add_argument('--only', type=pathlib.Path, help='text file with one style slug per line')
+    parser.add_argument('--effect-profiles', type=pathlib.Path, default=pathlib.Path(__file__).with_name('theme-effect-profiles.json'),
+                        help='canonical allowlisted effect profiles (defaults to tools/theme-effect-profiles.json)')
     args = parser.parse_args()
 
     styles = read_styles(args.styles)
@@ -395,7 +438,18 @@ def main():
             print('error: unknown styles: ' + ', '.join(missing), file=sys.stderr)
             return 2
 
-    themes = [build_theme(slug, styles[slug], meta) for slug in (wanted or styles)]
+    try:
+        profiles = read_effect_profiles(args.effect_profiles)
+        selected = list(wanted or styles)
+        if any(slug not in profiles for slug in selected):
+            raise ValueError('selected styles must all have reviewed effect profiles')
+    except (OSError, ValueError, TypeError) as error:
+        print(f'error: {error}', file=sys.stderr)
+        return 2
+
+    themes = [build_theme(slug, styles[slug], meta) for slug in selected]
+    for theme in themes:
+        theme['effects'] = copy.deepcopy(profiles[theme['id']])
     args.out.mkdir(parents=True, exist_ok=True)
     for theme in themes:
         (args.out / theme['id']).mkdir(exist_ok=True)

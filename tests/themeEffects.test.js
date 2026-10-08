@@ -110,3 +110,13 @@ test('theme effects: compatible materials are a bounded unique allowlist', () =>
         assertEqual(effectPolicy({...input, profile: {material: 'frosted-glass', compatibleMaterials: list}}), none);
     }
 });
+
+test('theme effects: material preference applies only to compatible trusted profiles', () => {
+    const profile = {material: 'translucent', compatibleMaterials: ['translucent', 'decorative-glass', 'frosted-glass']};
+    assertEqual(effectPolicy({...input, profile, materialPreference: 'frosted-glass'}).material, 'frosted-glass');
+    assertEqual(effectPolicy({...input, profile, materialPreference: 'decorative-glass'}).material, 'decorative-glass');
+    assertEqual(effectPolicy({...input, profile, materialPreference: 'theme'}).material, 'translucent');
+    assertEqual(effectPolicy({...input, profile: {material: 'opaque'}, materialPreference: 'frosted-glass'}).material, 'opaque');
+    assertEqual(effectPolicy({...input, profile, origin: 'user', materialPreference: 'frosted-glass'}).material, 'opaque');
+    assertEqual(effectPolicy({...input, profile, transparencyEnabled: false, materialPreference: 'frosted-glass'}).material, 'opaque');
+});

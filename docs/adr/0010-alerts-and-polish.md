@@ -34,9 +34,8 @@ English msgids. There is no language setting, no language step in the assistant 
 - The controller reports changes, not only that something changed: `subscribeChanges(({previous,
   next}) => ...)`. It seeds its previous values from the cache, so the first poll after a shell
   restart is not taken for a crossing.
-- Coalescing the updates of several providers that answer together into one redraw was planned and
-  is not done; what was done instead is that a bar item or a card whose view did not change is
-  not redrawn (see "Pending").
+- M4 avoided redrawing an unchanged bar item or card. M5 additionally coalesces
+  provider responses in one event-loop burst, retaining the newest snapshots.
 
 ### Quota notifications
 
@@ -216,18 +215,21 @@ monitor. Tooltip labels are reused across focus changes and destroyed during cle
 
 ## Pending
 
-Follow-up work outside the MVP scope:
-
-- **Indicator:** move its bar model to `lib/core` and coalesce the redraws of providers that answer
-  together.
-- **Bar items on the keyboard:** the tooltip on the bar shows on hover only; Escape closes the popup
-  before the legend.
-- **ESLint** (`no-undef` and the like) in CI: today the shell step of `tools/check.sh` covers it
-  locally, and CI does not run the shell.
+The M5 follow-ups are implemented: the bar model lives in pure `lib/core`,
+provider response bursts coalesce, keyboard focus opens bar tooltips, the first
+Escape hides the legend, and CI runs scoped ESLint without a desktop. Validation
+and remaining release checks are recorded in the
+[post-MVP execution plan](../temp/plans/2026-10-07-post-mvp-execution.md).
 
 Open questions:
 
 - Whether "Disconnect all accounts and delete local data" is wanted as a separate action.
-- Whether the pt-BR text needs a reader other than the owner.
+- A second agent reviewed the new pt-BR copy; an independent human/Orca pass
+  remains an owner check.
 - A warning and a critical level share one threshold per kind of quota. The text says which level was
   reached, but a second threshold is not offered.
+
+Concrete proposals, including optional font installation and safe coordination
+of account deletion, are in the
+[product decision record](../temp/plans/2026-10-07-post-mvp-product-decisions.md).
+Those proposals do not change current account or notification behavior.

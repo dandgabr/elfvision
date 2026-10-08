@@ -1,4 +1,4 @@
-# 0006. Theming: 20 themes, light and dark, tokens
+# 0006. Theming: 22 themes, light and dark, tokens
 
 Status: accepted. Implemented, except the items listed under "Not implemented".
 
@@ -7,9 +7,10 @@ Status: accepted. Implemented, except the items listed under "Not implemented".
 The panel and the popup are drawn by the GNOME Shell stylesheet, not by GTK. The
 popup background comes from `.popup-menu-content` (about `#36363a` in the dark
 variant) and the accent from the GNOME accent color (`accent-color`, GNOME 47 and
-later). Light or dark follows `color-scheme`. The author keeps a gallery of 72
+later). Light or dark follows `color-scheme`. The author keeps a gallery of
 visual styles, `dandgabr/estilos-visuais` (MIT, derived from the Coacus `ui-style-*`
-skills), which is the source of 19 of the built-in themes.
+skills), which is the source of twenty-one of the current built-in themes. The
+initial version-one inventory contained twenty themes including System.
 
 ## Decision
 
@@ -64,7 +65,7 @@ does not look like a warning.
 ### Light and dark
 
 - **Every theme has both schemes.** The gallery styles have one native scheme each
-  (33 dark, 39 light). `tools/gen-themes.py` derives the missing one in OKLCH
+  (light or dark). `tools/gen-themes.py` derives the missing one in OKLCH
   (neutrals retinted, accent hue preserved, status colors re-leveled, hard shadows
   and strong borders kept with an inverted color) and corrects contrast: text 7:1,
   secondary text and status colors 4.5:1, accent 3:1, text on accent 4.5:1.
@@ -78,30 +79,34 @@ does not look like a warning.
   frame. The top bar, including its meters, always uses the dark scheme because it
   sits on the shell's dark panel.
 
-### The 20 themes
+### The 22 themes
 
 `sistema-gnome`, `isometric`, `web-brutalism`, `ai-native-generative-ui`,
 `analog-newspaper-broadsheet`, `hand-drawn-sketch`, `expressive-variable-typography`,
 `de-stijl`, `mid-century-modern`, `terminal-tui`, `cyberpunk`, `lunarpunk`,
 `nanopunk`, `solarpunk`, `aurora-mesh-gradient`, `holographic-foil-iridescent`,
-`bento-grid`, `card-based-ui`, `flat-design`, `linear-saas`.
+`bento-grid`, `card-based-ui`, `flat-design`, `linear-saas`,
+`organic-biophilic`, `glassmorphism`.
 
-`sistema-gnome` is written by hand. The other 19 are generated; `themes/v1.txt` lists
-their slugs.
+`sistema-gnome` is written by hand. The other twenty-one are generated;
+`themes/v1.txt` lists their slugs. Reviewed effects come from the canonical
+`tools/theme-effect-profiles.json` developer source and are copied by the generator
+after token compilation. The initial version-one set was twenty; the post-MVP
+addition consists of Organic/Biophilic and Glassmorphism.
 
 ### Fidelity
 
-Version 1 delivers two levels for all 20 themes: tokens (colors, radii, border,
+The initial version 1 delivered two levels for its twenty themes: tokens (colors, radii, border,
 shadow, fonts) and shapes expressible in St CSS (a hard offset shadow, a thick
 border, an asymmetric radius, a simple gradient). Effects St cannot do in CSS (blur,
-chamfered corners, scanlines, textures, hand-drawn strokes) are not implemented.
-They would need `St.DrawingArea` or effects, as flags only built-in themes may
+chamfered corners, scanlines, textures, hand-drawn strokes) were outside that initial delivery.
+They require `St.DrawingArea` or effects, as flags only built-in themes may
 request.
 
 ### Fonts
 
-Themes ask for 27 Google Fonts families. St only uses installed fonts, so a missing
-family falls back to the generic family of the stack. Serif, monospace and
+Theme font stacks include sans-serif, serif, monospace and handwritten families
+from the gallery. St only uses installed fonts, so a missing family falls back to the generic family of the stack. Serif, monospace and
 handwritten body fonts raise the smallest popup text from 11 to 12 px (`fs-small`),
 because those faces read smaller at the same size.
 
@@ -117,11 +122,14 @@ themes".
 Related settings: `theme`, `color-scheme` (`system`, `light`, `dark`), `clock-format`
 (`system`, `12h`, `24h`), `reset-format` (`long`, `short`) and `auto-open`.
 
-### Not implemented
+### Open work
 
 - Downloading a theme's fonts to `~/.local/share/fonts` from Preferences, on request
   and after confirmation.
-- The N3 effects above, theme by theme.
+- GPU frame-time acceptance, fractional scaling and multiple-monitor acceptance
+  remain unverified for frost. Native rendering and semantic pixel comparisons
+  are implemented; those measurements do not certify the hardware gates. See the
+  [validation record](../temp/reviews/2026-10-07-post-mvp-validation.md).
 
 ## Consequences
 
@@ -136,7 +144,7 @@ existing color validation or requiring effects in old theme files. The full
 format is in [Themes](../themes.md#optional-effect-profiles). The core validator
 allowlists material, motion and texture presets, bounds particle counts to twelve
 and background opacity to 0.72–1 per scheme, and rejects executable fields,
-URLs, paths, arrays and non-finite numbers. Invalid optional data falls back to
+URLs, paths, unsupported arrays and non-finite numbers. Invalid optional data falls back to
 an opaque static profile with deterministic problem texts; base tokens still load.
 
 Origin is loader-owned: `builtin` or `user`, based on the selected theme file.
@@ -144,14 +152,16 @@ A user override of a built-in slug never inherits executable-effect permission.
 Raw `origin` fields cannot grant trust. The picker uses this same provenance.
 
 `effectPolicy({origin, profile, mode, animationsEnabled, transparencyEnabled,
-popupOpen})` returns `{motion, material, particleCount}`. Motion is `none`,
+popupOpen, materialPreference})` returns `{motion, material, particleCount}`. Motion is `none`,
 `interaction` or `ambient`. User origin, Effects Off and closed popup yield an
 opaque/no-motion policy. Subtle permits short interaction transitions and static
 decoration; Full permits compatible ambient presets. Disabled system animations
 prohibit animated interaction and ambient motion, independently of transparency.
 The panel remains dark and never runs an ambient loop.
 
-Preferences expose Effects and Transparency, reset with appearance settings.
+Preferences expose Effects, Transparency and Material, reset with appearance settings.
+An explicit material applies only when the trusted profile lists it as compatible;
+the default follows the theme. Glassmorphism permits all three glass materials.
 Account, tracking, consent and first-use state remain kept. ThemeManager exposes
 `getEffectState(popupOpen = false)` and `subscribeEffects(callback)` returning an
 unsubscribe function. Notifications follow theme, scheme, mode, transparency and
@@ -160,7 +170,11 @@ state with their actual popup-open flag; snapshots contain only validated theme
 data and settings, and mutating a snapshot does not change manager state.
 Disable publishes the inactive policy and releases listeners.
 
-This task establishes the contract and controls; it does not implement rendering
-or claim frost/contrast/performance validation. Native renderer tasks remain
-responsible for teardown, opaque reading zones, bounded resources and runtime
-fallback. Theme JSON cannot select arbitrary renderer code.
+The renderer uses shared native particle, material, cached texture and optical
+primitives behind persistent controls. Eight reused leaf sprites have one bounded
+timer; static glass has none. One fixed-radius background blur supplies frost,
+with decorative glass as an unsupported-capability fallback. The owned popup's
+offscreen redirect permits actual backdrop sampling only for effective frost.
+Close, Off, lock and disable remove owned work. Theme JSON cannot select arbitrary
+renderer code. Semantic pixel checks and the 22-theme light/dark inventory are
+recorded in the validation record; hardware performance remains a separate gate.

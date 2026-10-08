@@ -242,6 +242,11 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         });
         settings.bind('transparency-enabled', transparency, 'active', Gio.SettingsBindFlags.DEFAULT);
         look.add(transparency);
+        const material = choiceRow(settings, 'effect-material', [
+            ['theme', _('Follow the theme')], ['translucent', _('Translucent')],
+            ['decorative-glass', _('Decorative glass')], ['frosted-glass', _('Frosted glass')],
+        ], _('Material'), _('Applies only where the theme supports this material. Transparency off keeps the background opaque.'), handlerIds);
+        look.add(material);
 
         const folder = GLib.build_filenamev([GLib.get_user_data_dir(), 'gnome-ai-quota', 'themes']);
         const folderRow = new Adw.ActionRow({

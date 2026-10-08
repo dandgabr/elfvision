@@ -15,6 +15,14 @@ root="$(cd "$(dirname "$0")/.." && pwd)"
 [ -x /usr/libexec/mutter-devkit ] || { echo "mutter-devkit is missing: sudo dnf install mutter-devkit" >&2; exit 1; }
 "$root/tools/build.sh" >/dev/null
 uuid="$(python3 -I -c 'import json,sys;print(json.load(open(sys.argv[1]))["uuid"])' "$root/metadata.json")"
+# Preserve only the parent compositor endpoints before isolating runtime sockets.
+parent_runtime="${XDG_RUNTIME_DIR:-}"
+parent_wayland="${WAYLAND_DISPLAY:-}"
+if [ -n "$parent_wayland" ] && [[ "$parent_wayland" != /* ]]; then
+    [ -n "$parent_runtime" ] || { echo "Relative WAYLAND_DISPLAY requires XDG_RUNTIME_DIR" >&2; exit 1; }
+    parent_wayland="$parent_runtime/$parent_wayland"
+fi
+parent_pipewire="${PIPEWIRE_RUNTIME_DIR:-$parent_runtime}"
 work="$(mktemp -d)"
 # Removed on every way out, a signal included: the folder can hold a copy of the client ids.
 trap 'rm -rf "$work"' EXIT
@@ -24,12 +32,18 @@ mkdir -p "$work/data/gnome-shell/extensions"
 ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 
 # The client ids of your real configuration, copied (read only, private) so Connect works here.
-real_config="${XDG_CONFIG_HOME:-$HOME/.config}/gnome-ai-quota/providers.local.json"
+real_config="${LOCAL_CONFIG_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/gnome-ai-quota/providers.local.json}"
 if [ -r "$real_config" ]; then
     mkdir -p "$work/config/gnome-ai-quota" && chmod 700 "$work/config/gnome-ai-quota"
     install -m 600 "$real_config" "$work/config/gnome-ai-quota/providers.local.json"
 fi
 
+mkdir -m 700 "$work/runtime"
+export XDG_RUNTIME_DIR="$work/runtime"
+if [ -n "$parent_wayland" ]; then export WAYLAND_DISPLAY="$parent_wayland"; fi
+# Mutter devkit's preview may use the parent PipeWire endpoint; Shell sockets and
+# crash markers stay private. This does not expose the parent's configuration.
+if [ -n "$parent_pipewire" ]; then export PIPEWIRE_RUNTIME_DIR="$parent_pipewire"; fi
 export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
 # A file backend, not "memory": the preferences window is another process and
 # must share the settings with the shell.

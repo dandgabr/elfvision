@@ -76,5 +76,18 @@
     "control": "0"
   },
   "border": "hairline",
-  "hardShadow": false
+  "hardShadow": false,
+  "effects": {
+    "material": "opaque",
+    "motion": "interaction",
+    "texture": "scanlines",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "opaque"
+    ]
+  }
 }

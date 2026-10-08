@@ -10,6 +10,23 @@
 
 **Spec:** [Post-MVP design](2026-10-07-post-mvp-design.md). Read it before execution; its theme matrix and budgets are acceptance criteria.
 
+## Execution status (2026-10-07)
+
+Tasks 1–3 and 7–9 have implementation/evidence; Tasks 4–6 have native rendering,
+semantic pixel and lifecycle evidence. Headless and nested/devkit native gates passed after explicit sibling allocation and finite popup-anchor fixes. Automated release checks passed; reviewed work is retained on local branch `feat/post-mvp-effects`. Publication and merge await owner instructions.
+Unchecked hardware/physical-session steps below are intentional: GPU frame duration,
+fractional scaling, multiple monitors and human accessibility acceptance remain
+unverified. Native callback/cadence measurements do not satisfy the GPU gate.
+See the [validation record](../reviews/2026-10-07-post-mvp-validation.md).
+
+Automated graphics checks use the private headless GNOME Shell helper and
+`tools/effects-check.sh`; physical review remains available through
+`tools/nested-shell.sh`. This adaptation provides repeatable synthetic backdrop,
+image and resource checks while preserving the manual nested-shell gate.
+Visual inventory coverage is 44 light/dark captures, supplemented by 264 native
+policy/resource combinations for mode and animation settings. It is not a full
+264-image screenshot matrix; this coverage adaptation is recorded explicitly.
+
 ## Global Constraints
 
 - GNOME Shell 50 remains the target. GJS ES modules; no required native helper, browser engine or product build pipeline is introduced.
@@ -62,16 +79,16 @@ plain item descriptions the current indicator paints. No scheduling or fitting
 actors enter the core. Indicator owns one pending render source, retaining the
 latest snapshots; the existing fitting debounce remains separate.
 
-- [ ] Capture current demo bar item outputs as fixtures; add tests for empty,
+- [x] Capture current demo bar item outputs as fixtures; add tests for empty,
   paused, stale/error and multiple-provider responses. Prove that unchanged
   item descriptions remain equal and newest snapshots win a response burst.
-- [ ] Run `gjs -m tests/run.js`; confirm the new assertions fail before extraction.
-- [ ] Extract the current model unchanged; coalesce one event-loop burst into one
+- [x] Run `gjs -m tests/run.js`; confirm the new assertions fail before extraction.
+- [x] Extract the current model unchanged; coalesce one event-loop burst into one
   redraw and remove the queued source on cleanup. Keep countdown rendering and
   refresh feedback. Make actual bar items keyboard-focusable and reuse tooltip
   focus handling. Capture Escape only when the legend is visible: first Escape
   hides it, second uses the existing popup close behavior.
-- [ ] Run `tools/check.sh` and `tools/layout-check.sh`; verify burst counts,
+- [x] Run `tools/check.sh` and `tools/layout-check.sh`; verify burst counts,
   retained focus, latest values, tooltip cleanup and the two-Escape sequence in
   `tools/nested-shell.sh`. Commit the independently verified polish change.
 
@@ -82,17 +99,17 @@ latest snapshots; the existing fitting debounce remains separate.
 `lib/ui/providerCard.js`, `lib/core/theme.template.css`, `docs/development.md`
 only where the numeric-font probe justifies a change.
 
-- [ ] Resolve and pin ESLint's supported Node version at execution time. Install
+- [x] Resolve and pin ESLint's supported Node version at execution time. Install
   development-only dependencies with a lockfile; define globals by actual file
   context, not a blanket browser environment. Pin CI actions to full commits.
-- [ ] Demonstrate `no-undef` rejection with a synthetic misspelled variable in a
+- [x] Demonstrate `no-undef` rejection with a synthetic misspelled variable in a
   temporary fixture, then remove it. CI runs `npm ci` and `npm run lint` without
   a running desktop. Record success and workflow security checks.
-- [ ] Probe installed proportional and monospace fonts using Shell/Pango:
+- [x] Probe installed proportional and monospace fonts using Shell/Pango:
   measure widths of `1111`, `8888`, `09:59` and `10:00`. Verify an actually
   supported tabular-number mechanism, or apply a numeric-only font fallback.
   Do not assume browser `font-variant-numeric` works in St.
-- [ ] Run `tools/check.sh`, `npm run lint`, `tools/sast.sh` and nested-shell layout
+- [x] Run `tools/check.sh`, `npm run lint`, `tools/sast.sh` and nested-shell layout
   tests. Record font availability and numeric width evidence; commit.
 
 ### Task 3: Safe effect contract and controls
@@ -111,7 +128,7 @@ transparencyEnabled, popupOpen}) -> {motion, material, particleCount}`.
 Closed popup or mode off produces no motion; disabled system animations prohibit
 ambient and animated interaction motion. User origin produces no executable effect.
 
-- [ ] Register failing policy tests, including this regression:
+- [x] Register failing policy tests, including this regression:
 
 ```js
 test('theme effects: a user override never acquires builtin effects', () => {
@@ -123,11 +140,11 @@ test('theme effects: a user override never acquires builtin effects', () => {
 });
 ```
 
-- [ ] Run `gjs -m tests/run.js -- 'theme effects'` and observe failure. Implement
+- [x] Run `gjs -m tests/run.js -- 'theme effects'` and observe failure. Implement
   bounded presets, separate opacity fields, origin propagation, compatibility
   with old files and safe invalid-profile fallback. Reject arbitrary shaders,
   URLs, paths, non-finite numbers and unbounded arrays.
-- [ ] Add Effects/Transparency preferences, live notifications and default
+- [x] Add Effects/Transparency preferences, live notifications and default
   classification. Preserve first-use state and accounts. Run `tools/build.sh`,
   `tools/check.sh`, `tools/prefs-smoke.sh`; commit contract and settings together.
 
@@ -144,10 +161,10 @@ It owns all decoration actors, transitions and sources; it has no provider or
 authentication dependency. Leaves use a packaged cached atlas, eight instances
 initially, time-based movement and a twelve-instance cap.
 
-- [ ] Extend the nested-shell probe to fail on decoration outside popup bounds,
+- [x] Extend the nested-shell probe to fail on decoration outside popup bounds,
   reactive particles, stale callbacks and nonzero decoration-source counts after
   close/disable. Check reduced motion toggled live.
-- [ ] Implement clipped background/decoration layers without replacing provider
+- [x] Implement clipped background/decoration layers without replacing provider
   controls. Reuse leaf textures and actors; stop updates on close. Allow short
   native interaction transitions independently of ambient effects.
 - [ ] Run static versus leaves measurements for 60 seconds each and 100 lifecycle
@@ -160,9 +177,9 @@ initially, time-based movement and a twelve-instance cap.
 `lib/ui/themeEffects.js`, `lib/core/theme.template.css`,
 `tests/themeEffects.test.js`, `tools/effects-probe.js`.
 
-- [ ] Add failures for whole-popup opacity, translucent text, unbounded opacity,
+- [x] Add failures for whole-popup opacity, translucent text, unbounded opacity,
   wallpaper bleed behind reading zones and decorative layers capturing events.
-- [ ] Implement background-only alpha and opaque reading surfaces. Implement
+- [x] Implement background-only alpha and opaque reading surfaces. Implement
   decorative glass with cached internal gradients/specular borders; no desktop
   capture, browser process or ambient timer is needed for static glass.
 - [ ] Capture both materials on dark/light/detailed wallpapers with all controls
@@ -175,14 +192,14 @@ initially, time-based movement and a twelve-instance cap.
 `docs/temp/reviews/2026-10-07-frost-feasibility.md`; modify
 `lib/ui/themeEffects.js`, `tools/effects-probe.js`, `docs/pitfalls.md`.
 
-- [ ] Prototype inside `tools/nested-shell.sh` using installed Shell 50 APIs.
+- [x] Prototype inside `tools/nested-shell.sh` using installed Shell 50 APIs.
   Establish whether a native backdrop actor can be clipped and sample only the
   background under the popup. Record exact callable APIs and compatibility.
 - [ ] Establish failing visual checks: letters remain sharp; the desktop outside
   popup bounds remains sharp; moving a window behind the popup updates its frosted
   representation; no recursive popup capture; correct fractional scaling and
   multi-monitor origin. A frozen wallpaper-only imitation does not pass.
-- [ ] Implement one backdrop surface behind controls, fixed blur radius, safe
+- [x] Implement one backdrop surface behind controls, fixed blur radius, safe
   teardown and decorative-glass runtime fallback on unsupported capability.
   Avoid per-card blur, changing blur radius during animation and broad capture.
 - [ ] Measure 60-second static versus frost frame times, open latency and resource
@@ -201,20 +218,20 @@ initially, time-based movement and a twelve-instance cap.
 `themes/builtin/glassmorphism/theme.json`,
 `docs/temp/reviews/2026-10-07-theme-fidelity.md`.
 
-- [ ] Read each corresponding design domain skill and pinned gallery CSS/effect
+- [x] Read each corresponding design domain skill and pinned gallery CSS/effect
   before implementing its profile. Record original visual intent, chosen effects,
   adaptations and exclusions for every matrix row. Implement shared primitives
   in `lib/ui/effects/` only when required by these profiles; no arbitrary theme code.
-- [ ] Test every built-in profile's allowlist and static fallback; replace the
+- [x] Test every built-in profile's allowlist and static fallback; replace the
   fixed inventory count assertion with the explicitly expected slug set including
   the two new themes. Test both schemes and unknown-profile rejection.
-- [ ] Add profiles in generator source, regenerate with its documented invocation
+- [x] Add profiles in generator source, regenerate with its documented invocation
   in `docs/development.md`, and verify deterministic output. Keep manually authored
   System changes separate. Do not hand-edit generated theme JSON.
-- [ ] Give Glassmorphism its three compatible material choices; keep incompatible
+- [x] Give Glassmorphism its three compatible material choices; keep incompatible
   overrides out of editorial/flat styles. All themes support the motion policy;
   no-effect choices in the matrix are deliberate design decisions.
-- [ ] Run `tools/check.sh`, `tools/prefs-smoke.sh`, `tools/layout-check.sh` and
+- [x] Run `tools/check.sh`, `tools/prefs-smoke.sh`, `tools/layout-check.sh` and
   full inventory captures in the nested Shell for light/dark, off/subtle/full,
   reduced motion and opaque fallback. Review pt-BR with a second reader; identify
   whether that reader is human or an agent. Commit with the fidelity report.
@@ -224,14 +241,14 @@ initially, time-based movement and a twelve-instance cap.
 **Files:** Create `docs/temp/reviews/2026-10-07-webgl-feasibility.md`;
 experiments stay outside the packaged runtime until an architectural decision.
 
-- [ ] Compare existing native/static previews with an optional GTK/WebKit preview
+- [x] Compare existing native/static previews with an optional GTK/WebKit preview
   using packaged synthetic content. Measure startup, memory, frame time and
   disposal on the verified local WebKit version. Disable network/navigation and
   reject renderer-provided links or code from theme JSON.
-- [ ] Prove behavior when WebKit is absent or WebGL fails. Record whether native
+- [x] Prove behavior when WebKit is absent or WebGL fails. Record whether native
   previews suffice for the accepted four options. Do not add WebKit as a required
   dependency or claim native shaders are WebGL.
-- [ ] For a future genuinely WebGL-dependent gallery style, report real
+- [x] For a future genuinely WebGL-dependent gallery style, report real
   isolated-renderer-to-St transfer feasibility, costs and ABI/dependency impact.
   Submit a separate ADR proposal before introducing that bridge. Commit the
   evidence and keep unsupported WebGL-in-popup explicitly outside this release.
@@ -241,19 +258,19 @@ experiments stay outside the packaged runtime until an architectural decision.
 **Files:** Create `docs/temp/plans/2026-10-07-post-mvp-product-decisions.md`;
 modify ADRs 0006/0008/0010 only when the corresponding choice is resolved.
 
-- [ ] Propose a separate explicit disconnect-all action with Cancel as default.
+- [x] Propose a separate explicit disconnect-all action with Cancel as default.
   Define deletion scope: app-owned keyring entries, snapshot and alert caches;
   custom themes, fonts, public client configuration and terms acknowledgements
   remain unless individually selected. Specify coordination with in-flight
   login writes and refreshes so deletion cannot be undone by late completion.
   Restore defaults must continue to preserve accounts.
-- [ ] Propose optional font installation separately: explicit consent, licensed
+- [x] Propose optional font installation separately: explicit consent, licensed
   allowlisted downloads, bounded size, no overwrite of user fonts, cancellable
   async I/O and offline fallback. Do not infer font-install consent from a theme.
-- [ ] Propose independent warning/critical thresholds with ordering, hysteresis,
+- [x] Propose independent warning/critical thresholds with ordering, hysteresis,
   dedupe, cache migration and no notification storm. Preserve today's single
   threshold until the product decision is accepted.
-- [ ] List actual whole-keyboard, Orca and live-provider checks still requiring
+- [x] List actual whole-keyboard, Orca and live-provider checks still requiring
   human/account participation. No test tool may inspect real credential values.
   Commit the concrete proposals; undecided product changes remain open decisions.
 
@@ -262,14 +279,14 @@ modify ADRs 0006/0008/0010 only when the corresponding choice is resolved.
 **Files:** Modify ADRs 0006/0008/0010, `docs/themes.md`, `docs/development.md`;
 create `docs/temp/reviews/2026-10-07-post-mvp-validation.md`.
 
-- [ ] Run `tools/check.sh`, `npm run lint`, `tools/prefs-smoke.sh`,
+- [x] Run `tools/check.sh`, `npm run lint`, `tools/prefs-smoke.sh`,
   `tools/layout-check.sh`, `tools/sast.sh`, `tools/pack.sh`. Verify the packaged
   files match source, including assets; report unavailable checks accurately.
-- [ ] Review architecture, UI/UX, frontend and security against the spec, with
+- [x] Review architecture, UI/UX, frontend and security against the spec, with
   independent reviewers when executing through agents. Fix findings and annotate
   accepted divergences. Include performance baselines, hardware/session metadata,
   screenshot comparisons, fallback paths and manual-test limitations.
-- [ ] Update implemented status only for delivered capabilities. Keep real frost
+- [x] Update implemented status only for delivered capabilities. Keep real frost
   open if its gate failed; keep optional studies and product decisions distinct.
   Prepare commits/PRs by milestone and await publication/merge instructions when
   not already authorized. Synchronize after confirmed merges.

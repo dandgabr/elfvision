@@ -141,6 +141,9 @@ it, starts a sign-in or accepts terms for you. Only an explicit Connect action d
 | General, Colors and theme | Light or dark | Follows the system, or forces light or dark for the popup. The top bar is always dark. |
 | General, Colors and theme | Theme | Opens the theme picker. Default: System (GNOME). |
 | General, Colors and theme | Your themes | Opens the folder for your own themes. |
+| General, Colors and theme | Effects | Off, Subtle or Full. Default: Subtle. Full enables ambient effects on compatible built-in themes; the system animation preference takes precedence. |
+| General, Colors and theme | Transparency | Allows transparent backgrounds. Off keeps reading surfaces and backgrounds opaque. Default: on. |
+| General, Colors and theme | Material | Follows the theme, or chooses translucency, decorative glass or frost where the theme supports it. Default: follow the theme. |
 | General, Popup | Clock | Follows the GNOME clock setting, or forces 12 or 24 hours for reset times. |
 | General, Popup | Time until reset | Writes the countdown as `1h 20min` or `1h20`. |
 | General, Popup | Open cards that need attention | Opens cards in a warning, critical or error state on their own. A card you open or close by hand keeps that choice until its state changes. |
@@ -184,8 +187,9 @@ data stops arriving. The rules keep it quiet:
 
 ## Themes
 
-The extension ships 20 themes, each with a light and a dark variant; the default, System (GNOME),
-follows the shell. You can add your own by putting a `theme.json` in
+The extension ships 22 themes, each with a light and a dark variant; the default, System (GNOME),
+follows the shell. Organic/Biophilic adds warm paper and botanical forms; Glassmorphism
+offers the supported glass materials. You can add your own by putting a `theme.json` in
 `~/.local/share/gnome-ai-quota/themes/<id>/`. The format, the tokens and the validation rules are in
 [docs/themes.md](docs/themes.md).
 
@@ -224,6 +228,9 @@ design are in [docs/adr](docs/adr/README.md).
 | M2 | Command Code with an API key stored in libsecret | done |
 | M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | done |
 | M4 | Notifications and polish | done |
+| M5 | Indicator model, coalescing, keyboard behavior, CI lint and tabular numbers | implemented |
+| M6 | Native effects and 22 theme profiles | implemented; frost hardware gates open |
+| M7 | Optional WebGL study and product proposals | documented; product decisions open |
 
 What each milestone holds, and which follow-up items remain, is in [ADR 0008](docs/adr/0008-mvp-roadmap.md).
 

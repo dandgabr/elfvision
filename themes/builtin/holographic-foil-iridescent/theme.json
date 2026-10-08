@@ -76,5 +76,18 @@
     "control": "12px"
   },
   "border": "hairline",
-  "hardShadow": false
+  "hardShadow": false,
+  "effects": {
+    "material": "decorative-glass",
+    "motion": "interaction",
+    "texture": "none",
+    "particleCount": 0,
+    "opacity": {
+      "light": 1,
+      "dark": 1
+    },
+    "compatibleMaterials": [
+      "decorative-glass"
+    ]
+  }
 }

@@ -1,6 +1,8 @@
 import GLib from 'gi://GLib';
 
 import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
+import {effectPolicy, validateEffectProfile} from '../lib/core/themeEffects.js';
+import {builtinCatalog} from '../lib/prefs/themeCatalog.js';
 import {compileTheme, pickScheme, swatches, systemAccent, validateTheme, resolvedColors} from '../lib/core/theme.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
@@ -15,10 +17,17 @@ const builtinIds = () => {
 };
 const loadTheme = id => validateTheme(JSON.parse(read(`themes/builtin/${id}/theme.json`)));
 
-test('themes: the v1 set ships twenty themes and each one validates', () => {
+const EXPECTED_THEME_IDS = [
+    'ai-native-generative-ui', 'analog-newspaper-broadsheet', 'aurora-mesh-gradient',
+    'bento-grid', 'card-based-ui', 'cyberpunk', 'de-stijl', 'expressive-variable-typography',
+    'flat-design', 'glassmorphism', 'hand-drawn-sketch', 'holographic-foil-iridescent',
+    'isometric', 'linear-saas', 'lunarpunk', 'mid-century-modern', 'nanopunk',
+    'organic-biophilic', 'sistema-gnome', 'solarpunk', 'terminal-tui', 'web-brutalism',
+];
+
+test('themes: the reviewed inventory ships the exact expected theme slugs and each validates', () => {
     const ids = builtinIds();
-    assertEqual(ids.length, 20);
-    assertTrue(ids.includes('sistema-gnome'));
+    assertEqual(ids, EXPECTED_THEME_IDS);
     for (const id of ids) {
         const {theme, problems} = loadTheme(id);
         assertEqual([id, problems, theme?.id], [id, [], id]);
@@ -230,7 +239,9 @@ test('themes: swatches give four hex colors per scheme, even for the system acce
 
 test('themes: optional effects validate without weakening hex colors or old theme compatibility', () => {
     const raw = JSON.parse(read('themes/builtin/linear-saas/theme.json'));
-    assertEqual(validateTheme(raw).theme.effects.motion, 'none');
+    const legacy = {...raw};
+    delete legacy.effects;
+    assertEqual(validateTheme(legacy).theme.effects.motion, 'none');
     const good = validateTheme({...raw, effects: {material: 'frosted-glass', motion: 'leaves', opacity: {light: 0.8, dark: 0.9}}});
     assertEqual(good.problems, []);
     assertEqual([good.theme.effects.material, good.theme.effects.particleCount], ['frosted-glass', 8]);
@@ -267,4 +278,84 @@ test('themes: renderer colors are resolved hex values detached from theme data',
     assertTrue(Object.values(colors).every(c => /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(c)));
     colors.bg = '#000';
     assertEqual(resolvedColors(theme, 'light', 'teal').bg, '#fafafa');
+});
+
+
+const canonicalProfiles = () => {
+    assertTrue(GLib.file_test(`${root}/tools/theme-effect-profiles.json`, GLib.FileTest.IS_REGULAR), 'canonical effect-profile source must exist');
+    return JSON.parse(read('tools/theme-effect-profiles.json'));
+};
+
+test('themes: every reviewed source profile validates exactly and matches the shipped effect data', () => {
+    const profiles = canonicalProfiles();
+    assertEqual(Object.keys(profiles).sort(), EXPECTED_THEME_IDS);
+    const catalog = builtinCatalog(text => text);
+    assertEqual(Object.keys(catalog.byId).sort(), EXPECTED_THEME_IDS.filter(id => id !== 'sistema-gnome'));
+    for (const id of EXPECTED_THEME_IDS) {
+        const {profile, problems} = validateEffectProfile(profiles[id]);
+        assertEqual([id, problems, profile], [id, [], profiles[id]]);
+        assertEqual(JSON.parse(read(`themes/builtin/${id}/theme.json`)).effects, profile);
+        const options = {origin: 'builtin', profile, mode: 'full', animationsEnabled: true, transparencyEnabled: true, popupOpen: true};
+        for (const override of [{mode: 'off'}, {origin: 'user'}, {popupOpen: false}])
+            assertEqual(effectPolicy({...options, ...override}), {motion: 'none', material: 'opaque', particleCount: 0});
+        assertEqual(effectPolicy({...options, animationsEnabled: false}).motion, 'none');
+        assertEqual(effectPolicy({...options, mode: 'subtle'}).particleCount, 0);
+        assertEqual(effectPolicy({...options, transparencyEnabled: false}).material, 'opaque');
+        for (const materialPreference of profile.compatibleMaterials)
+            assertEqual(effectPolicy({...options, materialPreference}).material, materialPreference);
+        if (profile.compatibleMaterials.every(material => material === 'opaque'))
+            assertEqual(effectPolicy({...options, materialPreference: 'frosted-glass'}).material, 'opaque');
+    }
+    assertEqual(profiles['glassmorphism'].compatibleMaterials, ['translucent', 'decorative-glass', 'frosted-glass']);
+    for (const id of ['analog-newspaper-broadsheet', 'de-stijl', 'flat-design', 'terminal-tui'])
+        assertEqual(profiles[id].compatibleMaterials, ['opaque']);
+    assertEqual(profiles['sistema-gnome'].particleCount, 0);
+    assertEqual(profiles['sistema-gnome'].texture, 'none');
+});
+
+function runGenerator({fixture, output, profiles}) {
+    const [, stdout, stderr, status] = GLib.spawn_sync(root, ['python3', '-I', 'tools/gen-themes.py',
+        '--styles', fixture, '--out', output, '--only', `${fixture}/wanted.txt`, '--effect-profiles', profiles],
+    null, GLib.SpawnFlags.SEARCH_PATH, null);
+    return {stdout: new TextDecoder().decode(stdout), stderr: new TextDecoder().decode(stderr), status};
+}
+
+function galleryFixture() {
+    const fixture = tmpDir();
+    GLib.mkdir_with_parents(`${fixture}/styles`, 0o755);
+    GLib.file_set_contents(`${fixture}/styles/linear-saas.css`, '#stage[data-style="linear-saas"] { --bg: #101018; --surface: #202028; --fg: #fafafa; --accent: #9090ff; }');
+    GLib.file_set_contents(`${fixture}/styles/registry.js`, '');
+    GLib.file_set_contents(`${fixture}/wanted.txt`, 'linear-saas');
+    return fixture;
+}
+
+test('themes: generator applies the canonical valid profile deterministically', () => {
+    const fixture = galleryFixture();
+    const profiles = `${root}/tools/theme-effect-profiles.json`;
+    const first = runGenerator({fixture, output: `${fixture}/first`, profiles});
+    assertEqual(first.status, 0, first.stderr);
+    const second = runGenerator({fixture, output: `${fixture}/second`, profiles});
+    assertEqual(second.status, 0, second.stderr);
+    const text = path => new TextDecoder().decode(GLib.file_get_contents(path)[1]);
+    const firstText = text(`${fixture}/first/linear-saas/theme.json`);
+    assertEqual(firstText, text(`${fixture}/second/linear-saas/theme.json`));
+    assertEqual(JSON.parse(firstText).effects, canonicalProfiles()['linear-saas']);
+});
+
+test('themes: generator rejects unknown profile fields and presets before writing output', () => {
+    const fixture = galleryFixture();
+    const profile = canonicalProfiles()['linear-saas'];
+    for (const [name, change, reason] of [
+        ['preset', {motion: 'unknown'}, 'effects.motion'],
+        ['field', {shader: 'not executable'}, 'unknown fields'],
+        ['materials', {compatibleMaterials: ['opaque', 'unknown']}, 'compatibleMaterials'],
+    ]) {
+        const source = `${fixture}/${name}.json`;
+        GLib.file_set_contents(source, JSON.stringify({'linear-saas': {...profile, ...change}}));
+        const output = `${fixture}/${name}`;
+        const result = runGenerator({fixture, output, profiles: source});
+        assertTrue(result.status !== 0, `${name} must be rejected`);
+        assertTrue(result.stderr.includes(reason), result.stderr);
+        assertTrue(!GLib.file_test(output, GLib.FileTest.EXISTS), 'invalid profiles must not write output');
+    }
 });

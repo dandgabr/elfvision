@@ -21,10 +21,14 @@ log="${LOG:-$work/shell.log}"
 trap 'rm -rf "$work"' EXIT
 
 mkdir -p "$work/data/gnome-shell/extensions" "$work/config" "$work/cache"
+mkdir -m 700 "$work/runtime"
 ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 
-# Keep data, config and cache away from the real session.
+# Keep data, config, cache and runtime away from the real session.
 export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
+# Shell stores its extension crash sentinel and Wayland sockets here. A shared
+# host runtime directory lets concurrent throwaway shells remove each other's marker.
+export XDG_RUNTIME_DIR="$work/runtime"
 export GSETTINGS_BACKEND=memory
 export GAQ_TEST_MONITOR="${GAQ_TEST_MONITOR:-1280x800}"
 if [[ ! "$GAQ_TEST_MONITOR" =~ ^[0-9]+x[0-9]+$ ]]; then

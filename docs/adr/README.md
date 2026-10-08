@@ -11,7 +11,7 @@ replaced gets a new record, and the old one is marked `superseded by NNNN` and k
 | [0003](0003-security-model.md) | Keyring storage, OAuth in preferences, terms-of-service risk | accepted |
 | [0004](0004-panel-bar.md) | Top-bar items, states, selection and adaptive layout | accepted, partly implemented |
 | [0005](0005-popup.md) | Popup structure, defaults and failure states | accepted, partly implemented |
-| [0006](0006-theming.md) | 20 themes as data, light and dark, token compiler | accepted, partly implemented |
+| [0006](0006-theming.md) | 22 themes as data, light and dark, token compiler | accepted, partly implemented |
 | [0007](0007-internationalization.md) | English and pt-BR with gettext, following the session language | accepted |
 | [0008](0008-mvp-roadmap.md) | Milestones M0 to M4 and open items | accepted |
 | [0009](0009-adding-providers.md) | How providers are added (M3) | accepted |

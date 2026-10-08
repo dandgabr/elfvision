@@ -1,0 +1,28 @@
+{
+  "shell": {
+    "exit": 0,
+    "output": "GNOME Shell 50.5"
+  },
+  "gjs": {
+    "exit": 0,
+    "output": "gjs 1.88.1"
+  },
+  "packages": {
+    "exit": 0,
+    "output": "mutter-50.5-1.fc44.x86_64\ngtk4-4.22.5-2.fc44.x86_64\nlibadwaita-1.9.4-1.fc44.x86_64"
+  },
+  "cpu": [
+    "11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz"
+  ],
+  "gpuDevices": [
+    "00:02.0 \"VGA compatible controller\" \"Intel Corporation\" \"TigerLake-H GT1 [UHD Graphics]\" -r01 -p00 \"Acer Incorporated [ALI]\" \"Device 1534\"",
+    "01:00.0 \"VGA compatible controller\" \"NVIDIA Corporation\" \"GA106M [GeForce RTX 3060 Mobile / Max-Q]\" -ra1 -p00 \"Acer Incorporated [ALI]\" \"Device 1547\""
+  ],
+  "testSession": {
+    "backend": "private headless Wayland GNOME Shell",
+    "virtualMonitor": "1280x800",
+    "gsettings": "memory",
+    "data": "demo/synthetic",
+    "gpuFrameProfiler": "unavailable; installed device identity does not establish compositor renderer"
+  }
+}
