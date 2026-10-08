@@ -110,3 +110,10 @@ The pointer harness now explicitly selects a System scheme/motion mode, verifies
 - [Missing-probe guard](assets/manual-regressions/missing-probe-guard.txt): an unreadable required probe exits nonzero; final valid-pointer logs use the explicit verifier and succeed. The integration gate and five scanners were repeated after these final harness changes and passed.
 
 All retained images use made-up data. Real credentials and provider configuration were not inspected. The archive remains local: no public release, extensions.gnome.org upload or merge was performed.
+
+
+## Delivery closure
+
+[PR #15](https://github.com/dandgabr/gnome-ai-quota/pull/15) contains the committed corrections and evidence. The first implementation commit is `0d86b5c5bd03646d01e44e08d93c60b265254a1f`; this delivery-note update changes documentation only. Its ten remote checks passed before this note. Local `dist/v0.1/build-manifest.json` records the final clean source commit and all 135 ZIP member hashes, with `SHA256SUMS` alongside the exact privately installed archive. Archive SHA-256 is `f4b1fd3147fb7ac6bf3883e0685bfe90d61a798d810491c2589a32ac33d1842e`.
+
+The corrected nested demo and local screenshot gallery were opened for the user. Read-only private extension state reports enabled `true`, state `1.0`, error empty. The working tree was clean after the implementation commit and push. No merge or public release was performed. The initial Open rows in diagnosis are reconciled above; remaining acceptance is human visual judgment and the explicit real-account/Orca/physical-device limits, not unresolved source defects found by these reviews.

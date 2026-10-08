@@ -1,6 +1,6 @@
 # Manual regression correction plan — 2026-10-08
 
-Status: implementation, independent source review, final native checks and rebuilt ZIP complete; commit/PR delivery follows. The diagnosis/ownership sections below describe the original plan, not current unresolved work.
+Status: implementation, independent source review, final native checks, rebuilt ZIP and commit/PR delivery complete. Human visual/real-account/Orca/hardware participation remains separate. The diagnosis/ownership sections below describe the original plan, not current unresolved work.
 
 Context identifier: `manual-regressions-2026-10-08`. The current user report supersedes the earlier v0.1 audit's visual acceptance. Automated resource checks and screenshots did not establish that materials, expansion stability, every theme pair or account configuration matched the user's expectations. The earlier results remain historical evidence, not proof that these regressions are absent.
 
@@ -74,4 +74,4 @@ After those fixes, add direct tests for malformed live/demo registries, deletion
 
 ## Current implementation disposition
 
-All MR-01–MR-13 corrections and four additional independent QA findings have implemented source and focused regressions. Backend, Accounts and rendering were assigned disjoint files; root serialized all native sessions and integrated shared boundaries. See the [final QA](../reviews/2026-10-08-manual-regressions-final-qa.md) and [validation record](../reviews/2026-10-08-manual-regressions-validation.md). The new branch is `fix/manual-regressions-connectors` from merged `origin/main` (`db6c259`). Prior PR #14 is historical. Native final gates and installed rebuilt ZIP passed; commit and a new PR are the final delivery steps; human visual acceptance, real accounts, Orca and physical hardware are not claimed.
+All MR-01–MR-13 corrections and four additional independent QA findings have implemented source and focused regressions. Backend, Accounts and rendering were assigned disjoint files; root serialized all native sessions and integrated shared boundaries. See the [final QA](../reviews/2026-10-08-manual-regressions-final-qa.md) and [validation record](../reviews/2026-10-08-manual-regressions-validation.md). The new branch is `fix/manual-regressions-connectors` from merged `origin/main` (`db6c259`). Prior PR #14 is historical. Native final gates and installed rebuilt ZIP passed; source changes are committed and [PR #15](https://github.com/dandgabr/gnome-ai-quota/pull/15) is open; human visual acceptance, real accounts, Orca and physical hardware are not claimed.
