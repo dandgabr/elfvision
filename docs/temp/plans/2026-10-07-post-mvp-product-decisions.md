@@ -1,5 +1,10 @@
 # Post-MVP product decision proposals — 2026-10-07
 
+> Historical snapshot: this document preserves the decisions, findings, and test
+> results recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](../reviews/2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Status: accepted and implemented after the owner's request to resolve all open items on 2026-10-07. The sections below preserve the original proposals for traceability; the [closure plan](2026-10-07-open-items-closure.md) records the final choices and the implementation reviews record evidence.
 
 Final choices: disconnect-all preserves terms/tracking/configuration/themes/fonts and performs local deletion only, with no remote-revocation promise. The durable generation/lease gate is shared by Shell and preferences. Same-boot orphan keyring operations fail closed until a computer restart. Font installation is explicit, limited to four pinned licensed files and never initiated by selecting a theme. Warning is opt-in at 80% for both new and existing users; critical keeps its existing default 95% and custom values. Invalid pairs retain their last valid effective values across restart. Restore defaults continues to preserve accounts. No browser dependency or WebGL runtime bridge is added to Shell.

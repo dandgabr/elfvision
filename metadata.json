@@ -1,12 +1,12 @@
 {
   "uuid": "gnome-ai-quota@dandgabr.github.io",
   "name": "AI Quota",
-  "description": "Shows the remaining quota of your AI providers in the top bar and in a popup.",
+  "description": "Track AI provider quota usage and reset times in the GNOME top bar.",
   "shell-version": [
     "50"
   ],
   "url": "https://github.com/dandgabr/gnome-ai-quota",
   "gettext-domain": "gnome-ai-quota",
-  "version-name": "0.0.1",
+  "version-name": "0.1",
   "settings-schema": "org.gnome.shell.extensions.gnome-ai-quota"
 }

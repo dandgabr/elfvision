@@ -1,5 +1,10 @@
 # Post-MVP Visual Effects and Polish Implementation Plan
 
+> Historical snapshot: this document preserves the decisions, findings, and test
+> results recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](../reviews/2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers-subagent-driven-development or superpowers-executing-plans to implement this plan task-by-task. Steps use checkbox syntax for tracking.
 
 **Goal:** Finish the post-MVP polish backlog and deliver all four approved visual effects with theme-specific fidelity and measured resource use.

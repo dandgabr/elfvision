@@ -27,6 +27,7 @@ gnome-extensions pack --force --quiet \
     --extra-source=icons \
     --extra-source=themes \
     --extra-source=licenses \
+    --extra-source=LICENSE \
     --out-dir=dist \
     .
 

@@ -1,5 +1,10 @@
 # Final security and architecture review — 2026-10-08
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Reviewed the working feature implementation over baseline `800465f`, in
 `/home/daniel/Code/gnome-ai-quota-post-mvp`. This is an independent, read-only product
 review. Only this report was written. The root's reported 372 passing tests and

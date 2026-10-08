@@ -261,7 +261,7 @@
       </choices>
       <default>'steady'</default>
       <summary>Demo scenario (development)</summary>
-      <description>Until real providers exist, the demo providers act out a scenario. steady: everything fine. flaky: errors, a rate limit and a signed-out provider, every 15 seconds. drift: usage climbs toward the limits every 10 seconds.</description>
+      <description>When the demo data source is selected, fictional providers act out a scenario. steady: everything fine. flaky: errors, a rate limit and a signed-out provider, every 15 seconds. drift: usage climbs toward the limits every 10 seconds.</description>
     </key>
   </schema>
 </schemalist>

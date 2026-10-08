@@ -98,3 +98,17 @@ Things that cost time and are not obvious from the St or GNOME Shell sources.
 - BoxPointer may allocate before a newly added invisible popup anchor. Allocate the finite
   captured anchor box before setPosition; a fresh Clutter.Actor's allocation/extents may be NaN
   even when x/y/width/height properties look valid. Reject Clutter criticals in native test logs.
+
+## Provider configuration and alert edits
+
+- Read provider configuration asynchronously in both Shell and preferences. The
+  16 KiB streaming limit applies after opening the file as well as to metadata.
+  The 5-second timer cancels metadata, open, and read operations; asynchronous
+  stream closure is awaited afterward, so the timer does not bound the complete promise.
+- Use a separate GSettings object for a delayed settings transaction. Delaying the
+  shared object can buffer later edits from unrelated controls. Setup validates
+  the shared critical threshold against every enabled warning before atomically
+  applying the four critical values.
+- A keyring failure is reported as retryable network trouble with reason `keyring`.
+  Connection-alert rules must check that reason before treating the snapshot as
+  an ordinary network outage.

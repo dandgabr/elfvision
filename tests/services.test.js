@@ -12,6 +12,7 @@ import {MAX_ALERT_STATE_BYTES, emptyAlertState} from '../lib/core/alerts.js';
 import {AlertStore} from '../lib/services/alertStore.js';
 import {CacheStore} from '../lib/services/cacheStore.js';
 import {glibTimers} from '../lib/services/timers.js';
+import {createCommandCodeProvider} from '../lib/providers/commandCode.js';
 
 Gio._promisify(Gio.SocketClient.prototype, 'connect_async', 'connect_finish');
 Gio._promisify(Gio.OutputStream.prototype, 'write_bytes_async', 'write_bytes_finish');
@@ -20,6 +21,42 @@ Gio._promisify(Gio.InputStream.prototype, 'read_bytes_async', 'read_bytes_finish
 const MESSAGES = {ok: 'Done.', failed: 'Not done.'};
 const wait = ms => new Promise(resolve => GLib.timeout_add(GLib.PRIORITY_DEFAULT, ms, () => { resolve(); return GLib.SOURCE_REMOVE; }));
 const portOf = loopback => Number(loopback.redirectUri.split(':')[2].split('/')[0]);
+
+for (const stop of ['cancel', 'dispose']) {
+    test(`command code: ${stop} during key lookup prevents credential dispatch`, async () => {
+        let releaseKey, cancelled = false, requests = 0, disposals = 0;
+        const key = new Promise(resolve => { releaseKey = resolve; });
+        // Only the keyring and transport boundary are substituted; provider lifecycle
+        // guards must work even when the injected transport has no cancellation logic.
+        const provider = createCommandCodeProvider({getKey: () => key, http: {
+            get: async () => { requests++; return {status: 200, json: {credits: {monthlyCredits: 7}}}; },
+            dispose: () => { disposals++; },
+        }});
+        const pending = provider.fetch({isCancelled: () => cancelled}).then(() => null, error => error);
+        if (stop === 'cancel')
+            cancelled = true;
+        else
+            provider.dispose();
+        releaseKey('synthetic-key');
+        const error = await pending;
+        assertEqual(requests, 0, 'stopped provider must not send the bearer credential');
+        assertEqual(error?.code, 'network');
+        assertEqual(disposals, stop === 'dispose' ? 1 : 0);
+    });
+}
+
+test('command code: a current fetch sends its key and parses the credit balance', async () => {
+    const sent = [];
+    const context = {isCancelled: () => false};
+    const provider = createCommandCodeProvider({getKey: async () => 'synthetic-key', http: {
+        get: async (url, options) => {
+            sent.push({url, headers: options.headers, context: options.context});
+            return {status: 200, json: {credits: {monthlyCredits: 7}}};
+        },
+    }});
+    assertEqual(await provider.fetch(context), {metrics: [{id: 'monthly-credits', kind: 'money', balance: 7, currency: 'USD'}]});
+    assertEqual(sent, [{url: 'https://api.commandcode.ai/alpha/billing/credits', headers: {Authorization: 'Bearer synthetic-key'}, context}]);
+});
 
 /** A hand-written HTTP request, to say what a browser would never say (a foreign Host, a POST). */
 async function raw(port, text) {

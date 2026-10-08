@@ -1,5 +1,10 @@
 # Actual nested helper runtime isolation
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Scope: `tools/nested-shell.sh` only. Other workers' changes preserved; no commits.
 
 Shell now owns a new0700 runtime directory below its throwaway work directory, so compositor sockets/crash markers cannot collide with the parent runtime. Captures actual parent runtime/display before replacing it; relative WAYLAND_DISPLAY resolves against the actual parent runtime, absolute paths remain intact. A relative display with no runtime fails clearly instead of inventing a socket path. Unset display stays unset, preserving existing backend selection. PipeWire parent endpoint is retained for devkit preview only; existing explicit override wins. Private D-Bus/config/data/cache/keyring and GNOME_KEYRING_CONTROL/SSH_AUTH_SOCK unsetting remain intact. Work cleanup traps still remove runtime after session exit.

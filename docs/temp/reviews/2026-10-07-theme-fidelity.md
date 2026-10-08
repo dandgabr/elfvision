@@ -1,5 +1,10 @@
 # Post-MVP theme fidelity review
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 This records design intent and generated profile validation for all twenty-two built-in themes. Native rendering, wallpaper compositing, performance and human accessibility acceptance remain separate release gates. A validated profile does not prove its renderer visually reproduces the gallery.
 
 ## Canonical source and regeneration

@@ -1,5 +1,10 @@
 # Native theme-change allocation regression
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 The expanded 12-case layout gate reproduced a real native paint failure after switching from the large-font RTL scenario to Glass. Initial eight cases passed, then `StLabel` shadow painting and Cogl reported invalid allocation/zero viewport. GDB identified the nonnumeric “On the bar” heading and invalid foreground ancestors; finite cached boxes did not establish valid allocation.
 
 ## Cause and fix

@@ -22,5 +22,8 @@ import './barView.test.js';
 import './fontInstall.test.js';
 import './fontInstaller.test.js';
 import './disconnect.test.js';
+import './extensionCredentials.test.js';
+import './providerConfig.test.js';
+import './themeCatalog.test.js';
 
 System.exit(await runAll(ARGV.filter(arg => arg !== '--')[0] ?? '') ? 1 : 0);

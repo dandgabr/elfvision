@@ -1,8 +1,9 @@
 # 0003. Security model and terms-of-service risk
 
 Status: accepted and implemented (M2 and M3). The notifications and alerts of M4 follow the
-same rules (ADR 0010): fixed translated text, nothing provider-controlled on screen, a private state
-file. CI repeats the secret scan and adds static analysis (see the development guide).
+same rules (ADR 0010): fixed translated notification templates and a private state
+file. Popup cards may show bounded, validated provider plan names; notifications
+exclude plans and other provider-supplied text. CI repeats the secret scan and adds static analysis (see the development guide).
 
 ## Context
 
@@ -41,8 +42,8 @@ be re-checked against the providers' current terms before each provider ships:
   port is whatever the borrowed client id allows. A provider that offers device flow
   uses it instead.
 - **Refresh** is single-flight per provider. The new refresh token is stored before
-  it is used, because tokens rotate. A refresh error becomes `auth_required`, never a
-  retry loop.
+  it is used, because tokens rotate. Terminal credential refusals become
+  `auth_required`; transient network failures use bounded backoff.
 - **Network.** Requests use HTTPS only, with a host allowlist per module, no cross-host redirects, timeouts
   and response size limits. Polling runs at 5 minutes or slower, with jitter. Headers and bodies are
   never logged, and tokens are redacted in errors.

@@ -1,5 +1,10 @@
 # M4 completion implementation plan
 
+> Historical snapshot: this document preserves the decisions, findings, and test
+> results recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](../reviews/2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 **Goal:** Finish the accepted first-use assistant and the RTL/long-text pass.
 **Spec:** docs/adr/0010-alerts-and-polish.md and docs/adr/0007-internationalization.md.
 **Architecture:** Preserve the account controllers already written by Claude. Pure first-use decisions live in core; a disposable preferences subpage shares the Accounts views and controllers.

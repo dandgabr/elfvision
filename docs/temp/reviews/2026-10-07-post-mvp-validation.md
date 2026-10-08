@@ -1,5 +1,10 @@
 # Post-MVP execution and validation
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Date: 2026-10-07. Base: `61bced1`. Implementation branch:
 `feat/post-mvp-effects`, isolated worktree `gnome-ai-quota-post-mvp`.
 The integrated execution plan extends M4; M4 remains closed.

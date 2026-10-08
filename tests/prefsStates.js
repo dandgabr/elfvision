@@ -342,6 +342,51 @@ app.connect('activate', () => {
                 check(destroyed === 1, 'font installer is destroyed exactly once');
             }
         });
+        await run('reopened setup rejects incompatible warning thresholds as one batch', async () => {
+            const window = newWindow(), s = settings();
+            window.add(new Adw.PreferencesPage({title: 'General'}));
+            const kinds = ['session', 'week', 'month', 'credits'];
+            for (const kind of kinds) s.set_int(`alert-${kind}-percent`, 95);
+            s.set_boolean('alert-week-warning-enabled', true);
+            s.set_int('alert-week-warning-percent', 80);
+            const accounts = {cancel() {}, show() {}, controllers: new Map(availableProviders().map(m => [m.id, fakeController(s, m.id)]))};
+            const setup = openFirstUse({window, settings: s, gettext: _, accounts, extensionPath: root});
+            try {
+                window.present(); await wait();
+                for (let i = 0; i < 4; i++) button(setup.page, 'Continue').emit('clicked');
+                const critical = walk(setup.page).find(w => w instanceof Adw.SpinRow && w.title === _('Notify at'));
+                check(critical, 'setup threshold exists');
+                critical.value = 70; await wait();
+                check(kinds.every(kind => s.get_int(`alert-${kind}-percent`) === 95), 'invalid setup edit preserves every quota threshold');
+                check(critical.value === 95, 'invalid setup edit rolls control back');
+                check(walk(setup.page).some(w => w instanceof Adw.ActionRow && w.title === _('Warning must be lower than critical') && w.visible), 'invalid setup edit explains rejection');
+                let partialBatch = false;
+                const changed = s.connect('changed', (_settings, key) => {
+                    if (kinds.some(kind => key === `alert-${kind}-percent`))
+                        partialBatch ||= !kinds.every(kind => s.get_int(`alert-${kind}-percent`) === 90);
+                });
+                try { critical.value = 90; await wait(); }
+                finally { s.disconnect(changed); }
+                check(kinds.every(kind => s.get_int(`alert-${kind}-percent`) === 90), 'valid setup edit commits all quota thresholds');
+                check(!partialBatch, 'settings observers see the complete threshold batch');
+                check(s.get_boolean('alert-week-warning-enabled') && s.get_int('alert-week-warning-percent') === 80, 'setup preserves customized warning');
+                s.set_int('alert-session-percent', 96); await wait();
+                check(critical.value === 96, 'setup follows externally changed threshold');
+                s.set_boolean('notifications-enabled', false);
+                check(!s.get_boolean('notifications-enabled'), 'shared settings remain immediate after batch');
+                containment(window, critical, 'setup threshold');
+            } finally { setup.close(); window.close(); }
+            const reopenedWindow = newWindow();
+            reopenedWindow.add(new Adw.PreferencesPage({title: 'General'}));
+            const reopened = openFirstUse({window: reopenedWindow, settings: s, gettext: _, accounts, extensionPath: root});
+            try {
+                reopenedWindow.present(); await wait();
+                for (let i = 0; i < 4; i++) button(reopened.page, 'Continue').emit('clicked');
+                const critical = walk(reopened.page).find(w => w instanceof Adw.SpinRow && w.title === _('Notify at'));
+                check(critical.value === 96, 'reopening setup reloads the persisted threshold');
+                check(s.get_int('alert-week-percent') === 90 && s.get_int('alert-week-warning-percent') === 80, 'opening setup leaves independent quota rules unchanged');
+            } finally { reopened.close(); reopenedWindow.close(); }
+        });
         await run('warning and critical controls reject invalid pairs and expose external invalid configuration', async () => {
             for (const externalBad of [false, true]) {
                 const window = newWindow(), s = settings(), ids = [];

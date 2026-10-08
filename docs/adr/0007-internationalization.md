@@ -27,9 +27,10 @@ formats. The repository language is English (ADR 0001).
   - Numbers, currency, weekday and clock go through `Intl` with the active language (`US$ 12,40` in
     pt-BR, `$12.40` in English), and respect the 12 or 24-hour setting.
   - Time-unit abbreviations (`d h min`) are the same in both languages.
-  - Layout does not depend on text length: names are ellipsized, buttons grow, and nothing has a fixed
+  - Layout does not depend on text length: names wrap or are ellipsized according to context, buttons grow, and nothing has a fixed
     width tied to a word.
-  - Provider names and theme names are not translated.
+  - Provider names and visual-style theme names are not translated. The built-in
+    System (GNOME) label is translated; user theme names remain as supplied.
 - Files:
 
 ```text

@@ -1,0 +1,205 @@
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=1712390 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=1712390 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=1712390 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.portal.Desktop' requested by ':1.6' (uid=1000 pid=1712439 comm="gjs -m /home/daniel/Code/gnome-ai-quota-post-mvp/t" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.impl.portal.PermissionStore' requested by ':1.7' (uid=1000 pid=1712455 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.PermissionStore'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.portal.Documents' requested by ':1.7' (uid=1000 pid=1712455 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gnome' requested by ':1.7' (uid=1000 pid=1712455 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.gnome.Shell.Screencast' requested by ':1.4' (uid=1000 pid=1712401 comm="gnome-shell --headless --wayland --wayland-display" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.gnome.Shell.CalendarServer' requested by ':1.4' (uid=1000 pid=1712401 comm="gnome-shell --headless --wayland --wayland-display" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.gnome.evolution.dataserver.Sources5' requested by ':1.11' (uid=1000 pid=1712501 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.gnome.Shell.Notifications' requested by ':1.4' (uid=1000 pid=1712401 comm="gnome-shell --headless --wayland --wayland-display" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.gnome.OnlineAccounts' requested by ':1.12' (uid=1000 pid=1712508 comm="/usr/libexec/evolution-source-registry" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.portal.IBus' requested by ':1.13' (uid=1000 pid=1712533 comm="ibus-daemon --panel disable" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.gnome.Shell.Notifications'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.Sources5'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.freedesktop.portal.IBus'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.gnome.evolution.dataserver.Calendar8' requested by ':1.11' (uid=1000 pid=1712501 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.gnome.Shell.CalendarServer'
+goa-daemon-Message: 09:04:29.430: goa-daemon version 3.58.1 starting
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.gnome.Identity' requested by ':1.18' (uid=1000 pid=1712558 comm="/usr/libexec/goa-daemon" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.gnome.OnlineAccounts'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.gnome.Identity'
+
+(process:1712613): libgoaidentity-WARNING **: 09:04:29.446: GoaKerberosIdentityManager: Using polling for change notification for credential cache type 'KCM'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.Calendar8'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.gnome.evolution.dataserver.AddressBook10' requested by ':1.20' (uid=1000 pid=1712605 comm="/usr/libexec/evolution-calendar-factory" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.AddressBook10'
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.gnome.Settings.GlobalShortcutsProvider' requested by ':1.10' (uid=1000 pid=1712478 comm="/usr/libexec/xdg-desktop-portal-gnome" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.gnome.Settings.GlobalShortcutsProvider'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gnome'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gtk' requested by ':1.7' (uid=1000 pid=1712455 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=1712390 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+
+** (xdg-desktop-portal-gtk:1713303): WARNING **: 09:04:30.372: AT-SPI: Could not obtain desktop path or name
+
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gtk'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=1712390 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+
+** (xdg-desktop-portal-gtk:1713303): WARNING **: 09:04:30.374: atk-bridge: GetRegisteredEvents returned message with unknown signature
+
+** (xdg-desktop-portal-gtk:1713303): WARNING **: 09:04:30.374: atk-bridge: get_device_events_reply: unknown signature
+
+(/usr/libexec/xdg-desktop-portal:1712455): xdg-desktop-portal-WARNING **: 09:04:30.378: Failed to connect to PipeWire: Couldn't connect to PipeWire
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.freedesktop.portal.Desktop'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=1712390 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=1712390 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.portal.IBus' requested by ':1.31' (uid=1000 pid=1713395 comm="ibus-daemon --panel disable -r --xim" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.freedesktop.portal.IBus'
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=1712390 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=1712390 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[1712377]: [session uid=1000 pid=1712377 pidfd=5] Successfully activated service 'org.gnome.Shell.Screencast'
+Preferences traversal: LTR, normal text, 3 runs, all steps passed
+Preferences traversal: RTL, normal text, 3 runs, all steps passed
+Preferences traversal: LTR, expanded text, 3 runs, all steps passed
+Preferences traversal: RTL, expanded text, 3 runs, all steps passed
+Preferences traversal: LTR, expanded text, Sans 22, 3 runs, all steps passed
+Preferences traversal: RTL, expanded text, Sans 22, 3 runs, all steps passed
+Preferences lifecycle: Skip, Escape, header back, window close and summary account passed
+ok    preferences states: empty selection does not claim accounts connected
+ok    preferences states: Done follows late save and server rejection without replacing focused row
+ok    preferences states: disposed key view ignores initial refresh and queued save UI callbacks
+ok    preferences states: keyring recovery on window activation enables API entry
+ok    preferences states: live key view reports invalid save and clears successful retry
+ok    preferences states: initial lookup focuses only absent keys
+ok    preferences states: OAuth account states fit viewport and move focus to available actions
+ok    preferences states: API states and removal dialog fit viewport with safe default
+ok    preferences states: terms dialogs fit viewport and closing never accepts consent
+ok    preferences states: destructive confirmations cannot act through disposed account views
+ok    preferences states: disconnect-all confirmation is inert until explicit confirmation and defaults to Cancel
+ok    preferences states: suggested fonts review preserves consent and cancellation at narrow width
+ok    preferences states: reopened setup rejects incompatible warning thresholds as one batch
+ok    preferences states: warning and critical controls reject invalid pairs and expose external invalid configuration
+Preferences state matrix: LTR, normal, passed
+ok    preferences states: empty selection does not claim accounts connected
+ok    preferences states: Done follows late save and server rejection without replacing focused row
+ok    preferences states: disposed key view ignores initial refresh and queued save UI callbacks
+ok    preferences states: keyring recovery on window activation enables API entry
+ok    preferences states: live key view reports invalid save and clears successful retry
+ok    preferences states: initial lookup focuses only absent keys
+ok    preferences states: OAuth account states fit viewport and move focus to available actions
+ok    preferences states: API states and removal dialog fit viewport with safe default
+ok    preferences states: terms dialogs fit viewport and closing never accepts consent
+ok    preferences states: destructive confirmations cannot act through disposed account views
+ok    preferences states: disconnect-all confirmation is inert until explicit confirmation and defaults to Cancel
+ok    preferences states: suggested fonts review preserves consent and cancellation at narrow width
+ok    preferences states: reopened setup rejects incompatible warning thresholds as one batch
+ok    preferences states: warning and critical controls reject invalid pairs and expose external invalid configuration
+Preferences state matrix: RTL, normal, passed
+ok    preferences states: empty selection does not claim accounts connected
+ok    preferences states: Done follows late save and server rejection without replacing focused row
+ok    preferences states: disposed key view ignores initial refresh and queued save UI callbacks
+ok    preferences states: keyring recovery on window activation enables API entry
+ok    preferences states: live key view reports invalid save and clears successful retry
+ok    preferences states: initial lookup focuses only absent keys
+ok    preferences states: OAuth account states fit viewport and move focus to available actions
+ok    preferences states: API states and removal dialog fit viewport with safe default
+ok    preferences states: terms dialogs fit viewport and closing never accepts consent
+ok    preferences states: destructive confirmations cannot act through disposed account views
+ok    preferences states: disconnect-all confirmation is inert until explicit confirmation and defaults to Cancel
+ok    preferences states: suggested fonts review preserves consent and cancellation at narrow width
+ok    preferences states: reopened setup rejects incompatible warning thresholds as one batch
+ok    preferences states: warning and critical controls reject invalid pairs and expose external invalid configuration
+Preferences state matrix: LTR, expanded, passed
+ok    preferences states: empty selection does not claim accounts connected
+ok    preferences states: Done follows late save and server rejection without replacing focused row
+ok    preferences states: disposed key view ignores initial refresh and queued save UI callbacks
+ok    preferences states: keyring recovery on window activation enables API entry
+ok    preferences states: live key view reports invalid save and clears successful retry
+ok    preferences states: initial lookup focuses only absent keys
+ok    preferences states: OAuth account states fit viewport and move focus to available actions
+ok    preferences states: API states and removal dialog fit viewport with safe default
+ok    preferences states: terms dialogs fit viewport and closing never accepts consent
+ok    preferences states: destructive confirmations cannot act through disposed account views
+ok    preferences states: disconnect-all confirmation is inert until explicit confirmation and defaults to Cancel
+ok    preferences states: suggested fonts review preserves consent and cancellation at narrow width
+ok    preferences states: reopened setup rejects incompatible warning thresholds as one batch
+ok    preferences states: warning and critical controls reject invalid pairs and expose external invalid configuration
+Preferences state matrix: RTL, expanded, passed
+ok    preferences states: empty selection does not claim accounts connected
+ok    preferences states: Done follows late save and server rejection without replacing focused row
+ok    preferences states: disposed key view ignores initial refresh and queued save UI callbacks
+ok    preferences states: keyring recovery on window activation enables API entry
+ok    preferences states: live key view reports invalid save and clears successful retry
+ok    preferences states: initial lookup focuses only absent keys
+ok    preferences states: OAuth account states fit viewport and move focus to available actions
+ok    preferences states: API states and removal dialog fit viewport with safe default
+ok    preferences states: terms dialogs fit viewport and closing never accepts consent
+ok    preferences states: destructive confirmations cannot act through disposed account views
+
+(gjs:1714731): Adwaita-WARNING **: 09:06:36.004: AdwToolbarView 0x562d2635ff40 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+
+(gjs:1714731): Adwaita-WARNING **: 09:06:36.626: AdwToolbarView 0x562d26ce8270 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+
+(gjs:1714731): Adwaita-WARNING **: 09:06:37.242: AdwToolbarView 0x562d26e5da80 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+
+(gjs:1714731): Adwaita-WARNING **: 09:06:37.625: AdwToolbarView 0x562d26e5da80 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+
+(gjs:1714731): Adwaita-WARNING **: 09:06:37.842: AdwToolbarView 0x562d26e5da80 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+
+(gjs:1714731): Adwaita-WARNING **: 09:06:38.043: AdwToolbarView 0x562d26e5da80 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+ok    preferences states: disconnect-all confirmation is inert until explicit confirmation and defaults to Cancel
+
+(gjs:1714731): Adwaita-WARNING **: 09:06:41.174: AdwToolbarView 0x562d26b4bc70 exceeds AdwBreakpointBin width: requested 435 px, 360 px available
+ok    preferences states: suggested fonts review preserves consent and cancellation at narrow width
+ok    preferences states: reopened setup rejects incompatible warning thresholds as one batch
+ok    preferences states: warning and critical controls reject invalid pairs and expose external invalid configuration
+Preferences state matrix: LTR, expanded, Sans 22, passed
+ok    preferences states: empty selection does not claim accounts connected
+ok    preferences states: Done follows late save and server rejection without replacing focused row
+ok    preferences states: disposed key view ignores initial refresh and queued save UI callbacks
+ok    preferences states: keyring recovery on window activation enables API entry
+ok    preferences states: live key view reports invalid save and clears successful retry
+ok    preferences states: initial lookup focuses only absent keys
+ok    preferences states: OAuth account states fit viewport and move focus to available actions
+ok    preferences states: API states and removal dialog fit viewport with safe default
+ok    preferences states: terms dialogs fit viewport and closing never accepts consent
+ok    preferences states: destructive confirmations cannot act through disposed account views
+
+(gjs:1715002): Adwaita-WARNING **: 09:06:56.184: AdwToolbarView 0x55fbe0af1b30 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+
+(gjs:1715002): Adwaita-WARNING **: 09:06:56.801: AdwToolbarView 0x55fbe15418d0 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+
+(gjs:1715002): Adwaita-WARNING **: 09:06:57.417: AdwToolbarView 0x55fbe15de1c0 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+
+(gjs:1715002): Adwaita-WARNING **: 09:06:57.818: AdwToolbarView 0x55fbe15de1c0 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+
+(gjs:1715002): Adwaita-WARNING **: 09:06:58.016: AdwToolbarView 0x55fbe15de1c0 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+
+(gjs:1715002): Adwaita-WARNING **: 09:06:58.218: AdwToolbarView 0x55fbe15de1c0 exceeds AdwBreakpointBin width: requested 364 px, 360 px available
+ok    preferences states: disconnect-all confirmation is inert until explicit confirmation and defaults to Cancel
+
+(gjs:1715002): Adwaita-WARNING **: 09:07:01.350: AdwToolbarView 0x55fbe16b2d10 exceeds AdwBreakpointBin width: requested 435 px, 360 px available
+ok    preferences states: suggested fonts review preserves consent and cancellation at narrow width
+ok    preferences states: reopened setup rejects incompatible warning thresholds as one batch
+ok    preferences states: warning and critical controls reject invalid pairs and expose external invalid configuration
+Preferences state matrix: RTL, expanded, Sans 22, passed
+Full preferences startup: fresh, account target, demo, dismissed and live target change passed
+Gdk-Message: 09:07:20.806: Lost connection to Wayland compositor.
+Gdk-Message: 09:07:20.806: Error reading events from display: Broken pipe
+gnome-shell-calendar-server[1712501]: Lost (or failed to acquire) the name org.gnome.Shell.CalendarServer - exiting
+
+(evolution-calendar-factory:1712605): libedbus-private-WARNING **: 09:07:20.927: Error setting property 'ConnectionStatus' on interface org.gnome.evolution.dataserver.Source: The connection is closed (g-io-error-quark, 18)

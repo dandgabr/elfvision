@@ -1,0 +1,69 @@
+[
+  {
+    "scheme": "light",
+    "rtl": false,
+    "large": false,
+    "region": [
+      2451,
+      118,
+      8,
+      450
+    ],
+    "translucentEdge": 0.7475526549985168,
+    "frostEdge": 0.043903886087214475,
+    "outsideDifference": 0.0
+  },
+  {
+    "scheme": "light",
+    "rtl": true,
+    "large": true,
+    "region": [
+      2460,
+      138,
+      8,
+      460
+    ],
+    "translucentEdge": 0.7475333720255368,
+    "frostEdge": 0.04372218997871929,
+    "outsideDifference": 0.0
+  },
+  {
+    "scheme": "dark",
+    "rtl": false,
+    "large": true,
+    "region": [
+      2412,
+      138,
+      8,
+      460
+    ],
+    "translucentEdge": 1.3526794350938285,
+    "frostEdge": 0.022828400077384407,
+    "outsideDifference": 0.0
+  },
+  {
+    "scheme": "dark",
+    "rtl": true,
+    "large": false,
+    "region": [
+      2400,
+      118,
+      8,
+      450
+    ],
+    "translucentEdge": 1.3527143280925542,
+    "frostEdge": 0.02333629981212301,
+    "outsideDifference": 0.0
+  },
+  {
+    "cacheValueDifference": 10.746070460704606,
+    "region": [
+      2000,
+      439,
+      410,
+      39
+    ],
+    "original": "$12.40",
+    "changed": "73"
+  }
+]

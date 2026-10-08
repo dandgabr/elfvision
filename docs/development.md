@@ -102,8 +102,8 @@ modules stay in `lib/ui`, `extension.js` and the theme manager, and GTK and Adwa
   plain `gjs` and the tests cover it. Everything the UI shows is computed there
   (`viewmodel.js`) and painted by `lib/ui`.
 - `lib/services` holds the GLib and Gio code: timers, files, the controller that
-  runs the scheduler. All I/O is asynchronous, except the small theme files read when
-  the theme changes.
+  runs the scheduler. Shell and preferences configuration reads are asynchronous
+  and bounded; small theme files are read synchronously when the theme changes.
 - `lib/ui` only draws. It takes view models and emits callbacks, and keeps no
   business logic.
 - `lib/providers` holds one module per provider, behind the contract in
@@ -212,6 +212,13 @@ tools/headless-shell.sh
 tools/headless-shell.sh open-popup.js sleep:20 screenshot.js
 ```
 
+For an asynchronous private probe, `wait-for:EXPRESSION` polls its completion
+flag up to 60 times, with a one-second D-Bus call deadline and a half-second
+pause between attempts. Failure stops the owned shell and fails the check.
+The resource matrix and multi-theme focus probe use this bounded completion wait
+after their initial delays. Strict result verifiers still check the resource
+combinations, keyboard-focus criteria and cleanup.
+
 Useful snippets for the scripts: `Main.panel.statusArea[uuid].menu.open(false)` opens
 the popup; a `Shell.Screenshot` call writes a PNG of the virtual monitor; walking
 `get_children()` with `get_allocation_box()` and `get_preferred_width(-1)` prints
@@ -311,8 +318,9 @@ multiple monitors, physical keyboard and Orca gates remain explicit in the
 
 ## Static analysis
 
-GitHub Actions run these on every push to `main`, every pull request and once a week
-(`.github/workflows`):
+The checked-in GitHub Actions workflows run on pushes to `main` and pull
+requests. Gitleaks and SAST also run weekly; lint has a manual trigger. CodeQL
+runs separately through GitHub default setup:
 
 | Workflow | Tool | Looks at |
 |---|---|---|
@@ -338,7 +346,7 @@ than enabling a browser or Node environment. Dependencies and Node are developme
 `tools/pack.sh` does not include the npm manifest, lockfile or `node_modules` in the extension ZIP.
 
 CodeQL is not a workflow file here: the repository uses GitHub's own *default setup* (Settings, Code
-security, Code scanning), set to the extended suite for `javascript-typescript`, `python` and `actions`.
+security, Code scanning), set to the extended suite for `javascript-typescript`, `python`, and `actions`, with weekly analysis.
 GitHub does not accept results from a CodeQL workflow of our own while the default setup is on, so
 the repository uses only the default setup. In every tool except CodeQL, a finding fails the job.
 Every action is pinned to a commit, workflows get the least permissions they need, and Dependabot (with a one-week cooldown) proposes new versions of the
@@ -353,22 +361,36 @@ right, put the reason in a comment above it.
 ## Package
 
 `tools/pack.sh` builds `dist/<uuid>.shell-extension.zip` with everything the extension needs
-(code, icons, themes, schema and translations) and the client-id helper, with no tests, development tools or docs.
+(code, icons, themes, schema, and translations), the client-id helper, the main
+AGPL-3.0 `LICENSE`, and the bundled OFL-1.1 font licenses. It excludes tests,
+development tools, and documentation.
 Install it with `gnome-extensions install --force`, then log out and in. `gnome-extensions
 install` compiles the schema; unpacking the zip by hand does not.
+
+The archive follows the [standard GNOME extension layout](https://gjs.guide/extensions/overview/anatomy.html#extension-zip):
+`metadata.json` and `extension.js` sit at the ZIP root, alongside runtime folders.
+The current metadata declares `version-name: "0.1"` and Shell `50`. Keep the
+website-managed numeric `version` field unset for local distribution, as
+[GNOME documents](https://gjs.guide/extensions/overview/anatomy.html#version).
+A local package build does not publish a GitHub release.
 
 ## Signing in to OAuth providers
 
 The sign-in needs the provider's client id in `~/.config/gnome-ai-quota/providers.local.json`
 (see `providers.example.json`). Run `python3 -I tools/import-client-ids.py` once: it looks for
 the id in the AI tool installed on your computer, then in that tool's open-source code, and
-writes it to the file with mode 0600 without printing it. The nested shell copies that file in,
+writes it to the file with mode 0600 without printing it. Shell and preferences
+read it asynchronously with a 16 KiB streaming limit and a maximum 5-second
+cancellation timer for metadata, open, and read operations. Asynchronous stream
+closure follows cancellation; the complete promise has no hard 5-second deadline.
+Shell callers share one read and cache the result for one minute.
+The nested shell copies that file in,
 so Connect works there too, and keeps the sign-in in its own throwaway keyring.
 
 ## Themes
 
-A theme is a `theme.json` (see [themes.md](themes.md) for the format and ADR 0006 for the
-tokens). All CSS lives in `lib/core/theme.template.css`. Colors, radii, borders,
+A theme is a `theme.json` (see [themes.md](themes.md) for the format and
+[ADR 0006](adr/0006-theming.md) for the design). All CSS lives in `lib/core/theme.template.css`. Colors, radii, borders,
 shadows and fonts are tokens that `lib/core/theme.js` substitutes at compile time,
 because St has no `var()`.
 
@@ -486,7 +508,7 @@ committed.
 4. Add the control in `prefs.js` or `lib/prefs`, with every text through `gettext`, then translate the new
    strings (see [Translations](#translations)).
 5. Read the value where it is used, and re-check it there: dconf can be edited by hand.
-6. Add a test, and a row to the Settings table of the README.
+6. Add a test and document the setting in [Usage and settings](usage.md#settings).
 
 ## Conventions
 

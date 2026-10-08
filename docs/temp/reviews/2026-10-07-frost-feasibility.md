@@ -1,5 +1,10 @@
 # Native frost feasibility — GNOME Shell 50
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 The renderer implements a native backdrop surface beneath the existing popup controls.
 It uses the installed GNOME Shell 50.5 / Mutter 50.5 API, GI namespaces Shell 18 and
 Clutter 18: `new Shell.BlurEffect({mode: Shell.BlurMode.BACKGROUND, radius: 18,

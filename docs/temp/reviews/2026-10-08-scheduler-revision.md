@@ -1,5 +1,10 @@
 # Credential revisions and scheduler results
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 The independent security review identified an in-flight polling gap:
 `credentialsChanged()` scheduled another fetch but did not invalidate the old
 fetch's context or suppress its result. A response or authentication failure

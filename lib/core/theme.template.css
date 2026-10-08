@@ -288,7 +288,7 @@
 }
 
 .gaq-card-toggle:focus {
-    border-color: {{p:accent}};
+    border-color: {{p:focus}};
 }
 
 .gaq-chevron-icon {
@@ -356,7 +356,7 @@
 
 .gaq-window:focus {
     background-color: {{p:fg@0.06}};
-    border-color: {{p:accent}};
+    border-color: {{p:focus}};
 }
 
 .gaq-pool {
@@ -417,7 +417,7 @@
 
 .gaq-button:focus {
     background-color: {{p:fg@0.14}};
-    border-color: {{p:accent}};
+    border-color: {{p:focus}};
 }
 
 .gaq-button:active,
@@ -447,12 +447,17 @@
 
 .gaq-untracked-toggle {
     padding: 2px 0;
+    border: 2px solid transparent;
     border-radius: {{radius-sm}};
 }
 
 .gaq-untracked-toggle:hover,
 .gaq-untracked-toggle:focus {
     background-color: {{p:fg@0.08}};
+}
+
+.gaq-untracked-toggle:focus {
+    border-color: {{p:focus}};
 }
 
 .gaq-untracked-list {

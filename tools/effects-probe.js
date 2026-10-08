@@ -163,6 +163,84 @@
             result.numeric.fontComparisons.push({family, texts, widths: values});
         }
         result.cases.push('numeric text');
+        const {hexToRgb} = await import(`file://${root}/lib/core/theme.js`);
+        const luminance = rgb => rgb.map(value => {
+            const channel = value / 255;
+            return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+        }).reduce((total, value, index) => total + value * [0.2126, 0.7152, 0.0722][index], 0);
+        const contrast = (first, second) => {
+            const values = [luminance(first), luminance(second)].sort((a, b) => b - a);
+            return (values[0] + 0.05) / (values[1] + 0.05);
+        };
+        result.focus = [];
+        // Opaque mode gives every theme the same deterministic native backgrounds.
+        indicator._settings.set_string('effects-mode', 'off');
+        indicator._untracked.update([{id: 'codex', name: 'Codex'}]);
+        const controls = [['Not tracked', indicator._untracked._toggle], ['footer', indicator._legendButton]];
+        const sides = [St.Side.TOP, St.Side.RIGHT, St.Side.BOTTOM, St.Side.LEFT];
+        const directory = Gio.File.new_for_path(`${root}/themes/builtin`).enumerate_children('standard::name', Gio.FileQueryInfoFlags.NONE, null);
+        const themeIds = [];
+        for (let file = directory.next_file(null); file; file = directory.next_file(null))
+            themeIds.push(file.get_name());
+        directory.close(null);
+        check(themeIds.length === 22, 'focus inventory covers all 22 shipped themes');
+        const composite = (color, behind) => [color.red, color.green, color.blue].map((channel, index) =>
+            channel * color.alpha / 255 + behind[index] * (1 - color.alpha / 255));
+        for (const id of themeIds.sort()) {
+            indicator._settings.set_string('theme', id);
+            for (const scheme of ['light', 'dark']) {
+                indicator._settings.set_string('color-scheme', scheme);
+                global.stage.set_key_focus(null);
+                for (const [, control] of controls) {
+                    control.checked = false;
+                    control.remove_style_pseudo_class('hover');
+                }
+                await wait(80);
+                const palette = indicator._extension._themes.getEffectState().colors;
+                const expected = hexToRgb(palette.focus ?? palette.accent);
+                for (const [name, control] of controls) {
+                    global.stage.set_key_focus(null);
+                    const resting = control.get_theme_node();
+                    const restingWidths = sides.map(side => resting.get_border_width(side));
+                    const restingAlphas = sides.map(side => resting.get_border_color(side).alpha);
+                    const size = [...control.get_preferred_width(-1), ...control.get_preferred_height(-1)];
+                    control.grab_key_focus();
+                    await wait(80);
+                    check(global.stage.get_key_focus() === control && control.has_style_pseudo_class('focus'),
+                        `${id}/${scheme} ${name} receives native keyboard focus`);
+                    const focused = control.get_theme_node();
+                    const widths = sides.map(side => focused.get_border_width(side));
+                    const colors = sides.map(side => focused.get_border_color(side));
+                    const ancestors = [];
+                    for (let parent = control.get_parent(); parent; parent = parent.get_parent()) {
+                        if (parent.get_theme_node)
+                            ancestors.unshift(parent.get_theme_node().get_background_color());
+                    }
+                    check(ancestors.some(color => color.alpha === 255), `${id}/${scheme} ${name} has a native opaque backing`);
+                    const background = ancestors.reduce((behind, color) => composite(color, behind), hexToRgb(palette.bg));
+                    const fill = focused.get_background_color();
+                    const fillRgb = composite(fill, background);
+                    const ratios = colors.map(color => Math.min(
+                        contrast([color.red, color.green, color.blue], background),
+                        contrast([color.red, color.green, color.blue], fillRgb)));
+                    result.focus.push({id, scheme, control: name, restingWidths, restingAlphas, widths, background, fillRgb,
+                        colors: colors.map(color => [color.red, color.green, color.blue, color.alpha]), ratios});
+                    check(widths.every(width => width >= 2) && colors.every(color => color.alpha === 255),
+                        `${id}/${scheme} ${name} keyboard focus has an opaque two-pixel ring`);
+                    check(ratios.every(ratio => ratio >= 3),
+                        `${id}/${scheme} ${name} focus ring contrasts with both native adjacent backgrounds: ${Math.min(...ratios)}`);
+                    check(colors.every(color => [color.red, color.green, color.blue].every((channel, index) => channel === expected[index])),
+                        `${id}/${scheme} ${name} focus ring follows the resolved focus color`);
+                    check(restingWidths.every((width, index) => width === widths[index])
+                        && JSON.stringify(size) === JSON.stringify([...control.get_preferred_width(-1), ...control.get_preferred_height(-1)]),
+                        `${id}/${scheme} ${name} reserves its border without a focus layout jump`);
+                    if (name === 'Not tracked')
+                        check(restingAlphas.every(alpha => alpha === 0), `${id}/${scheme} Not tracked resting border stays transparent`);
+                }
+            }
+        }
+        check(result.focus.length === 88, '44 theme/scheme cases cover both Not tracked and footer controls');
+        result.cases.push('all-theme Not tracked and footer keyboard focus');
     } catch (error) {
         result.error = `${error.message}`;
     } finally {

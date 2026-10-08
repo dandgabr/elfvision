@@ -1,5 +1,10 @@
 # Post-MVP design: visual fidelity, motion and polish
 
+> Historical snapshot: this document preserves the decisions, findings, and test
+> results recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](../reviews/2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Status: accepted for implementation. The owner requested the full follow-up
 plan, approved support for all four visual concepts and authorized specialized
 agents, parallel theme work and reusable effect functions. This document does not

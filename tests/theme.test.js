@@ -3,7 +3,7 @@ import GLib from 'gi://GLib';
 import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
 import {effectPolicy, validateEffectProfile} from '../lib/core/themeEffects.js';
 import {builtinCatalog} from '../lib/prefs/themeCatalog.js';
-import {compileTheme, pickScheme, swatches, systemAccent, validateTheme, resolvedColors} from '../lib/core/theme.js';
+import {ACCENTS, compileTheme, hexToRgb, pickScheme, swatches, systemAccent, validateTheme, resolvedColors} from '../lib/core/theme.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
 const read = path => new TextDecoder().decode(GLib.file_get_contents(`${root}/${path}`)[1]);
@@ -278,6 +278,54 @@ test('themes: renderer colors are resolved hex values detached from theme data',
     assertTrue(Object.values(colors).every(c => /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(c)));
     colors.bg = '#000';
     assertEqual(resolvedColors(theme, 'light', 'teal').bg, '#fafafa');
+});
+
+test('themes: keyboard focus has 3:1 contrast across all themes and every System accent', () => {
+    const luminance = rgb => rgb.map(value => {
+        const channel = value / 255;
+        return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+    }).reduce((total, value, index) => total + value * [0.2126, 0.7152, 0.0722][index], 0);
+    const contrast = (first, second) => (Math.max(luminance(first), luminance(second)) + 0.05)
+        / (Math.min(luminance(first), luminance(second)) + 0.05);
+    let cases = 0;
+    let accentCases = 0;
+    let fallbackCases = 0;
+    for (const id of builtinIds()) {
+        const {theme} = loadTheme(id);
+        const before = JSON.stringify(theme);
+        for (const scheme of ['light', 'dark']) {
+            for (const accentName of id === 'sistema-gnome' ? Object.keys(ACCENTS) : ['blue']) {
+                const colors = resolvedColors(theme, scheme, accentName);
+                const foreground = hexToRgb(colors.fg);
+                const backgrounds = ['bg', 'surface'].flatMap(token => [0, 0.06, 0.08, 0.14, 0.2].map(alpha =>
+                    hexToRgb(colors[token]).map((channel, index) => channel * (1 - alpha) + foreground[index] * alpha)));
+                assertTrue(typeof colors.focus === 'string', `${id}/${scheme}/${accentName} is missing its derived focus color`);
+                const ring = hexToRgb(colors.focus);
+                for (const background of backgrounds)
+                    assertTrue(contrast(ring, background) >= 3, `${id}/${scheme}/${accentName} focus contrast ${contrast(ring, background)}`);
+                const accentIsSafe = backgrounds.every(background => contrast(hexToRgb(colors.accent), background) >= 3);
+                assertEqual(colors.focus, accentIsSafe ? colors.accent : colors.fg, `${id}/${scheme}/${accentName} focus choice`);
+                accentIsSafe ? accentCases++ : fallbackCases++;
+                assertEqual(colors.accent, theme.schemes[scheme].accent === 'system-accent'
+                    ? systemAccent(accentName, scheme === 'dark') : theme.schemes[scheme].accent, 'focus must preserve the theme accent');
+                const css = compileTheme(TEMPLATE, theme, {scheme, accentName});
+                for (const selector of ['gaq-card-toggle', 'gaq-window', 'gaq-button', 'gaq-untracked-toggle']) {
+                    let border;
+                    for (const rule of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+                        if (rule[1].split(',').map(value => value.trim()).includes(`.${selector}:focus`))
+                            border = rule[2].match(/border-color:\s*([^;]+);/)?.[1] ?? border;
+                    }
+                    assertEqual(border, colors.focus, `${selector} uses the resolved focus color`);
+                }
+                assertEqual(compileTheme('{{p:accent}}|{{p:fill}}|{{p:focus}}', theme, {scheme, accentName}),
+                    `${colors.accent}|${colors.fill}|${colors.focus}`, 'focus must not replace accent or meter fill');
+                cases++;
+            }
+        }
+        assertEqual(JSON.stringify(theme), before, 'focus resolution must not mutate theme data');
+    }
+    assertEqual(cases, 60);
+    assertTrue(accentCases > 0 && fallbackCases > 0, 'safe accents stay accented and unsafe accents use foreground');
 });
 
 

@@ -1,0 +1,77 @@
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.Shell.Extensions' requested by ':1.0' (uid=1000 pid=1910729 comm="gdbus call --session --dest org.gnome.Shell.Extens" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.freedesktop.portal.Desktop' requested by ':1.4' (uid=1000 pid=1910734 comm="/usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.S" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.freedesktop.impl.portal.PermissionStore' requested by ':1.5' (uid=1000 pid=1910772 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.PermissionStore'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.freedesktop.portal.Documents' requested by ':1.5' (uid=1000 pid=1910772 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gnome' requested by ':1.5' (uid=1000 pid=1910772 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+
+** (xdg-desktop-portal-gnome:1910795): WARNING **: 09:51:33.948: Failed to open service channel Wayland connection, portals dialogs may missbehave (Cannot invoke method; proxy is for the well-known name org.gnome.Mutter.ServiceChannel without an owner, and proxy was constructed with the G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START flag).
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.a11y.Bus' requested by ':1.9' (uid=1000 pid=1910727 comm="gnome-shell --headless --wayland --unsafe-mode --w" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activated service 'org.a11y.Bus' failed: Failed to execute program org.a11y.Bus: Permission denied
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.Settings.GlobalShortcutsProvider' requested by ':1.8' (uid=1000 pid=1910795 comm="/usr/libexec/xdg-desktop-portal-gnome" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.Shell.Screencast' requested by ':1.1' (uid=1000 pid=1910727 comm="gnome-shell --headless --wayland --unsafe-mode --w" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.Shell.CalendarServer' requested by ':1.1' (uid=1000 pid=1910727 comm="gnome-shell --headless --wayland --unsafe-mode --w" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.evolution.dataserver.Sources5' requested by ':1.11' (uid=1000 pid=1910846 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.Shell.Notifications' requested by ':1.1' (uid=1000 pid=1910727 comm="gnome-shell --headless --wayland --unsafe-mode --w" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.OnlineAccounts' requested by ':1.12' (uid=1000 pid=1910853 comm="/usr/libexec/evolution-source-registry" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.Sources5'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.evolution.dataserver.Calendar8' requested by ':1.11' (uid=1000 pid=1910846 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.Shell.Notifications'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.Shell.CalendarServer'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.freedesktop.portal.IBus' requested by ':1.14' (uid=1000 pid=1910881 comm="ibus-daemon --panel disable" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.freedesktop.portal.IBus'
+goa-daemon-Message: 09:51:34.412: goa-daemon version 3.58.1 starting
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.Identity' requested by ':1.18' (uid=1000 pid=1910899 comm="/usr/libexec/goa-daemon" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.OnlineAccounts'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.Identity'
+
+(process:1910956): libgoaidentity-WARNING **: 09:51:34.429: GoaKerberosIdentityManager: Using polling for change notification for credential cache type 'KCM'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.Calendar8'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.evolution.dataserver.AddressBook10' requested by ':1.19' (uid=1000 pid=1910925 comm="/usr/libexec/evolution-calendar-factory" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.AddressBook10'
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.a11y.Bus' requested by ':1.23' (uid=1000 pid=1910931 comm="/usr/libexec/ibus-extension-gtk3" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activated service 'org.a11y.Bus' failed: Failed to execute program org.a11y.Bus: Permission denied
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.Settings.GlobalShortcutsProvider'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gnome'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gtk' requested by ':1.5' (uid=1000 pid=1910772 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.a11y.Bus' requested by ':1.26' (uid=1000 pid=1911713 comm="/usr/libexec/xdg-desktop-portal-gtk" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activated service 'org.a11y.Bus' failed: Failed to execute program org.a11y.Bus: Permission denied
+
+(xdg-desktop-portal-gtk:1911713): dbind-WARNING **: 09:51:35.278: AT-SPI: Error retrieving accessibility bus address: org.freedesktop.DBus.Error.Spawn.ExecFailed: Failed to execute program org.a11y.Bus: Permission denied
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gtk'
+
+(/usr/libexec/xdg-desktop-portal:1910772): xdg-desktop-portal-WARNING **: 09:51:35.307: Failed to connect to PipeWire: Couldn't connect to PipeWire
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.freedesktop.secrets' requested by ':1.5' (uid=1000 pid=1910772 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+** Message: 09:51:35.314: couldn't access control socket: /tmp/tmp.IA7jKzHVYC/runtime/keyring/control: No such file or directory
+discover_other_daemon: 0dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.freedesktop.secrets'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.freedesktop.portal.Desktop'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.Shell.Extensions'
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.freedesktop.portal.IBus' requested by ':1.32' (uid=1000 pid=1911817 comm="ibus-daemon --panel disable -r --xim" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.freedesktop.portal.IBus'
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.a11y.Bus' requested by ':1.36' (uid=1000 pid=1911828 comm="/usr/libexec/ibus-extension-gtk3" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activated service 'org.a11y.Bus' failed: Failed to execute program org.a11y.Bus: Permission denied
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.Shell.Screencast'
+(true, '"INSTALLED_RUNTIME_READY"')
+(true, '"PACKAGE_INSTALL_GREEN: v0.1 loaded from actual installed ZIP; demo cards=5"')
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Activating service name='org.gnome.Shell.Extensions' requested by ':1.40' (uid=1000 pid=1912734 comm="gdbus call --session --dest org.gnome.Shell.Extens" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[1910721]: [session uid=1000 pid=1910721 pidfd=5] Successfully activated service 'org.gnome.Shell.Extensions'
+({'uuid': <'gnome-ai-quota@dandgabr.github.io'>, 'name': <'AI Quota'>, 'description': <'Track AI provider quota usage and reset times in the GNOME top bar.'>, 'shell-version': <[<'50'>]>, 'url': <'https://github.com/dandgabr/gnome-ai-quota'>, 'gettext-domain': <'gnome-ai-quota'>, 'version-name': <'0.1'>, 'settings-schema': <'org.gnome.shell.extensions.gnome-ai-quota'>, 'type': <2.0>, 'state': <1.0>, 'enabled': <true>, 'path': <'/tmp/tmp.IA7jKzHVYC/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io'>, 'error': <''>, 'hasPrefs': <true>, 'hasUpdate': <false>, 'canChange': <true>, 'sessionModes': <[<'user'>]>},)
+Gdk-Message: 09:51:40.761: Error reading events from display: Broken pipe
+Gdk-Message: 09:51:40.761: Lost connection to Wayland compositor.
+Gdk-Message: 09:51:40.761: Lost connection to Wayland compositor.
+gnome-shell-calendar-server[1910846]: Lost (or failed to acquire) the name org.gnome.Shell.CalendarServer - exiting
+
+(evolution-calendar-factory:1910925): libedbus-private-WARNING **: 09:51:40.869: Error setting property 'ConnectionStatus' on interface org.gnome.evolution.dataserver.Source: The connection is closed (g-io-error-quark, 18)

@@ -1,5 +1,10 @@
 # Restore defaults and nested configuration regression
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 The observed empty accounts were a data-source transition, not credential deletion: Restore reset demo to live, whose isolated keyring was empty. The nested helper also accepted `/dev/null` as readable input and copied it into an empty, invalid JSON configuration.
 
 Changes: `data-source` moved from RESET_KEYS to KEPT_KEYS; confirmation, ADR0010 and README now explicitly preserve the data source. Existing accounts/tracking/terms preservation remains. The helper copies only readable regular files. No active nested helper/devkit process was present before that script edit. No real configuration or credentials were read.

@@ -2,7 +2,7 @@
 # Run the extension in a throwaway headless GNOME Shell and execute a JS
 # snippet inside it, without touching your real session or settings.
 #
-#   tools/headless-shell.sh [script.js | sleep:SECONDS ...]
+#   tools/headless-shell.sh [script.js | sleep:SECONDS | wait-for:EXPRESSION ...]
 #
 # The shell runs on its own D-Bus session with an in-memory GSettings backend
 # and a temporary XDG_DATA_HOME that links this checkout as the only user
@@ -101,6 +101,22 @@ dbus-run-session -- bash -c '
         [ -n "$script" ] || continue
         case "$script" in
             sleep:*) sleep "${script#sleep:}"; continue ;;
+            wait-for:*)
+                ready=false
+                for _ in $(seq 1 60); do
+                    verdict="$(gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
+                        --method org.gnome.Shell.Eval --timeout 1 "Boolean(${script#wait-for:})" 2>/dev/null || true)"
+                    quote="$(printf "\047")"
+                    if [ "$verdict" = "(true, ${quote}true${quote})" ]; then ready=true; break; fi
+                    sleep 0.5
+                done
+                if [ "$ready" != true ]; then
+                    echo "Private probe did not finish within its bounded wait" >&2
+                    kill "$shell" 2>/dev/null || true
+                    wait "$shell" 2>/dev/null || true
+                    exit 1
+                fi
+                continue ;;
         esac
         echo "--- result of $script"
         code="$(cat "$script")"

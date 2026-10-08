@@ -18,7 +18,12 @@ case "${1:-quick}" in
     lifecycle) probe=effects-lifecycle-probe; verify=effects-lifecycle-verify; seconds=40; limit=100; marker=GAQ_EFFECTS_LIFECYCLE_OK ;;
     *) echo 'Usage: tools/effects-check.sh [quick|visual|inventory|benchmark|matrix|frames|lifecycle]' >&2; exit 2 ;;
 esac
-if ! DATA_SOURCE=demo SKIP_ENABLE='' LOG="$scratch/shell.log" GAQ_TEST_MONITOR=1280x800 timeout --kill-after=5s "$limit" tools/headless-shell.sh "tools/$probe.js" "sleep:$seconds" "tools/$verify.js" > "$scratch/result" 2>&1; then
+waits=("sleep:$seconds")
+# The matrix includes 100 real theme rebuilds after its 264 resource checks.
+# Wait for completion instead of racing its asynchronous final position rebuild.
+if [[ ${1:-quick} == matrix ]]; then waits+=("wait-for:global.gaqEffectsBenchmark?.finished"); fi
+if [[ ${1:-quick} == quick ]]; then waits+=("wait-for:global.gaqEffectsResult?.finished"); fi
+if ! DATA_SOURCE=demo SKIP_ENABLE='' LOG="$scratch/shell.log" GAQ_TEST_MONITOR=1280x800 timeout --kill-after=5s "$limit" tools/headless-shell.sh "tools/$probe.js" "${waits[@]}" "tools/$verify.js" > "$scratch/result" 2>&1; then
     cat "$scratch/result"; exit 1
 fi
 cat "$scratch/result"

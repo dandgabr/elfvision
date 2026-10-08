@@ -1,5 +1,10 @@
 # Independent domain review: architecture, security, UX and specification
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Scope: `feat/post-mvp-effects`, base `61bced1` through HEAD and all current uncommitted/untracked runtime, themes and probes. Sources: approved post-MVP design/execution plans, ADR 0003, development constraints, task reports, actual diff/current code and native evidence. Read-only production review; no equivalent long worker tests rerun, no real credentials/configuration read, no commits. This reviewer implemented earlier tooling; this is not independent peer approval of that slice. Role reuse was authorized by the concurrency cap; indicator reviewer covers UI/frontend/QA and root owns ADR/status reconciliation.
 
 Architecture/security/UX implementation verdict: **approved after independently reviewed fixes and clean strict native checks in headless and nested development Shells**. Specification verdict: **approved for reviewed implementation and measured visual behavior in those backends**, with all 22-style headless captures and actual nested leaves/material captures. No remaining reviewed-code blocker. These are measured-backend approvals, not certification of every hardware/platform condition. Full release-performance certification remains open because compositor/GPU frame duration is unmeasured; final clean benchmark/archive/check evidence is owned by author/root.
