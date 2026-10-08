@@ -71,7 +71,7 @@ notifications. Every provider is optional; selecting one does not sign you in.
 ### Install the GNOME release ZIP
 
 The installable file is named
-`gnome-ai-quota@dandgabr.github.io.shell-extension.zip`. Download it and
+`elfvision-gnome.shell-extension.zip`. Download it and
 `SHA256SUMS` from the [releases page](https://github.com/dandgabr/elfvision/releases).
 The release also includes a build manifest identifying the source commit.
 There is no extensions.gnome.org listing. From the download folder, verify and
@@ -79,7 +79,7 @@ install the archive:
 
 ```sh
 sha256sum --check SHA256SUMS
-gnome-extensions install --force gnome-ai-quota@dandgabr.github.io.shell-extension.zip
+gnome-extensions install --force elfvision-gnome.shell-extension.zip
 ```
 
 The GNOME integration retains its original installation ID despite the rename
@@ -110,7 +110,7 @@ From a checkout containing the revision you want to install:
 
 ```sh
 tools/pack.sh
-gnome-extensions install --force dist/gnome-ai-quota@dandgabr.github.io.shell-extension.zip
+gnome-extensions install --force dist/elfvision-gnome.shell-extension.zip
 ```
 
 The pack script compiles schemas and translations, then creates the standard GNOME

@@ -392,7 +392,7 @@ right, put the reason in a comment above it.
 
 ## Package
 
-`tools/pack.sh` builds `dist/<uuid>.shell-extension.zip` with everything the extension needs
+`tools/pack.sh` builds `dist/elfvision-gnome.shell-extension.zip` with everything the extension needs
 (code, icons, themes, schema, and translations), the client-id helper, the main
 AGPL-3.0 `LICENSE`, and the bundled OFL-1.1 font licenses. It excludes tests,
 development tools, and documentation.
@@ -505,7 +505,7 @@ Ordinary package replacement and code rollback can be checked against private,
 persistent settings with:
 
 ```sh
-python3 -I tools/upgrade-preservation-check.py previous.shell-extension.zip dist/gnome-ai-quota@dandgabr.github.io.shell-extension.zip
+python3 -I tools/upgrade-preservation-check.py previous.shell-extension.zip dist/elfvision-gnome.shell-extension.zip
 ```
 
 Both packages enable in fresh isolated Shell sessions. The check seeds synthetic

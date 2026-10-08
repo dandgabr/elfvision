@@ -11,9 +11,9 @@ namespaces and user directories. Install the new ZIP with
 `gnome-extensions install --force` to preserve existing connectors, settings and
 credentials, then log out and back in to load the code on Wayland.
 
-The build ships as `gnome-ai-quota@dandgabr.github.io.shell-extension.zip`.
-The legacy filename identifies the GNOME integration and keeps ordinary updates
-compatible with existing installations.
+The build ships as `elfvision-gnome.shell-extension.zip`. Its internal metadata
+retains the legacy installation UUID so ordinary updates remain compatible with
+existing installations, independent of the public archive's filename.
 
 This build fixes connectors remaining blocked after a new login on the same
 boot. It recovers the previous session's coordination automatically while
