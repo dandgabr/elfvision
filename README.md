@@ -35,7 +35,8 @@ offers a legend, Refresh and Preferences. Providers that cannot fit on the bar s
 accessible in the popup. Local connector names distinguish accounts in the cards.
 You can pause one connector without removing its account.
 
-Before connecting an account, the popup offers **Add account**. Preferences opens
+When there are no saved connectors, the popup offers **Add account**; a saved
+connector awaiting authentication instead offers **Open Preferences**. Preferences opens
 an optional setup assistant that guides you through providers, panel display and
 notifications. Every provider is optional; selecting one does not sign you in.
 
@@ -50,18 +51,18 @@ notifications. Every provider is optional; selecting one does not sign you in.
   3 and the `zip`/`unzip` commands. On Fedora, the schema and translation tools are
   provided by `glib2-devel` and `gettext`.
 
-### Install a supplied ZIP
+### Install the release ZIP
 
 The installable file is named
-`gnome-ai-quota@dandgabr.github.io.shell-extension.zip`. The local v0.1 delivery is
-under `dist/v0.1/`, with checksums and a source manifest. It includes the connector,
-settings and material corrections described here. There is currently no published
-GitHub release asset or
-extensions.gnome.org listing. Run this from the folder containing that local
-delivery, or replace the path with the supplied ZIP's location:
+`gnome-ai-quota@dandgabr.github.io.shell-extension.zip`. Download it and
+`SHA256SUMS` from the [v0.1 release](https://github.com/dandgabr/gnome-ai-quota/releases/tag/v0.1).
+The release also includes a build manifest identifying the source commit.
+There is no extensions.gnome.org listing. From the download folder, verify and
+install the archive:
 
 ```sh
-gnome-extensions install --force dist/v0.1/gnome-ai-quota@dandgabr.github.io.shell-extension.zip
+sha256sum --check SHA256SUMS
+gnome-extensions install --force gnome-ai-quota@dandgabr.github.io.shell-extension.zip
 ```
 
 **Log out and log back in**, then enable the extension:
@@ -85,7 +86,7 @@ gnome-extensions install --force dist/gnome-ai-quota@dandgabr.github.io.shell-ex
 
 The pack script compiles schemas and translations, then creates the standard GNOME
 extension ZIP in `dist/`. Log out and back in, and run the enable command above.
-The default repository branch may differ from the locally supplied v0.1 build;
+The default repository branch may differ from the published v0.1 build;
 check the checkout's `metadata.json` for its declared version and shell support.
 
 ### Connect accounts
