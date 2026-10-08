@@ -37,9 +37,9 @@ def run(*args, env):
     return subprocess.check_output(command, env=env, text=True, stderr=subprocess.PIPE).strip()  # nosec B603
 
 
-def fresh_shell(env, uuid, version):
+def fresh_shell(env, uuid, version, *, require_coordination=False):
     """Enable the installed ZIP in a new private bus, sharing only private settings."""
-    probe_env = {**env, 'GAQ_UPGRADE_UUID': uuid}
+    probe_env = {**env, 'GAQ_UPGRADE_UUID': uuid, 'GAQ_UPGRADE_REQUIRE_COORDINATION': '1' if require_coordination else '0'}
     script = r'''
 set -euo pipefail
 export WAYLAND_DISPLAY="gaq-upgrade-$$"
@@ -57,11 +57,19 @@ gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/
 sleep 2
 gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions \
     --method org.gnome.Shell.Extensions.GetExtensionInfo "$GAQ_UPGRADE_UUID"
+if [ "$GAQ_UPGRADE_REQUIRE_COORDINATION" = 1 ]; then
+    gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
+        --method org.gnome.Shell.Eval \
+        "(() => { const s = Main.panel.statusArea['$GAQ_UPGRADE_UUID']._extension._disconnectGate.snapshot(); return s.ready && !s.blocked; })()"
+fi
 '''
     completed = subprocess.run([executable('dbus-run-session'), '--', executable('bash'), '-c', script],  # nosec B603: fixed script; UUID passed via environment
                                env=probe_env, text=True, capture_output=True, timeout=50, check=True)
     require("'state': <1.0>" in completed.stdout and "'error': <''>" in completed.stdout, 'Installed extension did not enable')
     require(f"'version-name': <'{version}'>" in completed.stdout, 'Fresh Shell loaded the wrong package')
+    if require_coordination:
+        require("(true, 'true')" in completed.stdout.splitlines(),
+                'Updated extension did not recover credential coordination in the new login session')
     log = (Path(env['XDG_STATE_HOME']) / 'upgrade-shell.log').read_text()
     require(not re.search(r'JS ERROR|Gjs-CRITICAL|already disposed', log), 'Installed extension logged a runtime failure')
 
@@ -100,6 +108,11 @@ def check(old, new):
             'untracked-providers': f"['{connector_id}']", 'first-use-done': 'true',
             'data-source': "'demo'",
         }
+        old_keys = set(run('gsettings', 'list-keys', schema, env=env).splitlines())
+        popup_sentinels = {'popup-width': '600', 'popup-max-height': '700',
+                           'popup-connector-order': f"['{connector_id}']",
+                           'popup-hidden-connectors': f"['{connector_id}']"}
+        sentinels.update({key: value for key, value in popup_sentinels.items() if key in old_keys})
         for key, value in sentinels.items():
             run('gsettings', 'set', schema, key, value, env=env)
         snapshot = {key: run('gsettings', 'get', schema, key, env=env) for key in sentinels}
@@ -114,12 +127,13 @@ def check(old, new):
             markers.append((marker, marker.read_bytes()))
         run('gnome-extensions', 'install', '--force', str(new.resolve()), env=env)
         run('glib-compile-schemas', '--strict', env['GSETTINGS_SCHEMA_DIR'], env=env)
-        fresh_shell(env, metadata[1]['uuid'], metadata[1]['version-name'])
+        fresh_shell(env, metadata[1]['uuid'], metadata[1]['version-name'], require_coordination=True)
         after = {key: run('gsettings', 'get', schema, key, env=env) for key in sentinels}
         require(after == snapshot, f'Existing settings changed: {[key for key in snapshot if snapshot[key] != after[key]]}')
         require(all(path.read_bytes() == content for path, content in markers), 'Owned application data changed')
-        require(run('gsettings', 'get', schema, 'popup-width', env=env) == '0', 'Additive width default')
-        require(run('gsettings', 'get', schema, 'popup-connector-order', env=env) == '@as []', 'Additive order default')
+        if 'popup-width' not in old_keys:
+            require(run('gsettings', 'get', schema, 'popup-width', env=env) == '0', 'Additive width default')
+            require(run('gsettings', 'get', schema, 'popup-connector-order', env=env) == '@as []', 'Additive order default')
         # Existing values must survive ordinary reinstallation too.
         run('gsettings', 'set', schema, 'popup-width', '600', env=env)
         run('gsettings', 'set', schema, 'popup-connector-order', f"['{connector_id}']", env=env)

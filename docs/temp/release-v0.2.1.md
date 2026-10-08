@@ -14,3 +14,9 @@ credentials, then log out and back in to load the code on Wayland.
 The build ships as `gnome-ai-quota@dandgabr.github.io.shell-extension.zip`.
 The legacy filename identifies the GNOME integration and keeps ordinary updates
 compatible with existing installations.
+
+This build fixes connectors remaining blocked after a new login on the same
+boot. It recovers the previous session's coordination automatically while
+preserving connectors, credentials, popup order, visibility and other settings.
+Incomplete credential operations remain protected rather than being discarded.
+Credential coordination requires util-linux's `/usr/bin/flock`.
