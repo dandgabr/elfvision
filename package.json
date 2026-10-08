@@ -1,0 +1,16 @@
+{
+  "name": "gnome-ai-quota-development",
+  "private": true,
+  "type": "module",
+  "description": "Development-only static checks for the GJS extension",
+  "engines": {
+    "node": "^22.13.0 || ^24.0.0"
+  },
+  "scripts": {
+    "lint": "eslint extension.js prefs.js lib tests tools/*.js eslint.config.js --max-warnings=0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.12.0"
+  }
+}

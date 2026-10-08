@@ -2,7 +2,6 @@
 import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
-import Gtk from 'gi://Gtk';
 import System from 'system';
 import {fmt} from '../lib/core/viewmodel.js';
 

@@ -26,6 +26,21 @@ The extension needs `schemas/gschemas.compiled` and `locale/` to run from a
 checkout. Neither is committed. Run `tools/build.sh` after cloning and after
 changing `schemas/` or `po/`.
 
+ESLint is optional local developer tooling and required in the lint CI job. It does not run
+inside the extension or add a product build step. Use Node.js 24 LTS (CI pins 24.21.0);
+Node.js 22.13 or newer on the 22 LTS branch is also supported. Install the exact locked
+development dependencies, then lint without starting GNOME Shell:
+
+```sh
+npm ci --ignore-scripts
+npm run lint
+```
+
+The pinned ESLint 10.12.0 supports Node `^20.19.0`, `^22.13.0` or `>=24` according to its
+[official prerequisites](https://eslint.org/docs/latest/use/getting-started#prerequisites).
+This project selects the maintained 22 and 24 LTS branches; the
+[Node release schedule](https://nodejs.org/en/about/previous-releases) identifies their support status.
+
 ## Layout
 
 ```text
@@ -116,12 +131,15 @@ tests whose name contains `<text>`.
 1. The build: the compiled schema and the catalogs, which some tests read.
 2. The unit tests.
 3. The syntax of the shell scripts, and of every JavaScript module.
-4. **The extension enabled in a headless GNOME Shell.** It reads the extension's state and fails on an
+4. ESLint, when the checkout has its local npm dependencies. It detects undefined names and other
+   correctness errors using `eslint.config.js`. Without dependencies, this local step reports a skip;
+   the separate CI lint job always runs `npm ci --ignore-scripts` and `npm run lint`.
+5. **The extension enabled in a headless GNOME Shell.** It reads the extension's state and fails on an
    error. It is skipped when `gnome-shell` is not installed.
-5. ShellCheck.
-6. The schemas.
-7. The translation template and the catalogs, including that every placeholder survives translation.
-8. Whitespace.
+6. ShellCheck.
+7. The schemas.
+8. The translation template and the catalogs, including that every placeholder survives translation.
+9. Whitespace.
 
 Run it before a commit. For preferences or layout changes, also run:
 
@@ -248,6 +266,20 @@ GitHub Actions run these on every push to `main`, every pull request and once a 
 | sast | Semgrep (`p/javascript`, `p/security-audit`, `p/secrets`) | the JavaScript and secrets |
 | sast | ShellCheck | the shell scripts and the hook |
 | sast | zizmor | the workflows themselves |
+| lint | ESLint | GJS modules, tests and Shell Eval probes; no running desktop needed |
+
+`eslint.config.js` uses ESLint's recommended correctness rules with `no-undef` enabled for
+`typeof` expressions too. Globals follow the file context: Shell `global` belongs to shell UI
+and the theme manager; `Main`, GI shortcuts and `imports` belong to the `tools/*-probe.js` and
+`tools/*-verify.js` Eval scripts; `print`, `printerr` and `ARGV` belong to their GJS test runners.
+Text codecs and logging are declared only in the module groups that use them. Browser and Node
+globals are not granted to runtime modules. GI callback arguments prefixed with `_` may be unused.
+Unused caught errors are allowed for deliberate best-effort operations; test fixtures may retain
+unused callback parameters. Only the theme validator and alert-text tests allow control-byte regexes,
+because those expressions explicitly reject or strip controls.
+When adding a script that runs in a different context, declare its actual globals explicitly rather
+than enabling a browser or Node environment. Dependencies and Node are development-only;
+`tools/pack.sh` does not include the npm manifest, lockfile or `node_modules` in the extension ZIP.
 
 CodeQL is not a workflow file here: the repository uses GitHub's own *default setup* (Settings, Code
 security, Code scanning), set to the extended suite for `javascript-typescript`, `python` and `actions`.

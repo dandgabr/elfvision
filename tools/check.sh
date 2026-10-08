@@ -41,6 +41,14 @@ lint() {
     shellcheck -S warning tools/*.sh .githooks/pre-commit
 }
 
+js_lint() {
+    if [ ! -x node_modules/.bin/eslint ]; then
+        echo "ESLint dependencies are not installed; skipped (run npm ci --ignore-scripts)"
+        return 0
+    fi
+    npm run lint
+}
+
 template_in_step() {
     local sources
     mapfile -t sources < <(find extension.js prefs.js lib -name '*.js' | sort)
@@ -95,6 +103,7 @@ step "build" tools/build.sh
 step "unit tests" gjs -m tests/run.js
 step "script syntax" syntax
 step "javascript syntax" js_syntax
+step "eslint" js_lint
 step "extension enables in a shell" shell_loads
 step "shellcheck" lint
 step "schemas" glib-compile-schemas --strict --dry-run schemas

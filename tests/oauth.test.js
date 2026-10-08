@@ -71,7 +71,6 @@ test('callback: long, repeated and badly escaped queries are malformed, and noth
 
 // ---- protocol, loopback and the whole sign-in against local servers
 
-import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Soup from 'gi://Soup?version=3.0';
 
