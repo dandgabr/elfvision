@@ -24,8 +24,21 @@ Follow-up work that is outside the MVP is in the "Pending" list of
 [ADR 0010](0010-alerts-and-polish.md), including indicator redraw coalescing, keyboard tooltips and
 CI linting. Real-account checks and the providers' current terms remain owner checks (ADR 0009).
 
-## Open items
+## Post-MVP execution
 
-- Which of the other gallery styles become installable themes.
-- Whether the N3 theme effects (ADR 0006) get built, and in which order.
-- Validate tabular numbers in CSS versus Pango.
+The owner approved the [integrated execution plan](../temp/plans/2026-10-07-post-mvp-execution.md)
+and its [visual design](../temp/plans/2026-10-07-post-mvp-design.md).
+These extend the general roadmap without reopening M4.
+
+| Milestone | Deliverables | Status |
+|---|---|---|
+| M5 | Pure bar model, redraw coalescing, keyboard tooltips, legend Escape ordering, CI lint and numeric-font validation. | in progress |
+| M6 | Reusable native effects: leaves, translucency, decorative glass and real frosted glass; theme-specific profiles for the existing inventory and new Organic/Biophilic and Glassmorphism themes; motion/transparency controls and lifecycle checks. | planned |
+| M7 | Optional WebGL/preview feasibility evidence; explicit proposals for font installation, disconnect-all/local deletion and separate warning/critical thresholds. | planned |
+
+Use shared particle, texture, motion and material primitives where the visuals
+actually share behavior. Theme profiles stay declarative; specialized geometry
+can remain separate. Parallel theme work uses disjoint profile fragments with one
+generator/catalog integrator. Every milestone requires independent review and
+fresh validation; real frost remains open if its compatibility/performance gate
+fails. Product proposals in M7 do not authorize account deletion or font downloads.
