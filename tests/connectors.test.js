@@ -1,24 +1,46 @@
 import {test, assertEqual, assertTrue} from './harness.js';
-import {providerIdForConnector, validateConnectors, legacyConnectors} from '../lib/core/connectors.js';
+import {providerIdForConnector, validateConnectors, decodeConnectors} from '../lib/core/connectors.js';
 import {createConnectorStore} from '../lib/services/connectorStore.js';
 import {createProvider} from '../lib/providers/index.js';
 import {encodeSecret} from '../lib/oauth/secret.js';
 
 const id = 'codex--12345678-1234-4234-8234-123456789abc';
-function settingsFixture() {
+test('connectors: fresh and legacy unset registries start empty in both modes', () => {
+    for (const demo of [false, true]) {
+        assertEqual(decodeConnectors('', {demo}), []);
+        const store = createConnectorStore(settingsFixture(false), {demo});
+        assertEqual(store.list(), []);
+        store.dispose();
+    }
+});
+test('connectors: recovery with no saved identities creates no phantom accounts', async () => {
+    for (const demo of [false, true]) {
+        const store = createConnectorStore(settingsFixture(false), {demo, enumerate: async () => []});
+        assertEqual(await store.recover(), []);
+        store.dispose();
+    }
+});
+function legacyFixture(demo = false) {
+    return ['command-code', 'codex', 'claude', 'antigravity', ...(demo ? ['example-credits'] : [])]
+        .map(providerId => ({id: providerId, providerId, label: '', username: ''}));
+}
+function settingsFixture(seed = true) {
     const values = new Map(), listeners = new Map(); let serial = 0;
+    if (seed) {
+        values.set('connectors', JSON.stringify({version: 1, connectors: legacyFixture()}));
+        values.set('demo-connectors', JSON.stringify({version: 1, connectors: legacyFixture(true)}));
+    }
     return {get_string: key => values.get(key) ?? '', set_string(key, value) { values.set(key, value); for (const entry of listeners.values()) if (entry.key === `changed::${key}`) entry.fn(); return true; },
         connect(key, fn) { listeners.set(++serial, {key, fn}); return serial; }, disconnect: key => listeners.delete(key), listeners};
 }
 test('connectors: validates exact provider identity and bounded plain labels', () => {
     assertEqual(providerIdForConnector(id), 'codex'); assertEqual(providerIdForConnector('codex--spoof'), null);
     assertEqual(providerIdForConnector('evil--12345678-1234-4234-8234-123456789abc'), null);
-    assertEqual(legacyConnectors().map(c => c.id), ['command-code', 'codex', 'claude', 'antigravity']);
     for (const value of [[{id, providerId: 'claude', label: '', username: ''}], [{id, providerId: 'codex', label: 'a\nb', username: ''}], [{id, providerId: 'codex', label: '', username: ''}, {id, providerId: 'codex', label: '', username: ''}]]) {
         let rejected = false; try { validateConnectors(value); } catch (_) { rejected = true; } assertTrue(rejected);
     }
 });
-test('connectors: legacy defaults remain stable, rename and removal isolate sibling and demo store', () => {
+test('connectors: explicitly saved legacy identities remain stable, rename and removal isolate sibling and demo store', () => {
     const settings = settingsFixture(); const store = createConnectorStore(settings, {uuid: () => '12345678-1234-4234-8234-123456789abc'});
     const extra = store.add('codex', 'Work'); assertEqual(extra.id, id); assertEqual(store.list().filter(c => c.providerId === 'codex').length, 2);
     store.update(id, {label: 'Renamed'}); assertEqual(store.get(id).label, 'Renamed'); assertEqual(store.get('codex').id, 'codex');
@@ -43,10 +65,10 @@ test('connectors: corrupt registries recover identities from metadata without co
     const settings = settingsFixture(); settings.set_string('connectors', '{bad'); let calls = 0;
     const store = createConnectorStore(settings, {enumerate: async () => { calls++; return [{id, providerId: 'codex'}, {id: 'invalid', providerId: 'codex'}]; }});
     let rejected = false; try { store.list(); } catch (_) { rejected = true; } assertTrue(rejected);
-    const recovered = await store.recover(); assertEqual(calls, 1); assertEqual(recovered.filter(c => c.providerId === 'codex').length, 2);
+    const recovered = await store.recover(); assertEqual(calls, 1); assertEqual(recovered.filter(c => c.providerId === 'codex').length, 1);
     assertEqual(store.get(id), {id, providerId: 'codex', label: '', username: ''});
     settings.set_string('demo-connectors', 'broken'); const demo = createConnectorStore(settings, {demo: true, enumerate: async () => { throw new Error('demo must not read keyring'); }});
-    assertEqual((await demo.recover()).length, 5); store.dispose(); demo.dispose();
+    assertEqual((await demo.recover()).length, 0); store.dispose(); demo.dispose();
 });
 
 import Gio from 'gi://Gio';
@@ -103,13 +125,13 @@ test('connectors: multibyte metadata round trips within the byte bound and faile
 });
 
 for (const count of [29, 32]) {
-    test(`connectors: recovery preserves all ${count} saved added identities before optional legacy rows`, async () => {
+    test(`connectors: recovery preserves exactly ${count} saved identities without phantom rows`, async () => {
         const settings = settingsFixture(); settings.set_string('connectors', '{corrupt');
         const metadata = Array.from({length: count}, (_entry, index) => ({id: `codex--12345678-1234-4234-8234-${(index + 1).toString(16).padStart(12, '0')}`, providerId: 'codex'}));
         const store = createConnectorStore(settings, {enumerate: async () => metadata});
         const recovered = await store.recover();
-        assertEqual(recovered.length, 32); assertTrue(metadata.every(entry => recovered.some(connector => connector.id === entry.id)));
-        assertEqual(recovered.filter(entry => entry.id === entry.providerId).length, 32 - count); store.dispose();
+        assertEqual(recovered.length, count); assertTrue(metadata.every(entry => recovered.some(connector => connector.id === entry.id)));
+        assertEqual(recovered.filter(entry => entry.id === entry.providerId).length, 0); store.dispose();
     });
 }
 test('connectors: recovery exceeding the identity bound fails explicitly without modifying registry', async () => {

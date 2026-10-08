@@ -51,7 +51,11 @@ app.connect('activate', () => {
                 check(walk(view.group).some(item => item instanceof Adw.ActionRow && item.title.includes('Admin API key')), `${meta.name} explains admin credential requirement`);
             view.dispose();
         }
-        check(accounts.controllers.size === 5, 'five independent default demo connectors including credits');
+        check(accounts.controllers.size === 0 && store.list().length === 0, 'fresh demo starts without any default connectors');
+        settings.set_string('demo-connectors', JSON.stringify({version: 1, connectors: ['command-code', 'codex', 'claude', 'antigravity', 'example-credits']
+            .map(providerId => ({id: providerId, providerId, label: '', username: ''}))}));
+        await wait();
+        check(accounts.controllers.size === 5, 'five explicitly seeded synthetic connectors including credits');
         check(walk(accounts.page).some(item => item instanceof Adw.ActionRow && item.title === _('Demo connectors')), 'explicit synthetic notice');
         check(!walk(accounts.page).some(item => item instanceof Adw.PasswordEntryRow), 'demo cannot expose a live credential entry');
         const add = button(accounts.page, 'Add connector…'); contained(add, window); add.emit('clicked');
@@ -114,8 +118,8 @@ app.connect('activate', () => {
         check(settings.get_string('demo-connectors') === 'synthetic corrupt registry', 'cancel does not reconstruct metadata');
         recover.emit('clicked'); await wait(); recovery = window.get_visible_dialog();
         recovery.emit('response', 'recover'); recovery.close(); await wait();
-        check(store.list().length === 5 && button(accounts.page, 'Add connector…').sensitive, 'confirmed demo recovery reconstructs safe fictional metadata');
-        check(settings.get_string('connectors') === '', 'demo recovery never rewrites live connector metadata');
+        check(store.list().length === 0 && button(accounts.page, 'Add connector…').sensitive, 'confirmed demo recovery creates no phantom connectors');
+        check(settings.get_string('connectors') === liveBefore, 'demo recovery never rewrites live connector metadata');
         const demoBefore = settings.get_string('demo-connectors');
         settings.set_string('connectors', JSON.stringify({version: 1, connectors: []}));
         settings.set_string('data-source', 'live'); await wait();
@@ -127,7 +131,7 @@ app.connect('activate', () => {
         liveAdd.emit('response', 'cancel'); liveAdd.close(); await wait();
         check(!availableProviders().some(meta => ['gemini-api', 'zai'].includes(meta.id)), 'deferred providers absent');
         settings.set_string('data-source', 'demo'); await wait();
-        check(settings.get_string('demo-connectors') === demoBefore && accounts.controllers.size === 5, 'switching mode keeps recovered demo identities');
+        check(settings.get_string('demo-connectors') === demoBefore && accounts.controllers.size === 0, 'switching mode keeps recovered empty demo list');
         print(`Native connectors: add/connect/rename/cancel/remove/bulk-delete/restart/recovery passed (${ARGV.join(' ') || 'LTR'})`);
     })().catch(error => { failed = true; printerr(`FAIL native connectors: ${error.message}\n${error.stack}`); })
         .finally(() => { window.close(); handlers.forEach(id => settings.disconnect(id)); store.dispose(); app.release(); app.quit(); });

@@ -35,8 +35,8 @@ offers a legend, Refresh and Preferences. Providers that cannot fit on the bar s
 accessible in the popup. Local connector names distinguish accounts in the cards.
 You can pause one connector without removing its account.
 
-When there are no saved connectors, the popup offers **Add account**; a saved
-connector awaiting authentication instead offers **Open Preferences**. Preferences opens
+The extension starts without connectors in both Live and Demo mode. The popup's
+**Add connector** action opens **Accounts**, without selecting a provider. Preferences opens
 an optional setup assistant that guides you through providers, panel display and
 notifications. Every provider is optional; selecting one does not sign you in.
 
@@ -219,7 +219,7 @@ reference](docs/usage.md) describes every option and notification rule.
 
 Adding a connector saves its configuration; use **Connect** in its editor to
 authenticate (or **Simulate connect** in Demo). If the popup has a saved
-connector awaiting connection, **Open Preferences** opens that existing editor.
+connector awaiting connection, open **Accounts** and choose its editor.
 Its quota card appears automatically after connecting.
 
 **General → Restore configuration** resets appearance, notifications, tracking, and setup

@@ -4,7 +4,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 scratch="$(mktemp -d)"
 trap 'rm -rf "$scratch"' EXIT
-if ! LOG="$scratch/shell.log" GAQ_TEST_MONITOR=800x900 timeout 90 tools/headless-shell.sh tools/layout-probe.js sleep:20 tools/layout-verify.js >"$scratch/result" 2>&1; then
+if ! LOG="$scratch/shell.log" GAQ_TEST_MONITOR=800x900 timeout 90 tools/headless-shell.sh tools/demo-connectors-fixture.js tools/layout-probe.js sleep:20 tools/layout-verify.js >"$scratch/result" 2>&1; then
     cat "$scratch/result"
     exit 1
 fi

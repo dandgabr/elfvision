@@ -33,6 +33,8 @@ await eraseCredential('codex', OAUTH_TOKENS);
 check(await credentialPresence(connectorA, OAUTH_TOKENS) === 'present', 'legacy subset cannot delete new schema');
 const recoveredMetadata = await enumerateConnectorIdentities();
 check(recoveredMetadata.some(entry => entry.id === connectorA) && recoveredMetadata.some(entry => entry.id === connectorB), 'metadata recovery sees both exact connectors');
+check(recoveredMetadata.some(entry => entry.id === 'codex'), 'metadata recovery retains a genuinely saved legacy credential');
+check(!recoveredMetadata.some(entry => entry.id === 'command-code'), 'metadata recovery excludes unsaved legacy providers');
 check(recoveredMetadata.every(entry => Object.keys(entry).sort().join(',') === 'id,providerId'), 'metadata recovery returns no secret or labels');
 const quotaDirectory = `${GLib.get_user_cache_dir()}/gnome-ai-quota`;
 GLib.mkdir_with_parents(quotaDirectory, 0o700);
