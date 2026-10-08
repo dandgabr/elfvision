@@ -28,12 +28,12 @@ def generate():
 <div class="crop" style="width:{width}px;height:{height}px"><img alt="{html.escape(caption)}" loading="lazy" src="{name}" style="left:{-x}px;top:{-y}px"></div></a>
 <p>Requested font: {html.escape(row.get('font') or '')}<br>Resolved: {html.escape(row.get('resolvedFont') or '')}</p></article>''')
     document = '''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gnome AI Quota — native visual evidence</title><style>
+<title>Elfvision — native visual evidence</title><style>
 body{font:16px system-ui;margin:24px;background:#eceef2;color:#18202a}h1{font-size:24px}h2{font-size:14px;max-width:420px}
 nav{position:sticky;top:0;padding:12px;background:#eceef2;z-index:1;display:flex;gap:12px;flex-wrap:wrap}
 select,input{font:inherit;padding:6px}main{display:flex;flex-wrap:wrap;gap:24px}article{padding:12px;background:white;border:1px solid #bbb;border-radius:8px}
 .crop{position:relative;overflow:hidden;max-width:100%}.crop img{position:absolute;max-width:none}article p{font-size:12px;max-width:420px}article[hidden]{display:none}
-</style><h1>Gnome AI Quota — native visual evidence</h1><p>Synthetic connectors only. Screenshots are unchanged; crops are made by the page's viewport. Click a popup to inspect its complete original frame.</p>
+</style><h1>Elfvision — native visual evidence</h1><p>Synthetic connectors only. Screenshots are unchanged; crops are made by the page's viewport. Click a popup to inspect its complete original frame.</p>
 <nav><label>Theme <input id="theme" placeholder="Filter name"></label><label>Scheme <select id="scheme"><option value="">Both</option>light</option><option>dark</option></select></label>
 <label>Effects <select id="mode"><option>full</option><option>off</option><option>subtle</option><option value="">All</option></select></label>
 <label>Material <select id="material"><option>theme</option><option>translucent</option><option>decorative-glass</option><option>frosted-glass</option><option value="">All</option></select></label><span id="count"></span></nav><main>'''

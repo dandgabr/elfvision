@@ -1,3 +1,4 @@
 workspace = "default"
+# Legacy memory namespace retained for Elfvision's existing project history.
 project = "gnome-ai-quota"
 project_strategy = "repo-root"

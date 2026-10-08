@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Report a vulnerability privately
-    url: https://github.com/dandgabr/gnome-ai-quota/security/advisories/new
+    url: https://github.com/dandgabr/elfvision/security/advisories/new
     about: Use the private GitHub security channel for vulnerabilities; do not open a public issue.

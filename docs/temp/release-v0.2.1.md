@@ -1,0 +1,16 @@
+# Elfvision v0.2.1 — GNOME build
+
+The project is now Elfvision, with repository and reporting links at
+https://github.com/dandgabr/elfvision. The GNOME extension and its About dialog
+display the new product name. Documentation describes the project across Linux
+desktop environments, with GNOME Shell 50 available and KDE Plasma / KWin and
+other integrations planned. No KDE package is included in this release.
+
+This GNOME build retains its installation UUID, GSettings schema, credential
+namespaces and user directories. Install the new ZIP with
+`gnome-extensions install --force` to preserve existing connectors, settings and
+credentials, then log out and back in to load the code on Wayland.
+
+The build ships as `gnome-ai-quota@dandgabr.github.io.shell-extension.zip`.
+The legacy filename identifies the GNOME integration and keeps ordinary updates
+compatible with existing installations.

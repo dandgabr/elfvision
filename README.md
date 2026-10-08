@@ -1,16 +1,18 @@
-# Gnome AI Quota
+# Elfvision
 
-Gnome AI Quota is a GNOME Shell extension that puts your AI quota usage and reset
-times and API spending in the top bar. Check your configured providers without
-opening each service, then click the indicator for a breakdown of each quota window.
+Elfvision monitors AI provider quotas, reset times and API spending from your
+Linux desktop. Keep separate connectors for personal and work accounts, check
+usage and balances, and receive alerts without opening each provider's website.
 
-Version **0.2.0** supports **GNOME Shell 50**. It runs inside GNOME Shell with native
-widgets and effects. The OAuth integrations are unofficial and carry account risks;
+The current build integrates with **GNOME Shell 50** through a native extension.
+Elfvision is expanding to other desktop environments and window managers,
+including **KDE Plasma**. The OAuth integrations are unofficial and carry account risks;
 read [Provider access and consent](#provider-access-and-consent) before connecting.
 
 ## Table of contents
 
 - [How it works](#how-it-works)
+- [Desktop integrations](#desktop-integrations)
 - [Getting started](#getting-started)
 - [Providers](#providers)
 - [Features](#features)
@@ -19,6 +21,18 @@ read [Provider access and consent](#provider-access-and-consent) before connecti
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Desktop integrations
+
+| Environment | Status | Package |
+|---|---|---|
+| GNOME Shell 50 | Available | GNOME Shell extension ZIP |
+| KDE Plasma / KWin | Planned | Integration and package not released yet |
+| Other desktop environments and window managers | Planned | Integration and compatibility to be defined |
+
+The instructions and screenshots below describe the GNOME integration.
+Features and installation steps for additional integrations will be documented
+when their builds are available.
 
 ## How it works
 
@@ -44,7 +58,7 @@ notifications. Every provider is optional; selecting one does not sign you in.
 
 ## Getting started
 
-### Requirements
+### GNOME build requirements
 
 - GNOME Shell **50**; other versions are not declared compatible.
 - A desktop Secret Service, such as GNOME Keyring, for API keys and sign-ins.
@@ -53,11 +67,11 @@ notifications. Every provider is optional; selecting one does not sign you in.
   3 and the `zip`/`unzip` commands. On Fedora, the schema and translation tools are
   provided by `glib2-devel` and `gettext`.
 
-### Install the release ZIP
+### Install the GNOME release ZIP
 
 The installable file is named
 `gnome-ai-quota@dandgabr.github.io.shell-extension.zip`. Download it and
-`SHA256SUMS` from the [releases page](https://github.com/dandgabr/gnome-ai-quota/releases).
+`SHA256SUMS` from the [releases page](https://github.com/dandgabr/elfvision/releases).
 The release also includes a build manifest identifying the source commit.
 There is no extensions.gnome.org listing. From the download folder, verify and
 install the archive:
@@ -66,6 +80,9 @@ install the archive:
 sha256sum --check SHA256SUMS
 gnome-extensions install --force gnome-ai-quota@dandgabr.github.io.shell-extension.zip
 ```
+
+The GNOME integration retains its original installation ID despite the rename
+to Elfvision, so updates reuse existing connectors, credentials and settings.
 
 **Log out and log back in**, then enable the extension:
 
@@ -86,7 +103,7 @@ custom themes and public client configuration. Do not uninstall or delete the
 extension's configuration directories to update it. Restore configuration and
 Delete all connectors are separate, explicitly confirmed actions.
 
-### Build the checked-out revision
+### Build the GNOME extension from source
 
 From a checkout containing the revision you want to install:
 
@@ -293,8 +310,8 @@ unlocking; an earlier unread extension notification may disappear. See
 
 ## Contributing
 
-Use the [bug form](https://github.com/dandgabr/gnome-ai-quota/issues/new?template=bug_report.yml)
-for public bug reports and the [private security form](https://github.com/dandgabr/gnome-ai-quota/security/advisories/new)
+Use the [bug form](https://github.com/dandgabr/elfvision/issues/new?template=bug_report.yml)
+for public bug reports and the [private security form](https://github.com/dandgabr/elfvision/security/advisories/new)
 for vulnerabilities. Both are accessible in Preferences → General. Review anything
 you share; no diagnostics or credentials are attached automatically. See
 [SECURITY.md](SECURITY.md) for vulnerability disclosure.

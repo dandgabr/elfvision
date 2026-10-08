@@ -22,7 +22,7 @@ import {AlertNotifier} from './lib/ui/notifier.js';
 // so the indicator goes right after it.
 const BOX_INDEX = {left: 1, center: 0, right: 0};
 
-export default class GnomeAiQuotaExtension extends Extension {
+export default class ElfvisionGnomeExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
         this._disconnectGate = getDisconnectGate();
@@ -54,7 +54,7 @@ export default class GnomeAiQuotaExtension extends Extension {
             try {
                 this._createIndicator();
             } catch (error) {
-                console.error(`gnome-ai-quota: cannot move the indicator: ${error.message}\n${error.stack ?? ''}`);
+                console.error(`Elfvision: cannot move the indicator: ${error.message}\n${error.stack ?? ''}`);
             }
         });
         const rebuild = () => {
@@ -64,7 +64,7 @@ export default class GnomeAiQuotaExtension extends Extension {
                 this._createController();
                 this._createIndicator();
             } catch (error) {
-                console.error(`gnome-ai-quota: cannot rebuild: ${error.message}\n${error.stack ?? ''}`);
+                console.error(`Elfvision: cannot rebuild: ${error.message}\n${error.stack ?? ''}`);
             }
         };
         // A new demo scenario only matters for demo data: real providers must not be restarted.
@@ -131,7 +131,7 @@ export default class GnomeAiQuotaExtension extends Extension {
         const source = this._settings.get_string('data-source');
         const store = createConnectorStore(this._settings, {demo: source === 'demo'});
         let connectors;
-        try { connectors = store.list(); this._connectorRegistryProblem = false; } catch (_error) { connectors = []; this._connectorRegistryProblem = true; console.warn('gnome-ai-quota: connector registry unavailable; open Preferences to recover it'); } finally { store.dispose(); }
+        try { connectors = store.list(); this._connectorRegistryProblem = false; } catch (_error) { connectors = []; this._connectorRegistryProblem = true; console.warn('Elfvision: connector registry unavailable; open Preferences to recover it'); } finally { store.dispose(); }
         const untracked = this._settings.get_strv('untracked-providers');
         const connected = this._settings.get_strv('demo-connected-connectors');
         const providers = source === 'demo' ? [...connectors.filter(c => connected.includes(c.id) && !untracked.includes(c.id)).map(connector => {
@@ -151,7 +151,7 @@ export default class GnomeAiQuotaExtension extends Extension {
             this._syncProviders();
         }
         this._controller.start().catch(error =>
-            console.error(`gnome-ai-quota: cannot start: ${error.message}`));
+            console.error(`Elfvision: cannot start: ${error.message}`));
         this._createAlerts(cacheDirectory);
     }
 
@@ -173,7 +173,7 @@ export default class GnomeAiQuotaExtension extends Extension {
             notify: event => this._notifier.show(event),
         });
         this._alerts.start().catch(error =>
-            console.error(`gnome-ai-quota: cannot start the alerts: ${error?.message ?? error}`));
+            console.error(`Elfvision: cannot start the alerts: ${error?.message ?? error}`));
         // After the computer wakes up the data looks old and the network is slow to return: keep
         // the connection alert quiet for a while, then ask the providers again.
         this._power = new PowerWatcher({onResume: () => {
@@ -230,7 +230,7 @@ export default class GnomeAiQuotaExtension extends Extension {
                 availableProviders().flatMap(meta => entries.filter(c => c.providerId === meta.id).map(c => c.id)));
             controller.markSynced();
         } catch (error) {
-            console.error(`gnome-ai-quota: cannot sync the providers: ${error.message}\n${error.stack ?? ''}`);
+            console.error(`Elfvision: cannot sync the providers: ${error.message}\n${error.stack ?? ''}`);
             // After a failure the list is as known as it will get: do not claim "nothing".
             if (generation === this._syncGeneration && controller === this._controller)
                 controller.markSynced();

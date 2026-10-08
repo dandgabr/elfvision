@@ -1,12 +1,16 @@
 # Architecture decision records
 
+These records describe Elfvision's currently implemented GNOME integration and
+shared provider semantics. GJS, St/Clutter and GTK decisions govern the GNOME
+build; future desktop integrations will add their own platform decisions.
+
 Each record states the context, the decision and its consequences, and reads as the current decision.
 When a decision changes, the record is rewritten and its status line says so. A decision that is
 replaced gets a new record, and the old one is marked `superseded by NNNN` and kept.
 
 | # | Decision | Status |
 |---|---|---|
-| [0001](0001-stack-and-repository-conventions.md) | GJS only, English everywhere, AGPL-3.0 | accepted |
+| [0001](0001-stack-and-repository-conventions.md) | GNOME stack, English source text, AGPL-3.0 | accepted, scope clarified |
 | [0002](0002-provider-modules-and-authentication.md) | Provider modules, own authentication, data contract, scheduler and cache | accepted |
 | [0003](0003-security-model.md) | Keyring storage, OAuth in preferences, terms-of-service risk | accepted |
 | [0004](0004-panel-bar.md) | Top-bar items, states, selection and adaptive layout | accepted, partly implemented |

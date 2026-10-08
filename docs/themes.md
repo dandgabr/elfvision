@@ -1,6 +1,8 @@
 # Themes
 
-The format of a theme, for someone writing one. How the themes are built and why is in
+The theme format and rendering capabilities of Elfvision's GNOME integration.
+Other desktop integrations are planned; their rendering capabilities are not yet
+defined. How the current themes are built and why is in
 [ADR 0006](adr/0006-theming.md); how to add a built-in theme and how the generated ones are made is
 in the [development guide](development.md#themes).
 

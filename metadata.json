@@ -1,12 +1,12 @@
 {
   "uuid": "gnome-ai-quota@dandgabr.github.io",
-  "name": "AI Quota",
-  "description": "Track AI provider quota usage and reset times in the GNOME top bar.",
+  "name": "Elfvision",
+  "description": "GNOME Shell integration for Elfvision: monitor AI quotas, reset times and API spending.",
   "shell-version": [
     "50"
   ],
-  "url": "https://github.com/dandgabr/gnome-ai-quota",
+  "url": "https://github.com/dandgabr/elfvision",
   "gettext-domain": "gnome-ai-quota",
-  "version-name": "0.2.0",
+  "version-name": "0.2.1",
   "settings-schema": "org.gnome.shell.extensions.gnome-ai-quota"
 }

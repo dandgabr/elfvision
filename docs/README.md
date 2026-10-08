@@ -1,7 +1,9 @@
 # Documentation
 
-Start with the [project README](../README.md) for installation, providers and
-account setup. Use the following guides for settings or contributions.
+Start with the [Elfvision README](../README.md) for desktop integration status,
+installation, providers and account setup. These guides cover shared provider
+semantics and the currently available GNOME Shell build. KDE Plasma and other
+desktop integrations are planned.
 
 | Document | Purpose |
 |---|---|
@@ -14,3 +16,5 @@ account setup. Use the following guides for settings or contributions.
 Internal design records are indexed under [ADRs](adr/README.md). Plans and review
 evidence live under `temp/`; those records distinguish completed automated checks
 from outstanding real-account and human observations.
+Historical snapshots retain the former Gnome AI Quota name and original version
+claims. Current product documentation and links use Elfvision.

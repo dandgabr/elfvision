@@ -19,7 +19,7 @@ extract() {
     xgettext --from-code=UTF-8 --language=JavaScript \
         --keyword=gettext --keyword=ngettext:1,2 --keyword=pgettext:1c,2 \
         --add-comments=TRANSLATORS --sort-by-file \
-        --package-name="$DOMAIN" --msgid-bugs-address="https://github.com/dandgabr/gnome-ai-quota/issues" \
+        --package-name="Elfvision" --msgid-bugs-address="https://github.com/dandgabr/elfvision/issues" \
         -o "$POT" "${sources[@]}"
     echo "wrote $POT"
 }

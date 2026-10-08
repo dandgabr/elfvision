@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the installable package (a zip) in dist/:
+# Build Elfvision's GNOME Shell extension package (a ZIP) in dist/:
 #
 #   tools/pack.sh
 #

@@ -32,14 +32,14 @@ app.connect('activate', () => {
         row('About').emit('activated'); await wait();
         const about = window.get_visible_dialog();
         check(about instanceof Adw.AboutDialog, 'native About opens');
-        check(about.application_name === 'Gnome AI Quota' && about.developer_name === 'Daniel G. Araujo', 'project and contributor names');
+        check(about.application_name === 'Elfvision' && about.developer_name === 'Daniel G. Araujo', 'project and contributor names');
         check(about.developers.includes('Daniel G. Araujo'), 'contributor credit');
         check(about.issue_url.endsWith('issues/new?template=bug_report.yml'), 'About selects bug form');
         about.close(); await wait();
         row('Report a bug').emit('activated'); row('Report a vulnerability').emit('activated');
         check(JSON.stringify(launched) === JSON.stringify([
-            'https://github.com/dandgabr/gnome-ai-quota/issues/new?template=bug_report.yml',
-            'https://github.com/dandgabr/gnome-ai-quota/security/advisories/new',
+            'https://github.com/dandgabr/elfvision/issues/new?template=bug_report.yml',
+            'https://github.com/dandgabr/elfvision/security/advisories/new',
         ]), 'public/private fixed destinations, no account or log payload');
         Gio.AppInfo.launch_default_for_uri = () => { throw new Error('synthetic launcher failure'); };
         row('Report a vulnerability').emit('activated');

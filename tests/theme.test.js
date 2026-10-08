@@ -589,7 +589,7 @@ test('theme picker: default tooltips name actual background materials and effect
 
 test('About: author attribution and explicit public/private report actions use fixed destinations', () => {
     const source = read('lib/prefs/about.js');
-    assertTrue(source.includes("application_name: _('Gnome AI Quota')"));
+    assertTrue(source.includes("application_name: _('Elfvision')"));
     assertTrue(source.includes("developer_name: 'Daniel G. Araujo'"));
     assertTrue(source.includes("developers: ['Daniel G. Araujo']"));
     assertTrue(source.includes("copyright: '© 2026 Daniel G. Araujo'"));
@@ -598,9 +598,9 @@ test('About: author attribution and explicit public/private report actions use f
     assertEqual(declarations.find(line => line.startsWith('const AUTHOR = ')),
         "const AUTHOR = 'https://github.com/dandgabr';");
     assertEqual(declarations.find(line => line.startsWith('const BUG_REPORT = ')),
-        "const BUG_REPORT = 'https://github.com/dandgabr/gnome-ai-quota/issues/new?template=bug_report.yml';");
+        "const BUG_REPORT = 'https://github.com/dandgabr/elfvision/issues/new?template=bug_report.yml';");
     assertEqual(declarations.find(line => line.startsWith('const VULNERABILITY_REPORT = ')),
-        "const VULNERABILITY_REPORT = 'https://github.com/dandgabr/gnome-ai-quota/security/advisories/new';");
+        "const VULNERABILITY_REPORT = 'https://github.com/dandgabr/elfvision/security/advisories/new';");
     assertTrue(source.includes("_('Report a bug')") && source.includes("_('Report a vulnerability')"));
     assertTrue(source.includes("_('Restore configuration')"));
     assertTrue(source.includes('Gio.AppInfo.launch_default_for_uri(url, null)'));
