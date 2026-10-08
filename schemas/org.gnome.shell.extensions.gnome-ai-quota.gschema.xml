@@ -44,6 +44,21 @@
       <summary>Light or dark</summary>
       <description>system follows the GNOME light or dark preference; light and dark force one.</description>
     </key>
+    <key name="effects-mode" type="s">
+      <choices>
+        <choice value="off"/>
+        <choice value="subtle"/>
+        <choice value="full"/>
+      </choices>
+      <default>'subtle'</default>
+      <summary>Effects</summary>
+      <description>off disables theme effects; subtle allows short interactions and static decoration; full allows ambient motion in compatible built-in themes. System animation preferences take priority.</description>
+    </key>
+    <key name="transparency-enabled" type="b">
+      <default>true</default>
+      <summary>Transparency</summary>
+      <description>Allow translucent and glass backgrounds in compatible built-in themes. Turning this off keeps reading surfaces opaque.</description>
+    </key>
     <key name="clock-format" type="s">
       <choices>
         <choice value="system"/>

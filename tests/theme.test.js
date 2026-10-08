@@ -1,7 +1,7 @@
 import GLib from 'gi://GLib';
 
 import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
-import {compileTheme, pickScheme, swatches, systemAccent, validateTheme} from '../lib/core/theme.js';
+import {compileTheme, pickScheme, swatches, systemAccent, validateTheme, resolvedColors} from '../lib/core/theme.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
 const read = path => new TextDecoder().decode(GLib.file_get_contents(`${root}/${path}`)[1]);
@@ -226,4 +226,45 @@ test('themes: swatches give four hex colors per scheme, even for the system acce
         for (const colors of [light, dark])
             assertTrue(colors.length === 4 && colors.every(c => /^#[0-9a-f]{6}$/i.test(c) || /^#[0-9a-f]{3}$/i.test(c)), `${id}: ${colors}`);
     }
+});
+
+test('themes: optional effects validate without weakening hex colors or old theme compatibility', () => {
+    const raw = JSON.parse(read('themes/builtin/linear-saas/theme.json'));
+    assertEqual(validateTheme(raw).theme.effects.motion, 'none');
+    const good = validateTheme({...raw, effects: {material: 'frosted-glass', motion: 'leaves', opacity: {light: 0.8, dark: 0.9}}});
+    assertEqual(good.problems, []);
+    assertEqual([good.theme.effects.material, good.theme.effects.particleCount], ['frosted-glass', 8]);
+    const bad = validateTheme({...raw, effects: {shader: 'void main(){}'}});
+    assertTrue(bad.theme !== null && bad.problems.some(p => p.includes('effects')));
+    assertEqual(bad.theme.effects.motion, 'none');
+    const alphaColor = {...raw, schemes: {...raw.schemes, light: {...raw.schemes.light, bg: '#ffffffcc'}}};
+    assertEqual(validateTheme(alphaColor).theme, null);
+});
+
+test('theme files: origin is loader-owned and a user override never gains builtin provenance', () => {
+    const dir = sandbox();
+    const userDirectory = tmpDir();
+    const raw = JSON.parse(goodJson('mine'));
+    raw.effects = {material: 'frosted-glass', motion: 'leaves'};
+    raw.origin = 'builtin';
+    writeTheme(dir, 'mine', JSON.stringify(raw));
+    const options = {userDirectory};
+    const trusted = loadThemeFile(dir, 'mine', options);
+    assertEqual(trusted.theme.origin, 'builtin');
+    GLib.mkdir_with_parents(`${userDirectory}/mine`, 0o700);
+    GLib.file_set_contents(`${userDirectory}/mine/theme.json`, JSON.stringify(raw));
+    const overridden = loadThemeFile(dir, 'mine', options);
+    assertEqual(overridden.theme.origin, 'user');
+    assertEqual(scanThemes(dir, options).themes.find(t => t.id === 'mine').builtin, false);
+    assertEqual(scanThemes(dir, options).themes.find(t => t.id === 'mine').origin, 'user');
+});
+
+
+test('themes: renderer colors are resolved hex values detached from theme data', () => {
+    const {theme} = loadTheme('sistema-gnome');
+    const colors = resolvedColors(theme, 'light', 'teal');
+    assertEqual(colors.accent, '#2190a4');
+    assertTrue(Object.values(colors).every(c => /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(c)));
+    colors.bg = '#000';
+    assertEqual(resolvedColors(theme, 'light', 'teal').bg, '#fafafa');
 });

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-07 11:11-0300\n"
+"POT-Creation-Date: 2026-10-07 21:04-0300\n"
 "PO-Revision-Date: 2026-10-06 21:45-0300\n"
 "Last-Translator: gnome-ai-quota authors\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -85,368 +85,368 @@ msgid ""
 "connection."
 msgstr "A última consulta bem-sucedida foi há algum tempo. Verifique sua conexão ou o serviço."
 
-#: lib/core/viewmodel.js:52
+#: lib/core/viewmodel.js:57
 msgid "5 hours"
 msgstr "5 horas"
 
-#: lib/core/viewmodel.js:53
+#: lib/core/viewmodel.js:58
 msgid "Week"
 msgstr "Semana"
 
-#: lib/core/viewmodel.js:54
+#: lib/core/viewmodel.js:59
 msgid "Month"
 msgstr "Mês"
 
-#: lib/core/viewmodel.js:62
+#: lib/core/viewmodel.js:67
 msgctxt "window suffix"
 msgid "W"
 msgstr "S"
 
-#: lib/core/viewmodel.js:63
+#: lib/core/viewmodel.js:68
 msgctxt "window suffix"
 msgid "M"
 msgstr "M"
 
-#: lib/core/viewmodel.js:110
+#: lib/core/viewmodel.js:115
 msgid "%s: no API key"
 msgstr "%s: sem chave de API"
 
-#: lib/core/viewmodel.js:111
+#: lib/core/viewmodel.js:116
 msgid "%s: key rejected"
 msgstr "%s: chave recusada"
 
-#: lib/core/viewmodel.js:112
+#: lib/core/viewmodel.js:117
 msgid "%s: sign-in expired"
 msgstr "%s: login expirou"
 
-#: lib/core/viewmodel.js:113
+#: lib/core/viewmodel.js:118
 msgid "%s: access refused"
 msgstr "%s: acesso recusado"
 
-#: lib/core/viewmodel.js:114
+#: lib/core/viewmodel.js:119
 msgid "%s: setup needed"
 msgstr "%s: configuração necessária"
 
-#: lib/core/viewmodel.js:115
+#: lib/core/viewmodel.js:120
 msgid "%s: not connected"
 msgstr "%s: não conectado"
 
-#: lib/core/viewmodel.js:117
+#: lib/core/viewmodel.js:122
 msgid "%s: rate limited"
 msgstr "%s: limite de requisições"
 
-#: lib/core/viewmodel.js:119
+#: lib/core/viewmodel.js:124
 msgid "%s: no connection"
 msgstr "%s: sem conexão"
 
-#: lib/core/viewmodel.js:121
+#: lib/core/viewmodel.js:126
 msgid "%s: service problem"
 msgstr "%s: problema no serviço"
 
-#: lib/core/viewmodel.js:123
+#: lib/core/viewmodel.js:128
 msgid "%s: data out of date"
 msgstr "%s: dados desatualizados"
 
-#: lib/core/viewmodel.js:125
+#: lib/core/viewmodel.js:130
 msgid "%s: %s left"
 msgstr "%s: restam %s"
 
-#: lib/core/viewmodel.js:130
+#: lib/core/viewmodel.js:135
 msgid "%s: %s%% of %s used (%s)"
 msgstr "%s: %s%% usado, %s (%s)"
 
-#: lib/core/viewmodel.js:132
+#: lib/core/viewmodel.js:137
 msgid "%s: %s%% of %s used"
 msgstr "%s: %s%% usado, %s"
 
-#: lib/core/viewmodel.js:135 lib/core/viewmodel.js:145
+#: lib/core/viewmodel.js:140 lib/core/viewmodel.js:150
 msgid "critical"
 msgstr "crítico"
 
-#: lib/core/viewmodel.js:137 lib/core/viewmodel.js:145
+#: lib/core/viewmodel.js:142 lib/core/viewmodel.js:150
 msgid "warning"
 msgstr "atenção"
 
-#: lib/core/viewmodel.js:146
+#: lib/core/viewmodel.js:151
 msgid "%s · %s · %s%% used"
 msgstr "%s · %s · %s%% usado"
 
-#: lib/core/viewmodel.js:168 lib/core/viewmodel.js:499
+#: lib/core/viewmodel.js:173 lib/core/viewmodel.js:504
 msgid "Critical"
 msgstr "Crítico"
 
-#: lib/core/viewmodel.js:169 lib/core/viewmodel.js:501
+#: lib/core/viewmodel.js:174 lib/core/viewmodel.js:506
 msgid "Warning"
 msgstr "Atenção"
 
-#: lib/core/viewmodel.js:172
+#: lib/core/viewmodel.js:177
 msgid "No key"
 msgstr "Sem chave"
 
-#: lib/core/viewmodel.js:173
+#: lib/core/viewmodel.js:178
 msgid "Key rejected"
 msgstr "Chave recusada"
 
-#: lib/core/viewmodel.js:174
+#: lib/core/viewmodel.js:179
 msgid "Sign-in expired"
 msgstr "Login expirou"
 
-#: lib/core/viewmodel.js:175
+#: lib/core/viewmodel.js:180
 msgid "Access refused"
 msgstr "Acesso recusado"
 
-#: lib/core/viewmodel.js:176
+#: lib/core/viewmodel.js:181
 msgid "Setup needed"
 msgstr "Configuração necessária"
 
-#: lib/core/viewmodel.js:177 lib/core/viewmodel.js:505
-#: lib/prefs/firstUse.js:171
+#: lib/core/viewmodel.js:182 lib/core/viewmodel.js:510
+#: lib/prefs/firstUse.js:175
 msgid "Not connected"
 msgstr "Não conectado"
 
-#: lib/core/viewmodel.js:182
+#: lib/core/viewmodel.js:187
 msgid "Keyring locked"
 msgstr "Chaveiro bloqueado"
 
-#: lib/core/viewmodel.js:182 lib/core/viewmodel.js:186
+#: lib/core/viewmodel.js:187 lib/core/viewmodel.js:191
 msgid "No connection"
 msgstr "Sem conexão"
 
-#: lib/core/viewmodel.js:183
+#: lib/core/viewmodel.js:188
 msgid "Rate limited"
 msgstr "Limite atingido"
 
-#: lib/core/viewmodel.js:184
+#: lib/core/viewmodel.js:189
 msgid "Unexpected reply"
 msgstr "Resposta inesperada"
 
-#: lib/core/viewmodel.js:185
+#: lib/core/viewmodel.js:190
 msgid "Service changed"
 msgstr "Serviço alterado"
 
-#: lib/core/viewmodel.js:192
+#: lib/core/viewmodel.js:197
 msgid "%s ago"
 msgstr "há %s"
 
-#: lib/core/viewmodel.js:193
+#: lib/core/viewmodel.js:198
 msgid "Out of date"
 msgstr "Desatualizado"
 
-#: lib/core/viewmodel.js:213
+#: lib/core/viewmodel.js:218
 msgid "No API key yet. Paste one in Preferences."
 msgstr "Ainda não há chave de API. Cole uma nas Preferências."
 
-#: lib/core/viewmodel.js:214
+#: lib/core/viewmodel.js:219
 msgid ""
 "The server rejected this key. Check it or paste a new one in Preferences."
 msgstr "O servidor recusou esta chave. Confira a chave ou cole outra nas Preferências."
 
-#: lib/core/viewmodel.js:215
+#: lib/core/viewmodel.js:220
 msgid ""
 "Your %s sign-in expired or was revoked. Connect again to keep seeing this "
 "quota."
 msgstr "O login do %s expirou ou foi revogado. Conecte de novo para continuar vendo esta cota."
 
-#: lib/core/viewmodel.js:216
+#: lib/core/viewmodel.js:221
 msgid "%s refused access. Check your account on its site."
 msgstr "O %s recusou o acesso. Veja sua conta no site dele."
 
-#: lib/core/viewmodel.js:217
+#: lib/core/viewmodel.js:222
 msgid ""
 "%s is not set up yet. Open Preferences and follow the steps for this account."
 msgstr "O %s ainda não foi configurado. Abra as Preferências e siga os passos desta conta."
 
-#: lib/core/viewmodel.js:218
+#: lib/core/viewmodel.js:223
 msgid "Open Preferences to connect this account."
 msgstr "Abra as Preferências para conectar esta conta."
 
-#: lib/core/viewmodel.js:221
+#: lib/core/viewmodel.js:226
 msgid "Too many requests."
 msgstr "O serviço pediu para esperar."
 
-#: lib/core/viewmodel.js:225
+#: lib/core/viewmodel.js:230
 msgid "The service replied in an unexpected way. Showing the last value."
 msgstr "O serviço respondeu de forma inesperada. Mostrando o último valor."
 
-#: lib/core/viewmodel.js:226
+#: lib/core/viewmodel.js:231
 msgid "The service replied in an unexpected way."
 msgstr "O serviço respondeu de forma inesperada."
 
-#: lib/core/viewmodel.js:229
+#: lib/core/viewmodel.js:234
 msgid "The service seems to have changed. This extension needs an update."
 msgstr "O serviço parece ter mudado. Esta extensão precisa de atualização."
 
-#: lib/core/viewmodel.js:233
+#: lib/core/viewmodel.js:238
 msgid "Can't read the keyring. Unlock it, then try again."
 msgstr "Não foi possível ler o chaveiro. Desbloqueie-o e tente de novo."
 
-#: lib/core/viewmodel.js:237
+#: lib/core/viewmodel.js:242
 msgid "Can't reach the service. Showing the last value, from %s ago."
 msgstr "Sem conexão com o serviço. Mostrando o último valor, obtido há %s."
 
-#: lib/core/viewmodel.js:238
+#: lib/core/viewmodel.js:243
 msgid "Couldn't get the data yet."
 msgstr "Ainda não foi possível obter os dados."
 
-#: lib/core/viewmodel.js:243
+#: lib/core/viewmodel.js:248
 msgid "Retrying in %s."
 msgstr "Nova tentativa em %s."
 
-#: lib/core/viewmodel.js:244
+#: lib/core/viewmodel.js:249
 msgid "Retrying soon."
 msgstr "Nova tentativa em breve."
 
-#: lib/core/viewmodel.js:260
+#: lib/core/viewmodel.js:265
 msgid "Balance"
 msgstr "Saldo"
 
-#: lib/core/viewmodel.js:263
+#: lib/core/viewmodel.js:268
 msgid "%s left"
 msgstr "%s disponível"
 
-#: lib/core/viewmodel.js:282
+#: lib/core/viewmodel.js:287
 msgid "%s%% used"
 msgstr "%s%% usado"
 
-#: lib/core/viewmodel.js:286
+#: lib/core/viewmodel.js:291
 msgid "resets in %s"
 msgstr "reinicia em %s"
 
-#: lib/core/viewmodel.js:295
+#: lib/core/viewmodel.js:300
 msgid "Expected by now: %s%%"
 msgstr "Esperado até agora: %s%%"
 
-#: lib/core/viewmodel.js:321
+#: lib/core/viewmodel.js:326
 msgid "left"
 msgstr "disponível"
 
-#: lib/core/viewmodel.js:339
+#: lib/core/viewmodel.js:344
 msgid "Add key"
 msgstr "Adicionar chave"
 
-#: lib/core/viewmodel.js:340
+#: lib/core/viewmodel.js:345
 msgid "Replace key"
 msgstr "Trocar chave"
 
-#: lib/core/viewmodel.js:341 lib/prefs/oauthGroup.js:78 lib/ui/notifier.js:68
+#: lib/core/viewmodel.js:346 lib/prefs/oauthGroup.js:78 lib/ui/notifier.js:68
 msgid "Reconnect"
 msgstr "Reconectar"
 
-#: lib/core/viewmodel.js:342 lib/ui/providerCard.js:190
+#: lib/core/viewmodel.js:347 lib/ui/providerCard.js:190
 msgid "Open Preferences"
 msgstr "Abrir Preferências"
 
-#: lib/core/viewmodel.js:356
+#: lib/core/viewmodel.js:361
 msgid "The last data is more than a day old."
 msgstr "Os últimos dados têm mais de um dia."
 
-#: lib/core/viewmodel.js:357
+#: lib/core/viewmodel.js:362
 msgid "No quota data yet."
 msgstr "Ainda sem dados de cota."
 
-#: lib/core/viewmodel.js:366
+#: lib/core/viewmodel.js:371
 msgid "Budget spent"
 msgstr "Orçamento gasto"
 
-#: lib/core/viewmodel.js:368
+#: lib/core/viewmodel.js:373
 msgid "of %s · %s%%"
 msgstr "de %s · %s%%"
 
-#: lib/core/viewmodel.js:370
+#: lib/core/viewmodel.js:375
 msgid "No reset: prepaid balance"
 msgstr "Sem reinício: saldo pré-pago"
 
-#: lib/core/viewmodel.js:396
+#: lib/core/viewmodel.js:401
 msgid "%s: %d point ahead of an even pace"
 msgid_plural "%s: %d points ahead of an even pace"
 msgstr[0] "%s: %d ponto acima do ritmo uniforme"
 msgstr[1] "%s: %d pontos acima do ritmo uniforme"
 
-#: lib/core/viewmodel.js:402
+#: lib/core/viewmodel.js:407
 msgid "Data is out of date."
 msgstr "Dado desatualizado."
 
-#: lib/core/viewmodel.js:428
+#: lib/core/viewmodel.js:433
 msgid "%d ok"
 msgstr "%d ok"
 
-#: lib/core/viewmodel.js:429
+#: lib/core/viewmodel.js:434
 msgid "%d warning"
 msgid_plural "%d warnings"
 msgstr[0] "%d em atenção"
 msgstr[1] "%d em atenção"
 
-#: lib/core/viewmodel.js:430
+#: lib/core/viewmodel.js:435
 msgid "%d critical"
 msgid_plural "%d critical"
 msgstr[0] "%d crítico"
 msgstr[1] "%d críticos"
 
-#: lib/core/viewmodel.js:431
+#: lib/core/viewmodel.js:436
 msgid "%d not connected"
 msgid_plural "%d not connected"
 msgstr[0] "%d não conectado"
 msgstr[1] "%d não conectados"
 
-#: lib/core/viewmodel.js:432
+#: lib/core/viewmodel.js:437
 msgid "%d with a problem"
 msgstr "%d com problema"
 
-#: lib/core/viewmodel.js:444
+#: lib/core/viewmodel.js:449
 msgid "Updated %d min ago"
 msgstr "Atualizado há %d min"
 
-#: lib/core/viewmodel.js:444
+#: lib/core/viewmodel.js:449
 msgid "Updated just now"
 msgstr "Atualizado agora"
 
-#: lib/core/viewmodel.js:459
+#: lib/core/viewmodel.js:464
 msgid "Not updated yet"
 msgstr "Ainda não atualizado"
 
-#: lib/core/viewmodel.js:462
+#: lib/core/viewmodel.js:467
 msgid "%s · %d with a problem"
 msgid_plural "%s · %d with problems"
 msgstr[0] "%s · %d com problema"
 msgstr[1] "%s · %d com problemas"
 
-#: lib/core/viewmodel.js:486
+#: lib/core/viewmodel.js:491
 msgid "Resets in %s"
 msgstr "Reinicia em %s"
 
-#: lib/core/viewmodel.js:500
+#: lib/core/viewmodel.js:505
 msgid "The quota is nearly used up."
 msgstr "A cota está quase toda usada."
 
-#: lib/core/viewmodel.js:502
+#: lib/core/viewmodel.js:507
 msgid "The quota is getting high."
 msgstr "A cota está ficando alta."
 
-#: lib/core/viewmodel.js:503
+#: lib/core/viewmodel.js:508
 msgid "Approximate"
 msgstr "Aproximado"
 
-#: lib/core/viewmodel.js:504
+#: lib/core/viewmodel.js:509
 msgid "The last known value; the service could not be reached just now."
 msgstr "O último valor conhecido; não foi possível consultar o serviço agora."
 
-#: lib/core/viewmodel.js:506
+#: lib/core/viewmodel.js:511
 msgid "Sign in again, or add a key, in Preferences."
 msgstr "Entre novamente ou adicione uma chave nas Preferências."
 
-#: lib/core/viewmodel.js:507
+#: lib/core/viewmodel.js:512
 msgid "Problem"
 msgstr "Problema"
 
-#: lib/core/viewmodel.js:508
+#: lib/core/viewmodel.js:513
 msgid "The service could not be reached or replied in an unexpected way."
 msgstr "Não foi possível consultar o serviço, ou ele respondeu de um jeito inesperado."
 
-#: lib/core/viewmodel.js:509
+#: lib/core/viewmodel.js:514
 msgid "Pace"
 msgstr "Ritmo"
 
-#: lib/core/viewmodel.js:510
+#: lib/core/viewmodel.js:515
 msgid ""
 "The mark on a bar is where the usage would be if it were spread evenly until "
 "the reset."
@@ -498,7 +498,7 @@ msgid ""
 "stopped tracking stay stopped."
 msgstr "Aparência, tema, barra, popup, notificações e fonte dos dados voltam aos valores padrão. Suas contas não são alteradas, e os provedores que você parou de acompanhar continuam parados."
 
-#: lib/prefs/about.js:73 lib/prefs/accounts.js:137 lib/prefs/oauthGroup.js:57
+#: lib/prefs/about.js:73 lib/prefs/accounts.js:144 lib/prefs/oauthGroup.js:57
 #: lib/prefs/oauthGroup.js:139 lib/prefs/termsDialog.js:28
 msgid "Cancel"
 msgstr "Cancelar"
@@ -515,7 +515,7 @@ msgstr "Padrões restaurados"
 msgid "Finish signing in using your browser. %d:%02d left."
 msgstr "Conclua o login no navegador. Restam %d:%02d."
 
-#: lib/prefs/accountText.js:19 lib/prefs/apiKeyController.js:117
+#: lib/prefs/accountText.js:19 lib/prefs/apiKeyController.js:125
 msgid ""
 "No keyring found. Unlock it in Passwords and Keys, or install a Secret "
 "Service provider."
@@ -595,80 +595,80 @@ msgstr "Remover a chave do %s"
 msgid "API key"
 msgstr "Chave de API"
 
-#: lib/prefs/accounts.js:134
+#: lib/prefs/accounts.js:141
 msgid "Remove the %s key?"
 msgstr "Remover a chave do %s?"
 
-#: lib/prefs/accounts.js:135
+#: lib/prefs/accounts.js:142
 msgid "It is deleted from the keyring. The key stays valid on the %s site."
 msgstr "Ela é apagada do chaveiro. A chave continua válida no site do %s."
 
-#: lib/prefs/accounts.js:138
+#: lib/prefs/accounts.js:145
 msgid "Remove"
 msgstr "Remover"
 
-#: lib/prefs/accounts.js:168
+#: lib/prefs/accounts.js:189
 msgid "Track %s"
 msgstr "Acompanhar o %s"
 
-#: lib/prefs/accounts.js:169
+#: lib/prefs/accounts.js:190
 msgid ""
 "Off stops fetching and hides it from the bar. Your credentials stay saved."
 msgstr "Desligado, para de consultar e some da barra. Suas credenciais continuam guardadas."
 
-#: lib/prefs/accounts.js:187
+#: lib/prefs/accounts.js:208
 msgid "Your %s username"
 msgstr "Seu usuário no %s"
 
-#: lib/prefs/accounts.js:190
+#: lib/prefs/accounts.js:211
 msgid "Where do I get a key?"
 msgstr "Onde consigo uma chave?"
 
-#: lib/prefs/accounts.js:191
+#: lib/prefs/accounts.js:212
 msgid "Opens your keys page. Enter your %s username above first."
 msgstr "Abre a sua página de chaves. Informe antes o seu usuário no %s, no campo acima."
 
-#: lib/prefs/apiKeyController.js:71
+#: lib/prefs/apiKeyController.js:73
 msgid "That does not look like an API key."
 msgstr "Isso não parece uma chave de API."
 
-#: lib/prefs/apiKeyController.js:79
+#: lib/prefs/apiKeyController.js:81
 msgid "The keyring did not accept the key."
 msgstr "O chaveiro não aceitou a chave."
 
-#: lib/prefs/apiKeyController.js:85
+#: lib/prefs/apiKeyController.js:90
 msgid "Key saved. Checking…"
 msgstr "Chave guardada. Verificando…"
 
-#: lib/prefs/apiKeyController.js:101 lib/prefs/oauthController.js:351
+#: lib/prefs/apiKeyController.js:107 lib/prefs/oauthController.js:395
 msgid "The keyring is not available."
 msgstr "O chaveiro não está disponível."
 
-#: lib/prefs/apiKeyController.js:119
+#: lib/prefs/apiKeyController.js:127
 msgid "No key yet. Paste one in the field below."
 msgstr "Ainda não há chave. Cole uma no campo abaixo."
 
-#: lib/prefs/apiKeyController.js:121
+#: lib/prefs/apiKeyController.js:129
 msgid "Key accepted."
 msgstr "Chave aceita."
 
-#: lib/prefs/apiKeyController.js:122
+#: lib/prefs/apiKeyController.js:130
 msgid "The server rejected this key."
 msgstr "O servidor recusou esta chave."
 
-#: lib/prefs/apiKeyController.js:123
+#: lib/prefs/apiKeyController.js:131
 msgid "Key saved. The keyring is locked, so it was not checked."
 msgstr "Chave guardada. O chaveiro está bloqueado, então ela não foi verificada."
 
-#: lib/prefs/apiKeyController.js:124
+#: lib/prefs/apiKeyController.js:132
 msgid "Key saved. Could not reach the server."
 msgstr "Chave guardada. Não foi possível falar com o servidor."
 
-#: lib/prefs/apiKeyController.js:125
+#: lib/prefs/apiKeyController.js:133
 msgid "Key saved. The service replied in an unexpected way."
 msgstr "Chave guardada. O serviço respondeu de forma inesperada."
 
-#: lib/prefs/apiKeyController.js:126
+#: lib/prefs/apiKeyController.js:134
 msgid "Key saved. Not checked yet."
 msgstr "Chave guardada, ainda não verificada."
 
@@ -676,7 +676,7 @@ msgstr "Chave guardada, ainda não verificada."
 msgid "Setup"
 msgstr "Configuração"
 
-#: lib/prefs/firstUse.js:26 lib/prefs/firstUse.js:84
+#: lib/prefs/firstUse.js:26 lib/prefs/firstUse.js:85
 msgid "Skip this step"
 msgstr "Pular esta etapa"
 
@@ -684,182 +684,182 @@ msgstr "Pular esta etapa"
 msgid "Back"
 msgstr "Voltar"
 
-#: lib/prefs/firstUse.js:28 lib/prefs/firstUse.js:85
+#: lib/prefs/firstUse.js:28 lib/prefs/firstUse.js:86
 msgid "Continue"
 msgstr "Continuar"
 
-#: lib/prefs/firstUse.js:81
+#: lib/prefs/firstUse.js:82
 msgid "Setup · %d of 5"
 msgstr "Configuração · %d de 5"
 
-#: lib/prefs/firstUse.js:81
+#: lib/prefs/firstUse.js:82
 msgid "Welcome"
 msgstr "Boas-vindas"
 
-#: lib/prefs/firstUse.js:84
+#: lib/prefs/firstUse.js:85
 msgid "Set up later"
 msgstr "Configurar depois"
 
-#: lib/prefs/firstUse.js:85
+#: lib/prefs/firstUse.js:86
 msgid "Close setup"
 msgstr "Concluir configuração"
 
-#: lib/prefs/firstUse.js:88
+#: lib/prefs/firstUse.js:89
 msgid ""
 "See remaining usage in the top bar and details in the popup. Nothing changes "
 "until you press a button. Keys and sign-ins stay in the system keyring. You "
 "can skip any step and set up again from General."
 msgstr "Veja a cota restante na barra superior e os detalhes no painel. Nada muda até você pressionar um botão. Chaves e acessos ficam no chaveiro do sistema. Você pode pular qualquer etapa e configurar novamente em Geral."
 
-#: lib/prefs/firstUse.js:88
+#: lib/prefs/firstUse.js:89
 msgid "Your AI quotas at a glance"
 msgstr "Suas cotas de IA à vista"
 
-#: lib/prefs/firstUse.js:90
+#: lib/prefs/firstUse.js:91
 msgid "Choose providers"
 msgstr "Escolha os provedores"
 
-#: lib/prefs/firstUse.js:90
+#: lib/prefs/firstUse.js:91
 msgid ""
 "Every provider is optional. Choosing one here does not connect it or change "
 "which providers are tracked."
 msgstr "Todos os provedores são opcionais. Escolher um aqui não o conecta nem muda quais provedores são acompanhados."
 
-#: lib/prefs/firstUse.js:95
+#: lib/prefs/firstUse.js:96
 msgid ""
 "OAuth sign-in · Against the terms; your whole Google account could be "
 "suspended. Skip unless you accept this risk."
 msgstr "Acesso por OAuth · Contraria os termos; toda a sua conta Google pode ser suspensa. Pule se não aceitar esse risco."
 
-#: lib/prefs/firstUse.js:96
+#: lib/prefs/firstUse.js:97
 msgid ""
 "OAuth sign-in · Unofficial access; your account could be limited or "
 "suspended."
 msgstr "Acesso por OAuth · Acesso não oficial; sua conta pode ser limitada ou suspensa."
 
-#: lib/prefs/firstUse.js:97
+#: lib/prefs/firstUse.js:98
 msgid "API key · Paste a key from the provider’s site."
 msgstr "Chave de API · Cole uma chave do site do provedor."
 
-#: lib/prefs/firstUse.js:108
+#: lib/prefs/firstUse.js:109
 msgid "No providers selected"
 msgstr "Nenhum provedor selecionado"
 
-#: lib/prefs/firstUse.js:108
+#: lib/prefs/firstUse.js:109
 msgid "You can continue now and connect accounts later in Accounts."
 msgstr "Você pode continuar agora e conectar suas contas depois em Contas."
 
-#: lib/prefs/firstUse.js:109
+#: lib/prefs/firstUse.js:111
 msgid "Connect your accounts"
 msgstr "Conecte suas contas"
 
-#: lib/prefs/firstUse.js:113
+#: lib/prefs/firstUse.js:115
 msgid "All chosen accounts are connected."
 msgstr "Todas as contas escolhidas estão conectadas."
 
-#: lib/prefs/firstUse.js:114
+#: lib/prefs/firstUse.js:116
 msgid ""
 "Connect one provider at a time. A failed sign-in does not stop you from "
 "continuing."
 msgstr "Conecte um provedor de cada vez. Uma falha no acesso não impede que você continue."
 
-#: lib/prefs/firstUse.js:123
+#: lib/prefs/firstUse.js:127
 msgid ""
 "Run this command in a terminal, then come back. The helper looks for public "
 "client ids in installed programs using PATH and writes providers.local.json. "
 "This extension does not run it."
 msgstr "Execute este comando em um terminal e volte. O auxiliar procura IDs públicos de cliente nos programas instalados usando o PATH e grava providers.local.json. A extensão não executa o comando."
 
-#: lib/prefs/firstUse.js:123
+#: lib/prefs/firstUse.js:127
 msgid "Set up the public client ids"
 msgstr "Configure os IDs públicos de cliente"
 
-#: lib/prefs/firstUse.js:130 lib/prefs/oauthGroup.js:59
+#: lib/prefs/firstUse.js:134 lib/prefs/oauthGroup.js:59
 msgid "Copy command"
 msgstr "Copiar comando"
 
-#: lib/prefs/firstUse.js:133 lib/prefs/oauthGroup.js:131
+#: lib/prefs/firstUse.js:137 lib/prefs/oauthGroup.js:131
 msgid "Command copied."
 msgstr "Comando copiado."
 
-#: lib/prefs/firstUse.js:144
+#: lib/prefs/firstUse.js:148
 msgid ""
 "Choose where quotas appear and how many providers are shown. Changes apply "
 "as you make them."
 msgstr "Escolha onde as cotas aparecem e quantos provedores são exibidos. As mudanças são aplicadas na hora."
 
-#: lib/prefs/firstUse.js:144 prefs.js:177
+#: lib/prefs/firstUse.js:148 prefs.js:177
 msgid "Top bar"
 msgstr "Barra superior"
 
-#: lib/prefs/firstUse.js:146 prefs.js:180
+#: lib/prefs/firstUse.js:150 prefs.js:180
 msgid "Center"
 msgstr "Centro"
 
-#: lib/prefs/firstUse.js:146 prefs.js:179
+#: lib/prefs/firstUse.js:150 prefs.js:179
 msgid "Left"
 msgstr "Esquerda"
 
-#: lib/prefs/firstUse.js:146 prefs.js:182
+#: lib/prefs/firstUse.js:150 prefs.js:182
 msgid "Position"
 msgstr "Posição"
 
-#: lib/prefs/firstUse.js:146 prefs.js:181
+#: lib/prefs/firstUse.js:150 prefs.js:181
 msgid "Right"
 msgstr "Direita"
 
-#: lib/prefs/firstUse.js:150 prefs.js:186
+#: lib/prefs/firstUse.js:154 prefs.js:186
 msgid "Providers on the bar"
 msgstr "Provedores na barra"
 
-#: lib/prefs/firstUse.js:155 lib/prefs/notifications.js:35
+#: lib/prefs/firstUse.js:159 lib/prefs/notifications.js:35
 msgid "Notifications"
 msgstr "Notificações"
 
-#: lib/prefs/firstUse.js:155
+#: lib/prefs/firstUse.js:159
 msgid ""
 "Notifications are on by default. One notice is sent when a quota crosses its "
 "threshold. Do Not Disturb holds banners. This setup sends no test "
 "notification."
 msgstr "As notificações vêm ativadas. Um aviso é enviado quando uma cota cruza seu limite. O Não perturbe retém os banners. Esta configuração não envia notificações de teste."
 
-#: lib/prefs/firstUse.js:156 lib/prefs/notifications.js:41
+#: lib/prefs/firstUse.js:160 lib/prefs/notifications.js:41
 msgid "Send notifications"
 msgstr "Enviar notificações"
 
-#: lib/prefs/firstUse.js:159 lib/prefs/notifications.js:66
+#: lib/prefs/firstUse.js:163 lib/prefs/notifications.js:66
 msgid "Notify at"
 msgstr "Notificar em"
 
-#: lib/prefs/firstUse.js:159
+#: lib/prefs/firstUse.js:163
 msgid "Used percentage · applies to all quota types"
 msgstr "Percentual usado · vale para todos os tipos de cota"
 
-#: lib/prefs/firstUse.js:166
+#: lib/prefs/firstUse.js:170
 msgid "More notification settings"
 msgstr "Mais opções de notificação"
 
-#: lib/prefs/firstUse.js:168
+#: lib/prefs/firstUse.js:172
 msgid "Setup complete"
 msgstr "Configuração concluída"
 
-#: lib/prefs/firstUse.js:168
+#: lib/prefs/firstUse.js:172
 msgid "You can change these choices later. Select an account to review it."
 msgstr "Você pode mudar essas escolhas depois. Selecione uma conta para conferi-la."
 
-#: lib/prefs/firstUse.js:171
+#: lib/prefs/firstUse.js:175
 msgid "Connected"
 msgstr "Conectado"
 
-#: lib/prefs/firstUse.js:171
+#: lib/prefs/firstUse.js:175
 msgid "Needs attention"
 msgstr "Precisa de atenção"
 
-#: lib/prefs/firstUse.js:171
+#: lib/prefs/firstUse.js:175
 msgid "Skipped"
 msgstr "Pulado"
 
-#: lib/prefs/firstUse.js:172
+#: lib/prefs/firstUse.js:179
 msgid "%s · %s"
 msgstr "%s · %s"
 
@@ -912,7 +912,7 @@ msgstr "Percentual usado"
 msgid "Notifies at %d%% used"
 msgstr "Notifica com %d%% usado"
 
-#: lib/prefs/notifications.js:78
+#: lib/prefs/notifications.js:78 prefs.js:236
 msgid "Off"
 msgstr "Desligado"
 
@@ -964,49 +964,49 @@ msgstr "O provedor não aceitou o login. Nada foi salvo."
 msgid "Sign-in failed. Nothing was saved."
 msgstr "O login falhou. Nada foi salvo."
 
-#: lib/prefs/oauthController.js:175
+#: lib/prefs/oauthController.js:199
 msgid "You can close this tab and go back to Preferences."
 msgstr "Você já pode fechar esta aba e voltar às Preferências."
 
-#: lib/prefs/oauthController.js:176
+#: lib/prefs/oauthController.js:200
 msgid "Sign-in did not finish. You can close this tab."
 msgstr "O login não terminou. Você pode fechar esta aba."
 
-#: lib/prefs/oauthController.js:188
+#: lib/prefs/oauthController.js:212
 msgid "Couldn't open the browser. Copy the link and open it yourself."
 msgstr "Não consegui abrir o navegador. Copie o link e abra você mesmo."
 
-#: lib/prefs/oauthController.js:241
+#: lib/prefs/oauthController.js:281
 msgid "%s connected."
 msgstr "%s conectado."
 
-#: lib/prefs/oauthController.js:243
+#: lib/prefs/oauthController.js:283
 msgid "The keyring did not accept the sign-in."
 msgstr "O chaveiro não aceitou o login."
 
-#: lib/prefs/oauthController.js:247
+#: lib/prefs/oauthController.js:287
 msgid "Sign-in cancelled. Nothing was saved."
 msgstr "Login cancelado. Nada foi salvo."
 
-#: lib/prefs/oauthController.js:284
+#: lib/prefs/oauthController.js:324
 msgid "Finish or cancel the other sign-in first."
 msgstr "Conclua ou cancele o outro acesso primeiro."
 
-#: lib/prefs/oauthController.js:328
+#: lib/prefs/oauthController.js:372
 msgid "That address belongs to another sign-in. Start again from this window."
 msgstr "Esse endereço é de outro login. Comece de novo nesta janela."
 
-#: lib/prefs/oauthController.js:330
+#: lib/prefs/oauthController.js:374
 msgid "The sign-in was refused in the browser."
 msgstr "O login foi recusado no navegador."
 
-#: lib/prefs/oauthController.js:331
+#: lib/prefs/oauthController.js:375
 msgid ""
 "That is not the address or the code. Copy the full address from the browser "
 "bar, or the code shown on the page."
 msgstr "Isso não é o endereço nem o código. Copie o endereço completo da barra do navegador ou o código mostrado na página."
 
-#: lib/prefs/oauthController.js:348
+#: lib/prefs/oauthController.js:392
 msgid "%s disconnected."
 msgstr "%s desconectado."
 
@@ -1202,69 +1202,69 @@ msgstr "Uma interface de terminal em texto."
 msgid "Raw HTML and dense tables."
 msgstr "HTML cru e tabelas densas."
 
-#: lib/ui/indicator.js:159
+#: lib/ui/indicator.js:161
 msgid "Add account"
 msgstr "Adicionar conta"
 
-#: lib/ui/indicator.js:202
+#: lib/ui/indicator.js:204
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: lib/ui/indicator.js:203
+#: lib/ui/indicator.js:205
 msgid "Preferences"
 msgstr "Preferências"
 
-#: lib/ui/indicator.js:214 lib/ui/indicator.js:215
+#: lib/ui/indicator.js:229 lib/ui/indicator.js:230
 msgid "What the marks on the bar mean"
 msgstr "O que significam as marcas da barra"
 
-#: lib/ui/indicator.js:265
+#: lib/ui/indicator.js:280
 msgid "Refreshing…"
 msgstr "Atualizando…"
 
-#: lib/ui/indicator.js:333 prefs.js:284
+#: lib/ui/indicator.js:348 prefs.js:295
 msgid "Demo data (made up)"
 msgstr "Dados de demonstração (fictícios)"
 
-#: lib/ui/indicator.js:384
+#: lib/ui/indicator.js:410
 msgid "Waiting for the first update…"
 msgstr "Aguardando a primeira atualização…"
 
-#: lib/ui/indicator.js:387
+#: lib/ui/indicator.js:413
 msgid "Nothing connected yet."
 msgstr "Nada conectado ainda."
 
-#: lib/ui/indicator.js:387
+#: lib/ui/indicator.js:413
 msgid "Nothing is being tracked."
 msgstr "Nada está sendo acompanhado."
 
-#: lib/ui/indicator.js:389
+#: lib/ui/indicator.js:415
 msgid "Resume a provider below to see its quota."
 msgstr "Retome um provedor abaixo para ver a cota."
 
-#: lib/ui/indicator.js:390
+#: lib/ui/indicator.js:416
 msgid "Add an account in Preferences to see your quotas here."
 msgstr "Adicione uma conta nas Preferências para ver suas cotas aqui."
 
-#: lib/ui/indicator.js:520
+#: lib/ui/indicator.js:546
 msgid "Nothing connected yet"
 msgstr "Nada conectado ainda"
 
-#: lib/ui/indicator.js:526
+#: lib/ui/indicator.js:552
 msgid "Waiting for the first update"
 msgstr "Aguardando a primeira atualização"
 
-#: lib/ui/indicator.js:550
+#: lib/ui/indicator.js:579
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] "mais %d provedor (abra para ver)"
 msgstr[1] "mais %d provedores (abra para ver)"
 
-#: lib/ui/indicator.js:565
+#: lib/ui/indicator.js:589
 msgid "On the bar"
 msgstr "Na barra"
 
-#: lib/ui/indicator.js:568
+#: lib/ui/indicator.js:592
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] "Oculto da barra (%d)"
@@ -1282,17 +1282,17 @@ msgstr "Cota de IA"
 msgid "Marks on the bar"
 msgstr "Marcas na barra"
 
-#: lib/ui/popupExtras.js:92
+#: lib/ui/popupExtras.js:96
 msgid "Not tracked (%d)"
 msgid_plural "Not tracked (%d)"
 msgstr[0] "Não acompanhado (%d)"
 msgstr[1] "Não acompanhados (%d)"
 
-#: lib/ui/popupExtras.js:102
+#: lib/ui/popupExtras.js:106
 msgid "Resume"
 msgstr "Retomar"
 
-#: lib/ui/popupExtras.js:103
+#: lib/ui/popupExtras.js:107
 msgid "Resume tracking %s"
 msgstr "Retomar o acompanhamento de %s"
 
@@ -1316,7 +1316,7 @@ msgstr "Alguns temas não puderam ser carregados"
 msgid "System"
 msgstr "Sistema"
 
-#: prefs.js:115 prefs.js:237
+#: prefs.js:115 prefs.js:248
 msgid "Your themes"
 msgstr "Seus temas"
 
@@ -1370,7 +1370,7 @@ msgstr "Modo compacto"
 msgid "Colors and theme"
 msgstr "Cores e tema"
 
-#: prefs.js:204 prefs.js:259
+#: prefs.js:204 prefs.js:270
 msgid "Follow the system"
 msgstr "Seguir o sistema"
 
@@ -1398,98 +1398,127 @@ msgstr "%s (indisponível)"
 msgid "Each theme has a light and a dark variant."
 msgstr "Todo tema tem variante clara e escura."
 
-#: prefs.js:238
+#: prefs.js:236
+msgid "Full"
+msgstr "Completo"
+
+#: prefs.js:236
+msgid "Subtle"
+msgstr "Sutil"
+
+#: prefs.js:237
+msgid "Effects"
+msgstr "Efeitos"
+
+#: prefs.js:237
+msgid ""
+"Subtle adds short transitions and static decoration. Full adds background "
+"motion where the theme supports it. System animation preferences take "
+"priority."
+msgstr "Sutil adiciona transições curtas e decoração estática. Completo adiciona movimento ao fundo quando o tema permite. As preferências de animação do sistema têm prioridade."
+
+#: prefs.js:240
+msgid "Transparency"
+msgstr "Transparência"
+
+#: prefs.js:241
+msgid ""
+"Allows translucent and glass backgrounds in compatible themes. Off keeps "
+"backgrounds opaque."
+msgstr "Permite fundos translúcidos e de vidro em temas compatíveis. Desativar mantém os fundos opacos."
+
+#: prefs.js:249
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr "Uma pasta por tema, com um theme.json dentro: %s"
 
-#: prefs.js:241
+#: prefs.js:252
 msgid "Open folder"
 msgstr "Abrir pasta"
 
-#: prefs.js:243
+#: prefs.js:254
 msgid "Open the themes folder"
 msgstr "Abrir a pasta de temas"
 
-#: prefs.js:257
+#: prefs.js:268
 msgid "Popup"
 msgstr "Popup"
 
-#: prefs.js:260
+#: prefs.js:271
 msgid "12 hours"
 msgstr "12 horas"
 
-#: prefs.js:261
+#: prefs.js:272
 msgid "24 hours"
 msgstr "24 horas"
 
-#: prefs.js:262
+#: prefs.js:273
 msgid "Clock"
 msgstr "Relógio"
 
-#: prefs.js:262
+#: prefs.js:273
 msgid "How reset times are written."
 msgstr "Como os horários de reinício são escritos."
 
-#: prefs.js:265
+#: prefs.js:276
 msgid "1h 20min"
 msgstr "1h 20min"
 
-#: prefs.js:266
+#: prefs.js:277
 msgid "1h20"
 msgstr "1h20"
 
-#: prefs.js:267
+#: prefs.js:278
 msgid "How the countdown to a reset is written."
 msgstr "Como a contagem até o reinício é escrita."
 
-#: prefs.js:267
+#: prefs.js:278
 msgid "Time until reset"
 msgstr "Tempo até o reinício"
 
-#: prefs.js:270
+#: prefs.js:281
 msgid "Open cards that need attention"
 msgstr "Abrir cartões que pedem atenção"
 
-#: prefs.js:271
+#: prefs.js:282
 msgid "Cards in warning, critical or error states open on their own."
 msgstr "Cartões em atenção, críticos ou com erro abrem sozinhos."
 
-#: prefs.js:279
+#: prefs.js:290
 msgid "Advanced"
 msgstr "Avançado"
 
-#: prefs.js:280
+#: prefs.js:291
 msgid "Demo data, to try every state without an account."
 msgstr "Dados de demonstração, para ver todos os estados sem uma conta."
 
-#: prefs.js:283
+#: prefs.js:294
 msgid "Real providers"
 msgstr "Provedores reais"
 
-#: prefs.js:285
+#: prefs.js:296
 msgid "Data source"
 msgstr "Fonte dos dados"
 
-#: prefs.js:285
+#: prefs.js:296
 msgid "Demo data queries no account."
 msgstr "Os dados de demonstração não consultam nenhuma conta."
 
-#: prefs.js:287
+#: prefs.js:298
 msgid "Steady"
 msgstr "Estável"
 
-#: prefs.js:288
+#: prefs.js:299
 msgid "Flaky"
 msgstr "Instável"
 
-#: prefs.js:289
+#: prefs.js:300
 msgid "Drifting"
 msgstr "Subindo"
 
-#: prefs.js:291
+#: prefs.js:302
 msgid "Demo scenario"
 msgstr "Cenário de demonstração"
 
-#: prefs.js:291
+#: prefs.js:302
 msgid "Steady: all fine. Flaky: errors come and go. Drifting: usage climbs."
 msgstr "Estável: tudo certo. Instável: erros vão e vêm. Subindo: o uso sobe."

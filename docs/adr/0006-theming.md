@@ -128,3 +128,39 @@ Related settings: `theme`, `color-scheme` (`system`, `light`, `dark`), `clock-fo
 - A new theme is a JSON file; no extension code changes.
 - Theme previews in the gallery use the same tokens, so they match what the extension
   can paint at the two delivered levels.
+
+## Post-MVP effect contract
+
+The accepted post-MVP design adds a data-only `effects` profile without changing
+existing color validation or requiring effects in old theme files. The full
+format is in [Themes](../themes.md#optional-effect-profiles). The core validator
+allowlists material, motion and texture presets, bounds particle counts to twelve
+and background opacity to 0.72–1 per scheme, and rejects executable fields,
+URLs, paths, arrays and non-finite numbers. Invalid optional data falls back to
+an opaque static profile with deterministic problem texts; base tokens still load.
+
+Origin is loader-owned: `builtin` or `user`, based on the selected theme file.
+A user override of a built-in slug never inherits executable-effect permission.
+Raw `origin` fields cannot grant trust. The picker uses this same provenance.
+
+`effectPolicy({origin, profile, mode, animationsEnabled, transparencyEnabled,
+popupOpen})` returns `{motion, material, particleCount}`. Motion is `none`,
+`interaction` or `ambient`. User origin, Effects Off and closed popup yield an
+opaque/no-motion policy. Subtle permits short interaction transitions and static
+decoration; Full permits compatible ambient presets. Disabled system animations
+prohibit animated interaction and ambient motion, independently of transparency.
+The panel remains dark and never runs an ambient loop.
+
+Preferences expose Effects and Transparency, reset with appearance settings.
+Account, tracking, consent and first-use state remain kept. ThemeManager exposes
+`getEffectState(popupOpen = false)` and `subscribeEffects(callback)` returning an
+unsubscribe function. Notifications follow theme, scheme, mode, transparency and
+system `enable-animations` changes, even when CSS is unchanged. Subscribers read
+state with their actual popup-open flag; snapshots contain only validated theme
+data and settings, and mutating a snapshot does not change manager state.
+Disable publishes the inactive policy and releases listeners.
+
+This task establishes the contract and controls; it does not implement rendering
+or claim frost/contrast/performance validation. Native renderer tasks remain
+responsible for teardown, opaque reading zones, bounded resources and runtime
+fallback. Theme JSON cannot select arbitrary renderer code.

@@ -1,7 +1,8 @@
 # Post-MVP design: visual fidelity, motion and polish
 
-Status: proposed implementation design. The owner requested the full follow-up
-plan and approved support for all four visual concepts. This document does not
+Status: accepted for implementation. The owner requested the full follow-up
+plan, approved support for all four visual concepts and authorized specialized
+agents, parallel theme work and reusable effect functions. This document does not
 claim that the effects have been implemented or performance-tested.
 
 ## Scope and sources

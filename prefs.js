@@ -232,6 +232,17 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         }));
         look.add(themeRow);
 
+        const effects = choiceRow(settings, 'effects-mode', [
+            ['off', _('Off')], ['subtle', _('Subtle')], ['full', _('Full')],
+        ], _('Effects'), _('Subtle adds short transitions and static decoration. Full adds background motion where the theme supports it. System animation preferences take priority.'), handlerIds);
+        look.add(effects);
+        const transparency = new Adw.SwitchRow({
+            title: _('Transparency'),
+            subtitle: _('Allows translucent and glass backgrounds in compatible themes. Off keeps backgrounds opaque.'),
+        });
+        settings.bind('transparency-enabled', transparency, 'active', Gio.SettingsBindFlags.DEFAULT);
+        look.add(transparency);
+
         const folder = GLib.build_filenamev([GLib.get_user_data_dir(), 'gnome-ai-quota', 'themes']);
         const folderRow = new Adw.ActionRow({
             title: _('Your themes'),
