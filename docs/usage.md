@@ -161,9 +161,12 @@ endpoints. Connection icons distinguish API keys from OAuth 2. Gemini and Z.ai
 are deferred to future versions and do not appear in the provider selector. Demo includes synthetic templates for all listed
 providers; Example Credits is an ordinary removable demo connector.
 
-The theme picker shows named capability icons for transparency and effects from
-validated built-in profiles. These icons describe capabilities, not the currently
-selected settings; custom themes do not acquire built-in effect permissions.
+The theme picker describes each validated built-in theme's default background.
+Its transparency icon names the default material; its effects icon names motion
+and static decoration and explains which Effects mode displays them. Compatible
+material overrides and interaction-only transitions do not qualify for icons.
+Current settings do not change the description of the theme's defaults; custom
+themes do not acquire built-in effect permissions.
 
 General contains About, the Daniel G. Araujo GitHub link, Report a bug and Report a
 vulnerability. Reports open in your browser for review and submission; no logs,

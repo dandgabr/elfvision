@@ -216,6 +216,11 @@ panel, popup, themes, fonts and demo data. **Notifications** controls thresholds
 connection notices and the test notification. The [usage and settings
 reference](docs/usage.md) describes every option and notification rule.
 
+Adding a connector saves its configuration; use **Connect** in its editor to
+authenticate (or **Simulate connect** in Demo). If the popup has a saved
+connector awaiting connection, **Open Preferences** opens that existing editor.
+Its quota card appears automatically after connecting.
+
 **General → Restore configuration** resets appearance, notifications, tracking, and setup
 dismissal. All connectors are tracked again and setup becomes available. Saved
 connectors, credentials, terms acknowledgements, client configuration, and the

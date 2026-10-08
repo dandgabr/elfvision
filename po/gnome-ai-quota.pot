@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-08 14:13-0300\n"
+"POT-Creation-Date: 2026-10-08 14:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -309,7 +309,7 @@ msgid ""
 "%s is not set up yet. Open Preferences and follow the steps for this account."
 msgstr ""
 
-#: lib/core/viewmodel.js:247
+#: lib/core/viewmodel.js:247 lib/ui/indicator.js:492
 msgid "Open Preferences to connect this account."
 msgstr ""
 
@@ -396,7 +396,7 @@ msgstr ""
 msgid "Reconnect"
 msgstr ""
 
-#: lib/core/viewmodel.js:376 lib/core/viewmodel.js:390
+#: lib/core/viewmodel.js:376 lib/core/viewmodel.js:390 lib/ui/indicator.js:495
 #: lib/ui/providerCard.js:229
 msgid "Open Preferences"
 msgstr ""
@@ -730,7 +730,7 @@ msgid ""
 "provider request is used."
 msgstr ""
 
-#: lib/prefs/accounts.js:49 lib/ui/indicator.js:492
+#: lib/prefs/accounts.js:49 lib/ui/indicator.js:499
 msgid "Connector configuration is unavailable"
 msgstr ""
 
@@ -1325,27 +1325,27 @@ msgid ""
 "as you make them."
 msgstr ""
 
-#: lib/prefs/firstUse.js:154 prefs.js:185
+#: lib/prefs/firstUse.js:154 prefs.js:179
 msgid "Top bar"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:188
+#: lib/prefs/firstUse.js:156 prefs.js:182
 msgid "Center"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:187
+#: lib/prefs/firstUse.js:156 prefs.js:181
 msgid "Left"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:190
+#: lib/prefs/firstUse.js:156 prefs.js:184
 msgid "Position"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:189
+#: lib/prefs/firstUse.js:156 prefs.js:183
 msgid "Right"
 msgstr ""
 
-#: lib/prefs/firstUse.js:160 prefs.js:194
+#: lib/prefs/firstUse.js:160 prefs.js:188
 msgid "Providers on the bar"
 msgstr ""
 
@@ -1471,7 +1471,7 @@ msgstr ""
 msgid "Notifies at %d%% used"
 msgstr ""
 
-#: lib/prefs/notifications.js:117 prefs.js:239
+#: lib/prefs/notifications.js:117 prefs.js:233
 msgid "Off"
 msgstr ""
 
@@ -1787,209 +1787,292 @@ msgstr ""
 msgid "I understand, connect"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:11
+#: lib/prefs/themeCatalog.js:12
 msgid "Follows the GNOME accent color and the light or dark setting."
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:11 prefs.js:116
+#: lib/prefs/themeCatalog.js:12 prefs.js:116
 msgid "System"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:11
+#: lib/prefs/themeCatalog.js:12
 msgid "System (GNOME)"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:13 prefs.js:116 prefs.js:256
+#: lib/prefs/themeCatalog.js:14 prefs.js:116 prefs.js:250
 msgid "Your themes"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:18
+#: lib/prefs/themeCatalog.js:19
 #, javascript-format
 msgid "%s (unavailable)"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:26
-msgid "Clean and functional"
-msgstr ""
-
-#: lib/prefs/themeCatalog.js:27
-msgid "Typography and editorial"
-msgstr ""
-
 #: lib/prefs/themeCatalog.js:28
-msgid "Surface and materials"
+msgid "Default transparency: translucent background."
 msgstr ""
 
 #: lib/prefs/themeCatalog.js:29
-msgid "Immersive and motion"
+msgid "Default transparency: decorative glass."
 msgstr ""
 
 #: lib/prefs/themeCatalog.js:30
-msgid "Punks and science fiction"
-msgstr ""
-
-#: lib/prefs/themeCatalog.js:31
-msgid "Historical and retro"
-msgstr ""
-
-#: lib/prefs/themeCatalog.js:32
-msgid "Brutalist and rebellious"
+msgid "Default transparency: frosted glass with background blur."
 msgstr ""
 
 #: lib/prefs/themeCatalog.js:36
-msgid "Solid colors, no shadows or gradients."
+msgid "Falling leaves"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:36
+msgid "Moving gradient"
 msgstr ""
 
 #: lib/prefs/themeCatalog.js:37
-msgid "Everything in modular cards."
+msgid "Floating particles"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:38
-msgid "A grid of asymmetric blocks."
-msgstr ""
-
-#: lib/prefs/themeCatalog.js:39
-msgid "Refined dark product UI with subtle borders."
+#: lib/prefs/themeCatalog.js:37
+msgid "Pulsing background"
 msgstr ""
 
 #: lib/prefs/themeCatalog.js:40
-msgid "A daily newspaper page, in columns with serif type."
+msgid "Fine grain"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:40
+msgid "Geometric grid"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:40
+msgid "Paper texture"
 msgstr ""
 
 #: lib/prefs/themeCatalog.js:41
-msgid "Large variable type, the glyph as the image."
+msgid "Botanical decoration"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:41
+msgid "Scanlines"
 msgstr ""
 
 #: lib/prefs/themeCatalog.js:42
-msgid "Strokes drawn by hand."
+msgid "Chamfered framing"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:43
-msgid "Soft mesh gradients."
+#: lib/prefs/themeCatalog.js:42
+msgid "Hand-drawn strokes"
 msgstr ""
 
 #: lib/prefs/themeCatalog.js:44
-msgid "Warm paper, botanical forms and gentle falling leaves."
+msgid "Glass highlights"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:45
-msgid "Translucent glass, soft frost and luminous edges."
+#: lib/prefs/themeCatalog.js:44
+msgid "Mesh gradient"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:46
-msgid "Pearly, prismatic foil."
+#: lib/prefs/themeCatalog.js:44
+msgid "Pearlescent sheen"
 msgstr ""
 
 #: lib/prefs/themeCatalog.js:47
-msgid "Isometric projection."
+#, javascript-format
+msgid "%s (with Full effects and system animations enabled)"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:48
-msgid "An interface composed from intent."
-msgstr ""
-
-#: lib/prefs/themeCatalog.js:49
-msgid "Neon noir and tactical HUD."
-msgstr ""
-
-#: lib/prefs/themeCatalog.js:50
-msgid "Night, silver and digital mysticism."
-msgstr ""
-
-#: lib/prefs/themeCatalog.js:51
-msgid "Micro scale, particles and precision."
-msgstr ""
-
-#: lib/prefs/themeCatalog.js:52
-msgid "A green, sunlit future on linen tones."
+#: lib/prefs/themeCatalog.js:50 lib/prefs/themeCatalog.js:52
+#, javascript-format
+msgid "%s (with Subtle or Full effects)"
 msgstr ""
 
 #: lib/prefs/themeCatalog.js:53
+#, javascript-format
+msgid "Default background effects: %s."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:63
+msgid "Clean and functional"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:64
+msgid "Typography and editorial"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:65
+msgid "Surface and materials"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:66
+msgid "Immersive and motion"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:67
+msgid "Punks and science fiction"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:68
+msgid "Historical and retro"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:69
+msgid "Brutalist and rebellious"
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:73
+msgid "Solid colors, no shadows or gradients."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:74
+msgid "Everything in modular cards."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:75
+msgid "A grid of asymmetric blocks."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:76
+msgid "Refined dark product UI with subtle borders."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:77
+msgid "A daily newspaper page, in columns with serif type."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:78
+msgid "Large variable type, the glyph as the image."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:79
+msgid "Strokes drawn by hand."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:80
+msgid "Soft mesh gradients."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:81
+msgid "Warm paper, botanical forms and gentle falling leaves."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:82
+msgid "Translucent glass, soft frost and luminous edges."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:83
+msgid "Pearly, prismatic foil."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:84
+msgid "Isometric projection."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:85
+msgid "An interface composed from intent."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:86
+msgid "Neon noir and tactical HUD."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:87
+msgid "Night, silver and digital mysticism."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:88
+msgid "Micro scale, particles and precision."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:89
+msgid "A green, sunlit future on linen tones."
+msgstr ""
+
+#: lib/prefs/themeCatalog.js:90
 msgid "Black lines and primary colors."
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:54
+#: lib/prefs/themeCatalog.js:91
 msgid "Mid-twentieth century, earthy tones."
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:55
+#: lib/prefs/themeCatalog.js:92
 msgid "A text terminal interface."
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:56
+#: lib/prefs/themeCatalog.js:93
 msgid "Raw HTML and dense tables."
 msgstr ""
 
-#: lib/ui/indicator.js:183
+#: lib/ui/indicator.js:184 lib/ui/indicator.js:495
 msgid "Add account"
 msgstr ""
 
-#: lib/ui/indicator.js:223
+#: lib/ui/indicator.js:224
 msgid "Refresh"
 msgstr ""
 
-#: lib/ui/indicator.js:224
+#: lib/ui/indicator.js:225
 msgid "Preferences"
 msgstr ""
 
-#: lib/ui/indicator.js:248 lib/ui/indicator.js:249
+#: lib/ui/indicator.js:249 lib/ui/indicator.js:250
 msgid "What the marks on the bar mean"
 msgstr ""
 
-#: lib/ui/indicator.js:343
+#: lib/ui/indicator.js:344
 msgid "Refreshing…"
 msgstr ""
 
-#: lib/ui/indicator.js:416 prefs.js:306
+#: lib/ui/indicator.js:417 prefs.js:300
 msgid "Demo data (made up)"
 msgstr ""
 
-#: lib/ui/indicator.js:482
+#: lib/ui/indicator.js:483
 msgid "Waiting for the first update…"
 msgstr ""
 
-#: lib/ui/indicator.js:485
+#: lib/ui/indicator.js:489
 msgid "Nothing connected yet."
 msgstr ""
 
-#: lib/ui/indicator.js:485
+#: lib/ui/indicator.js:489
 msgid "Nothing is being tracked."
 msgstr ""
 
-#: lib/ui/indicator.js:487
+#: lib/ui/indicator.js:491
 msgid "Resume a provider below to see its quota."
 msgstr ""
 
-#: lib/ui/indicator.js:488
+#: lib/ui/indicator.js:493
 msgid "Add an account in Preferences to see your quotas here."
 msgstr ""
 
-#: lib/ui/indicator.js:493
+#: lib/ui/indicator.js:500
 msgid ""
 "Open Preferences to recover the connector list. Saved credentials have not "
 "been changed."
 msgstr ""
 
-#: lib/ui/indicator.js:625
+#: lib/ui/indicator.js:632
 msgid "Nothing connected yet"
 msgstr ""
 
-#: lib/ui/indicator.js:631
+#: lib/ui/indicator.js:638
 msgid "Waiting for the first update"
 msgstr ""
 
-#: lib/ui/indicator.js:658
+#: lib/ui/indicator.js:665
 #, javascript-format
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/indicator.js:668
+#: lib/ui/indicator.js:675
 msgid "On the bar"
 msgstr ""
 
-#: lib/ui/indicator.js:671
+#: lib/ui/indicator.js:678
 #, javascript-format
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
@@ -2042,93 +2125,85 @@ msgstr ""
 msgid "Some themes could not be loaded"
 msgstr ""
 
-#: prefs.js:129
-msgid "Supports transparency"
-msgstr ""
-
-#: prefs.js:130
-msgid "Supports visual effects"
-msgstr ""
-
-#: prefs.js:163 prefs.js:220
+#: prefs.js:157 prefs.js:214
 msgid "Theme"
 msgstr ""
 
-#: prefs.js:181
+#: prefs.js:175
 msgid "General"
 msgstr ""
 
-#: prefs.js:190
+#: prefs.js:184
 msgid "Where the quota items sit on the top bar."
 msgstr ""
 
-#: prefs.js:195
+#: prefs.js:189
 msgid "Up to this many providers are shown (1 to 5), most critical first."
 msgstr ""
 
-#: prefs.js:202
+#: prefs.js:196
 msgid "Automatic"
 msgstr ""
 
-#: prefs.js:203
+#: prefs.js:197
 msgid "Always compact"
 msgstr ""
 
-#: prefs.js:204
+#: prefs.js:198
 msgid "Never compact"
 msgstr ""
 
-#: prefs.js:205
+#: prefs.js:199
 msgid ""
 "Automatic: only when space runs out. Always: drops the % sign and the window "
 "suffix. Never: hides providers instead."
 msgstr ""
 
-#: prefs.js:205
+#: prefs.js:199
 msgid "Compact mode"
 msgstr ""
 
-#: prefs.js:210
+#: prefs.js:204
 msgid "Colors and theme"
 msgstr ""
 
-#: prefs.js:212 prefs.js:281
+#: prefs.js:206 prefs.js:275
 msgid "Follow the system"
 msgstr ""
 
-#: prefs.js:213
+#: prefs.js:207
 msgid "Light"
 msgstr ""
 
-#: prefs.js:214
+#: prefs.js:208
 msgid "Dark"
 msgstr ""
 
-#: prefs.js:215
+#: prefs.js:209
 msgid "Applies to the popup. The top bar always stays dark."
 msgstr ""
 
-#: prefs.js:215
+#: prefs.js:209
 msgid "Light or dark"
 msgstr ""
 
-#: prefs.js:221
+#: prefs.js:215
 msgid "Each theme has a light and a dark variant."
 msgstr ""
 
-#: prefs.js:239
+#: prefs.js:233
 msgid "Full"
 msgstr ""
 
-#: prefs.js:239
+#: prefs.js:233
 msgid "Subtle"
 msgstr ""
 
-#: prefs.js:240
+#: prefs.js:234
 msgid "Effects"
 msgstr ""
 
-#: prefs.js:240
+#: prefs.js:234
 msgid ""
 "Off stops motion and decoration; material and transparency remain available. "
 "Subtle adds short transitions and static decoration. Full adds background "
@@ -2136,135 +2211,135 @@ msgid ""
 "priority."
 msgstr ""
 
-#: prefs.js:243
+#: prefs.js:237
 msgid "Transparency"
 msgstr ""
 
-#: prefs.js:244
+#: prefs.js:238
 msgid ""
 "Allows translucent and glass backgrounds in compatible themes. Off keeps "
 "backgrounds opaque."
 msgstr ""
 
-#: prefs.js:249
+#: prefs.js:243
 msgid "Follow the theme"
 msgstr ""
 
-#: prefs.js:249
+#: prefs.js:243
 msgid "Translucent"
 msgstr ""
 
-#: prefs.js:250
+#: prefs.js:244
 msgid "Decorative glass"
 msgstr ""
 
-#: prefs.js:250
+#: prefs.js:244
 msgid "Frosted glass"
 msgstr ""
 
-#: prefs.js:251
+#: prefs.js:245
 msgid ""
 "Applies only where the theme supports this material. Transparency off keeps "
 "the background opaque."
 msgstr ""
 
-#: prefs.js:251
+#: prefs.js:245
 msgid "Material"
 msgstr ""
 
-#: prefs.js:257
+#: prefs.js:251
 #, javascript-format
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr ""
 
-#: prefs.js:260
+#: prefs.js:254
 msgid "Open folder"
 msgstr ""
 
-#: prefs.js:262
+#: prefs.js:256
 msgid "Open the themes folder"
 msgstr ""
 
-#: prefs.js:279
+#: prefs.js:273
 msgid "Popup"
 msgstr ""
 
-#: prefs.js:282
+#: prefs.js:276
 msgid "12 hours"
 msgstr ""
 
-#: prefs.js:283
+#: prefs.js:277
 msgid "24 hours"
 msgstr ""
 
-#: prefs.js:284
+#: prefs.js:278
 msgid "Clock"
 msgstr ""
 
-#: prefs.js:284
+#: prefs.js:278
 msgid "How reset times are written."
 msgstr ""
 
-#: prefs.js:287
+#: prefs.js:281
 msgid "1h 20min"
 msgstr ""
 
-#: prefs.js:288
+#: prefs.js:282
 msgid "1h20"
 msgstr ""
 
-#: prefs.js:289
+#: prefs.js:283
 msgid "How the countdown to a reset is written."
 msgstr ""
 
-#: prefs.js:289
+#: prefs.js:283
 msgid "Time until reset"
 msgstr ""
 
-#: prefs.js:292
+#: prefs.js:286
 msgid "Open cards that need attention"
 msgstr ""
 
-#: prefs.js:293
+#: prefs.js:287
 msgid "Cards in warning, critical or error states open on their own."
 msgstr ""
 
-#: prefs.js:301
+#: prefs.js:295
 msgid "Advanced"
 msgstr ""
 
-#: prefs.js:302
+#: prefs.js:296
 msgid "Demo data, to try every state without an account."
 msgstr ""
 
-#: prefs.js:305
+#: prefs.js:299
 msgid "Real providers"
 msgstr ""
 
-#: prefs.js:307
+#: prefs.js:301
 msgid "Data source"
 msgstr ""
 
-#: prefs.js:307
+#: prefs.js:301
 msgid "Demo data queries no account."
 msgstr ""
 
-#: prefs.js:309
+#: prefs.js:303
 msgid "Steady"
 msgstr ""
 
-#: prefs.js:310
+#: prefs.js:304
 msgid "Flaky"
 msgstr ""
 
-#: prefs.js:311
+#: prefs.js:305
 msgid "Drifting"
 msgstr ""
 
-#: prefs.js:313
+#: prefs.js:307
 msgid "Demo scenario"
 msgstr ""
 
-#: prefs.js:313
+#: prefs.js:307
 msgid "Steady: all fine. Flaky: errors come and go. Drifting: usage climbs."
 msgstr ""

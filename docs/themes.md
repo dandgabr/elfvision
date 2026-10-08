@@ -115,12 +115,15 @@ Profiles permit a material; they do not prove that its renderer is available or 
 contrast/performance has passed validation. Opaque reading zones and runtime
 fallbacks remain renderer requirements.
 
-## Theme picker capabilities
+## Theme picker default backgrounds
 
-Informational icons identify transparency and visual effects from the validated
-built-in profile. Transparency includes compatible material overrides; effects
-include interaction motion, ambient motion, or texture. The icons have translated
-accessible labels and tooltips and do not add keyboard stops. They indicate what
-a theme supports, independently of the current Effects/Transparency settings.
-User themes, including overrides using a built-in ID, cannot claim built-in
-effect permissions.
+Informational icons describe the validated built-in theme's default background,
+not every material it supports. The transparency icon appears only when its
+chosen material is translucent, decorative glass or frosted glass; its tooltip
+names that material. Opaque themes do not show it merely because an override is
+compatible. The effects icon describes background motion (such as falling leaves)
+and static decoration, with the Effects mode needed to display each. Interaction
+transitions alone do not qualify. Particle effects with zero particles do not
+qualify either. Labels are translated, accessible and add no keyboard stops.
+Current preference overrides do not change this description of the theme.
+User overrides cannot claim built-in effect permissions.
