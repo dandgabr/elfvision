@@ -306,7 +306,7 @@ app.connect('activate', () => {
                         const retryDialog = window.get_visible_dialog(); retryDialog.emit('response', 'disconnect'); retryDialog.close(); await wait();
                         check(view.row.subtitle.includes('Restart the computer') && !view.row.subtitle.includes('removed'), 'failed attempt cannot reuse prior success message');
                         transaction = {phase: 'failed', problem: 'orphaned-write'}; for (const fn of [...listeners]) fn();
-                        check(view.button.label === _('Retry disconnection') && view.button.sensitive,
+                        check(view.button.label === _('Retry deletion') && view.button.sensitive,
                             'persisted failure offers an enabled, localized retry action');
                     }
                 } finally { view.dispose(); window.close(); }

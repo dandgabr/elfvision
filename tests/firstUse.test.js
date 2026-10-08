@@ -39,7 +39,7 @@ test('first use: summary distinguishes saved, rejected, failed and skipped accou
         antigravity: {connected: false},
     };
     assertEqual(connectionSummary(availableProviders(), ['command-code', 'codex', 'claude'], states).map(r => [r.id, r.status]),
-        [['command-code', 'failed'], ['codex', 'connected'], ['claude', 'failed'], ['antigravity', 'skipped']]);
+        [['command-code', 'failed'], ['codex', 'connected'], ['claude', 'failed'], ['antigravity', 'skipped'], ...['openai-api', 'anthropic-api', 'cursor', 'openrouter'].map(id => [id, 'skipped'])]);
 });
 
 test('first use: a shared gate serializes sign-ins and stale release cannot free a new owner', () => {
@@ -56,7 +56,7 @@ test('first use: completion and eligibility reflect account failures without blo
     const providers = availableProviders();
     const states = {'command-code': {hasKey: true}, codex: {connected: true, hasConfig: true},
         claude: {connected: false, hasConfig: false}, antigravity: {connected: false, hasConfig: true, keyringDown: true}};
-    assertEqual(connectableProviders(providers, states).map(meta => meta.id), ['command-code', 'codex']);
+    assertEqual(connectableProviders(providers, states).map(meta => meta.id), ['command-code', 'codex', 'openai-api', 'anthropic-api', 'cursor', 'openrouter']);
     assertEqual(stepComplete('connect', ['command-code', 'codex'], states), true);
     assertEqual(stepComplete('connect', ['codex', 'claude'], states), false);
     assertEqual(stepComplete('providers', [], states), false);
@@ -67,5 +67,9 @@ test('first use: completion and eligibility reflect account failures without blo
 test('first use: unavailable keyring and API-save failure each override otherwise connected summary', () => {
     const states = {'command-code': {hasKey: false, lastFailure: 'save refused'}, codex: {connected: true, keyringDown: true}, claude: {connected: true}};
     assertEqual(connectionSummary(availableProviders(), ['command-code', 'codex'], states).map(r => [r.id, r.status]),
-        [['command-code', 'failed'], ['codex', 'failed'], ['claude', 'connected'], ['antigravity', 'skipped']]);
+        [['command-code', 'failed'], ['codex', 'failed'], ['claude', 'connected'], ['antigravity', 'skipped'], ...['openai-api', 'anthropic-api', 'cursor', 'openrouter'].map(id => [id, 'skipped'])]);
+});
+
+test('first use: deferred Gemini and Z.ai are not offered', () => {
+    assertEqual(availableProviders().some(meta => ['gemini-api', 'zai'].includes(meta.id)), false);
 });

@@ -1,0 +1,62 @@
+name: Bug report
+description: Report a problem with Gnome Gnome AI Quota.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This report will be public. For security vulnerabilities, use [private vulnerability reporting](https://github.com/dandgabr/gnome-ai-quota/security/advisories/new).
+        Do not include API keys, tokens, cookies, credentials, account identifiers, personal information, or unreviewed logs. The extension does not collect or attach diagnostics to this form.
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the minimum steps and relevant settings, using synthetic data.
+    validations:
+      required: true
+  - type: input
+    id: extension_version
+    attributes:
+      label: Gnome Gnome AI Quota version
+      description: The version shown in Preferences → About; include a commit if using a development build.
+    validations:
+      required: true
+  - type: input
+    id: shell_version
+    attributes:
+      label: GNOME Shell version
+    validations:
+      required: true
+  - type: input
+    id: distribution
+    attributes:
+      label: Distribution and version (optional)
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected component (optional)
+      options:
+        - Top bar or popup
+        - Provider connection or quota
+        - Preferences or accounts
+        - Theme or accessibility
+        - Other
+  - type: textarea
+    id: reviewed_logs
+    attributes:
+      label: Reviewed, redacted logs (optional)
+      description: Paste only relevant lines after removing credentials and personal or account information.
+      render: text

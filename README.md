@@ -1,7 +1,7 @@
 # Gnome AI Quota
 
 Gnome AI Quota is a GNOME Shell extension that puts your AI quota usage and reset
-times in the top bar. Check Command Code, Codex, Claude and Antigravity without
+times and API spending in the top bar. Check your configured providers without
 opening each service, then click the indicator for a breakdown of each quota window.
 
 Version **0.1** supports **GNOME Shell 50**. It runs inside GNOME Shell with native
@@ -24,9 +24,9 @@ read [Provider access and consent](#provider-access-and-consent) before connecti
 
 Add a connector for each account you want to monitor in Preferences. You can
 connect several accounts from the same provider. Each connector has its own
-quota card and status; usage and balances are never combined. The top bar shows the
-highest used percentage for each connector, with a small progress bar and a quota
-window label. Warning, critical, stale and error states have symbols as well as
+quota card and status; usage and balances are never combined. The top bar shows
+the highest quota usage or a monetary amount for each connector. Progress bars
+appear only when a limit is known; quota windows carry a short label. Warning, critical, stale and error states have symbols as well as
 colors. Hover for the state and time until reset.
 
 Click the indicator to open the popup. Provider cards show usage windows, reset
@@ -120,20 +120,31 @@ The setup assistant can copy the helper command; you run it yourself.
 
 ## Providers
 
-These are the four implemented live providers. Available quotas depend on the
-provider's response and your account; a missing metric is not shown as zero.
+Available data depends on the provider and account permissions. Subscription
+quotas, organization spending and key allowances are separate measurements.
+Missing limits never become a made-up percentage or balance.
 
-| Provider | Authentication | Quotas shown when available |
+| Provider | Connection | Data and requirements |
 |---|---|---|
 | **Command Code** | API key | Five-hour and weekly usage; remaining monthly credits in USD |
-| **Codex** | Browser OAuth with PKCE | Primary and secondary rate-limit windows, their reset times and plan |
-| **Claude** | Browser OAuth with PKCE | Five-hour and seven-day usage with reset times |
-| **Antigravity** | Google browser OAuth with PKCE | Five-hour and weekly usage for Gemini and the shared Claude/GPT pool |
+| **Codex** | OAuth 2 with PKCE | Subscription rate-limit windows, reset times and plan |
+| **Claude** | OAuth 2 with PKCE | Subscription five-hour and seven-day usage |
+| **Antigravity** | Google OAuth 2 with PKCE | Gemini and shared Claude/GPT subscription pools |
+| **OpenAI API** | Organization Admin API key | Current UTC-month organization costs; configured monthly spending limit when available |
+| **Anthropic API** | Organization Admin API key | Current UTC-month organization costs; no assumed balance or limit |
+| **Cursor** | Team Admin API key | Team aggregate spending; hourly polling, no personal subscription quota |
+| **OpenRouter** | API key | Remaining key allowance, or account credits with a management key; unlimited keys show spending |
 
-PKCE means Proof Key for Code Exchange. The extension creates its own sign-in;
-it does not reuse the official clients' saved sessions. OpenRouter is not an
-implemented provider. Account sign-ins and quota requests have automated synthetic
-coverage; a successful real-account round trip has not been recorded for v0.1.
+The provider selector identifies API keys and OAuth 2 with icons and text.
+Gemini and Z.ai are deferred to future versions.
+OpenAI and Anthropic administrative keys require organization permissions; ordinary
+inference keys cannot access these reports. Cursor requires a team administrator.
+See [provider endpoints and limitations](docs/providers.md) for exact APIs and
+primary sources. Synthetic tests cover all supported reporting contracts; no
+successful real-account round trip has been recorded for these additions.
+
+PKCE means Proof Key for Code Exchange. The subscription integrations create their
+own sign-in and do not reuse the official clients' saved sessions.
 
 ### Provider access and consent
 
@@ -205,18 +216,20 @@ panel, popup, themes, fonts and demo data. **Notifications** controls thresholds
 connection notices and the test notification. The [usage and settings
 reference](docs/usage.md) describes every option and notification rule.
 
-**Restore defaults** resets appearance, notifications, tracking, and setup
+**General → Restore configuration** resets appearance, notifications, tracking, and setup
 dismissal. All connectors are tracked again and setup becomes available. Saved
 connectors, credentials, terms acknowledgements, client configuration, and the
 selected live/demo data source stay saved.
 
 **Remove connector…** removes only the selected connector, its local credential,
 and its quota and alert data after confirmation. Other accounts stay saved.
-**Disconnect all accounts…** removes this extension's local credentials across
-all connectors, including credentials missing from the connector list, along
-with quota snapshots and alert history. It keeps settings, connector metadata,
-themes, fonts, and client configuration. Local deletion does not guarantee remote
-logout or revoke an API key on the provider's site.
+**Accounts → Delete all connectors…** removes every connector in the current
+Live or Demo mode after confirmation. Demo deletion includes **Example Credits**
+and never accesses live credentials. Live deletion removes this extension's
+credentials, quota snapshots and alert history, including orphaned credential
+entries. Appearance, themes, fonts and client configuration stay saved. Local
+deletion does not revoke an API key on the provider's site. Failed deletions remain
+blocked with a retry rather than reporting success.
 
 If the connector list is invalid, **Recover list…** rebuilds it from saved
 credential identities after confirmation. Secret values are not read or deleted;
@@ -259,10 +272,13 @@ unlocking; an earlier unread extension notification may disappear. See
 
 ## Contributing
 
-Bug reports and pull requests are welcome at the [project
-repository](https://github.com/dandgabr/gnome-ai-quota). Include your GNOME version,
-extension version, steps to reproduce and the visible error category. Remove
-account details and credentials from logs or screenshots.
+Use the [bug form](https://github.com/dandgabr/gnome-ai-quota/issues/new?template=bug_report.yml)
+for public bug reports and the [private security form](https://github.com/dandgabr/gnome-ai-quota/security/advisories/new)
+for vulnerabilities. Both are accessible in Preferences → General. Review anything
+you share; no diagnostics or credentials are attached automatically. See
+[SECURITY.md](SECURITY.md) for vulnerability disclosure.
+
+Created by [Daniel G. Araujo](https://github.com/dandgabr). Pull requests are welcome.
 
 The [development guide](docs/development.md#contributing) covers local setup,
 checks, isolated shells, themes and translations. The [documentation

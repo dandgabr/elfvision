@@ -6,6 +6,7 @@ account setup. Use the following guides for settings or contributions.
 | Document | Purpose |
 |---|---|
 | [Usage and settings](usage.md) | Indicator legend, every preference, notification behavior, reset and local account removal |
+| [Providers](providers.md) | Supported endpoints, authentication permissions, monetary semantics and unavailable data |
 | [Themes](themes.md) | Custom theme format, tokens, validation and native effect profiles |
 | [Development](development.md) | Build, package, test, try changes in isolated shells, add themes or translations and contribute |
 | [Pitfalls](pitfalls.md) | GNOME widget, layout and lifecycle problems to avoid while developing |

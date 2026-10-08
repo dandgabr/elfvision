@@ -521,3 +521,68 @@ test('themes: Cyberpunk light has visible structural framing on its reading surf
     const values = [luminance(colors.border), luminance(colors.surface)].sort((a, b) => b - a);
     assertTrue((values[0] + 0.05) / (values[1] + 0.05) >= 3, 'daylight HUD outlines must remain distinguishable');
 });
+
+
+test('theme picker: validated capabilities follow built-in origin and preserve profiles', () => {
+    const {themes} = scanThemes(root, {userDirectory: tmpDir()});
+    const system = themes.find(theme => theme.id === 'sistema-gnome');
+    assertEqual(system.capabilities, {transparency: true, effects: true});
+    assertEqual(system.effects, loadTheme('sistema-gnome').theme.effects);
+    const cyberpunk = themes.find(theme => theme.id === 'cyberpunk');
+    assertEqual(cyberpunk.capabilities, {transparency: true, effects: true});
+});
+
+test('theme picker: user claims never grant capabilities and malformed built-in effects fall back safely', () => {
+    const dir = sandbox();
+    const userDirectory = tmpDir();
+    GLib.mkdir_with_parents(`${userDirectory}/custom`, 0o755);
+    const userRaw = {...JSON.parse(goodJson('custom')), origin: 'builtin', builtin: true,
+        capabilities: {transparency: true, effects: true}};
+    GLib.file_set_contents(`${userDirectory}/custom/theme.json`, JSON.stringify(userRaw));
+    const custom = scanThemes(dir, {userDirectory}).themes[0];
+    assertEqual(custom.origin, 'user');
+    assertEqual(custom.capabilities, {transparency: false, effects: false});
+    const malformed = JSON.parse(goodJson('broken'));
+    malformed.effects.motion = 'unreviewed-script';
+    writeTheme(dir, 'broken', JSON.stringify(malformed));
+    assertEqual(scanThemes(dir, {userDirectory}).themes.find(theme => theme.id === 'broken').capabilities,
+        {transparency: false, effects: false});
+});
+
+test('theme picker: capability metadata reflects transparent materials, motion and texture independently', () => {
+    const dir = sandbox();
+    const userDirectory = tmpDir();
+    const cases = [
+        ['opaque-static', {material: 'opaque', motion: 'none', texture: 'none'}, {transparency: false, effects: false}],
+        ['transparent-static', {material: 'opaque', motion: 'none', texture: 'none', compatibleMaterials: ['opaque', 'translucent']}, {transparency: true, effects: false}],
+        ['opaque-motion', {material: 'opaque', motion: 'interaction', texture: 'none'}, {transparency: false, effects: true}],
+        ['opaque-texture', {material: 'opaque', motion: 'none', texture: 'paper'}, {transparency: false, effects: true}],
+    ];
+    for (const [id, effects] of cases) {
+        const raw = JSON.parse(goodJson(id));
+        raw.effects = effects;
+        writeTheme(dir, id, JSON.stringify(raw));
+    }
+    const {themes} = scanThemes(dir, {userDirectory});
+    for (const [id, _profile, expected] of cases)
+        assertEqual(themes.find(theme => theme.id === id).capabilities, expected, id);
+});
+
+test('About: author attribution and explicit public/private report actions use fixed destinations', () => {
+    const source = read('lib/prefs/about.js');
+    assertTrue(source.includes("application_name: _('Gnome AI Quota')"));
+    assertTrue(source.includes("developer_name: 'Daniel G. Araujo'"));
+    assertTrue(source.includes("developers: ['Daniel G. Araujo']"));
+    assertTrue(source.includes("copyright: '© 2026 Daniel G. Araujo'"));
+    assertTrue(source.includes('dialog.add_credit_section(') && source.includes('dialog.add_link('));
+    const declarations = source.split('\n');
+    assertEqual(declarations.find(line => line.startsWith('const AUTHOR = ')),
+        "const AUTHOR = 'https://github.com/dandgabr';");
+    assertEqual(declarations.find(line => line.startsWith('const BUG_REPORT = ')),
+        "const BUG_REPORT = 'https://github.com/dandgabr/gnome-ai-quota/issues/new?template=bug_report.yml';");
+    assertEqual(declarations.find(line => line.startsWith('const VULNERABILITY_REPORT = ')),
+        "const VULNERABILITY_REPORT = 'https://github.com/dandgabr/gnome-ai-quota/security/advisories/new';");
+    assertTrue(source.includes("_('Report a bug')") && source.includes("_('Report a vulnerability')"));
+    assertTrue(source.includes("_('Restore configuration')"));
+    assertTrue(source.includes('Gio.AppInfo.launch_default_for_uri(url, null)'));
+});

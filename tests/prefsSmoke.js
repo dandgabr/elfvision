@@ -60,7 +60,7 @@ app.connect('activate', () => {
             const button = text => widgets.find(w => w instanceof Gtk.Button && w.label === translate(text));
             if (step === 1) {
                 const rows = widgets.filter(w => w instanceof Adw.SwitchRow);
-                check(rows.length === 4 && rows.every(w => !w.active), 'providers must be opt-in');
+                check(rows.length === availableProviders().length && rows.every(w => !w.active), 'providers must be opt-in');
                 rows.forEach(w => { w.active = true; });
             }
             if (step === 2) {
@@ -72,7 +72,7 @@ app.connect('activate', () => {
                 const [commandAllocated, commandBounds] = scroll.compute_bounds(window);
                 check(commandAllocated && commandBounds.get_x() >= -1 && commandBounds.get_x() + commandBounds.get_width() <= window.get_width() + 1,
                     'command viewport stays inside actual window');
-                check(widgets.filter(w => w instanceof Adw.PreferencesGroup).length === 6, 'all four chosen provider groups');
+                check(widgets.filter(w => w instanceof Adw.PreferencesGroup).length === availableProviders().length + 2, 'every chosen provider has a group');
             }
             if (step === 3) {
                 const count = widgets.find(w => w instanceof Adw.SpinRow);

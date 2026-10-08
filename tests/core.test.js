@@ -774,3 +774,97 @@ test('not tracked: only known providers, in the registry\'s order', () => {
     assertEqual(untrackedProviders(undefined, registry), []);
     assertEqual(untrackedProviders(['__proto__', 'constructor'], registry), []);
 });
+
+import {parseCache, serializeCache} from '../lib/core/cache.js';
+
+const monetarySnapshot = metrics => normalizeSnapshot({id: 'report', name: 'Report', state: 'ok', metrics}).snapshot;
+
+test('monetary spend normalizes known values without inventing an unknown limit', () => {
+    const snapshot = monetarySnapshot([{id: 'cost', kind: 'spend', amount: 1234.56, currency: 'USD', window: 'month', resetsAt: NOW + 60000}]);
+    assertEqual(snapshot.metrics[0], {id: 'cost', kind: 'spend', amount: 1234.56, currency: 'USD', window: 'month', windowSecs: 0, percentUsed: null, resetsAt: NOW + 60000});
+    for (const limit of [undefined, null, 0, -1, Infinity])
+        assertEqual(monetarySnapshot([{kind: 'spend', amount: 1, currency: 'USD', limit}]).metrics[0].percentUsed, null);
+    assertEqual(monetarySnapshot([{kind: 'spend', amount: 25, currency: 'EUR', limit: 100}]).metrics[0].percentUsed, 25);
+    for (const amount of [undefined, null, '1', NaN, Infinity])
+        assertEqual(monetarySnapshot([{kind: 'spend', amount, currency: 'USD'}]).metrics.length, 0);
+    for (const currency of [undefined, null, 'USD\n', 'US', '<b>USD', 'usd'])
+        assertEqual(monetarySnapshot([{kind: 'spend', amount: 1, currency}]).metrics.length, 0);
+});
+
+test('monetary unknown budget retains a negative balance without fictitious spending', () => {
+    const snapshot = monetarySnapshot([{kind: 'money', balance: -12.4, currency: 'USD'}]);
+    assertEqual(snapshot.metrics[0].percentUsed, null);
+    const view = cardView(snapshot, {locale: 'en'});
+    assertEqual(view.percent, null);
+    assertEqual(view.money.percent, null);
+    assertEqual(view.money.spentText, '-$12.40');
+    assertEqual(view.money.spentLabel, 'Balance');
+    assertEqual(view.money.ofText, '');
+    assertTrue(!view.heroSmall.includes('%'));
+});
+
+test('monetary spend card and accessibility use complete actual costs', () => {
+    const snapshot = monetarySnapshot([{kind: 'spend', amount: 1234.56, currency: 'USD', window: 'month'}]);
+    const card = cardView(snapshot, {locale: 'en'});
+    assertEqual([card.heroText, card.heroSmall, card.percent], ['$1,234.56', 'Month spend', null]);
+    assertEqual([card.money.spentText, card.money.ofText, card.money.percent], ['$1,234.56', '', null]);
+    const bar = barView(snapshot, {locale: 'en'});
+    assertEqual([bar.number, bar.showPercent, bar.percent], ['$1,234.56', false, null]);
+    assertTrue(bar.accessibleName.includes('$1,234.56') && bar.accessibleName.includes('spend'));
+    const capped = cardView(monetarySnapshot([{kind: 'spend', amount: 1234.56, currency: 'USD', limit: 2000}]), {locale: 'en'});
+    assertEqual(capped.money.percent, 61.7);
+    assertTrue(capped.money.ofText.includes('$2,000.00'));
+});
+
+test('monetary key allowance preserves its actual period and reset', () => {
+    const snapshot = monetarySnapshot([{kind: 'money', basis: 'allowance', balance: 25, budget: 100, currency: 'USD', window: 'month', resetsAt: NOW + 60000}]);
+    assertEqual([snapshot.metrics[0].window, snapshot.metrics[0].resetsAt, snapshot.metrics[0].basis], ['month', NOW + 60000, 'allowance']);
+    const card = cardView(snapshot, {nowMs: NOW, locale: 'en'});
+    assertEqual(card.heroSmall, 'Key allowance left');
+    assertTrue(card.money.note.includes('1min') && !card.money.note.includes('prepaid'));
+    const bar = barView(snapshot, {locale: 'en'});
+    assertTrue(bar.accessibleName.includes('key allowance'));
+    assertEqual(bar.resetsAt, NOW + 60000);
+});
+
+test('monetary known percentages outrank unknown spend in either order', () => {
+    const unknown = {id: 'unknown', kind: 'spend', percentUsed: null};
+    const zero = {id: 'zero', kind: 'percent', percentUsed: 0};
+    assertEqual(mostCriticalMetric([unknown, zero]), zero);
+    assertEqual(mostCriticalMetric([zero, unknown]), zero);
+    assertEqual(mostCriticalMetric([unknown]), unknown);
+});
+
+test('monetary cache preserves pure report semantics and drops raw account fields', () => {
+    const snapshot = monetarySnapshot([{kind: 'spend', amount: 9.25, currency: 'USD', window: 'month', limit: 10, resetsAt: NOW + 60000}]);
+    const serialized = serializeCache([{...snapshot, members: [{email: 'private@example.test'}], secret: 'private-key'}], NOW);
+    assertTrue(!serialized.includes('private'));
+    assertEqual(parseCache(serialized).snapshots[0], snapshot);
+    const allowance = monetarySnapshot([{kind: 'money', basis: 'allowance', balance: 25, budget: 100, currency: 'EUR', window: 'month', resetsAt: NOW + 60000}]);
+    assertEqual(parseCache(serializeCache([allowance], NOW)).snapshots[0], allowance);
+});
+
+test('monetary unavailable public quota is explicitly explained and cache bounded', () => {
+    const snapshot = normalizeSnapshot({id: 'gemini', name: 'Gemini API', state: 'ok', metrics: [], quotaAvailability: 'unsupported'}).snapshot;
+    assertEqual(snapshot.quotaAvailability, 'unsupported');
+    assertEqual([cardView(snapshot).canConfigure, cardView(snapshot).configureText], [true, 'Open Preferences']);
+    assertTrue(cardView(snapshot).message.includes('public API'));
+    assertEqual(parseCache(serializeCache([snapshot], NOW)).snapshots[0].quotaAvailability, 'unsupported');
+    assertEqual(normalizeSnapshot({id: 'x', quotaAvailability: 'arbitrary private text'}).snapshot.quotaAvailability, undefined);
+});
+
+test('monetary daily key allowance remains daily rather than a five-hour window', () => {
+    const snapshot = monetarySnapshot([{kind: 'money', basis: 'allowance', balance: 5, budget: 10, currency: 'USD', window: 'day', resetsAt: NOW + 60000}]);
+    assertEqual(snapshot.metrics[0].window, 'day');
+    assertTrue(cardView(snapshot, {nowMs: NOW}).money.note.includes('1min'));
+});
+
+test('monetary mixed quotas keep unknown spend as a currency row', () => {
+    const snapshot = monetarySnapshot([{id: 'spend', kind: 'spend', amount: 1234.56, currency: 'USD', window: 'month'},
+        {id: 'quota', kind: 'percent', percentUsed: 40, window: 'week'}]);
+    const view = cardView(snapshot, {locale: 'en'});
+    assertEqual(view.heroText, '40');
+    assertEqual(view.groups[0].rows[0].valueText, '$1,234.56');
+    assertEqual(view.groups[0].rows[0].noMeter, true);
+    assertEqual(view.groups[0].topText, '40');
+});

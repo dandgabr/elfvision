@@ -7,7 +7,7 @@ import {accountStatus} from './lib/core/accountStatus.js';
 import {createProvider, createProviders, isConnected} from './lib/providers/index.js';
 import {createConnectorStore} from './lib/services/connectorStore.js';
 import {providerIdForConnector} from './lib/core/connectors.js';
-import {availableProviders} from './lib/providers/registry.js';
+import {availableProviders, availableDemoProviders} from './lib/providers/registry.js';
 import {AlertService} from './lib/services/alertService.js';
 import {AlertStore} from './lib/services/alertStore.js';
 import {CacheStore} from './lib/services/cacheStore.js';
@@ -132,18 +132,17 @@ export default class GnomeAiQuotaExtension extends Extension {
         const store = createConnectorStore(this._settings, {demo: source === 'demo'});
         let connectors;
         try { connectors = store.list(); this._connectorRegistryProblem = false; } catch (_error) { connectors = []; this._connectorRegistryProblem = true; console.warn('gnome-ai-quota: connector registry unavailable; open Preferences to recover it'); } finally { store.dispose(); }
-        const templates = createProviders({source, scenario: this._settings.get_string('demo-scenario')});
         const untracked = this._settings.get_strv('untracked-providers');
         const connected = this._settings.get_strv('demo-connected-connectors');
         const providers = source === 'demo' ? [...connectors.filter(c => connected.includes(c.id) && !untracked.includes(c.id)).map(connector => {
             const template = createProviders({source, scenario: this._settings.get_string('demo-scenario')}).find(p => p.id === connector.providerId);
             return {...template, id: connector.id};
-        }), ...templates.filter(p => p.id === 'example-credits')] : [];
+        })] : [];
         // Demo and real data must never share a cache: they use the same ids.
         const cacheDirectory = GLib.build_filenamev([GLib.get_user_cache_dir(), 'gnome-ai-quota', ...(source === 'demo' ? ['demo', this._settings.get_string('demo-scenario')] : [])]);
         const gate = source === 'live' ? this._disconnectGate : null;
         this._controllerEpoch = null;
-        this._controller = new QuotaController({providers, cache: new CacheStore(cacheDirectory, {gate}), order: availableProviders().flatMap(meta => connectors.filter(c => c.providerId === meta.id).map(c => c.id))});
+        this._controller = new QuotaController({providers, cache: new CacheStore(cacheDirectory, {gate}), order: (source === 'demo' ? availableDemoProviders() : availableProviders()).flatMap(meta => connectors.filter(c => c.providerId === meta.id).map(c => c.id))});
         this._controller.registryProblem = this._connectorRegistryProblem;
         if (source === 'demo')
             this._controller.markSynced();

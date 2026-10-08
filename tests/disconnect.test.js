@@ -31,13 +31,111 @@ function fixture() {
         read: async () => state ? JSON.parse(JSON.stringify(state)) : null,
         watch: fn => { listeners.add(fn); return () => listeners.delete(fn); },
     };
-    const make = (id, boot = 'boot-a') => createDisconnectGate({store, identity: {id, boot},
+    const make = (id, boot = 'boot-a', providers = ['codex', 'command-code']) => createDisconnectGate({store, identity: {id, boot},
         alive: async identity => live.has(identity.id), uuid: () => `id-${++n}`, sleep: delay, now: Date.now, drainMs: 40,
-        providers: ['codex', 'command-code'], kinds: ['api-key', 'oauth-token']});
-    return {make, live, state: () => state};
+        providers, kinds: ['api-key', 'oauth-token']});
+    return {make, live, store, state: () => state};
 }
 const deletion = (extra = {}) => ({removeCredential: async () => true, removeFile: async () => true, clearStatus: async () => {}, ...extra});
 async function failure(fn) { try { await fn(); } catch (error) { return error.code; } return null; }
+
+const expandedProviders = ['codex', 'command-code', 'claude'];
+test('disconnect: completed durable transaction admits expanded registry without changing its fence', async () => {
+    const f = fixture(), old = f.make('one'); await old.disconnect(deletion()); await old.close();
+    const epoch = f.state().epoch, transactionId = f.state().transaction.id;
+    const upgraded = f.make('two', 'boot-a', expandedProviders); await upgraded.ready();
+    const ticket = await upgraded.capture('claude');
+    assertEqual(ticket.epoch, epoch); assertEqual(f.state().transaction.id, transactionId);
+    assertEqual(f.state().transaction.credentials.claude, {'api-key': 'absent', 'oauth-token': 'absent'});
+    let stored = false; await upgraded.withCredentialWrite('claude', ticket, async () => { stored = true; });
+    assertTrue(stored); await upgraded.close();
+});
+
+for (const phase of ['failed', 'draining', 'deleting']) {
+    test(`disconnect: expanded registry preserves unfinished global ${phase} deletion and blocks added providers`, async () => {
+        const f = fixture(), old = f.make('one');
+        await old.disconnect(deletion({removeCredential: async () => false})); await old.close();
+        await f.store.transact(state => { state.transaction.phase = phase; return {state}; });
+        const epoch = f.state().epoch, transactionId = f.state().transaction.id;
+        const upgraded = f.make('two', 'boot-a', expandedProviders); await upgraded.ready();
+        assertEqual(f.state().epoch, epoch); assertEqual(f.state().transaction.id, transactionId);
+        assertEqual(f.state().blockedProviders, expandedProviders);
+        assertEqual(f.state().transaction.credentials.claude, {'api-key': 'pending', 'oauth-token': 'pending'});
+        assertEqual(await failure(() => upgraded.capture('claude')), 'blocked');
+        // An interrupted coordinator must be dead before a new client can retry.
+        f.live.delete('one'); const removed = [];
+        assertEqual((await upgraded.disconnect(deletion({removeCredential: async (id, kind) => { removed.push([id, kind]); return true; }}))).phase, 'complete');
+        assertTrue(removed.some(([id, kind]) => id === 'claude' && kind === 'api-key'));
+        assertTrue(removed.some(([id, kind]) => id === 'claude' && kind === 'oauth-token'));
+        await upgraded.close();
+    });
+}
+
+test('disconnect: expanded registry keeps a failed target scope and only its original provider blocked', async () => {
+    const f = fixture(), old = f.make('one');
+    const target = {id: 'codex--12345678-1234-4234-8234-123456789abc', provider: 'codex', kind: 'oauth-token'};
+    await old.disconnect(deletion({removeCredential: async () => false}), {target}); await old.close();
+    const upgraded = f.make('two', 'boot-a', expandedProviders); await upgraded.ready();
+    assertEqual(f.state().transaction.target, target); assertEqual(f.state().blockedProviders, ['codex']);
+    assertEqual(f.state().transaction.credentials.claude, {'api-key': 'preserved', 'oauth-token': 'preserved'});
+    await upgraded.capture('claude'); assertEqual(await failure(() => upgraded.capture('codex')), 'blocked');
+    const removed = []; await upgraded.disconnect(deletion({removeCredential: async (id, kind) => { removed.push([id, kind]); return true; }}), {target});
+    assertEqual(removed, [[target.id, target.kind]]); await upgraded.close();
+});
+
+test('disconnect: expansion preserves an issued lease and stale ticket fence', async () => {
+    const f = fixture(), old = f.make('one'); await old.ready();
+    const ticket = await old.capture('codex'), hold = deferred(), entered = deferred();
+    const writing = old.withCredentialWrite('codex', ticket, async () => { entered.resolve(); await hold.promise; });
+    await entered.promise; f.live.delete('one');
+    const remover = f.make('two'); await remover.disconnect(deletion()); await remover.close();
+    const leases = JSON.stringify(f.state().leases), epoch = f.state().epoch;
+    const upgraded = f.make('two', 'boot-a', expandedProviders); await upgraded.ready();
+    assertEqual(JSON.stringify(f.state().leases), leases); assertEqual(f.state().epoch, epoch);
+    assertEqual(await failure(() => upgraded.assertCurrent(ticket)), 'stale');
+    const result = await upgraded.disconnect(deletion()); assertEqual(result.problem, 'orphaned-write');
+    assertEqual(JSON.stringify(f.state().leases), leases);
+    // Simulate only the accepted backend operation settling; the old reader fails
+    // closed on a newer matrix rather than rewriting it with fewer providers.
+    hold.resolve(); await failure(() => writing); await upgraded.close();
+});
+
+for (const corruption of ['unknown-provider', 'unknown-kind', 'missing-kind', 'empty-matrix']) {
+    test(`disconnect: expanded registry rejects ${corruption} without persisting normalization`, async () => {
+        const f = fixture(), old = f.make('one'); await old.disconnect(deletion()); await old.close();
+        await f.store.transact(state => {
+            const credentials = state.transaction.credentials;
+            if (corruption === 'unknown-provider') credentials.unknown = {...credentials.codex};
+            if (corruption === 'unknown-kind') credentials.codex.unknown = 'absent';
+            if (corruption === 'missing-kind') delete credentials.codex['api-key'];
+            if (corruption === 'empty-matrix') state.transaction.credentials = {};
+            return {state};
+        });
+        const before = JSON.stringify(f.state());
+        const upgraded = f.make('two', 'boot-a', expandedProviders);
+        assertEqual(await failure(() => upgraded.ready()), 'invalid-state');
+        assertEqual(JSON.stringify(f.state()), before); assertTrue(upgraded.isBlocked('claude'));
+    });
+}
+
+test('disconnect: status clearing receives current durable deletion results', async () => {
+    const f = fixture(), gate = f.make('one'); let seen = null;
+    const result = await gate.disconnect(deletion({removeCredential: async id => id !== 'codex',
+        clearStatus: async transaction => { seen = transaction; if (transaction.credentials.codex['api-key'] === 'failed') throw new Error('retain metadata'); }}));
+    assertEqual(seen?.credentials.codex['api-key'], 'failed'); assertEqual(seen?.files.snapshots, 'absent');
+    assertEqual(result.status, 'failed'); assertEqual(result.phase, 'failed');
+    await gate.close();
+});
+
+test('disconnect: explicit metadata refusal retains every provider fence', async () => {
+    const f = fixture(), gate = f.make('one');
+    const result = await gate.disconnect(deletion({clearStatus: async () => false}));
+    assertEqual(result.status, 'failed'); assertEqual(result.phase, 'failed');
+    assertEqual(await failure(() => gate.capture('codex')), 'blocked');
+    assertEqual(await failure(() => gate.capture('command-code')), 'blocked');
+    assertEqual((await gate.disconnect(deletion())).phase, 'complete');
+    await gate.capture('codex'); await gate.close();
+});
 
 test('disconnect: completion rejects old login tickets and permits explicit new ones', async () => {
     const f = fixture(), gate = f.make('one'); await gate.ready();

@@ -343,7 +343,7 @@ test('scheduler: seeded snapshots are returned in registration order', () => {
 
 test('demo: the steady scenario always answers with metrics that match the fixtures', async () => {
     const providers = createDemoProviders('steady', () => 5_000_000);
-    assertEqual(providers.map(p => p.id), ['command-code', 'codex', 'claude', 'antigravity', 'example-credits']);
+    assertEqual(providers.map(p => p.id), ['command-code', 'codex', 'claude', 'antigravity', 'example-credits', 'openai-api', 'anthropic-api', 'cursor', 'openrouter']);
     const claude = providers.find(p => p.id === 'claude');
     const result = await claude.fetch();
     assertEqual(result.metrics.map(m => m.percentUsed), [61, 97]);
@@ -380,7 +380,7 @@ test('demo: the drift scenario climbs toward the limit', async () => {
     await codex.fetch();
     const third = (await codex.fetch()).metrics[0].percentUsed;
     assertTrue(third > first, `${third} should be above ${first}`);
-    assertEqual(createDemoProviders('nonsense').length, 5, 'an unknown scenario falls back to steady');
+    assertEqual(createDemoProviders('nonsense').length, 9, 'an unknown scenario falls back to steady');
 });
 
 // ------------------------------------------- review fixes (M1, part 1)
@@ -598,4 +598,36 @@ test('contract: text from a provider is bounded before it reaches the cache or a
     assertTrue(snapshot.error.length <= 200);
     assertTrue(snapshot.metrics[0].id.length <= 64 && snapshot.metrics[0].pool.name.length <= 64 && snapshot.metrics[0].pool.short.length <= 8);
     assertTrue(snapshot.metrics[1].currency.length <= 8);
+});
+
+
+test('demo: API fixtures distinguish spending and key allowance', async () => {
+    const now = Date.UTC(2026, 9, 8, 12);
+    const providers = createDemoProviders('steady', () => now);
+    const get = id => providers.find(provider => provider.id === id).fetch();
+    const openai = (await get('openai-api')).metrics[0];
+    assertEqual([openai.kind, openai.amount, openai.limit, openai.window, openai.resetsAt], ['spend', 24.8, 100, 'month', Date.UTC(2026, 10, 1)]);
+    for (const id of ['anthropic-api', 'cursor']) {
+        const metric = (await get(id)).metrics[0];
+        assertEqual(metric.kind, 'spend');
+        assertTrue(metric.amount > 0);
+        assertTrue(!Object.hasOwn(metric, 'limit') && !Object.hasOwn(metric, 'balance'));
+    }
+    const allowance = (await get('openrouter')).metrics[0];
+    assertEqual([allowance.kind, allowance.basis, allowance.window, allowance.resetsAt], ['money', 'allowance', 'day', Date.UTC(2026, 9, 9)]);
+});
+
+test('demo: drift increases spending and decreases allowance without inventing percentages', async () => {
+    const providers = createDemoProviders('drift');
+    for (const id of ['openai-api', 'anthropic-api', 'cursor']) {
+        const provider = providers.find(entry => entry.id === id);
+        const first = (await provider.fetch()).metrics[0];
+        const next = (await provider.fetch()).metrics[0];
+        assertTrue(next.amount > first.amount);
+        assertTrue(!Object.hasOwn(next, 'percentUsed'));
+    }
+    const provider = providers.find(entry => entry.id === 'openrouter');
+    const first = (await provider.fetch()).metrics[0];
+    const next = (await provider.fetch()).metrics[0];
+    assertTrue(next.balance < first.balance);
 });

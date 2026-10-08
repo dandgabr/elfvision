@@ -2,6 +2,7 @@
 import System from 'system';
 import {runAll} from './harness.js';
 import './core.test.js';
+import './apiUsage.test.js';
 import './alerts.test.js';
 import './alertText.test.js';
 import './alertService.test.js';

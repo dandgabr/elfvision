@@ -34,12 +34,12 @@ test('disconnect presentation: a scoped delete never claims all accounts or cach
     const target = {id: 'codex--second', provider: 'codex', kind: 'oauth-token'};
     const completed = DisconnectDialog.disconnectPresentation({transaction: {phase: 'complete', target, files: {snapshots: 'preserved', alerts: 'preserved'}}}, _);
     assertTrue(completed.subtitle.includes('Other accounts and cached data were kept.'));
-    assertEqual(completed.label, 'Disconnect all');
+    assertEqual(completed.label, 'Delete all connectors');
     const failed = DisconnectDialog.disconnectPresentation({transaction: {phase: 'failed', target, problem: 'deletion-incomplete', files: {snapshots: 'preserved', alerts: 'preserved'}}}, _);
     assertTrue(failed.subtitle.includes('connector’s settings'), 'an exact deletion retries in its connector editor');
-    assertEqual(failed.label, 'Disconnect all', 'the all-accounts action must not masquerade as exact retry');
+    assertEqual(failed.label, 'Delete all connectors', 'the all-accounts action must not masquerade as exact retry');
     const all = DisconnectDialog.disconnectPresentation({transaction: {phase: 'complete', files: {snapshots: 'absent', alerts: 'absent'}}}, _);
-    assertTrue(all.subtitle.includes('Local credentials and cached data removed.'));
+    assertTrue(all.subtitle.includes('Live connectors, local credentials and cached data removed.'));
 });
 
 for (const type of ['api-key', 'oauth']) {
@@ -172,7 +172,7 @@ function fakeSettings(initial = {}) {
     return {
         values,
         get_strv: key => [...(values[key] ?? [])],
-        set_strv: (key, list) => { values[key] = [...list]; },
+        set_strv: (key, list) => { values[key] = [...list]; return true; },
         get_value: key => ({deepUnpack: () => values[key]}),
     };
 }
