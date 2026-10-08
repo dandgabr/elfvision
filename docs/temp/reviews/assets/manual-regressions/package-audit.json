@@ -1,0 +1,18 @@
+{
+  "result": "PACKAGE_AUDIT_GREEN",
+  "zipFiles": 135,
+  "byteMatchedRuntimeAndLicenses": 132,
+  "byteMatchedAllFiles": 135,
+  "mainLicense": "AGPL-3.0",
+  "fontLicenses": [
+    "licenses/fonts/inter-OFL.txt",
+    "licenses/fonts/jetbrainsmono-OFL.txt",
+    "licenses/fonts/poppins-OFL.txt"
+  ],
+  "uuid": "gnome-ai-quota@dandgabr.github.io",
+  "versionName": "0.1",
+  "shellVersions": [
+    "50"
+  ],
+  "sha256": "f4b1fd3147fb7ac6bf3883e0685bfe90d61a798d810491c2589a32ac33d1842e"
+}

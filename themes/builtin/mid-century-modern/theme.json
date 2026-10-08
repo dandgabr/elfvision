@@ -84,11 +84,14 @@
     "texture": "grain",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   }
 }

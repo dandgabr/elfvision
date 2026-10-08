@@ -225,7 +225,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
 
         const effects = choiceRow(settings, 'effects-mode', [
             ['off', _('Off')], ['subtle', _('Subtle')], ['full', _('Full')],
-        ], _('Effects'), _('Subtle adds short transitions and static decoration. Full adds background motion where the theme supports it. System animation preferences take priority.'), handlerIds);
+        ], _('Effects'), _('Off stops motion and decoration; material and transparency remain available. Subtle adds short transitions and static decoration. Full adds background motion where the theme supports it. System animation preferences take priority.'), handlerIds);
         look.add(effects);
         const transparency = new Adw.SwitchRow({
             title: _('Transparency'),
@@ -321,7 +321,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         window.add(page);
         window.add(notificationsPage);
         const considerSetup = () => {
-            if (closed || assistant)
+            if (closed || assistant || accounts.registryUnavailable?.())
                 return;
             const policy = firstUsePolicy({done: settings.get_boolean('first-use-done'),
                 source: settings.get_string('data-source'), target: initialTarget || settings.get_string('prefs-target'),

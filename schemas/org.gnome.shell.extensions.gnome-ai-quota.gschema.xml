@@ -13,6 +13,9 @@
 
   <schema id="org.gnome.shell.extensions.gnome-ai-quota"
           path="/org/gnome/shell/extensions/gnome-ai-quota/">
+    <key name="connectors" type="s"><default>''</default><summary>Saved connector registry</summary><description>Versioned nonsecret connector metadata. Empty defaults preserve legacy credentials; an initialized empty collection stays empty.</description></key>
+    <key name="demo-connectors" type="s"><default>''</default><summary>Fictional connector registry</summary><description>Separate synthetic connector metadata; never selects real credentials.</description></key>
+    <key name="demo-connected-connectors" type="as"><default>['command-code', 'codex', 'claude', 'antigravity']</default><summary>Connected fictional accounts</summary><description>Connector identifiers with simulated authentication, separate from real accounts.</description></key>
     <key name="position" enum="org.gnome.shell.extensions.gnome-ai-quota.Position">
       <default>'right'</default>
       <summary>Panel position</summary>
@@ -63,7 +66,7 @@
       </choices>
       <default>'theme'</default>
       <summary>Material</summary>
-      <description>Follow the theme, or select translucent, decorative glass or frosted glass backgrounds only in themes declaring that material compatible. Transparency off takes priority.</description>
+      <description>Follow the theme, or select translucent, decorative glass or frosted glass backgrounds in themes declaring that material compatible. Transparency off takes priority; disabling animated effects keeps supported material selections available.</description>
     </key>
     <key name="transparency-enabled" type="b">
       <default>true</default>

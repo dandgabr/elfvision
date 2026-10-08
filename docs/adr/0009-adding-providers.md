@@ -14,7 +14,8 @@ once, here, after a review by UI, UX, frontend and security consultants.
 
 ### Module shape and registry
 
-- `lib/providers/registry.js` is pure JavaScript (no `gi://`) and lists every
+- `lib/core/providerRegistry.js` is pure JavaScript (no `gi://`), re-exported by
+  `lib/providers/registry.js`, and lists every
   provider in its fixed display order: Command Code, Codex, Claude, Antigravity.
   Each entry has `id`, `name`, `auth` (`api-key` or `oauth-pkce`), the allowed hosts for
   the API, whether it is `available`, a terms notice and, for OAuth, a pure spec (authorize and token URLs, scopes, extra parameters,
@@ -43,17 +44,20 @@ once, here, after a review by UI, UX, frontend and security consultants.
 
 ### Tokens and the refresh race
 
-- One secret per provider in the keyring, `provider` and `kind=oauth-token` attributes,
+- One secret per connector in the keyring. Legacy default IDs use the original
+  schema with `provider` and `kind=oauth-token` attributes; additional connectors
+  use a separate schema with `provider`, `connector`, and `kind=oauth-token`.
   JSON `{v, gen, access, refresh, expiresAt, scope}`, at most 12 KiB. The `id_token` and any
   identity claim are never stored.
-- Only the shell refreshes, one refresh at a time per provider. It reads the secret,
+- Only the shell refreshes, one refresh at a time per connector. It reads the secret,
   remembers the refresh token it used, calls the token endpoint, reads the secret
   again and writes only if the refresh token and `gen` are unchanged and the provider
   is still connected; otherwise it drops the result (the user signed in again or
   disconnected meanwhile). If the write fails the new pair stays in memory and is
-  retried; without a successful write the provider needs reconnecting. The keyring
-  has no compare-and-swap, so a window of milliseconds remains, and its worst case is
-  one more click on Connect.
+  retried; without a successful write the connector needs reconnecting. The keyring
+  has no native compare-and-swap; the durable provider lease serializes credential
+  mutation, and replacement checks the exact connector generation and refresh
+  token inside that lease.
 - A usage endpoint that refuses even a freshly renewed token (a 401 twice) is not asked to renew
   again at every poll for half an hour: renewing spends a refresh token, and some providers
   rotate them.
@@ -122,49 +126,65 @@ every value of the local file; the gitleaks hook gets rules for the known format
 and a list of SHA-256 hashes of the known public ids lets a test flag one without the
 id being in the repository.
 
-### Accounts page
+### Connector identity and Accounts
 
-- One page, a group per provider in the fixed order, no sub-page. Every group has the
-  same skeleton: a status row (provider icon, name and plan, the status chip, last
-  check), a credential row (key field, or the Connect, Cancel and Disconnect buttons)
-  and a "Track in the bar" switch. Command Code keeps its username field and key link.
-- States, each with an icon and text, never color alone: not connected, connecting
-  (spinner, countdown, Cancel, Copy link), connected, sign-in expired (Reconnect),
-  refused or rejected, keyring unavailable (a banner for the whole page).
-- Only the plan is shown for a connected account, and for now only in the popup card. The
-  "connecting" state lives in the preferences process, so the popup cannot show it. An email, even masked, is not read
-  from the token, stored or shown.
-- Terms notice: a permanent line in the group description for the three OAuth
-  providers, and a confirmation dialog before the first sign-in of each one (Cancel is
-  the default; the acknowledgement is stored per provider).
-- Two actions per account: **Stop tracking** (pauses collection, hides the provider,
-  keeps the credential, reversible, no confirmation) and **Disconnect** or **Remove
-  key** (deletes the credential, with a confirmation). The separate "Remove connector"
-  of ADR 0002 is the same as Disconnect and is dropped.
+The original M3 singleton layout was replaced on 2026-10-08 by the
+[accepted connector design](../temp/specs/2026-10-08-connectors-design.md).
+Accounts lists connectors grouped by provider and provides **Add connector…**.
+The user selects a provider and local label, then configures the new connector in
+an editor. Creation does not start authentication. Several connectors can use
+the same provider; each has independent credentials, tracking, status, and quotas.
+
+- The nonsecret versioned registry holds `{id, providerId, label, username}`,
+  bounded to 32 connectors and 16 KiB. Existing singleton IDs remain provider IDs;
+  new IDs use `providerId--UUID`. Labels and usernames are bounded and validated;
+  rename keeps the immutable ID. An initialized empty list stays empty.
+- Controllers are keyed by connector ID. Setup reuses an existing connector for
+  a selected provider or creates one when needed. Public OAuth configuration and
+  terms acknowledgements remain provider-scoped. Consent is explicit.
+- The editor supports rename, tracking, API-key or OAuth connection, a visible
+  **Check configuration again** action, and **Remove connector…**. Removal confirms
+  the local account label, deletes only its credential and quota/alert state, then
+  removes metadata after success. Failures keep the row available for retry;
+  siblings remain. Local deletion does not promise remote logout.
+- An invalid registry fails closed. **Recover list…** asks before reconstructing
+  metadata from extension credential identities without loading or deleting secret
+  values. Labels and usernames may need to be entered again.
+- Demo has a separate registry and simulated connect/disconnect/remove controller,
+  with explicit fictional-account text. It uses no browser, keyring, provider
+  configuration, or network authentication. Live credentials remain separate.
+- Disconnect-all clears both extension credential namespaces, including orphan
+  connector items missing from the registry, before reporting absence. Metadata,
+  client configuration, consent, themes, and fonts remain saved.
 
 ### Bar and popup
 
-- (Confirmed by the owner.) A provider that was never connected is not on the bar or in the popup. With nothing
-  connected the bar shows the extension icon and the popup an empty state with an
-  Add account button; with providers, a quiet "Add account" line ends the list until
-  all are connected.
-- A card in a credential state offers a button named for the state (Connect,
-  Reconnect, Replace key) that opens the Accounts page on that provider, through a
-  `prefs-target` setting written before the window opens. The popup never starts a
-  sign-in.
-- Credential states in the popup: not connected, connecting, sign-in expired,
-  refused or rejected, keyring locked.
+Each connected connector has its own card, trusted provider name, and sanitized
+local label. Quotas and balances are never aggregated across accounts. Order is
+provider registry order followed by connector order. The bar still has at most
+five items; two accounts using the same provider take two slots. Paused connectors
+remain in Not tracked with an exact Resume action.
+
+Add account opens Add connector even when every provider already has an account.
+Credential actions write the exact connector ID to `prefs-target` before opening
+Preferences; `add` routes to connector creation. The popup never starts sign-in.
+Notifications and tooltips keep fixed trusted provider names without local labels;
+alert state and notification actions retain the exact connector identity.
 
 ### Shell side
 
-- The controller keeps its providers in a map and can add and remove them while
-  running; the extension decides the set from the registry, the stored credentials
-  and an `untracked-providers` setting, and reacts to `credentials-revision` and to
-  a `credentials-touched` setting that names the provider that changed.
-- The nested and headless shells use a throwaway keyring (and never talk to the real
-  keyring daemon), so a sign-in made there is lost with the window.
-- Until the extension has asked the keyring which accounts are connected, an empty list
-  means "not known yet": the empty state is not shown, and the cache keeps the values it had.
+The controller map, scheduler, cache, account status, and revision targets use
+connector IDs. Provider factories and endpoint/configuration lookup use provider
+IDs. Runtime adapters set the connector ID on success and error snapshots.
+`untracked-providers` retains its schema name but contains connector IDs.
+Credential mutations serialize under the existing provider-wide gate while
+addressing only the selected connector. Conditional renewal checks that exact
+connector's generation and refresh token.
+
+Until credential discovery completes, an empty live list means unknown rather
+than disconnected. Demo constructs fictional runtime providers only for simulated
+connected connectors. The nested and headless helpers use private keyrings and
+settings; authentication there does not modify the user's normal session.
 
 ## Providers added so far
 

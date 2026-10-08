@@ -16,6 +16,8 @@ import './localConfig.test.js';
 import './controller.test.js';
 import './services.test.js';
 import './accounts.test.js';
+import './connectors.test.js';
+import './indicatorConnectors.test.js';
 import './firstUse.test.js';
 import './layout.test.js';
 import './barView.test.js';

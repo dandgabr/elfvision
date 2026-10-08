@@ -29,7 +29,9 @@ be re-checked against the providers' current terms before each provider ships:
   identifies the extension as that application; this is accepted for personal use
   and documented here.
 - **Secrets are stored in libsecret** (`gi://Secret`) under a dedicated schema with
-  the attributes `provider` and `kind` (`api-key` or `oauth-token`). Nothing goes into
+  the attributes `provider` and `kind` (`api-key` or `oauth-token`) for legacy
+  default connectors. Additional connectors use a separate schema with exact
+  `provider`, `connector`, and `kind` attributes (ADR 0009). Secret values never go into
   GSettings, files or logs. The shell never asks the user to unlock the keyring: a locked or
   missing one is a failure with the reason `keyring`, reported as a network-type state so that
   polling resumes by itself once the keyring is unlocked. There is no plaintext fallback.
@@ -41,7 +43,7 @@ be re-checked against the providers' current terms before each provider ships:
   `S256` method through `GLib.Checksum`, and a validated random `state`. The redirect
   port is whatever the borrowed client id allows. A provider that offers device flow
   uses it instead.
-- **Refresh** is single-flight per provider. The new refresh token is stored before
+- **Refresh** is single-flight per connector. The new refresh token is stored before
   it is used, because tokens rotate. Terminal credential refusals become
   `auth_required`; transient network failures use bounded backoff.
 - **Network.** Requests use HTTPS only, with a host allowlist per module, no cross-host redirects, timeouts

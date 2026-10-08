@@ -25,6 +25,13 @@ The language is the one of the GNOME Shell session. The extension uses the shell
 English msgids. There is no language setting, no language step in the assistant and no process-wide
 `setlocale` or `LANGUAGE` change (that would translate the shell itself). Catalogs: English (the msgids) and pt-BR.
 
+### Connector identity
+
+Alert state and deduplication use connector IDs, including separate accounts from
+one provider. Existing field names such as `providerId` carry that runtime identity.
+Notification text and tooltips resolve a fixed trusted provider name and omit local
+connector labels. Notification actions target the exact connector.
+
 ### Where alerts are raised
 
 - `lib/core/alerts.js` is a pure reducer, with no `gi://` imports:
@@ -120,19 +127,21 @@ English msgids. There is no language setting, no language step in the assistant 
 - **Not tracked:** a collapsed section under the hidden list, "Not tracked (N)"; each row is the
   muted icon, the name and a Resume button, with no meter (resume writes the `untracked-providers`
   setting, which the extension already follows). The "Add account" line stays separate and quiet below
-  it: it means "never connected", which is not the same as paused. The section opens by itself when
+  it and always offers another connector, including one for an existing provider. The section opens by itself when
   nothing else is on the popup, until the user opens or closes it by hand.
 - **About:** `Adw.AboutDialog` with `version-name` from `metadata.json`, the AGPL-3.0 license, and constant
   `https://` links and its own application icon in `icons/hicolor`. No paths or user name.
-- **Restore defaults:** every schema key is classified as reset or kept, and a test fails for an
-  unclassified key. It resets appearance, bar, popup, notification and threshold settings, the theme
-  and keeps the selected data source, accounts, tracking state, terms acknowledgements,
-  `account-status`, the credentials revision, the demo scenario and the messages between the two
-  processes. Preserving the data source also keeps a demo session from appearing disconnected after
-  the reset switches to an empty live keyring. The dialog says "your accounts are
-  not changed" (not "stay connected": a rejected account stays rejected) and names what changes;
-  Cancel is the default. The reset is one batch (`delay` and `apply`), so the shell reacts once, and a
-  toast confirms it. It does not start the assistant again.
+- **Restore defaults:** resets appearance, bar, popup, notification and threshold
+  settings, theme, tracking, and setup dismissal in one dedicated GSettings batch.
+  Every connector is tracked again (`untracked-providers` becomes empty) and
+  `first-use-done` becomes false. The connector lists, credentials, terms, account
+  status/revision coordination, selected data source, demo scenario, public client
+  configuration, custom themes, and fonts remain saved. General and Accounts offer
+  the same confirmed action, with Cancel as the default. Demo stays Demo. This
+  replaces the original M4 choice to preserve tracking and setup dismissal; the
+  owner requested the broader settings reset on 2026-10-08. The confirmation
+  distinguishes settings reset from credential deletion.
+
 - **Notifications page:** the master switch (it also silences the connection alert), a test button
   (the preferences window raises the `test-notification` number and the shell shows one notification;
   the assistant never sends one on its own), and for each kind of quota a switch and a threshold
@@ -145,7 +154,7 @@ English msgids. There is no language setting, no language step in the assistant 
     unset, no account known, `prefs-target` empty and the live data source on. Skip, Finish, and closing
     the window all set `first-use-done`: nagging is worse than missing the assistant. An existing user
     with an account has the flag set silently. "Set up again" in the About group reopens it without
-    touching the flag; Restore defaults leaves the flag alone (it is in `KEPT_KEYS`). The popup's empty
+    touching the flag; Restore defaults clears the flag (it is in `RESET_KEYS`). The popup's empty
     state opens Preferences without a target while the flag is unset, so the assistant is what appears.
     The extension never opens Preferences by itself, and no notification announces the assistant.
   - *Steps.* Welcome (what it does, that nothing changes until a button is pressed, that keys stay in
@@ -159,7 +168,8 @@ English msgids. There is no language setting, no language step in the assistant 
   - *Connect.* One scrollable page with a group per chosen provider, so a failure blocks nothing. It
     reuses the sign-in code of the Accounts page, split into a controller (state, terms, sign-in,
     cancel, paste) and two thin views, so there is one sign-in implementation and one security review.
-    One sign-in runs at a time. Moving away, Skip, or closing cancels it (the port closes and the PKCE
+    Connector-keyed controllers are shared with Accounts; an existing connector for
+    the provider is reused, or one is created when needed. One sign-in runs at a time. Moving away, Skip, or closing cancels it (the port closes and the PKCE
     verifier goes with the closure). The terms dialog is the existing one, per provider, with Cancel as
     the default and the stronger text for Antigravity; the assistant never pre-acknowledges, batches or
     writes `terms-acknowledged` itself.

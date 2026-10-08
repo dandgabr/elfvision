@@ -376,6 +376,18 @@ def build_theme(slug, tokens, meta):
     schemes = {native: scheme_native, other: scheme_derived}
     adjusted = {native: fixed_native, other: fixed_derived}
 
+    if slug == 'cyberpunk':
+        # A daylight instrument panel needs graphite framing, rather than the
+        # generic near-white inversion of a neon-on-black gallery palette.
+        schemes['light'].update({
+            'bg': '#e8eef6', 'surface': '#f9fbff', 'surface-2': '#dae5f2',
+            'fg': '#142033', 'muted': '#415570', 'border': '#63738f',
+            'accent': '#006f91', 'accent-fg': '#ffffff', 'ok': '#14623f',
+            'warn': '#7b5400', 'danger': '#a02e55', 'error': '#8b3f61',
+            'shadow': '3px 3px 0 rgba(20,32,51,.18)',
+        })
+        adjusted['light'] = refine(schemes['light']) + fix_contrast(schemes['light'])
+
     def audit(scheme):
         s = parse(scheme['surface'])
         return {

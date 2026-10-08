@@ -33,9 +33,7 @@ msgstr "Notificação de teste"
 msgid ""
 "If you can read this, notifications work. With Do Not Disturb on, the banner "
 "is held and this waits in the list."
-msgstr ""
-"Se você está lendo isto, as notificações funcionam. Com o Não Perturbe "
-"ligado, o banner fica retido e esta espera na lista."
+msgstr "Se você está lendo isto, as notificações funcionam. Com o Não Perturbe ligado, o banner fica retido e esta espera na lista."
 
 #: lib/core/alertText.js:32
 msgid "A provider"
@@ -46,12 +44,10 @@ msgid "Quota alert"
 msgstr "Alerta de cota"
 
 #: lib/core/alertText.js:54
-#, javascript-format
 msgid "Critical: %s at %s%%"
 msgstr "Crítico: %s em %s%%"
 
 #: lib/core/alertText.js:54
-#, javascript-format
 msgid "Warning: %s at %s%%"
 msgstr "Atenção: %s em %s%%"
 
@@ -60,22 +56,18 @@ msgid "Credits"
 msgstr "Créditos"
 
 #: lib/core/alertText.js:59
-#, javascript-format
 msgid "%s: %s%% of the budget used."
 msgstr "%s: %s%% do orçamento usado."
 
 #: lib/core/alertText.js:60
-#, javascript-format
 msgid "%s: %s%% used."
 msgstr "%s: %s%% da cota usada."
 
 #: lib/core/alertText.js:63
-#, javascript-format
 msgid "Resets in %s."
 msgstr "Reinicia em %s."
 
 #: lib/core/alertText.js:72
-#, javascript-format
 msgid "%s: reconnect the account"
 msgstr "%s: reconecte a conta"
 
@@ -84,7 +76,6 @@ msgid "The sign-in expired or was refused. Reconnect it in Preferences."
 msgstr "O login expirou ou foi recusado. Reconecte em Preferências."
 
 #: lib/core/alertText.js:77
-#, javascript-format
 msgid "%s: no recent data"
 msgstr "%s: sem dados recentes"
 
@@ -92,9 +83,7 @@ msgstr "%s: sem dados recentes"
 msgid ""
 "The last successful check was a while ago. The service may be down, or your "
 "connection."
-msgstr ""
-"A última consulta bem-sucedida foi há algum tempo. Verifique sua conexão ou "
-"o serviço."
+msgstr "A última consulta bem-sucedida foi há algum tempo. Verifique sua conexão ou o serviço."
 
 #: lib/core/viewmodel.js:57
 msgid "5 hours"
@@ -119,67 +108,54 @@ msgid "M"
 msgstr "M"
 
 #: lib/core/viewmodel.js:115
-#, javascript-format
 msgid "%s: no API key"
 msgstr "%s: sem chave de API"
 
 #: lib/core/viewmodel.js:116
-#, javascript-format
 msgid "%s: key rejected"
 msgstr "%s: chave recusada"
 
 #: lib/core/viewmodel.js:117
-#, javascript-format
 msgid "%s: sign-in expired"
 msgstr "%s: login expirou"
 
 #: lib/core/viewmodel.js:118
-#, javascript-format
 msgid "%s: access refused"
 msgstr "%s: acesso recusado"
 
 #: lib/core/viewmodel.js:119
-#, javascript-format
 msgid "%s: setup needed"
 msgstr "%s: configuração necessária"
 
 #: lib/core/viewmodel.js:120
-#, javascript-format
 msgid "%s: not connected"
 msgstr "%s: não conectado"
 
 #: lib/core/viewmodel.js:122
-#, javascript-format
 msgid "%s: rate limited"
 msgstr "%s: limite de requisições"
 
 #: lib/core/viewmodel.js:124
-#, javascript-format
 msgid "%s: no connection"
 msgstr "%s: sem conexão"
 
 #: lib/core/viewmodel.js:126
-#, javascript-format
 msgid "%s: service problem"
 msgstr "%s: problema no serviço"
 
 #: lib/core/viewmodel.js:128
-#, javascript-format
 msgid "%s: data out of date"
 msgstr "%s: dados desatualizados"
 
 #: lib/core/viewmodel.js:130
-#, javascript-format
 msgid "%s: %s left"
 msgstr "%s: restam %s"
 
 #: lib/core/viewmodel.js:135
-#, javascript-format
 msgid "%s: %s%% of %s used (%s)"
 msgstr "%s: %s%% usado, %s (%s)"
 
 #: lib/core/viewmodel.js:137
-#, javascript-format
 msgid "%s: %s%% of %s used"
 msgstr "%s: %s%% usado, %s"
 
@@ -192,7 +168,6 @@ msgid "warning"
 msgstr "atenção"
 
 #: lib/core/viewmodel.js:151
-#, javascript-format
 msgid "%s · %s · %s%% used"
 msgstr "%s · %s · %s%% usado"
 
@@ -225,7 +200,7 @@ msgid "Setup needed"
 msgstr "Configuração necessária"
 
 #: lib/core/viewmodel.js:182 lib/core/viewmodel.js:510
-#: lib/prefs/firstUse.js:210
+#: lib/prefs/firstUse.js:213
 msgid "Not connected"
 msgstr "Não conectado"
 
@@ -250,7 +225,6 @@ msgid "Service changed"
 msgstr "Serviço alterado"
 
 #: lib/core/viewmodel.js:197
-#, javascript-format
 msgid "%s ago"
 msgstr "há %s"
 
@@ -265,31 +239,22 @@ msgstr "Ainda não há chave de API. Cole uma nas Preferências."
 #: lib/core/viewmodel.js:219
 msgid ""
 "The server rejected this key. Check it or paste a new one in Preferences."
-msgstr ""
-"O servidor recusou esta chave. Confira a chave ou cole outra nas "
-"Preferências."
+msgstr "O servidor recusou esta chave. Confira a chave ou cole outra nas Preferências."
 
 #: lib/core/viewmodel.js:220
-#, javascript-format
 msgid ""
 "Your %s sign-in expired or was revoked. Connect again to keep seeing this "
 "quota."
-msgstr ""
-"O login do %s expirou ou foi revogado. Conecte de novo para continuar vendo "
-"esta cota."
+msgstr "O login do %s expirou ou foi revogado. Conecte de novo para continuar vendo esta cota."
 
 #: lib/core/viewmodel.js:221
-#, javascript-format
 msgid "%s refused access. Check your account on its site."
 msgstr "O %s recusou o acesso. Veja sua conta no site dele."
 
 #: lib/core/viewmodel.js:222
-#, javascript-format
 msgid ""
 "%s is not set up yet. Open Preferences and follow the steps for this account."
-msgstr ""
-"O %s ainda não foi configurado. Abra as Preferências e siga os passos desta "
-"conta."
+msgstr "O %s ainda não foi configurado. Abra as Preferências e siga os passos desta conta."
 
 #: lib/core/viewmodel.js:223
 msgid "Open Preferences to connect this account."
@@ -316,7 +281,6 @@ msgid "Can't read the keyring. Unlock it, then try again."
 msgstr "Não foi possível ler o chaveiro. Desbloqueie-o e tente de novo."
 
 #: lib/core/viewmodel.js:242
-#, javascript-format
 msgid "Can't reach the service. Showing the last value, from %s ago."
 msgstr "Sem conexão com o serviço. Mostrando o último valor, obtido há %s."
 
@@ -325,7 +289,6 @@ msgid "Couldn't get the data yet."
 msgstr "Ainda não foi possível obter os dados."
 
 #: lib/core/viewmodel.js:248
-#, javascript-format
 msgid "Retrying in %s."
 msgstr "Nova tentativa em %s."
 
@@ -338,22 +301,18 @@ msgid "Balance"
 msgstr "Saldo"
 
 #: lib/core/viewmodel.js:268
-#, javascript-format
 msgid "%s left"
 msgstr "%s disponível"
 
 #: lib/core/viewmodel.js:287
-#, javascript-format
 msgid "%s%% used"
 msgstr "%s%% usado"
 
 #: lib/core/viewmodel.js:291
-#, javascript-format
 msgid "resets in %s"
 msgstr "reinicia em %s"
 
 #: lib/core/viewmodel.js:300
-#, javascript-format
 msgid "Expected by now: %s%%"
 msgstr "Esperado até agora: %s%%"
 
@@ -369,7 +328,7 @@ msgstr "Adicionar chave"
 msgid "Replace key"
 msgstr "Trocar chave"
 
-#: lib/core/viewmodel.js:346 lib/prefs/oauthGroup.js:78 lib/ui/notifier.js:68
+#: lib/core/viewmodel.js:346 lib/prefs/oauthGroup.js:79 lib/ui/notifier.js:69
 msgid "Reconnect"
 msgstr "Reconectar"
 
@@ -390,7 +349,6 @@ msgid "Budget spent"
 msgstr "Orçamento gasto"
 
 #: lib/core/viewmodel.js:373
-#, javascript-format
 msgid "of %s · %s%%"
 msgstr "de %s · %s%%"
 
@@ -399,7 +357,6 @@ msgid "No reset: prepaid balance"
 msgstr "Sem reinício: saldo pré-pago"
 
 #: lib/core/viewmodel.js:401
-#, javascript-format
 msgid "%s: %d point ahead of an even pace"
 msgid_plural "%s: %d points ahead of an even pace"
 msgstr[0] "%s: %d ponto acima do ritmo uniforme"
@@ -410,38 +367,32 @@ msgid "Data is out of date."
 msgstr "Dado desatualizado."
 
 #: lib/core/viewmodel.js:433
-#, javascript-format
 msgid "%d ok"
 msgstr "%d ok"
 
 #: lib/core/viewmodel.js:434
-#, javascript-format
 msgid "%d warning"
 msgid_plural "%d warnings"
 msgstr[0] "%d em atenção"
 msgstr[1] "%d em atenção"
 
 #: lib/core/viewmodel.js:435
-#, javascript-format
 msgid "%d critical"
 msgid_plural "%d critical"
 msgstr[0] "%d crítico"
 msgstr[1] "%d críticos"
 
 #: lib/core/viewmodel.js:436
-#, javascript-format
 msgid "%d not connected"
 msgid_plural "%d not connected"
 msgstr[0] "%d não conectado"
 msgstr[1] "%d não conectados"
 
 #: lib/core/viewmodel.js:437
-#, javascript-format
 msgid "%d with a problem"
 msgstr "%d com problema"
 
 #: lib/core/viewmodel.js:449
-#, javascript-format
 msgid "Updated %d min ago"
 msgstr "Atualizado há %d min"
 
@@ -454,14 +405,12 @@ msgid "Not updated yet"
 msgstr "Ainda não atualizado"
 
 #: lib/core/viewmodel.js:467
-#, javascript-format
 msgid "%s · %d with a problem"
 msgid_plural "%s · %d with problems"
 msgstr[0] "%s · %d com problema"
 msgstr[1] "%s · %d com problemas"
 
 #: lib/core/viewmodel.js:491
-#, javascript-format
 msgid "Resets in %s"
 msgstr "Reinicia em %s"
 
@@ -491,9 +440,7 @@ msgstr "Problema"
 
 #: lib/core/viewmodel.js:513
 msgid "The service could not be reached or replied in an unexpected way."
-msgstr ""
-"Não foi possível consultar o serviço, ou ele respondeu de um jeito "
-"inesperado."
+msgstr "Não foi possível consultar o serviço, ou ele respondeu de um jeito inesperado."
 
 #: lib/core/viewmodel.js:514
 msgid "Pace"
@@ -503,9 +450,7 @@ msgstr "Ritmo"
 msgid ""
 "The mark on a bar is where the usage would be if it were spread evenly until "
 "the reset."
-msgstr ""
-"A marca em uma barra é onde o uso estaria se fosse distribuído por igual até "
-"o reinício."
+msgstr "A marca em uma barra é onde o uso estaria se fosse distribuído por igual até o reinício."
 
 #: lib/prefs/about.js:32
 msgid "About"
@@ -518,9 +463,7 @@ msgstr "Cota de IA"
 #: lib/prefs/about.js:41
 msgid ""
 "Shows the used quota of your AI providers in the top bar and in a popup."
-msgstr ""
-"Mostra a cota usada dos seus provedores de IA na barra superior e em um "
-"popup."
+msgstr "Mostra a cota usada dos seus provedores de IA na barra superior e em um popup."
 
 #: lib/prefs/about.js:51
 msgid "Choose providers and review the bar and notifications."
@@ -536,13 +479,11 @@ msgstr "Restaurar padrões"
 
 #: lib/prefs/about.js:58
 msgid ""
-"Appearance, top bar, popup and notifications. Your accounts and tracked "
-"providers are not changed."
-msgstr ""
-"Aparência, barra, popup e notificações. Suas contas e os provedores "
-"acompanhados não são alterados."
+"Appearance, top bar, popup and notifications. Saved connectors and "
+"credentials stay saved. Tracking returns to its default."
+msgstr "Aparência, barra superior, painel e notificações. Os conectores e as credenciais salvos são mantidos. O acompanhamento volta ao padrão."
 
-#: lib/prefs/about.js:61
+#: lib/prefs/about.js:61 lib/prefs/accounts.js:84
 msgid "Restore…"
 msgstr "Restaurar…"
 
@@ -553,16 +494,15 @@ msgstr "Restaurar as configurações padrão?"
 #: lib/prefs/about.js:71
 msgid ""
 "Appearance, theme, top bar, popup and notification settings go back to their "
-"defaults. Your accounts and data source are not changed, and providers you "
-"stopped tracking stay stopped."
-msgstr ""
-"Aparência, tema, barra, popup e notificações voltam aos valores padrão. Suas "
-"contas e a fonte dos dados não são alteradas, e os provedores que você parou "
-"de acompanhar continuam parados."
+"defaults. Saved connectors, credentials and client configuration are kept. "
+"All connectors are tracked again and setup becomes available. Your data "
+"source stays the same."
+msgstr "A aparência, o tema, a barra superior, o painel e as notificações voltam às configurações padrão. Os conectores, as credenciais e a configuração de cliente salvos são mantidos. Todos os conectores voltam a ser acompanhados e a configuração inicial fica disponível. A fonte de dados permanece a mesma."
 
-#: lib/prefs/about.js:73 lib/prefs/accounts.js:147
-#: lib/prefs/disconnectDialog.js:44 lib/prefs/oauthGroup.js:57
-#: lib/prefs/oauthGroup.js:141 lib/prefs/suggestedFonts.js:17
+#: lib/prefs/about.js:73 lib/prefs/accounts.js:62 lib/prefs/accounts.js:222
+#: lib/prefs/accounts.js:257 lib/prefs/accounts.js:365
+#: lib/prefs/disconnectDialog.js:37 lib/prefs/oauthGroup.js:57
+#: lib/prefs/oauthGroup.js:144 lib/prefs/suggestedFonts.js:17
 #: lib/prefs/suggestedFonts.js:34 lib/prefs/termsDialog.js:33
 msgid "Cancel"
 msgstr "Cancelar"
@@ -575,43 +515,34 @@ msgstr "Restaurar"
 msgid "Defaults restored"
 msgstr "Padrões restaurados"
 
-#: lib/prefs/accountText.js:14 lib/prefs/apiKeyController.js:138
-#: lib/prefs/oauthController.js:384 lib/prefs/oauthGroup.js:84
+#: lib/prefs/accountText.js:14 lib/prefs/apiKeyController.js:141
+#: lib/prefs/oauthController.js:384 lib/prefs/oauthGroup.js:85
 msgid "Account changes are blocked while local disconnection is incomplete."
-msgstr ""
-"As alterações de contas ficam bloqueadas enquanto a desconexão local não for "
-"concluída."
+msgstr "As alterações de contas ficam bloqueadas enquanto a desconexão local não for concluída."
 
 #: lib/prefs/accountText.js:17
-#, javascript-format
 msgid "Finish signing in using your browser. %d:%02d left."
 msgstr "Conclua o login no navegador. Restam %d:%02d."
 
-#: lib/prefs/accountText.js:20 lib/prefs/apiKeyController.js:142
+#: lib/prefs/accountText.js:20 lib/prefs/apiKeyController.js:145
 msgid ""
 "No keyring found. Unlock it in Passwords and Keys, or install a Secret "
 "Service provider."
-msgstr ""
-"Nenhum chaveiro encontrado. Desbloqueie-o em Senhas e Chaves ou instale um "
-"provedor de Secret Service."
+msgstr "Nenhum chaveiro encontrado. Desbloqueie-o em Senhas e Chaves ou instale um provedor de Secret Service."
 
 #: lib/prefs/accountText.js:25
 msgid "Not connected."
 msgstr "Não conectado."
 
 #: lib/prefs/accountText.js:27
-#, javascript-format
 msgid "The local configuration cannot be used: %s"
 msgstr "A configuração local não pode ser usada: %s"
 
 #: lib/prefs/accountText.js:28
-#, javascript-format
 msgid ""
 "%s is not set up yet. Press \"Copy command\", run it in a terminal, then "
 "come back."
-msgstr ""
-"O %s ainda não foi configurado. Toque em \"Copiar comando\", rode-o num "
-"terminal e volte aqui."
+msgstr "O %s ainda não foi configurado. Toque em \"Copiar comando\", rode-o num terminal e volte aqui."
 
 #: lib/prefs/accountText.js:31
 msgid "Connected."
@@ -645,77 +576,255 @@ msgstr "Conectado, mas falta o client id na configuração local."
 msgid "Connected. Not checked yet."
 msgstr "Conectado, ainda não verificado."
 
-#: lib/prefs/accounts.js:32
+#: lib/prefs/accounts.js:36
 msgid "Accounts"
 msgstr "Contas"
 
-#: lib/prefs/accounts.js:89
-#, javascript-format
-msgid "The key is kept in the system keyring and sent only to %s."
-msgstr "A chave fica no chaveiro do sistema e só é enviada a %s."
+#: lib/prefs/accounts.js:43
+msgid ""
+"Create separate connectors for each account, including more than one account "
+"with the same provider."
+msgstr "Crie um conector separado para cada conta, inclusive para várias contas do mesmo provedor."
 
-#: lib/prefs/accounts.js:91 lib/prefs/oauthGroup.js:55
-msgid "Checking the keyring…"
-msgstr "Consultando o chaveiro…"
+#: lib/prefs/accounts.js:44 lib/prefs/accounts.js:210 lib/prefs/accounts.js:222
+msgid "Add connector"
+msgstr "Adicionar conector"
 
-#: lib/prefs/accounts.js:91 lib/prefs/oauthGroup.js:55
+#: lib/prefs/accounts.js:44
+msgid "Command Code, Codex, Claude or Antigravity"
+msgstr "Command Code, Codex, Claude ou Antigravity"
+
+#: lib/prefs/accounts.js:45
+msgid "Add connector…"
+msgstr "Adicionar conector…"
+
+#: lib/prefs/accounts.js:48
+msgid "Demo connectors"
+msgstr "Conectores de demonstração"
+
+#: lib/prefs/accounts.js:48
+msgid ""
+"Fictional accounts. Connect and remove are simulated; no browser, keyring or "
+"provider request is used."
+msgstr "Contas fictícias. A conexão e a remoção são simuladas, sem usar o navegador ou o chaveiro nem enviar solicitações ao provedor."
+
+#: lib/prefs/accounts.js:50 lib/ui/indicator.js:492
+msgid "Connector configuration is unavailable"
+msgstr "A configuração dos conectores está indisponível"
+
+#: lib/prefs/accounts.js:50
+msgid ""
+"The local connector list is invalid. Saved credentials have not been changed."
+msgstr "A lista local de conectores é inválida. As credenciais salvas não foram alteradas."
+
+#: lib/prefs/accounts.js:51
+msgid ""
+"Rebuild the list from saved credential identities. Credentials are kept; "
+"connector names may need to be entered again."
+msgstr "Recrie a lista a partir dos identificadores das credenciais salvas. As credenciais são mantidas; pode ser necessário informar novamente os nomes dos conectores."
+
+#: lib/prefs/accounts.js:51
+msgid "Recover connector list"
+msgstr "Recuperar lista de conectores"
+
+#: lib/prefs/accounts.js:52
+msgid "Recover list…"
+msgstr "Recuperar lista…"
+
+#: lib/prefs/accounts.js:59
+msgid "Recover the connector list?"
+msgstr "Recuperar a lista de conectores?"
+
+#: lib/prefs/accounts.js:60
+msgid ""
+"Rebuild the fictional connector list. No real credential is read or changed. "
+"Connector names may need to be entered again."
+msgstr "Recrie a lista de conectores fictícios. Nenhuma credencial real é lida ou alterada. Pode ser necessário informar novamente os nomes dos conectores."
+
+#: lib/prefs/accounts.js:61
+msgid ""
+"Read saved credential identities to rebuild the connector list. Secret "
+"values are not read or deleted. Connector names and usernames may need to be "
+"entered again."
+msgstr "Leia os identificadores das credenciais salvas para recriar a lista de conectores. O conteúdo das credenciais não é lido nem excluído. Pode ser necessário informar novamente os nomes dos conectores e de usuário."
+
+#: lib/prefs/accounts.js:62
+msgid "Recover list"
+msgstr "Recuperar lista"
+
+#: lib/prefs/accounts.js:71
+msgid ""
+"The connector list could not be recovered. Saved credentials were kept. "
+"Unlock the keyring and retry."
+msgstr "Não foi possível recuperar a lista de conectores. As credenciais salvas foram mantidas. Desbloqueie o chaveiro e tente novamente."
+
+#: lib/prefs/accounts.js:80
+msgid "Add a connector to start tracking an account."
+msgstr "Adicione um conector para começar a acompanhar uma conta."
+
+#: lib/prefs/accounts.js:80
+msgid "No connectors"
+msgstr "Nenhum conector"
+
+#: lib/prefs/accounts.js:83
+msgid ""
+"Reset appearance, notifications and tracking. Saved connectors and "
+"credentials stay saved."
+msgstr "Restaure a aparência, as notificações e o acompanhamento. Os conectores e as credenciais salvos são mantidos."
+
+#: lib/prefs/accounts.js:83
+msgid "Restore default settings"
+msgstr "Restaurar configurações padrão"
+
+#: lib/prefs/accounts.js:106
+msgid "Paused"
+msgstr "Pausado"
+
+#: lib/prefs/accounts.js:107 lib/prefs/accounts.js:295
+msgid "Demo connected"
+msgstr "Conectado na demonstração"
+
+#: lib/prefs/accounts.js:107 lib/prefs/accounts.js:295
+msgid "Demo not connected"
+msgstr "Não conectado na demonstração"
+
+#: lib/prefs/accounts.js:132 lib/prefs/accounts.js:133
+msgid "Configure %s"
+msgstr "Configurar %s"
+
+#: lib/prefs/accounts.js:210
+msgid ""
+"Choose a provider and a name that helps you distinguish this account. "
+"Creating a connector does not sign in."
+msgstr "Escolha um provedor e um nome que ajude a distinguir esta conta. Criar um conector não inicia uma sessão."
+
+#: lib/prefs/accounts.js:213
+msgid "Provider"
+msgstr "Provedor"
+
+#: lib/prefs/accounts.js:214 lib/prefs/accounts.js:240
+msgid "Connector name"
+msgstr "Nome do conector"
+
+#: lib/prefs/accounts.js:229
+msgid ""
+"The connector could not be created. Check the name and the number of "
+"connectors."
+msgstr "Não foi possível criar o conector. Verifique o nome e a quantidade de conectores."
+
+#: lib/prefs/accounts.js:243
+msgid "Enter a valid connector name."
+msgstr "Informe um nome válido para o conector."
+
+#: lib/prefs/accounts.js:252
+msgid ""
+"Delete this connector and its local credential. Other accounts are kept."
+msgstr "Exclua este conector e a credencial local correspondente. As outras contas são mantidas."
+
+#: lib/prefs/accounts.js:252 lib/prefs/accounts.js:257
+msgid "Remove connector"
+msgstr "Remover conector"
+
+#: lib/prefs/accounts.js:253
+msgid "Remove…"
+msgstr "Remover…"
+
+#: lib/prefs/accounts.js:255
+msgid "Remove %s?"
+msgstr "Remover %s?"
+
+#: lib/prefs/accounts.js:256
+msgid ""
+"Its local credential and quota data are removed. Access may remain valid on "
+"the provider’s site. Other connectors are kept."
+msgstr "A credencial local e os dados de cota deste conector são removidos. O acesso pode continuar válido no site do provedor. Os outros conectores são mantidos."
+
+#: lib/prefs/accounts.js:256
+msgid ""
+"This removes only this fictional connector. No real credential is changed."
+msgstr "Esta ação remove apenas este conector fictício. Nenhuma credencial real é alterada."
+
+#: lib/prefs/accounts.js:266
+msgid ""
+"The credential was removed, but the connector list could not be updated. "
+"Retry removing the connector."
+msgstr "A credencial foi removida, mas não foi possível atualizar a lista de conectores. Tente remover o conector novamente."
+
+#: lib/prefs/accounts.js:268
+msgid ""
+"The credential could not be removed. The connector was kept. Unlock the "
+"keyring and retry."
+msgstr "Não foi possível remover a credencial. O conector foi mantido. Desbloqueie o chaveiro e tente novamente."
+
+#: lib/prefs/accounts.js:290
+msgid "Simulation only. No real account, browser or keyring is used."
+msgstr "Apenas simulação. Nenhuma conta real é usada, e o navegador e o chaveiro não são acessados."
+
+#: lib/prefs/accounts.js:291 lib/prefs/accounts.js:309
+#: lib/prefs/oauthGroup.js:55
 msgid "Status"
 msgstr "Situação"
 
-#: lib/prefs/accounts.js:93
+#: lib/prefs/accounts.js:296
+msgid "Simulate connect"
+msgstr "Simular conexão"
+
+#: lib/prefs/accounts.js:296
+msgid "Simulate disconnect"
+msgstr "Simular desconexão"
+
+#: lib/prefs/accounts.js:307
+msgid "The key is kept in the system keyring and sent only to %s."
+msgstr "A chave fica no chaveiro do sistema e só é enviada a %s."
+
+#: lib/prefs/accounts.js:309 lib/prefs/oauthGroup.js:55
+msgid "Checking the keyring…"
+msgstr "Consultando o chaveiro…"
+
+#: lib/prefs/accounts.js:311
 msgid "Remove key"
 msgstr "Remover chave"
 
-#: lib/prefs/accounts.js:94
-#, javascript-format
+#: lib/prefs/accounts.js:312
 msgid "Remove the %s key"
 msgstr "Remover a chave do %s"
 
-#: lib/prefs/accounts.js:100
+#: lib/prefs/accounts.js:318
 msgid "API key"
 msgstr "Chave de API"
 
-#: lib/prefs/accounts.js:144
-#, javascript-format
+#: lib/prefs/accounts.js:362
 msgid "Remove the %s key?"
 msgstr "Remover a chave do %s?"
 
-#: lib/prefs/accounts.js:145
-#, javascript-format
+#: lib/prefs/accounts.js:363
 msgid "It is deleted from the keyring. The key stays valid on the %s site."
 msgstr "Ela é apagada do chaveiro. A chave continua válida no site do %s."
 
-#: lib/prefs/accounts.js:148
+#: lib/prefs/accounts.js:366
 msgid "Remove"
 msgstr "Remover"
 
-#: lib/prefs/accounts.js:192
-#, javascript-format
+#: lib/prefs/accounts.js:410
 msgid "Track %s"
 msgstr "Acompanhar o %s"
 
-#: lib/prefs/accounts.js:193
+#: lib/prefs/accounts.js:411
 msgid ""
 "Off stops fetching and hides it from the bar. Your credentials stay saved."
-msgstr ""
-"Desligado, para de consultar e some da barra. Suas credenciais continuam "
-"guardadas."
+msgstr "Desligado, para de consultar e some da barra. Suas credenciais continuam guardadas."
 
-#: lib/prefs/accounts.js:211
-#, javascript-format
+#: lib/prefs/accounts.js:431
 msgid "Your %s username"
 msgstr "Seu usuário no %s"
 
-#: lib/prefs/accounts.js:214
+#: lib/prefs/accounts.js:434
 msgid "Where do I get a key?"
 msgstr "Onde consigo uma chave?"
 
-#: lib/prefs/accounts.js:215
-#, javascript-format
+#: lib/prefs/accounts.js:435
 msgid "Opens your keys page. Enter your %s username above first."
-msgstr ""
-"Abre a sua página de chaves. Informe antes o seu usuário no %s, no campo "
-"acima."
+msgstr "Abre a sua página de chaves. Informe antes o seu usuário no %s, no campo acima."
 
 #: lib/prefs/apiKeyController.js:82
 msgid "That does not look like an API key."
@@ -729,36 +838,41 @@ msgstr "O chaveiro não aceitou a chave."
 msgid "Key saved. Checking…"
 msgstr "Chave guardada. Verificando…"
 
-#: lib/prefs/apiKeyController.js:121 lib/prefs/oauthController.js:443
+#: lib/prefs/apiKeyController.js:122 lib/prefs/oauthController.js:450
+msgid ""
+"Finish removing the previous connector first, or explicitly disconnect all "
+"accounts."
+msgstr "Conclua primeiro a remoção do conector anterior ou confirme a desconexão de todas as contas."
+
+#: lib/prefs/apiKeyController.js:123 lib/prefs/oauthController.js:451
 msgid "The keyring is not available."
 msgstr "O chaveiro não está disponível."
 
-#: lib/prefs/apiKeyController.js:144
+#: lib/prefs/apiKeyController.js:147
 msgid "No key yet. Paste one in the field below."
 msgstr "Ainda não há chave. Cole uma no campo abaixo."
 
-#: lib/prefs/apiKeyController.js:146
+#: lib/prefs/apiKeyController.js:149
 msgid "Key accepted."
 msgstr "Chave aceita."
 
-#: lib/prefs/apiKeyController.js:147
+#: lib/prefs/apiKeyController.js:150
 msgid "The server rejected this key."
 msgstr "O servidor recusou esta chave."
 
-#: lib/prefs/apiKeyController.js:148
+#: lib/prefs/apiKeyController.js:151
 msgid "Key saved. The keyring is locked, so it was not checked."
-msgstr ""
-"Chave guardada. O chaveiro está bloqueado, então ela não foi verificada."
+msgstr "Chave guardada. O chaveiro está bloqueado, então ela não foi verificada."
 
-#: lib/prefs/apiKeyController.js:149
+#: lib/prefs/apiKeyController.js:152
 msgid "Key saved. Could not reach the server."
 msgstr "Chave guardada. Não foi possível falar com o servidor."
 
-#: lib/prefs/apiKeyController.js:150
+#: lib/prefs/apiKeyController.js:153
 msgid "Key saved. The service replied in an unexpected way."
 msgstr "Chave guardada. O serviço respondeu de forma inesperada."
 
-#: lib/prefs/apiKeyController.js:151
+#: lib/prefs/apiKeyController.js:154
 msgid "Key saved. Not checked yet."
 msgstr "Chave guardada, ainda não verificada."
 
@@ -770,320 +884,305 @@ msgstr "Dados locais das contas"
 msgid "Disconnect all accounts"
 msgstr "Desconectar todas as contas"
 
-#: lib/prefs/disconnectDialog.js:11
+#: lib/prefs/disconnectDialog.js:11 lib/prefs/disconnectDialog.js:56
 msgid ""
 "Remove local credentials, quota snapshots and alert history. Provider "
 "sessions stay valid on their sites."
-msgstr ""
-"Remove as credenciais locais, os dados de cotas e o histórico de alertas. As "
-"sessões continuam válidas nos sites dos provedores."
+msgstr "Remove as credenciais locais, os dados de cotas e o histórico de alertas. As sessões continuam válidas nos sites dos provedores."
 
-#: lib/prefs/disconnectDialog.js:12 lib/prefs/disconnectDialog.js:19
-#: lib/prefs/disconnectDialog.js:44
+#: lib/prefs/disconnectDialog.js:12 lib/prefs/disconnectDialog.js:37
+#: lib/prefs/disconnectDialog.js:55
 msgid "Disconnect all"
 msgstr "Desconectar todas"
 
-#: lib/prefs/disconnectDialog.js:19
-msgid "Retry disconnection"
-msgstr "Tentar desconectar novamente"
-
-#: lib/prefs/disconnectDialog.js:20
-msgid "Stopping pending operations and removing local data…"
-msgstr "Interrompendo operações pendentes e removendo dados locais…"
-
-#: lib/prefs/disconnectDialog.js:22
-msgid ""
-"Local credentials and cached data removed. Provider sessions stay valid on "
-"their sites."
-msgstr ""
-"Credenciais locais e dados em cache removidos. As sessões continuam válidas "
-"nos sites dos provedores."
-
-#: lib/prefs/disconnectDialog.js:23 lib/prefs/disconnectDialog.js:36
+#: lib/prefs/disconnectDialog.js:29 lib/prefs/disconnectDialog.js:64
 msgid ""
 "An older extension was running without credential coordination. Restart the "
 "computer, then retry local disconnection. Account changes remain blocked."
-msgstr ""
-"Uma versão anterior da extensão estava em execução sem coordenação de "
-"credenciais. Reinicie o computador e tente desconectar novamente. As "
-"alterações de contas continuam bloqueadas."
+msgstr "Uma versão anterior da extensão estava em execução sem coordenação de credenciais. Reinicie o computador e tente desconectar novamente. As alterações de contas continuam bloqueadas."
 
-#: lib/prefs/disconnectDialog.js:24
-msgid ""
-"A keyring operation lost its process before completion. Restart the "
-"computer, then retry. Account changes remain blocked."
-msgstr ""
-"O processo de uma operação do chaveiro terminou antes de concluí-la. "
-"Reinicie o computador e tente novamente. As alterações de contas continuam "
-"bloqueadas."
-
-#: lib/prefs/disconnectDialog.js:25
-msgid ""
-"An operation has not acknowledged stopping. Close other Preferences windows, "
-"wait for pending keyring operations, then retry. Account changes remain "
-"blocked."
-msgstr ""
-"Uma operação ainda não confirmou a interrupção. Feche outras janelas de "
-"Preferências, aguarde as operações pendentes do chaveiro e tente novamente. "
-"As alterações de contas continuam bloqueadas."
-
-#: lib/prefs/disconnectDialog.js:27
-msgid ""
-"Some cached data or account status could not be cleared. Check access to the "
-"extension’s cache directory and retry. Account changes remain blocked."
-msgstr ""
-"Não foi possível limpar alguns dados em cache ou o estado das contas. "
-"Verifique o acesso à pasta de cache da extensão e tente novamente. As "
-"alterações de contas continuam bloqueadas."
-
-#: lib/prefs/disconnectDialog.js:28
-msgid ""
-"Some credentials could not be removed. Unlock the keyring and retry. "
-"Affected accounts remain blocked."
-msgstr ""
-"Não foi possível remover algumas credenciais. Desbloqueie o chaveiro e tente "
-"novamente. As contas afetadas continuam bloqueadas."
-
-#: lib/prefs/disconnectDialog.js:37
+#: lib/prefs/disconnectDialog.js:30
 msgid ""
 "Local disconnection could not start. Credential coordination is unavailable; "
 "no success was reported."
-msgstr ""
-"Não foi possível iniciar a desconexão local. A coordenação de credenciais "
-"está indisponível; a desconexão não foi confirmada."
+msgstr "Não foi possível iniciar a desconexão local. A coordenação de credenciais está indisponível; a desconexão não foi confirmada."
 
-#: lib/prefs/disconnectDialog.js:42
+#: lib/prefs/disconnectDialog.js:35
 msgid "Disconnect all accounts locally?"
 msgstr "Desconectar todas as contas neste computador?"
 
-#: lib/prefs/disconnectDialog.js:43
+#: lib/prefs/disconnectDialog.js:36
 msgid ""
 "Remove this extension’s API keys and OAuth sign-ins from the keyring, its "
 "live quota snapshots, alert history and account status. Your settings, "
 "tracking choices, terms acknowledgements, local configuration, themes and "
 "fonts stay saved. This does not revoke provider sessions or API keys on "
 "their sites."
-msgstr ""
-"Remove do chaveiro as chaves de API e os acessos OAuth desta extensão, além "
-"dos dados de cotas reais, do histórico de alertas e do estado das contas. "
-"Suas preferências, escolhas de acompanhamento, aceites de termos, "
-"configurações locais, temas e fontes continuam salvos. Isso não revoga "
-"sessões nem chaves de API nos sites dos provedores."
+msgstr "Remove do chaveiro as chaves de API e os acessos OAuth desta extensão, além dos dados de cotas reais, do histórico de alertas e do estado das contas. Suas preferências, escolhas de acompanhamento, aceites de termos, configurações locais, temas e fontes continuam salvos. Isso não revoga sessões nem chaves de API nos sites dos provedores."
 
-#: lib/prefs/firstUse.js:25
+#: lib/prefs/disconnectDialog.js:55
+msgid "Retry disconnection"
+msgstr "Tentar desconectar novamente"
+
+#: lib/prefs/disconnectDialog.js:57
+msgid "Stopping pending operations and removing local data…"
+msgstr "Interrompendo operações pendentes e removendo dados locais…"
+
+#: lib/prefs/disconnectDialog.js:60
+msgid ""
+"One connector’s credential was removed. Other accounts and cached data were "
+"kept."
+msgstr "A credencial de um conector foi removida. As outras contas e os respectivos dados em cache foram mantidos."
+
+#: lib/prefs/disconnectDialog.js:61
+msgid ""
+"Local credentials and cached data removed. Provider sessions stay valid on "
+"their sites."
+msgstr "Credenciais locais e dados em cache removidos. As sessões continuam válidas nos sites dos provedores."
+
+#: lib/prefs/disconnectDialog.js:63
+msgid ""
+"An older extension was running without credential coordination. Restart the "
+"computer, then retry removal in that connector’s settings. Account changes "
+"remain blocked."
+msgstr "Uma versão antiga da extensão estava em execução sem coordenação de credenciais. Reinicie o computador e tente novamente a remoção nas configurações desse conector. As alterações de contas continuam bloqueadas."
+
+#: lib/prefs/disconnectDialog.js:66
+msgid ""
+"A keyring operation lost its process before completion. Restart the "
+"computer, then retry removal in that connector’s settings. Account changes "
+"remain blocked."
+msgstr "O processo de uma operação do chaveiro foi encerrado antes da conclusão. Reinicie o computador e tente novamente a remoção nas configurações desse conector. As alterações de contas continuam bloqueadas."
+
+#: lib/prefs/disconnectDialog.js:67
+msgid ""
+"A keyring operation lost its process before completion. Restart the "
+"computer, then retry. Account changes remain blocked."
+msgstr "O processo de uma operação do chaveiro terminou antes de concluí-la. Reinicie o computador e tente novamente. As alterações de contas continuam bloqueadas."
+
+#: lib/prefs/disconnectDialog.js:69
+msgid ""
+"An operation has not acknowledged stopping. Close other Preferences windows, "
+"wait, then retry removal in that connector’s settings."
+msgstr "Uma operação ainda não confirmou a interrupção. Feche as outras janelas de Preferências, aguarde e tente novamente a remoção nas configurações desse conector."
+
+#: lib/prefs/disconnectDialog.js:70
+msgid ""
+"An operation has not acknowledged stopping. Close other Preferences windows, "
+"wait for pending keyring operations, then retry. Account changes remain "
+"blocked."
+msgstr "Uma operação ainda não confirmou a interrupção. Feche outras janelas de Preferências, aguarde as operações pendentes do chaveiro e tente novamente. As alterações de contas continuam bloqueadas."
+
+#: lib/prefs/disconnectDialog.js:71
+msgid ""
+"One connector could not be removed. Unlock the keyring and retry removal in "
+"that connector’s settings. Other connectors were not selected for deletion."
+msgstr "Não foi possível remover um conector. Desbloqueie o chaveiro e tente novamente a remoção nas configurações desse conector. Os outros conectores não foram selecionados para exclusão."
+
+#: lib/prefs/disconnectDialog.js:73
+msgid ""
+"Some cached data or account status could not be cleared. Check access to the "
+"extension’s cache directory and retry. Account changes remain blocked."
+msgstr "Não foi possível limpar alguns dados em cache ou o estado das contas. Verifique o acesso à pasta de cache da extensão e tente novamente. As alterações de contas continuam bloqueadas."
+
+#: lib/prefs/disconnectDialog.js:74
+msgid ""
+"Some credentials could not be removed. Unlock the keyring and retry. "
+"Affected accounts remain blocked."
+msgstr "Não foi possível remover algumas credenciais. Desbloqueie o chaveiro e tente novamente. As contas afetadas continuam bloqueadas."
+
+#: lib/prefs/firstUse.js:27
 msgid "Setup"
 msgstr "Configuração"
 
-#: lib/prefs/firstUse.js:27 lib/prefs/firstUse.js:86
+#: lib/prefs/firstUse.js:29 lib/prefs/firstUse.js:88
 msgid "Skip this step"
 msgstr "Pular esta etapa"
 
-#: lib/prefs/firstUse.js:28
+#: lib/prefs/firstUse.js:30
 msgid "Back"
 msgstr "Voltar"
 
-#: lib/prefs/firstUse.js:29 lib/prefs/firstUse.js:87
+#: lib/prefs/firstUse.js:31 lib/prefs/firstUse.js:89
 msgid "Continue"
 msgstr "Continuar"
 
-#: lib/prefs/firstUse.js:83
-#, javascript-format
+#: lib/prefs/firstUse.js:85
 msgid "Setup · %d of 5"
 msgstr "Configuração · %d de 5"
 
-#: lib/prefs/firstUse.js:83
+#: lib/prefs/firstUse.js:85
 msgid "Welcome"
 msgstr "Boas-vindas"
 
-#: lib/prefs/firstUse.js:86
+#: lib/prefs/firstUse.js:88
 msgid "Set up later"
 msgstr "Configurar depois"
 
-#: lib/prefs/firstUse.js:87
+#: lib/prefs/firstUse.js:89
 msgid "Close setup"
 msgstr "Concluir configuração"
 
-#: lib/prefs/firstUse.js:90
+#: lib/prefs/firstUse.js:92
 msgid ""
 "See used quota in the top bar and details in the popup. Nothing changes "
 "until you press a button. Keys and sign-ins stay in the system keyring. You "
 "can skip any step and set up again from General."
-msgstr ""
-"Veja a cota usada na barra superior e os detalhes no painel. Nada muda até "
-"você pressionar um botão. Chaves e acessos ficam no chaveiro do sistema. "
-"Você pode pular qualquer etapa e configurar novamente em Geral."
+msgstr "Veja a cota usada na barra superior e os detalhes no painel. Nada muda até você pressionar um botão. Chaves e acessos ficam no chaveiro do sistema. Você pode pular qualquer etapa e configurar novamente em Geral."
 
-#: lib/prefs/firstUse.js:90
+#: lib/prefs/firstUse.js:92
 msgid "Your AI quotas at a glance"
 msgstr "Suas cotas de IA à vista"
 
-#: lib/prefs/firstUse.js:92
+#: lib/prefs/firstUse.js:94
 msgid "Choose providers"
 msgstr "Escolha os provedores"
 
-#: lib/prefs/firstUse.js:92
+#: lib/prefs/firstUse.js:94
 msgid ""
 "Every provider is optional. Choosing one here does not connect it or change "
 "which providers are tracked."
-msgstr ""
-"Todos os provedores são opcionais. Escolher um aqui não o conecta nem muda "
-"quais provedores são acompanhados."
+msgstr "Todos os provedores são opcionais. Escolher um aqui não o conecta nem muda quais provedores são acompanhados."
 
-#: lib/prefs/firstUse.js:97
+#: lib/prefs/firstUse.js:99
 msgid ""
 "OAuth sign-in · Against the terms; your whole Google account could be "
 "suspended. Skip unless you accept this risk."
-msgstr ""
-"Acesso por OAuth · Contraria os termos; toda a sua conta Google pode ser "
-"suspensa. Pule se não aceitar esse risco."
+msgstr "Acesso por OAuth · Contraria os termos; toda a sua conta Google pode ser suspensa. Pule se não aceitar esse risco."
 
-#: lib/prefs/firstUse.js:98
+#: lib/prefs/firstUse.js:100
 msgid ""
 "OAuth sign-in · Unofficial access; your account could be limited or "
 "suspended."
-msgstr ""
-"Acesso por OAuth · Acesso não oficial; sua conta pode ser limitada ou "
-"suspensa."
+msgstr "Acesso por OAuth · Acesso não oficial; sua conta pode ser limitada ou suspensa."
 
-#: lib/prefs/firstUse.js:99
+#: lib/prefs/firstUse.js:101
 msgid "API key · Paste a key from the provider’s site."
 msgstr "Chave de API · Cole uma chave do site do provedor."
 
-#: lib/prefs/firstUse.js:110
+#: lib/prefs/firstUse.js:113
 msgid "No providers selected"
 msgstr "Nenhum provedor selecionado"
 
-#: lib/prefs/firstUse.js:110
+#: lib/prefs/firstUse.js:113
 msgid "You can continue now and connect accounts later in Accounts."
 msgstr "Você pode continuar agora e conectar suas contas depois em Contas."
 
-#: lib/prefs/firstUse.js:112
+#: lib/prefs/firstUse.js:115
 msgid "Connect your accounts"
 msgstr "Conecte suas contas"
 
-#: lib/prefs/firstUse.js:116
+#: lib/prefs/firstUse.js:119
 msgid "All chosen accounts are connected."
 msgstr "Todas as contas escolhidas estão conectadas."
 
-#: lib/prefs/firstUse.js:117
+#: lib/prefs/firstUse.js:120
 msgid ""
 "Connect one provider at a time. A failed sign-in does not stop you from "
 "continuing."
-msgstr ""
-"Conecte um provedor de cada vez. Uma falha no acesso não impede que você "
-"continue."
+msgstr "Conecte um provedor de cada vez. Uma falha no acesso não impede que você continue."
 
-#: lib/prefs/firstUse.js:128
+#: lib/prefs/firstUse.js:131
 msgid ""
 "Run this command in a terminal, then come back. The helper looks for public "
 "client ids in installed programs using PATH and writes providers.local.json. "
 "This extension does not run it."
-msgstr ""
-"Execute este comando em um terminal e volte. O auxiliar procura IDs públicos "
-"de cliente nos programas instalados usando o PATH e grava "
-"providers.local.json. A extensão não executa o comando."
+msgstr "Execute este comando em um terminal e volte. O auxiliar procura IDs públicos de cliente nos programas instalados usando o PATH e grava providers.local.json. A extensão não executa o comando."
 
-#: lib/prefs/firstUse.js:128
+#: lib/prefs/firstUse.js:131
 msgid "Set up the public client ids"
 msgstr "Configure os IDs públicos de cliente"
 
-#: lib/prefs/firstUse.js:135 lib/prefs/oauthGroup.js:59
+#: lib/prefs/firstUse.js:138 lib/prefs/oauthGroup.js:59
 msgid "Copy command"
 msgstr "Copiar comando"
 
-#: lib/prefs/firstUse.js:138 lib/prefs/oauthGroup.js:133
+#: lib/prefs/firstUse.js:141 lib/prefs/oauthGroup.js:136
 msgid "Command copied."
 msgstr "Comando copiado."
 
-#: lib/prefs/firstUse.js:149
+#: lib/prefs/firstUse.js:152
 msgid ""
 "Choose where quotas appear and how many providers are shown. Changes apply "
 "as you make them."
-msgstr ""
-"Escolha onde as cotas aparecem e quantos provedores são exibidos. As "
-"mudanças são aplicadas na hora."
+msgstr "Escolha onde as cotas aparecem e quantos provedores são exibidos. As mudanças são aplicadas na hora."
 
-#: lib/prefs/firstUse.js:149 prefs.js:173
+#: lib/prefs/firstUse.js:152 prefs.js:173
 msgid "Top bar"
 msgstr "Barra superior"
 
-#: lib/prefs/firstUse.js:151 prefs.js:176
+#: lib/prefs/firstUse.js:154 prefs.js:176
 msgid "Center"
 msgstr "Centro"
 
-#: lib/prefs/firstUse.js:151 prefs.js:175
+#: lib/prefs/firstUse.js:154 prefs.js:175
 msgid "Left"
 msgstr "Esquerda"
 
-#: lib/prefs/firstUse.js:151 prefs.js:178
+#: lib/prefs/firstUse.js:154 prefs.js:178
 msgid "Position"
 msgstr "Posição"
 
-#: lib/prefs/firstUse.js:151 prefs.js:177
+#: lib/prefs/firstUse.js:154 prefs.js:177
 msgid "Right"
 msgstr "Direita"
 
-#: lib/prefs/firstUse.js:155 prefs.js:182
+#: lib/prefs/firstUse.js:158 prefs.js:182
 msgid "Providers on the bar"
 msgstr "Provedores na barra"
 
-#: lib/prefs/firstUse.js:160 lib/prefs/notifications.js:36
+#: lib/prefs/firstUse.js:163 lib/prefs/notifications.js:36
 msgid "Notifications"
 msgstr "Notificações"
 
-#: lib/prefs/firstUse.js:160
+#: lib/prefs/firstUse.js:163
 msgid ""
 "Notifications are on by default. One notice is sent when a quota crosses its "
 "threshold. Do Not Disturb holds banners. This setup sends no test "
 "notification."
-msgstr ""
-"As notificações vêm ativadas. Um aviso é enviado quando uma cota cruza seu "
-"limite. O Não perturbe retém os banners. Esta configuração não envia "
-"notificações de teste."
+msgstr "As notificações vêm ativadas. Um aviso é enviado quando uma cota cruza seu limite. O Não perturbe retém os banners. Esta configuração não envia notificações de teste."
 
-#: lib/prefs/firstUse.js:161 lib/prefs/notifications.js:42
+#: lib/prefs/firstUse.js:164 lib/prefs/notifications.js:42
 msgid "Send notifications"
 msgstr "Enviar notificações"
 
-#: lib/prefs/firstUse.js:164
+#: lib/prefs/firstUse.js:167
 msgid "Notify at"
 msgstr "Notificar em"
 
-#: lib/prefs/firstUse.js:164
+#: lib/prefs/firstUse.js:167
 msgid "Used percentage · applies to all quota types"
 msgstr "Percentual usado · vale para todos os tipos de cota"
 
-#: lib/prefs/firstUse.js:165 lib/prefs/notifications.js:75
+#: lib/prefs/firstUse.js:168 lib/prefs/notifications.js:75
 msgid "Warning must be lower than critical"
 msgstr "O limite de aviso deve ser menor que o limite crítico"
 
-#: lib/prefs/firstUse.js:205
+#: lib/prefs/firstUse.js:208
 msgid "More notification settings"
 msgstr "Mais opções de notificação"
 
-#: lib/prefs/firstUse.js:207
+#: lib/prefs/firstUse.js:210
 msgid "Setup complete"
 msgstr "Configuração concluída"
 
-#: lib/prefs/firstUse.js:207
-msgid "You can change these choices later. Select an account to review it."
-msgstr ""
-"Você pode mudar essas escolhas depois. Selecione uma conta para conferi-la."
-
 #: lib/prefs/firstUse.js:210
+msgid "You can change these choices later. Select an account to review it."
+msgstr "Você pode mudar essas escolhas depois. Selecione uma conta para conferi-la."
+
+#: lib/prefs/firstUse.js:213
 msgid "Connected"
 msgstr "Conectado"
 
-#: lib/prefs/firstUse.js:210
+#: lib/prefs/firstUse.js:213
 msgid "Needs attention"
 msgstr "Precisa de atenção"
 
-#: lib/prefs/firstUse.js:210
+#: lib/prefs/firstUse.js:213
 msgid "Skipped"
 msgstr "Pulado"
 
-#: lib/prefs/firstUse.js:214
-#, javascript-format
+#: lib/prefs/firstUse.js:217
 msgid "%s · %s"
 msgstr "%s · %s"
 
@@ -1103,9 +1202,7 @@ msgstr "Janela mensal"
 msgid ""
 "Off: nothing is sent, connection alerts included. The bar and the popup do "
 "not change."
-msgstr ""
-"Desligado: nada é enviado, nem os avisos de conexão. A barra e o popup não "
-"mudam."
+msgstr "Desligado: nada é enviado, nem os avisos de conexão. A barra e o popup não mudam."
 
 #: lib/prefs/notifications.js:49
 msgid "Send a test notification"
@@ -1114,8 +1211,7 @@ msgstr "Enviar uma notificação de teste"
 #: lib/prefs/notifications.js:50
 msgid ""
 "Do Not Disturb holds the banner; the notification still waits in the list."
-msgstr ""
-"O Não Perturbe retém o banner; a notificação continua esperando na lista."
+msgstr "O Não Perturbe retém o banner; a notificação continua esperando na lista."
 
 #: lib/prefs/notifications.js:52
 msgid "Send"
@@ -1129,10 +1225,7 @@ msgstr "Cotas"
 msgid ""
 "Warning and critical notices each rearm after usage falls 3 points below "
 "their threshold or the quota resets. A jump over both sends only critical."
-msgstr ""
-"Os avisos e alertas críticos podem se repetir após o uso cair 3 pontos "
-"abaixo do respectivo limite ou a cota ser renovada. Se o uso ultrapassar "
-"ambos de uma vez, só o alerta crítico será enviado."
+msgstr "Os avisos e alertas críticos podem se repetir após o uso cair 3 pontos abaixo do respectivo limite ou a cota ser renovada. Se o uso ultrapassar ambos de uma vez, só o alerta crítico será enviado."
 
 #: lib/prefs/notifications.js:69
 msgid "Critical threshold"
@@ -1155,7 +1248,6 @@ msgid "Warning threshold"
 msgstr "Limite de aviso"
 
 #: lib/prefs/notifications.js:116
-#, javascript-format
 msgid "Notifies at %d%% used"
 msgstr "Notifica com %d%% usado"
 
@@ -1175,19 +1267,13 @@ msgstr "Avisar sobre problemas de conexão"
 msgid ""
 "Once, when an account has been rejected for ten minutes, or has had no data "
 "for fifteen minutes or more. Providers you stopped tracking never notify."
-msgstr ""
-"Uma vez, quando uma conta foi recusada por dez minutos, ou ficou quinze "
-"minutos ou mais sem dados. Provedores que você parou de acompanhar nunca "
-"avisam."
+msgstr "Uma vez, quando uma conta foi recusada por dez minutos, ou ficou quinze minutos ou mais sem dados. Provedores que você parou de acompanhar nunca avisam."
 
 #: lib/prefs/oauthController.js:35
-#, javascript-format
 msgid ""
 "The sign-in did not start: port %d is in use by another program. Close it "
 "and try again."
-msgstr ""
-"O login não começou: a porta %d está em uso por outro programa. Feche-o e "
-"tente de novo."
+msgstr "O login não começou: a porta %d está em uso por outro programa. Feche-o e tente de novo."
 
 #: lib/prefs/oauthController.js:36
 msgid "The sign-in did not start: no local port could be opened."
@@ -1230,7 +1316,6 @@ msgid "Couldn't open the browser. Copy the link and open it yourself."
 msgstr "Não consegui abrir o navegador. Copie o link e abra você mesmo."
 
 #: lib/prefs/oauthController.js:309
-#, javascript-format
 msgid "%s connected."
 msgstr "%s conectado."
 
@@ -1258,26 +1343,19 @@ msgstr "O login foi recusado no navegador."
 msgid ""
 "That is not the address or the code. Copy the full address from the browser "
 "bar, or the code shown on the page."
-msgstr ""
-"Isso não é o endereço nem o código. Copie o endereço completo da barra do "
-"navegador ou o código mostrado na página."
+msgstr "Isso não é o endereço nem o código. Copie o endereço completo da barra do navegador ou o código mostrado na página."
 
-#: lib/prefs/oauthController.js:440
-#, javascript-format
+#: lib/prefs/oauthController.js:445
 msgid "%s disconnected."
 msgstr "%s desconectado."
 
 #: lib/prefs/oauthGroup.js:50
-#, javascript-format
 msgid ""
 "Against the terms: %s forbids this, and Google could suspend your whole "
 "Google account."
-msgstr ""
-"Contra os termos: o %s proíbe isto, e o Google pode suspender toda a sua "
-"conta Google."
+msgstr "Contra os termos: o %s proíbe isto, e o Google pode suspender toda a sua conta Google."
 
 #: lib/prefs/oauthGroup.js:52
-#, javascript-format
 msgid "Unofficial access: %s may not allow this and could limit your account."
 msgstr "Acesso não oficial: o %s pode não permitir isto e limitar a sua conta."
 
@@ -1285,55 +1363,52 @@ msgstr "Acesso não oficial: o %s pode não permitir isto e limitar a sua conta.
 msgid "Copy link"
 msgstr "Copiar link"
 
-#: lib/prefs/oauthGroup.js:60 lib/prefs/oauthGroup.js:142
+#: lib/prefs/oauthGroup.js:60
+msgid "Check configuration again"
+msgstr "Verificar configuração novamente"
+
+#: lib/prefs/oauthGroup.js:61 lib/prefs/oauthGroup.js:145
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: lib/prefs/oauthGroup.js:70
+#: lib/prefs/oauthGroup.js:71
 msgid "Paste the address or the code"
 msgstr "Cole o endereço ou o código"
 
-#: lib/prefs/oauthGroup.js:78
+#: lib/prefs/oauthGroup.js:79
 msgid "Connect"
 msgstr "Conectar"
 
-#: lib/prefs/oauthGroup.js:80
-#, javascript-format
+#: lib/prefs/oauthGroup.js:81
 msgid "Connect %s"
 msgstr "Conectar o %s"
 
-#: lib/prefs/oauthGroup.js:80
-#, javascript-format
+#: lib/prefs/oauthGroup.js:81
 msgid "Reconnect %s"
 msgstr "Reconectar o %s"
 
-#: lib/prefs/oauthGroup.js:85
+#: lib/prefs/oauthGroup.js:86
 msgid "Set up the client id and the keyring first."
 msgstr "Configure antes o client id e o chaveiro."
 
-#: lib/prefs/oauthGroup.js:90
-#, javascript-format
+#: lib/prefs/oauthGroup.js:92
 msgid "Copies the command that finds the client id (it writes to %s)."
 msgstr "Copia o comando que acha o client id (ele grava em %s)."
 
-#: lib/prefs/oauthGroup.js:128
+#: lib/prefs/oauthGroup.js:131
 msgid "Link copied."
 msgstr "Link copiado."
 
-#: lib/prefs/oauthGroup.js:138
-#, javascript-format
+#: lib/prefs/oauthGroup.js:141
 msgid "Disconnect %s?"
 msgstr "Desconectar o %s?"
 
-#: lib/prefs/oauthGroup.js:139
-#, javascript-format
+#: lib/prefs/oauthGroup.js:142
 msgid ""
 "The sign-in is deleted from the keyring and the extension stops reading this "
 "quota. Access already granted may stay listed in your %s account until you "
 "revoke it there."
-msgstr ""
-"O login é apagado do chaveiro e a extensão para de ler esta cota. O acesso "
-"concedido pode continuar listado na sua conta do %s até você revogá-lo lá."
+msgstr "O login é apagado do chaveiro e a extensão para de ler esta cota. O acesso concedido pode continuar listado na sua conta do %s até você revogá-lo lá."
 
 #: lib/prefs/suggestedFonts.js:12
 msgid "Suggested fonts"
@@ -1343,9 +1418,7 @@ msgstr "Fontes sugeridas"
 msgid ""
 "Optional fonts for selected themes. Themes keep using installed-font "
 "fallbacks until fonts are available."
-msgstr ""
-"Fontes opcionais para alguns temas. Enquanto não estiverem disponíveis, os "
-"temas usam fontes já instaladas."
+msgstr "Fontes opcionais para alguns temas. Enquanto não estiverem disponíveis, os temas usam fontes já instaladas."
 
 #: lib/prefs/suggestedFonts.js:14
 msgid "Install suggested fonts…"
@@ -1355,31 +1428,25 @@ msgstr "Instalar fontes sugeridas…"
 msgid ""
 "Poppins, Inter and JetBrains Mono. Review the source and licenses before "
 "downloading."
-msgstr ""
-"Poppins, Inter e JetBrains Mono. Confira a origem e as licenças antes de "
-"baixar."
+msgstr "Poppins, Inter e JetBrains Mono. Confira a origem e as licenças antes de baixar."
 
 #: lib/prefs/suggestedFonts.js:16
 msgid "Review…"
 msgstr "Conferir…"
 
 #: lib/prefs/suggestedFonts.js:23
-#, javascript-format
 msgid "Source: %s"
 msgstr "Origem: %s"
 
 #: lib/prefs/suggestedFonts.js:24
-#, javascript-format
 msgid "Pinned revision: %s"
 msgstr "Revisão fixada: %s"
 
 #: lib/prefs/suggestedFonts.js:25
-#, javascript-format
 msgid "Total download: %d bytes"
 msgstr "Total a baixar: %d bytes"
 
 #: lib/prefs/suggestedFonts.js:27
-#, javascript-format
 msgid "%d bytes · SIL Open Font License 1.1"
 msgstr "%d bytes · SIL Open Font License 1.1"
 
@@ -1391,10 +1458,7 @@ msgstr "Instalar fontes sugeridas?"
 msgid ""
 "Download four verified font files from GitHub and install them for your user "
 "account. Existing files are preserved. Choosing a theme never installs fonts."
-msgstr ""
-"Baixa quatro arquivos de fontes verificados do GitHub e os instala para seu "
-"usuário. Os arquivos existentes são preservados. Escolher um tema nunca "
-"instala fontes."
+msgstr "Baixa quatro arquivos de fontes verificados do GitHub e os instala para seu usuário. Os arquivos existentes são preservados. Escolher um tema nunca instala fontes."
 
 #: lib/prefs/suggestedFonts.js:35
 msgid "Download and install"
@@ -1412,36 +1476,27 @@ msgstr "Cancelado. As fontes já instaladas continuam disponíveis."
 msgid ""
 "Fonts were not installed. Check the connection or installation permissions "
 "and try again; existing files were preserved."
-msgstr ""
-"As fontes não foram instaladas. Confira a conexão ou as permissões de "
-"instalação e tente novamente. Os arquivos existentes foram preservados."
+msgstr "As fontes não foram instaladas. Confira a conexão ou as permissões de instalação e tente novamente. Os arquivos existentes foram preservados."
 
 #: lib/prefs/suggestedFonts.js:51
 msgid ""
 "An existing font file conflicts with this version. It was preserved; no "
 "files were replaced."
-msgstr ""
-"Uma fonte existente conflita com esta versão. Ela foi preservada; nenhum "
-"arquivo foi substituído."
+msgstr "Uma fonte existente conflita com esta versão. Ela foi preservada; nenhum arquivo foi substituído."
 
 #: lib/prefs/suggestedFonts.js:53
 msgid ""
 "Font verification failed. Nothing was installed; installed-font fallbacks "
 "remain available."
-msgstr ""
-"A verificação das fontes falhou. Nada foi instalado; as fontes já instaladas "
-"continuam disponíveis."
+msgstr "A verificação das fontes falhou. Nada foi instalado; as fontes já instaladas continuam disponíveis."
 
 #: lib/prefs/suggestedFonts.js:54
 msgid ""
 "The font installation directory is unsafe. Nothing was installed; existing "
 "files were preserved."
-msgstr ""
-"A pasta de instalação das fontes não é segura. Nada foi instalado; os "
-"arquivos existentes foram preservados."
+msgstr "A pasta de instalação das fontes não é segura. Nada foi instalado; os arquivos existentes foram preservados."
 
 #: lib/prefs/suggestedFonts.js:55
-#, javascript-format
 msgid "Downloading: %d of %d bytes"
 msgstr "Baixando: %d de %d bytes"
 
@@ -1449,17 +1504,13 @@ msgstr "Baixando: %d de %d bytes"
 msgid ""
 "Fonts installed. Reopen applications or sign in again if they still use a "
 "fallback."
-msgstr ""
-"Fontes instaladas. Reabra os aplicativos ou entre novamente na sessão se "
-"eles ainda usarem outra fonte."
+msgstr "Fontes instaladas. Reabra os aplicativos ou entre novamente na sessão se eles ainda usarem outra fonte."
 
 #: lib/prefs/suggestedFonts.js:58
 msgid "Fonts installed. Applications may need to be reopened to use them."
-msgstr ""
-"Fontes instaladas. Pode ser necessário reabrir os aplicativos para usá-las."
+msgstr "Fontes instaladas. Pode ser necessário reabrir os aplicativos para usá-las."
 
 #: lib/prefs/termsDialog.js:21 lib/prefs/termsDialog.js:26
-#, javascript-format
 msgid "Using %s this way breaks its terms"
 msgstr "Usar o %s assim viola os termos dele"
 
@@ -1469,27 +1520,17 @@ msgid ""
 "in or collect and store its session tokens. This extension uses that "
 "unofficial access. Your account could be limited or suspended. Continuing "
 "does not grant permission from Anthropic."
-msgstr ""
-"A Anthropic não permite que aplicativos de terceiros ofereçam login no "
-"Claude.ai nem coletem e armazenem seus tokens de sessão. Esta extensão usa "
-"esse acesso não oficial. Sua conta pode sofrer limitações ou suspensão. "
-"Continuar não concede permissão da Anthropic."
+msgstr "A Anthropic não permite que aplicativos de terceiros ofereçam login no Claude.ai nem coletem e armazenem seus tokens de sessão. Esta extensão usa esse acesso não oficial. Sua conta pode sofrer limitações ou suspensão. Continuar não concede permissão da Anthropic."
 
 #: lib/prefs/termsDialog.js:27
-#, javascript-format
 msgid ""
 "This extension signs in the way the official app does. The terms of %s "
 "forbid that, and Google could suspend your whole Google account (Gmail and "
 "Drive included), not only this service. The sign-in also gives access to "
 "your Google Cloud data. Use it only if you accept that risk."
-msgstr ""
-"Esta extensão entra do mesmo jeito que o app oficial. Os termos do %s "
-"proíbem isso, e o Google pode suspender toda a sua conta Google (Gmail e "
-"Drive incluídos), não só este serviço. O login também dá acesso aos seus "
-"dados do Google Cloud. Use somente se aceitar esse risco."
+msgstr "Esta extensão entra do mesmo jeito que o app oficial. Os termos do %s proíbem isso, e o Google pode suspender toda a sua conta Google (Gmail e Drive incluídos), não só este serviço. O login também dá acesso aos seus dados do Google Cloud. Use somente se aceitar esse risco."
 
 #: lib/prefs/termsDialog.js:30
-#, javascript-format
 msgid "Using %s this way may break its terms"
 msgstr "Usar o %s assim pode violar os termos dele"
 
@@ -1498,9 +1539,7 @@ msgid ""
 "This extension signs in the way the official app does, which the terms may "
 "not allow. Your account could be limited or suspended. Use it at your own "
 "risk."
-msgstr ""
-"A extensão entra do mesmo modo que o app oficial, o que os termos podem não "
-"permitir. Sua conta pode ser limitada ou suspensa. Use por sua conta e risco."
+msgstr "A extensão entra do mesmo modo que o app oficial, o que os termos podem não permitir. Sua conta pode ser limitada ou suspensa. Use por sua conta e risco."
 
 #: lib/prefs/termsDialog.js:34
 msgid "Connect anyway"
@@ -1527,7 +1566,6 @@ msgid "Your themes"
 msgstr "Seus temas"
 
 #: lib/prefs/themeCatalog.js:18
-#, javascript-format
 msgid "%s (unavailable)"
 msgstr "%s (indisponível)"
 
@@ -1643,81 +1681,85 @@ msgstr "Uma interface de terminal em texto."
 msgid "Raw HTML and dense tables."
 msgstr "HTML cru e tabelas densas."
 
-#: lib/ui/indicator.js:173
+#: lib/ui/indicator.js:183
 msgid "Add account"
 msgstr "Adicionar conta"
 
-#: lib/ui/indicator.js:216
+#: lib/ui/indicator.js:223
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: lib/ui/indicator.js:217
+#: lib/ui/indicator.js:224
 msgid "Preferences"
 msgstr "Preferências"
 
-#: lib/ui/indicator.js:241 lib/ui/indicator.js:242
+#: lib/ui/indicator.js:248 lib/ui/indicator.js:249
 msgid "What the marks on the bar mean"
 msgstr "O que significam as marcas da barra"
 
-#: lib/ui/indicator.js:326
+#: lib/ui/indicator.js:343
 msgid "Refreshing…"
 msgstr "Atualizando…"
 
-#: lib/ui/indicator.js:399 prefs.js:294
+#: lib/ui/indicator.js:416 prefs.js:294
 msgid "Demo data (made up)"
 msgstr "Dados de demonstração (fictícios)"
 
-#: lib/ui/indicator.js:461
+#: lib/ui/indicator.js:482
 msgid "Waiting for the first update…"
 msgstr "Aguardando a primeira atualização…"
 
-#: lib/ui/indicator.js:464
+#: lib/ui/indicator.js:485
 msgid "Nothing connected yet."
 msgstr "Nada conectado ainda."
 
-#: lib/ui/indicator.js:464
+#: lib/ui/indicator.js:485
 msgid "Nothing is being tracked."
 msgstr "Nada está sendo acompanhado."
 
-#: lib/ui/indicator.js:466
+#: lib/ui/indicator.js:487
 msgid "Resume a provider below to see its quota."
 msgstr "Retome um provedor abaixo para ver a cota."
 
-#: lib/ui/indicator.js:467
+#: lib/ui/indicator.js:488
 msgid "Add an account in Preferences to see your quotas here."
 msgstr "Adicione uma conta nas Preferências para ver suas cotas aqui."
 
-#: lib/ui/indicator.js:597
+#: lib/ui/indicator.js:493
+msgid ""
+"Open Preferences to recover the connector list. Saved credentials have not "
+"been changed."
+msgstr "Abra as Preferências para recuperar a lista de conectores. As credenciais salvas não foram alteradas."
+
+#: lib/ui/indicator.js:625
 msgid "Nothing connected yet"
 msgstr "Nada conectado ainda"
 
-#: lib/ui/indicator.js:603
+#: lib/ui/indicator.js:631
 msgid "Waiting for the first update"
 msgstr "Aguardando a primeira atualização"
 
-#: lib/ui/indicator.js:630
-#, javascript-format
+#: lib/ui/indicator.js:658
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] "mais %d provedor (abra para ver)"
 msgstr[1] "mais %d provedores (abra para ver)"
 
-#: lib/ui/indicator.js:640
+#: lib/ui/indicator.js:668
 msgid "On the bar"
 msgstr "Na barra"
 
-#: lib/ui/indicator.js:643
-#, javascript-format
+#: lib/ui/indicator.js:671
 msgid "Hidden from the bar (%d)"
 msgid_plural "Hidden from the bar (%d)"
 msgstr[0] "Oculto da barra (%d)"
 msgstr[1] "Ocultos da barra (%d)"
 
-#: lib/ui/notifier.js:70
+#: lib/ui/notifier.js:71
 msgid "Open"
 msgstr "Abrir"
 
-#: lib/ui/notifier.js:94
+#: lib/ui/notifier.js:95
 msgid "AI quota"
 msgstr "Cota de IA"
 
@@ -1726,7 +1768,6 @@ msgid "Marks on the bar"
 msgstr "Marcas na barra"
 
 #: lib/ui/popupExtras.js:96
-#, javascript-format
 msgid "Not tracked (%d)"
 msgid_plural "Not tracked (%d)"
 msgstr[0] "Não acompanhado (%d)"
@@ -1737,17 +1778,14 @@ msgid "Resume"
 msgstr "Retomar"
 
 #: lib/ui/popupExtras.js:107
-#, javascript-format
 msgid "Resume tracking %s"
 msgstr "Retomar o acompanhamento de %s"
 
 #: lib/ui/providerCard.js:175
-#, javascript-format
 msgid "Collapse %s"
 msgstr "Recolher %s"
 
 #: lib/ui/providerCard.js:175
-#, javascript-format
 msgid "Expand %s"
 msgstr "Expandir %s"
 
@@ -1791,9 +1829,7 @@ msgstr "Nunca compactar"
 msgid ""
 "Automatic: only when space runs out. Always: drops the % sign and the window "
 "suffix. Never: hides providers instead."
-msgstr ""
-"Automático: só quando falta espaço. Sempre: remove o % e o sufixo da janela. "
-"Nunca: oculta provedores."
+msgstr "Automático: só quando falta espaço. Sempre: remove o % e o sufixo da janela. Nunca: oculta provedores."
 
 #: prefs.js:193
 msgid "Compact mode"
@@ -1841,13 +1877,11 @@ msgstr "Efeitos"
 
 #: prefs.js:228
 msgid ""
+"Off stops motion and decoration; material and transparency remain available. "
 "Subtle adds short transitions and static decoration. Full adds background "
 "motion where the theme supports it. System animation preferences take "
 "priority."
-msgstr ""
-"Sutil adiciona transições curtas e decoração estática. Completo adiciona "
-"movimento ao fundo quando o tema permite. As preferências de animação do "
-"sistema têm prioridade."
+msgstr "O modo Desligado interrompe o movimento e a decoração; o material e a transparência continuam disponíveis. Sutil adiciona transições curtas e decoração estática. Completo adiciona movimento de fundo nos temas compatíveis. As preferências de animação do sistema têm prioridade."
 
 #: prefs.js:231
 msgid "Transparency"
@@ -1857,9 +1891,7 @@ msgstr "Transparência"
 msgid ""
 "Allows translucent and glass backgrounds in compatible themes. Off keeps "
 "backgrounds opaque."
-msgstr ""
-"Permite fundos translúcidos e de vidro em temas compatíveis. Desativar "
-"mantém os fundos opacos."
+msgstr "Permite fundos translúcidos e de vidro em temas compatíveis. Desativar mantém os fundos opacos."
 
 #: prefs.js:237
 msgid "Follow the theme"
@@ -1881,16 +1913,13 @@ msgstr "Vidro fosco"
 msgid ""
 "Applies only where the theme supports this material. Transparency off keeps "
 "the background opaque."
-msgstr ""
-"Aplica-se apenas quando o tema permite este material. Desativar a "
-"transparência mantém o fundo opaco."
+msgstr "Aplica-se apenas quando o tema permite este material. Desativar a transparência mantém o fundo opaco."
 
 #: prefs.js:239
 msgid "Material"
 msgstr "Material"
 
 #: prefs.js:245
-#, javascript-format
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr "Uma pasta por tema, com um theme.json dentro: %s"
 

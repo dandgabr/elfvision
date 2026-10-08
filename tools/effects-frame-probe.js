@@ -44,6 +44,9 @@
             indicator._settings.set_string('theme', theme);
             indicator._settings.set_string('effects-mode', mode);
             indicator._settings.set_string('effect-material', material);
+            // Off controls motion/decoration. An opaque reference must explicitly
+            // disable transparency so static-glass does not retain native frost.
+            indicator._settings.set_boolean('transparency-enabled', mode !== 'off');
             const opening = GLib.get_monotonic_time();
             indicator.menu.open(false);
             const opened = GLib.get_monotonic_time();

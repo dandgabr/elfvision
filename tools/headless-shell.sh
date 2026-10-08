@@ -119,7 +119,7 @@ dbus-run-session -- bash -c '
                 continue ;;
         esac
         echo "--- result of $script"
-        code="$(cat "$script")"
+        code="$(cat "$script")" || exit 1
         gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
             --method org.gnome.Shell.Eval "$code"
         sleep 1.5

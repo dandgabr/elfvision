@@ -103,6 +103,7 @@ step "build" tools/build.sh
 step "unit tests" gjs -m tests/run.js
 step "cross-process disconnect" timeout 90 tests/disconnectDisk.sh
 step "private keyring disconnect" timeout 90 tests/disconnectSecrets.sh
+step "cross-process connector removal" timeout 90 tests/connectorsDisk.sh
 step "script syntax" syntax
 step "javascript syntax" js_syntax
 step "eslint" js_lint

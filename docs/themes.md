@@ -79,7 +79,8 @@ base theme still loads. Only finite numeric opacity is accepted, clamped to
 0.72–1; particle counts are finite integers clamped to 0–12. Leaves and motes
 default to eight particles; other motion presets create none. Optional
 `compatibleMaterials` is a unique list of one to four material presets, defaulting
-to `[material]`; it declares safe alternatives without forcing glass on other styles. Missing values
+to `[material]`. The shipped built-in profiles list all four materials so the
+user can override their default. Missing values
 use opaque/no motion/no texture and opacity 1. Colors remain hex without alpha.
 
 Trust comes from the file the loader selected. A theme in the user folder,
@@ -88,17 +89,22 @@ effects. The picker and selected-theme label identify such overrides as user
 themes, with the user-supplied name and description, including overrides of
 System (GNOME).
 
-General exposes Effects (`Off`, `Subtle`, `Full`), Transparency and a material choice.
-The material follows the theme by default; an explicit choice applies only when the
-profile lists it in `compatibleMaterials`. Glassmorphism permits simple translucency,
-decorative glass and frosted glass. Editorial, flat, terminal and warm nature themes
-retain their approved opaque reading surfaces. The default
-is Subtle with transparency allowed: short interactions and static decoration;
-Full permits ambient motion only in compatible built-in profiles. System
-animation disablement overrides motion immediately. Transparency can be disabled
-independently. Off and a closed popup produce an opaque, motionless policy; no
-ambient effect runs on the panel. Restore defaults resets all three controls and
-preserves accounts, tracking, consent, and first-use state.
+General exposes Effects (`Off`, `Subtle`, `Full`), Transparency, and Material.
+The material follows the theme by default. Every built-in theme also accepts an
+explicit opaque, translucent, decorative-glass, or frosted-glass material.
+Transparent built-in backgrounds use opacity 0.80 in light mode and 0.74 in dark
+mode, with opaque reading zones. Disable Transparency to make them opaque.
+Effects Off disables motion and textures while retaining the selected material;
+Subtle permits short interactions and static decoration, and Full permits ambient
+motion where the built-in profile supports it. System animation settings disable
+motion independently. A closed popup stops ambient work; the panel has no ambient
+loop. Unsupported frost can fall back to decorative glass.
+
+User themes remain static and opaque under the loader-owned trust policy, including
+overrides of built-in IDs. Selecting a glass material does not grant a user theme
+permission to run packaged effects. Restore defaults resets all three appearance
+controls, resumes tracking, and clears setup dismissal while preserving connector
+metadata, credentials, consent, and the selected data source.
 
 Built-in profiles are maintained in `tools/theme-effect-profiles.json`. The generator
 reads this allowlisted source after compiling gallery tokens; it never imports gallery

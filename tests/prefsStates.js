@@ -197,7 +197,15 @@ app.connect('activate', () => {
                         check(window.get_focus() === target || window.get_focus()?.is_ancestor(target), `${name}: keyboard focus reaches ${focusLabel}`);
                     }
                 }
-                controller.recheck = async () => controller.update({hasConfig: true, keyringDown: false});
+                let rechecks = 0;
+                controller.recheck = async () => { rechecks++; controller.update({hasConfig: true, keyringDown: false}); };
+                const recheck = button(view.group, 'Check configuration again');
+                check(recheck.visible && recheck.sensitive, 'missing-client configuration has an available recheck action');
+                containment(window, recheck, 'translated configuration recheck');
+                recheck.emit('clicked'); await wait();
+                check(rechecks === 1 && button(view.group, 'Connect').sensitive && !recheck.visible,
+                    'explicit recheck recovers configuration and enables Connect');
+                controller.update({hasConfig: false, keyringDown: true});
                 Object.defineProperty(window, 'is_active', {value: true}); window.notify('is-active'); await wait();
                 check(button(view.group, 'Connect').sensitive, 'OAuth activation recovers configuration and keyring');
                 controller.update({connected: true}); await wait();

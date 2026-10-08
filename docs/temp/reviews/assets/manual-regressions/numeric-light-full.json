@@ -1,0 +1,1914 @@
+{
+  "finished": true,
+  "error": "",
+  "toggles": [
+    {
+      "cycle": 0,
+      "frames": [
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        }
+      ],
+      "attributesChanged": 0,
+      "stylesChanged": 3,
+      "attributeEvents": [],
+      "click": [
+        880,
+        413
+      ],
+      "visible": true,
+      "menuOpen": true,
+      "menuVisible": true,
+      "pick": "[0x55b9c9702dc0 StButton.gaq-card-toggle:first-child (\"\")]",
+      "heroRegion": [
+        822,
+        434,
+        334,
+        28
+      ]
+    },
+    {
+      "cycle": 1,
+      "frames": [
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        }
+      ],
+      "attributesChanged": 0,
+      "stylesChanged": 2,
+      "attributeEvents": [],
+      "click": [
+        880,
+        413
+      ],
+      "visible": true,
+      "menuOpen": true,
+      "menuVisible": true,
+      "pick": "[0x55b9c9702dc0 StButton.gaq-card-toggle:first-child hover (\"\")]",
+      "heroRegion": [
+        822,
+        434,
+        334,
+        28
+      ]
+    },
+    {
+      "cycle": 2,
+      "frames": [
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": true
+        }
+      ],
+      "attributesChanged": 0,
+      "stylesChanged": 2,
+      "attributeEvents": [],
+      "click": [
+        880,
+        413
+      ],
+      "visible": true,
+      "menuOpen": true,
+      "menuVisible": true,
+      "pick": "[0x55b9c9702dc0 StButton.gaq-card-toggle:first-child hover (\"\")]",
+      "heroRegion": [
+        822,
+        434,
+        334,
+        28
+      ]
+    },
+    {
+      "cycle": 3,
+      "frames": [
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        },
+        {
+          "box": [
+            0,
+            0,
+            334,
+            28
+          ],
+          "preferred": [
+            1,
+            76
+          ],
+          "attrs": "0 4294967295 scale 1.000000\n0 6 font-features \"tnum=1\"\n0 4294967295 foreground #1de21de21de2",
+          "text": "$12.40",
+          "paintPosition": [
+            822,
+            434
+          ],
+          "scrollValue": 0,
+          "open": false
+        }
+      ],
+      "attributesChanged": 0,
+      "stylesChanged": 2,
+      "attributeEvents": [],
+      "click": [
+        880,
+        413
+      ],
+      "visible": true,
+      "menuOpen": true,
+      "menuVisible": true,
+      "pick": "[0x55b9c9702dc0 StButton.gaq-card-toggle:first-child hover (\"\")]",
+      "heroRegion": [
+        822,
+        434,
+        334,
+        28
+      ]
+    }
+  ],
+  "materials": [
+    {
+      "theme": "organic-biophilic",
+      "mode": "off",
+      "actual": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 0,
+        "pendingLayoutSources": 0,
+        "particles": 0,
+        "blurEffects": 1,
+        "actors": 0,
+        "material": "frosted-glass",
+        "updates": 0,
+        "callbackUsec": 0,
+        "generation": 15
+      },
+      "policy": {
+        "motion": "none",
+        "material": "frosted-glass",
+        "particleCount": 0
+      },
+      "footerBackground": "#00000000",
+      "cardPosition": [
+        815,
+        120
+      ],
+      "framePosition": [
+        791,
+        38
+      ],
+      "frameSize": [
+        404,
+        552
+      ]
+    },
+    {
+      "theme": "organic-biophilic",
+      "mode": "subtle",
+      "actual": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 0,
+        "pendingLayoutSources": 0,
+        "particles": 0,
+        "blurEffects": 1,
+        "actors": 2,
+        "material": "frosted-glass",
+        "updates": 0,
+        "callbackUsec": 0,
+        "generation": 16
+      },
+      "policy": {
+        "motion": "interaction",
+        "material": "frosted-glass",
+        "particleCount": 0
+      },
+      "footerBackground": "#00000000",
+      "cardPosition": [
+        815,
+        120
+      ],
+      "framePosition": [
+        791,
+        38
+      ],
+      "frameSize": [
+        404,
+        552
+      ]
+    },
+    {
+      "theme": "organic-biophilic",
+      "mode": "full",
+      "actual": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 1,
+        "pendingLayoutSources": 0,
+        "particles": 8,
+        "blurEffects": 1,
+        "actors": 10,
+        "material": "frosted-glass",
+        "updates": 8,
+        "callbackUsec": 1074,
+        "generation": 17
+      },
+      "policy": {
+        "motion": "ambient",
+        "material": "frosted-glass",
+        "particleCount": 8
+      },
+      "footerBackground": "#00000000",
+      "cardPosition": [
+        815,
+        120
+      ],
+      "framePosition": [
+        791,
+        38
+      ],
+      "frameSize": [
+        404,
+        552
+      ]
+    },
+    {
+      "theme": "glassmorphism",
+      "mode": "off",
+      "actual": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 0,
+        "pendingLayoutSources": 0,
+        "particles": 0,
+        "blurEffects": 1,
+        "actors": 0,
+        "material": "frosted-glass",
+        "updates": 8,
+        "callbackUsec": 1074,
+        "generation": 19
+      },
+      "policy": {
+        "motion": "none",
+        "material": "frosted-glass",
+        "particleCount": 0
+      },
+      "footerBackground": "#00000000",
+      "cardPosition": [
+        806,
+        116
+      ],
+      "framePosition": [
+        791,
+        38
+      ],
+      "frameSize": [
+        404,
+        552
+      ]
+    },
+    {
+      "theme": "glassmorphism",
+      "mode": "subtle",
+      "actual": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 0,
+        "pendingLayoutSources": 0,
+        "particles": 0,
+        "blurEffects": 1,
+        "actors": 1,
+        "material": "frosted-glass",
+        "updates": 8,
+        "callbackUsec": 1074,
+        "generation": 20
+      },
+      "policy": {
+        "motion": "interaction",
+        "material": "frosted-glass",
+        "particleCount": 0
+      },
+      "footerBackground": "#00000000",
+      "cardPosition": [
+        806,
+        116
+      ],
+      "framePosition": [
+        791,
+        38
+      ],
+      "frameSize": [
+        404,
+        552
+      ]
+    },
+    {
+      "theme": "glassmorphism",
+      "mode": "full",
+      "actual": {
+        "destroyed": false,
+        "open": true,
+        "active": true,
+        "sources": 0,
+        "pendingLayoutSources": 0,
+        "particles": 0,
+        "blurEffects": 1,
+        "actors": 1,
+        "material": "frosted-glass",
+        "updates": 8,
+        "callbackUsec": 1074,
+        "generation": 21
+      },
+      "policy": {
+        "motion": "interaction",
+        "material": "frosted-glass",
+        "particleCount": 0
+      },
+      "footerBackground": "#00000000",
+      "cardPosition": [
+        806,
+        116
+      ],
+      "framePosition": [
+        791,
+        38
+      ],
+      "frameSize": [
+        404,
+        552
+      ]
+    }
+  ],
+  "scheme": "light",
+  "mode": "full"
+}

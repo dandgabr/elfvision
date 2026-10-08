@@ -436,3 +436,37 @@ test('disconnect: a provider mutation wait times out without removing the accept
     assertEqual([result, writes, Object.keys(f.state().leases).length], ['credential-busy', 0, 1]);
     hold.resolve(); await writing; await first.close(); await second.close();
 });
+
+test('disconnect: exact connector removal fences old tickets while preserving siblings durably', async () => {
+    const f = fixture(), writer = f.make('one'), remover = f.make('two'); await writer.ready(); await remover.ready();
+    const ticket = await writer.capture('codex'), removed = [];
+    const result = await remover.disconnect(deletion({removeCredential: async (provider, kind) => { removed.push([provider, kind]); return true; }}),
+        {target: {id: 'codex--12345678-1234-4234-8234-123456789abc', provider: 'codex', kind: 'oauth-token'}});
+    assertEqual(removed, [['codex--12345678-1234-4234-8234-123456789abc', 'oauth-token']]);
+    assertEqual(result.credentials['command-code']['api-key'], 'preserved'); assertEqual(result.files.snapshots, 'pruned');
+    assertEqual(await failure(() => writer.withCredentialWrite('codex', ticket, async () => {})), 'stale');
+    await writer.capture('codex'); await writer.close(); await remover.close();
+});
+
+test('disconnect: failed exact target deletion retries while provider is blocked and preserves sibling scope', async () => {
+    const f = fixture(), gate = f.make('one'); await gate.ready();
+    const target = {id: 'codex--12345678-1234-4234-8234-123456789abc', provider: 'codex', kind: 'oauth-token'};
+    const failed = await gate.disconnect(deletion({removeCredential: async () => false}), {target}); assertEqual(failed.phase, 'failed');
+    assertEqual(await failure(() => gate.capture('codex')), 'blocked');
+    const removed = []; const retried = await gate.disconnect(deletion({removeCredential: async (id, kind) => { removed.push([id, kind]); return true; }}), {target});
+    assertEqual(retried.phase, 'complete'); assertEqual(removed, [[target.id, target.kind]]);
+    assertEqual(retried.credentials['command-code']['api-key'], 'preserved'); await gate.capture('codex'); await gate.close();
+});
+
+test('disconnect: unresolved scoped deletion cannot be replaced by a different connector intent', async () => {
+    const f = fixture(), gate = f.make('one'); await gate.ready();
+    const target = {id: 'codex--12345678-1234-4234-8234-123456789abc', provider: 'codex', kind: 'oauth-token'};
+    await gate.disconnect(deletion({removeCredential: async () => false}), {target});
+    const previous = JSON.stringify(f.state().transaction); const epoch = f.state().epoch;
+    for (const other of [{id: 'command-code', provider: 'command-code', kind: 'api-key'}, {...target, id: 'codex--12345678-1234-4234-8234-123456789abd'}]) {
+        assertEqual(await failure(() => gate.disconnect(deletion(), {target: other})), 'unfinished-connector-removal');
+        assertEqual(JSON.stringify(f.state().transaction), previous); assertEqual(f.state().epoch, epoch);
+        assertEqual(await failure(() => gate.capture('codex')), 'blocked');
+    }
+    assertEqual((await gate.disconnect(deletion(), {target})).phase, 'complete'); await gate.capture('codex'); await gate.close();
+});
