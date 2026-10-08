@@ -7,7 +7,7 @@ desktop integrations are planned.
 
 | Document | Purpose |
 |---|---|
-| [Usage and settings](usage.md) | Indicator legend, every preference, notification behavior, reset and local account removal |
+| [Usage and settings](usage.md#settings) | Preferences, notification behavior, reset and local account removal; [configuration locations](usage.md#local-folders) |
 | [Providers](providers.md) | Supported endpoints, authentication permissions, monetary semantics and unavailable data |
 | [Themes](themes.md) | Custom theme format, tokens, validation and native effect profiles |
 | [Development](development.md) | Build, package, test, try changes in isolated shells, add themes or translations and contribute |

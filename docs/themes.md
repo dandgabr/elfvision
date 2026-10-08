@@ -20,7 +20,9 @@ font is absent.
 
 A theme is a folder with a `theme.json`. Put your own in
 `~/.local/share/gnome-ai-quota/themes/<id>/theme.json`; a theme there replaces a
-built-in one with the same id. The file lists colors for a `light` and a `dark`
+built-in one with the same id. This legacy directory name is retained for
+Elfvision upgrades; `XDG_DATA_HOME` changes the data directory when set.
+The file lists colors for a `light` and a `dark`
 scheme and a few shape and font choices:
 
 ```json
@@ -115,8 +117,8 @@ themes, with the user-supplied name and description, including overrides of
 System (GNOME).
 
 General exposes Effects (`Off`, `Subtle`, `Full`), Transparency, and Material.
-The material follows the theme by default. Every built-in theme also accepts an
-explicit opaque, translucent, decorative-glass, or frosted-glass material.
+The material follows the theme by default. The Material control offers
+Translucent, Decorative glass, and Frosted glass for compatible built-in themes.
 Transparent built-in backgrounds use opacity 0.80 in light mode and 0.74 in dark
 mode, with a contrast-safe tint around exposed reading zones. Disable
 Transparency to make the background opaque.
@@ -128,7 +130,7 @@ loop. Unsupported frost can fall back to decorative glass.
 
 User themes remain static and opaque under the loader-owned trust policy, including
 overrides of built-in IDs. Selecting a glass material does not grant a user theme
-permission to run packaged effects. Restore defaults resets all three appearance
+permission to run packaged effects. Restore configuration resets all three appearance
 controls, resumes tracking, and clears setup dismissal while preserving connector
 metadata, credentials, consent, and the selected data source.
 

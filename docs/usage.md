@@ -26,9 +26,9 @@ combined. Each card shows the available plan,
 state, usage windows, progress bars and reset times. The pacing tick marks the usage
 expected at an even rate across the window; it is a guide, not a prediction.
 
-The bar prioritizes providers that need attention. The popup uses one list in the
+The bar prioritizes connectors that need attention. The popup uses one list in the
 order chosen under **General → Popup → Connector order and visibility**. Cards
-hidden there still update, notify and may appear in the bar. Paused providers
+hidden there still update, notify and may appear in the bar. Paused connectors
 appear under **Not tracked** with a Resume action. Use **?** for the indicator
 legend, **Refresh** to request fresh data and **Preferences** to change settings.
 
@@ -46,7 +46,7 @@ in the extension's keyring namespace; it never creates empty provider slots.
 For a new live-data user with no accounts, Preferences opens a setup assistant once:
 Welcome, Providers, Connect, Top bar, Notifications and a summary. Every provider is optional;
 choosing one never connects it. Skip, Escape or closing dismisses setup. General → Set up again
-reopens it. Restore defaults clears setup dismissal so setup becomes available again. Existing accounts, demo mode and a
+reopens it. Restore configuration clears setup dismissal so setup becomes available again. Existing accounts, demo mode and a
 request to show a particular account do not trigger setup. A keyring that cannot be checked does
 not count as an empty account list.
 
@@ -70,9 +70,9 @@ it, starts a sign-in or accepts terms for you. Only an explicit Connect action d
 | General, Colors and theme | Theme | Opens the theme picker. Default: System (GNOME). |
 | General, Colors and theme | Your themes | Opens the folder for your own themes. |
 | General, Suggested fonts | Install suggested fonts… | Reviews four licensed Poppins, Inter, and JetBrains Mono files before an optional download. Cancel is the default; theme selection never installs fonts. |
-| General, Colors and theme | Effects | Off stops motion and textures while preserving the selected material. Subtle allows short interactions; Full permits compatible ambient motion. Default: Subtle. System animation settings take precedence. |
+| General, Colors and theme | Effects | Off stops motion and textures while preserving the selected material. Subtle allows short interactions and static decoration; Full permits compatible ambient motion. Default: Subtle. System animation settings take precedence. |
 | General, Colors and theme | Transparency | Allows transparent backgrounds. Off keeps reading surfaces and backgrounds opaque. Default: on. |
-| General, Colors and theme | Material | Follows the theme or selects opaque, translucent, decorative glass, or frost for any built-in theme. Transparency must be on for a transparent material. Default: follow the theme. |
+| General, Colors and theme | Material | Follows the theme or selects Translucent, Decorative glass, or Frosted glass where supported by the built-in theme. Turn Transparency off for an opaque background. Default: follow the theme. |
 | General, Popup | Clock | Follows the GNOME clock setting, or forces 12 or 24 hours for reset times. |
 | General, Popup | Automatic width / Popup width | Automatic starts at 420 logical pixels. Turn it off to choose a width. The monitor clamps the displayed size without rewriting the requested value. |
 | General, Popup | Automatic height / Maximum popup height | Automatic limits the whole popup to 70% of the current monitor's work area. A custom limit includes the footer and native chrome; a short list may use less height. |
@@ -80,7 +80,7 @@ it, starts a sign-in or accepts terms for you. Only an explicit Connect action d
 | General, Popup | Time until reset | Writes the countdown as `1h 20min` or `1h20`. |
 | General, Popup | Open cards that need attention | Opens cards in a warning, critical or error state on their own. A card you open or close by hand keeps that choice until its state changes. |
 | General, Advanced | Data source, Demo scenario | Switches to made-up providers (`steady`, `flaky` or `drift`) so every state can be seen without an account. The popup says when the data is made up. |
-| General, last group | Set up again | Reopens the optional setup assistant. Restore defaults clears setup dismissal; saved connectors remain. |
+| General, last group | Set up again | Reopens the optional setup assistant. Restore configuration clears setup dismissal; saved connectors remain. |
 | General, last group | About | Shows the version, the license, and the links. |
 | General, last group | Restore configuration | Resets appearance, bar, popup, notifications, tracking, and setup dismissal. All connectors are tracked again. Connectors, credentials, terms, and the selected data source stay saved. |
 | Notifications | Send notifications | Is the master switch. It also silences the connection alert. Off leaves the bar and the popup as they are. |
@@ -165,6 +165,17 @@ or deleted. Connector names and usernames may need to be entered again. In Demo,
 recovery rebuilds only fictional connector metadata.
 
 ## Local folders
+
+Preferences and connector metadata use the GSettings schema
+`org.gnome.shell.extensions.gnome-ai-quota`, at
+`/org/gnome/shell/extensions/gnome-ai-quota/` in the settings backend (normally
+dconf). Change them through Preferences. The JSON file below supplies public
+OAuth client configuration; it does not store appearance settings or account
+tokens. See [account setup](../README.md#connect-accounts) for the import helper.
+
+The extension UUID `gnome-ai-quota@dandgabr.github.io`, schema and directory names
+remain unchanged after the Elfvision rename to preserve existing installations,
+settings and accounts.
 
 The paths below assume the default XDG directories. Custom `XDG_CONFIG_HOME` and
 `XDG_DATA_HOME` values change their corresponding locations.

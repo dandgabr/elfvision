@@ -409,9 +409,15 @@ A local package build does not publish a GitHub release.
 ## Signing in to OAuth providers
 
 The sign-in needs the provider's client id in `~/.config/gnome-ai-quota/providers.local.json`
-(see `providers.example.json`). Run `python3 -I tools/import-client-ids.py` once: it looks for
-the id in the AI tool installed on your computer, then in that tool's open-source code, and
-writes it to the file with mode 0600 without printing it. Shell and preferences
+(see [providers.example.json](../providers.example.json)). The retained directory
+name preserves existing configuration after the Elfvision rename; `XDG_CONFIG_HOME`
+changes its base directory. Preferences use GSettings separately; see the
+[configuration locations](usage.md#local-folders).
+Run `python3 -I tools/import-client-ids.py` once: it looks for the public client
+configuration in the installed AI tool. Codex can fall back to public source;
+Antigravity checks candidate client pairs with Google's token endpoint using a
+made-up authorization code. The helper writes the configuration with mode 0600
+without printing it. Shell and preferences
 read it asynchronously with a 16 KiB streaming limit and a maximum 5-second
 cancellation timer for metadata, open, and read operations. Asynchronous stream
 closure follows cancellation; the complete promise has no hard 5-second deadline.

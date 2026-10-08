@@ -62,6 +62,7 @@ notifications. Every provider is optional; selecting one does not sign you in.
 
 - GNOME Shell **50**; other versions are not declared compatible.
 - A desktop Secret Service, such as GNOME Keyring, for API keys and sign-ins.
+- `flock` from util-linux (at `/usr/bin/flock`) for safe coordination across login sessions.
 - Python 3 for the optional OAuth client-ID helper.
 - To build from source: `gnome-extensions`, `glib-compile-schemas`, `msgfmt`, Python
   3 and the `zip`/`unzip` commands. On Fedora, the schema and translation tools are
@@ -214,8 +215,8 @@ requires an explicit acknowledgement before an OAuth connection starts.
   Connection notices and a test notification have their own controls.
 - **Themes:** 22 built-in themes, each with light and dark variants. Follow the
   system scheme or choose one explicitly; add your own theme files.
-- **Native materials and effects:** every built-in theme lets you choose an opaque
-  background, translucency, decorative glass, or frost. Effects Off stops motion
+- **Native materials and effects:** every built-in theme lets you choose
+  translucency, decorative glass, or frost. Effects Off stops motion
   and textures while preserving the selected material. Turn Transparency off for
   an opaque background. Subtle and Full control motion, with system animation
   settings taking precedence; ambient work stops when the popup closes.
@@ -245,8 +246,14 @@ gnome-extensions prefs gnome-ai-quota@dandgabr.github.io
 
 **Accounts** creates, configures, disconnects, and pauses connectors. **General** controls the
 panel, popup, themes, fonts and demo data. **Notifications** controls thresholds,
-connection notices and the test notification. The [usage and settings
-reference](docs/usage.md) describes every option and notification rule.
+connection notices and the test notification. The [settings
+reference](docs/usage.md#settings) describes the available controls;
+[local configuration locations](docs/usage.md#local-folders) explains where
+preferences, public OAuth client configuration and credentials are stored.
+
+The GNOME UUID, settings schema and local folders retain the `gnome-ai-quota`
+name so Elfvision reuses existing settings and accounts. Use the command above
+and the documented legacy paths when configuring this GNOME build.
 
 Adding a connector saves its configuration; use **Connect** in its editor to
 authenticate (or **Simulate connect** in Demo). If the popup has a saved
@@ -281,7 +288,10 @@ reference](docs/themes.md) describes the file format.
 API keys and OAuth tokens are stored through libsecret in the desktop keyring,
 with no plaintext fallback. The extension keeps its own credentials and does not
 read or change the official AI clients' sessions. The manually run client-ID
-helper reads installed program files only for public OAuth configuration.
+helper reads public OAuth configuration from installed program files. For Codex,
+it can also fetch the public source when local discovery fails; for Antigravity,
+it checks candidate client pairs with Google's token endpoint using a made-up
+authorization code. It never reads the clients' saved account tokens.
 
 Quota requests go to the configured provider hosts over HTTPS. Choosing a theme
 does not contact a font server; optional font downloads require a separate action.
