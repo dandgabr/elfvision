@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the gnome-ai-quota package.
+# This file is distributed under the same license as the Elfvision package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-ai-quota\n"
-"Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-08 17:26-0300\n"
+"Project-Id-Version: Elfvision\n"
+"Report-Msgid-Bugs-To: https://github.com/dandgabr/elfvision/issues\n"
+"POT-Creation-Date: 2026-10-08 18:43-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -546,12 +546,13 @@ msgid "About"
 msgstr ""
 
 #: lib/prefs/about.js:38
-msgid "Gnome AI Quota"
+msgid "Elfvision"
 msgstr ""
 
 #: lib/prefs/about.js:43
 msgid ""
-"Shows the used quota of your AI providers in the top bar and in a popup."
+"Monitors AI quotas, reset times and API spending. This build integrates with "
+"GNOME Shell."
 msgstr ""
 
 #: lib/prefs/about.js:49

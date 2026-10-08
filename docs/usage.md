@@ -1,6 +1,8 @@
 # Usage and settings
 
-Reference for the installed extension. For installation and account setup, start with
+Reference for Elfvision's currently available GNOME Shell integration. KDE Plasma
+and other integrations are planned; their controls and installation will be
+documented with their builds. For installation and account setup, start with
 [Getting started](../README.md#getting-started).
 
 ## Reading the top bar

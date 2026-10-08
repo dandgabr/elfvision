@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build the generated files the shell needs: the compiled GSettings schema and
+# Build the generated files Elfvision's GNOME integration needs: the GSettings schema and
 # the translation catalogs. Run it after changing schemas/ or po/.
 # Neither output is committed (see .gitignore).
 set -euo pipefail

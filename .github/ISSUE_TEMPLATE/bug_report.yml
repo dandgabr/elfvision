@@ -1,11 +1,11 @@
 name: Bug report
-description: Report a problem with Gnome Gnome AI Quota.
+description: Report a problem with Elfvision.
 body:
   - type: markdown
     attributes:
       value: |
-        This report will be public. For security vulnerabilities, use [private vulnerability reporting](https://github.com/dandgabr/gnome-ai-quota/security/advisories/new).
-        Do not include API keys, tokens, cookies, credentials, account identifiers, personal information, or unreviewed logs. The extension does not collect or attach diagnostics to this form.
+        This report will be public. For security vulnerabilities, use [private vulnerability reporting](https://github.com/dandgabr/elfvision/security/advisories/new).
+        Do not include API keys, tokens, cookies, credentials, account identifiers, personal information, or unreviewed logs. Elfvision does not collect or attach diagnostics to this form.
   - type: textarea
     id: actual
     attributes:
@@ -30,14 +30,15 @@ body:
   - type: input
     id: extension_version
     attributes:
-      label: Gnome Gnome AI Quota version
+      label: Elfvision version
       description: The version shown in Preferences → About; include a commit if using a development build.
     validations:
       required: true
   - type: input
     id: shell_version
     attributes:
-      label: GNOME Shell version
+      label: Desktop environment or window manager and version
+      description: Identify the integration used, such as the GNOME Shell extension, and its environment version. KDE Plasma and other integrations are currently planned.
     validations:
       required: true
   - type: input

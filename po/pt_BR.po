@@ -1,15 +1,15 @@
-# Brazilian Portuguese translation for gnome-ai-quota.
-# Copyright (C) 2026 the gnome-ai-quota authors.
-# This file is distributed under the same license as the gnome-ai-quota package.
+# Brazilian Portuguese translation for Elfvision.
+# Copyright (C) 2026 the Elfvision authors.
+# This file is distributed under the same license as the Elfvision package.
 #
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-ai-quota\n"
-"Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-08 17:26-0300\n"
+"Project-Id-Version: Elfvision\n"
+"Report-Msgid-Bugs-To: https://github.com/dandgabr/elfvision/issues\n"
+"POT-Creation-Date: 2026-10-08 18:43-0300\n"
 "PO-Revision-Date: 2026-10-06 21:45-0300\n"
-"Last-Translator: gnome-ai-quota authors\n"
+"Last-Translator: Elfvision authors\n"
 "Language-Team: Brazilian Portuguese\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -561,15 +561,14 @@ msgid "About"
 msgstr "Sobre"
 
 #: lib/prefs/about.js:38
-msgid "Gnome AI Quota"
-msgstr "Gnome AI Quota"
+msgid "Elfvision"
+msgstr "Elfvision"
 
 #: lib/prefs/about.js:43
 msgid ""
-"Shows the used quota of your AI providers in the top bar and in a popup."
-msgstr ""
-"Mostra a cota usada dos seus provedores de IA na barra superior e em um "
-"popup."
+"Monitors AI quotas, reset times and API spending. This build integrates with "
+"GNOME Shell."
+msgstr "Monitora cotas de IA, prazos de reinício e gastos com APIs. Esta versão integra-se ao GNOME Shell."
 
 #: lib/prefs/about.js:49
 msgid "Created by"
@@ -2356,7 +2355,9 @@ msgstr "Nenhum conector visível"
 msgid ""
 "Choose which connectors appear in the popup. Collection and alert settings "
 "have not changed."
-msgstr "Escolha quais conectores aparecem no popup. As configurações de coleta e alertas continuam iguais."
+msgstr ""
+"Escolha quais conectores aparecem no popup. As configurações de coleta e "
+"alertas continuam iguais."
 
 #: lib/ui/notifier.js:71
 msgid "Open"
@@ -2632,6 +2633,12 @@ msgstr "Cenário de demonstração"
 #: prefs.js:309
 msgid "Steady: all fine. Flaky: errors come and go. Drifting: usage climbs."
 msgstr "Estável: tudo certo. Instável: erros vão e vêm. Subindo: o uso sobe."
+
+#~ msgid ""
+#~ "Shows the used quota of your AI providers in the top bar and in a popup."
+#~ msgstr ""
+#~ "Mostra a cota usada dos seus provedores de IA na barra superior e em um "
+#~ "popup."
 
 #~ msgid ""
 #~ "Your accounts are still being tracked. Choose which connectors appear in "

@@ -1,8 +1,8 @@
 {
-  "name": "gnome-ai-quota-development",
+  "name": "elfvision-development",
   "private": true,
   "type": "module",
-  "description": "Development-only static checks for the GJS extension",
+  "description": "Development checks for Elfvision and its GNOME Shell integration",
   "engines": {
     "node": "^22.13.0 || ^24.0.0"
   },

@@ -1,7 +1,11 @@
 # Development
 
-A guide for working on the code. For what the extension is and how to install
-it, read the [README](../README.md); for why it is built this way, the
+A guide for working on Elfvision's shared provider code and current GNOME Shell
+integration. The GNOME build uses GJS, St and GTK/libadwaita; KDE Plasma and other
+desktop integrations are planned and do not have build targets yet. Requirements
+and native-shell commands in this guide apply to the GNOME integration.
+For the project and installation, read the [README](../README.md); for why the
+GNOME implementation is built this way, the
 [ADRs](adr/README.md).
 
 **Contents:** [Setup](#setup) · [Layout](#layout) · [Connector identities](#connector-identities) · [Architecture rules](#architecture-rules) · [Tests](#tests) ·
@@ -17,8 +21,8 @@ You need GNOME Shell 50, `gjs`, `glib-compile-schemas`, the gettext tools
 shell (`sudo dnf install mutter-devkit`).
 
 ```sh
-git clone https://github.com/dandgabr/gnome-ai-quota.git
-cd gnome-ai-quota
+git clone https://github.com/dandgabr/elfvision.git
+cd elfvision
 tools/build.sh
 ```
 
@@ -397,7 +401,7 @@ install` compiles the schema; unpacking the zip by hand does not.
 
 The archive follows the [standard GNOME extension layout](https://gjs.guide/extensions/overview/anatomy.html#extension-zip):
 `metadata.json` and `extension.js` sit at the ZIP root, alongside runtime folders.
-The current metadata declares `version-name: "0.2.0"` and Shell `50`. Keep the
+The current metadata declares `version-name: "0.2.1"` and Shell `50`. Keep the
 website-managed numeric `version` field unset for local distribution, as
 [GNOME documents](https://gjs.guide/extensions/overview/anatomy.html#version).
 A local package build does not publish a GitHub release.

@@ -103,7 +103,7 @@ function rejectedRow(rejected, _) {
     return row;
 }
 
-export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
+export default class ElfvisionGnomePreferences extends ExtensionPreferences {
     /** The theme picker: grouped rows with a color sketch of each theme. */
     _themePage(window, settings, _) {
         const {themes, rejected} = scanThemes(this.path);

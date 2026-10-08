@@ -1,6 +1,6 @@
-# 0001. Stack (GJS only) and repository conventions
+# 0001. GNOME integration stack and repository conventions
 
-Status: accepted
+Status: accepted; GNOME-specific stack scope clarified for Elfvision on 2026-10-08
 
 ## Context
 
@@ -10,6 +10,12 @@ in the preferences window, which runs in a separate process. A native library lo
 into the shell is discouraged, and a crash in it takes the whole session down.
 
 ## Decision
+
+The GJS, St/Clutter, GTK and GNOME Shell choices below govern Elfvision's GNOME
+integration. KDE Plasma and other desktop integrations are planned and will have
+their own platform decisions. English source text and the project license apply
+across integrations. Existing GNOME installation and storage identifiers remain
+stable during the rename so account data and upgrades retain their identity.
 
 - **GJS only**, as ES modules, with no JavaScript compilation step.
   `tools/build.sh` compiles schemas and translation catalogs.
