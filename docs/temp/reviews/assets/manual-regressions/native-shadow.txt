@@ -1,0 +1,97 @@
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.a11y.Bus' requested by ':1.0' (uid=1000 pid=2178958 comm="gdbus call --session --dest org.a11y.Bus --object-" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.a11y.Bus'
+dbus-daemon[2178967]: Failed to write data to pipe!
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.freedesktop.systemd1' requested by ':1.2' (uid=1000 pid=2178968 comm="/usr/bin/dbus-broker-launch --config-file=/usr/sha" label="unconfined_u:unconfined_r:unconfined_dbusd_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.Shell.Extensions' requested by ':1.6' (uid=1000 pid=2179020 comm="gdbus call --session --dest org.gnome.Shell.Extens" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.freedesktop.portal.Desktop' requested by ':1.9' (uid=1000 pid=2179025 comm="/usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.S" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.freedesktop.impl.portal.PermissionStore' requested by ':1.10' (uid=1000 pid=2179042 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.PermissionStore'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.freedesktop.portal.Documents' requested by ':1.10' (uid=1000 pid=2179042 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gnome' requested by ':1.10' (uid=1000 pid=2179042 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.Shell.Screencast' requested by ':1.5' (uid=1000 pid=2178986 comm="gnome-shell --headless --wayland --unsafe-mode --w" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.Shell.CalendarServer' requested by ':1.5' (uid=1000 pid=2178986 comm="gnome-shell --headless --wayland --unsafe-mode --w" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.evolution.dataserver.Sources5' requested by ':1.14' (uid=1000 pid=2179088 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.Shell.Notifications' requested by ':1.5' (uid=1000 pid=2178986 comm="gnome-shell --headless --wayland --unsafe-mode --w" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.OnlineAccounts' requested by ':1.15' (uid=1000 pid=2179095 comm="/usr/libexec/evolution-source-registry" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.Sources5'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.Shell.Notifications'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.evolution.dataserver.Calendar8' requested by ':1.14' (uid=1000 pid=2179088 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.Shell.CalendarServer'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.freedesktop.portal.IBus' requested by ':1.17' (uid=1000 pid=2179118 comm="ibus-daemon --panel disable" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.freedesktop.portal.IBus'
+goa-daemon-Message: 13:10:58.971: goa-daemon version 3.58.1 starting
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.Identity' requested by ':1.20' (uid=1000 pid=2179133 comm="/usr/libexec/goa-daemon" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.OnlineAccounts'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.Identity'
+
+(process:2179188): libgoaidentity-WARNING **: 13:10:58.982: GoaKerberosIdentityManager: Using polling for change notification for credential cache type 'KCM'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.Calendar8'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.evolution.dataserver.AddressBook10' requested by ':1.23' (uid=1000 pid=2179163 comm="/usr/libexec/evolution-calendar-factory" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.evolution.dataserver.AddressBook10'
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.Settings.GlobalShortcutsProvider' requested by ':1.13' (uid=1000 pid=2179065 comm="/usr/libexec/xdg-desktop-portal-gnome" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.Settings.GlobalShortcutsProvider'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gnome'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.freedesktop.impl.portal.desktop.gtk' requested by ':1.10' (uid=1000 pid=2179042 comm="/usr/libexec/xdg-desktop-portal" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.desktop.gtk'
+
+(/usr/libexec/xdg-desktop-portal:2179042): xdg-desktop-portal-WARNING **: 13:10:59.905: Failed to connect to PipeWire: Couldn't connect to PipeWire
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.freedesktop.portal.Desktop'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.Shell.Extensions'
+libva info: VA-API version 1.23.0
+libva info: Trying to open /usr/lib64/dri-nonfree/iHD_drv_video.so
+libva info: Found init function __vaDriverInit_1_23
+libva info: va_openDriver() returns 0
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.freedesktop.portal.IBus' requested by ':1.35' (uid=1000 pid=2180027 comm="ibus-daemon --panel disable -r --xim" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.freedesktop.portal.IBus'
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.Shell.Screencast'
+--- extension info
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Activating service name='org.gnome.Shell.Extensions' requested by ':1.41' (uid=1000 pid=2180103 comm="gdbus call --session --dest org.gnome.Shell.Extens" label="unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023")
+dbus-daemon[2178954]: [session uid=1000 pid=2178954 pidfd=5] Successfully activated service 'org.gnome.Shell.Extensions'
+ 'state': <1.0>
+ 'enabled': <true>
+ 'error': <''>
+--- result of tools/card-shadow-probe.js
+(true, '"GAQ_CARD_SHADOW_STARTED"')
+--- result of tools/card-shadow-verify.js
+(true, '"GAQ_CARD_SHADOW_OK: {\\"finished\\":true,\\"cases\\":[{\\"scheme\\":\\"light\\",\\"card\\":[808,116,366,242],\\"stage\\":[1280,800],\\"strips\\":{\\"left\\":[805,131,807,343],\\"right\\":[1175,131,1177,343]},\\"paths\\":[\\"/tmp/tmp.Zf1IxKTROK/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/.superpowers/sdd/2026-10-07-open-items/card-shadow-light-original.png\\",\\"/tmp/tmp.Zf1IxKTROK/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/.superpowers/sdd/2026-10-07-open-items/card-shadow-light-none.png\\"]},{\\"scheme\\":\\"dark\\",\\"card\\":[843,138,308,242],\\"stage\\":[1280,800],\\"strips\\":{\\"left\\":[831,153,842,365],\\"right\\":[1152,153,1163,365]},\\"paths\\":[\\"/tmp/tmp.Zf1IxKTROK/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/.superpowers/sdd/2026-10-07-open-items/card-shadow-dark-original.png\\",\\"/tmp/tmp.Zf1IxKTROK/data/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/.superpowers/sdd/2026-10-07-open-items/card-shadow-dark-none.png\\"]}],\\"error\\":\\"\\"}"')
+Gdk-Message: 13:11:14.258: Lost connection to Wayland compositor.
+Gdk-Message: 13:11:14.258: Lost connection to Wayland compositor.
+Gdk-Message: 13:11:14.258: Error reading events from display: Broken pipe
+--- shell log (/tmp/gaq-manual-shadow-shell.log)
+gnome-shell-calendar-server[2179088]: Lost (or failed to acquire) the name org.gnome.Shell.CalendarServer - exiting
+
+(evolution-calendar-factory:2179163): libedbus-private-WARNING **: 13:11:14.379: Error setting property 'ConnectionStatus' on interface org.gnome.evolution.dataserver.Source: The connection is closed (g-io-error-quark, 18)
+
+(evolution-addressbook-factory:2179213): libedbus-private-WARNING **: 13:11:14.379: Error setting property 'ConnectionStatus' on interface org.gnome.evolution.dataserver.Source: The connection is closed (g-io-error-quark, 18)
+libmutter-Message: 13:10:58.553: Using Wayland display name 'gaq-headless-2178955'
+GNOME Shell-Message: 13:10:59.113: Error looking up permission: GDBus.Error:org.freedesktop.portal.Error.NotFound: No entry for geolocation
+Errors from xkbcomp are not fatal to the X server
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [Gjs_ui_providerCard_GaqProviderCard] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [Gjs_ui_meter_GaqMeterBar] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [Gjs_ui_meter_GaqMeterBar] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:04.063: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:05.539: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:05.539: Can't update stage views actor unnamed [Gjs_ui_meter_GaqMeterBar] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:05.539: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:05.539: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:05.539: Can't update stage views actor unnamed [StBoxLayout] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:05.539: Can't update stage views actor unnamed [Gjs_ui_meter_GaqMeterBar] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:05.539: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.
+(gnome-shell:2178986): Clutter-WARNING **: 13:11:05.539: Can't update stage views actor unnamed [StWidget] is on because it needs an allocation.

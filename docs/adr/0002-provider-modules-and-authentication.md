@@ -49,11 +49,22 @@ These endpoints are unofficial and may change without notice.
 5. **Money metrics** (`kind: money`) are first-class: the balance is the value, the
    bar is the share of the configured budget already spent, there is no window or
    reset. A dollar floor for the alerts is not implemented.
-6. **Providers the user no longer uses.** *Track* (a switch per account) off pauses
-   collection and hides the provider while the credential stays saved. *Disconnect* or
-   *Remove key* deletes the stored credential (the separate *Remove connector* of the first
-   design did the same and was dropped). A provider that is not tracked never raises an alert
-   or takes a bar slot. A provider that was never connected is not shown at all.
+6. **Connector tracking and removal.** *Track* off pauses only that connector and
+   hides its active card while its credential stays saved. *Disconnect* or *Remove
+   key* deletes its credential while retaining metadata. *Remove connector…* also
+   prunes its quota/alert state and list entry after confirmed deletion. Other
+   connectors remain. Each account, including same-provider accounts, has its own
+   runtime and snapshot identity (ADR 0009). Unconnected connectors have no live
+   quota card; paused connectors appear under Not tracked.
+
+## Connector identity
+
+Provider modules remain reusable per provider type. Each account now has its own
+connector ID for the scheduler, normalized snapshots, disk cache, status,
+tracking, and preference targets. Provider IDs continue to select client
+configuration and endpoint allowlists. Legacy default IDs preserve existing
+credential locations; added accounts use a separate keyring namespace. See
+[ADR 0009](0009-adding-providers.md#connector-identity-and-accounts).
 
 ## Scheduler and cache
 

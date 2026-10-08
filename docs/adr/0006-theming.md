@@ -183,16 +183,21 @@ Raw `origin` fields cannot grant trust. The picker uses this same provenance.
 
 `effectPolicy({origin, profile, mode, animationsEnabled, transparencyEnabled,
 popupOpen, materialPreference})` returns `{motion, material, particleCount}`. Motion is `none`,
-`interaction` or `ambient`. User origin, Effects Off and closed popup yield an
-opaque/no-motion policy. Subtle permits short interaction transitions and static
+`interaction` or `ambient`. User origin and a closed popup yield an
+opaque/no-motion policy. Effects Off disables motion and textures but retains the
+selected material. Subtle permits short interaction transitions and static
 decoration; Full permits compatible ambient presets. Disabled system animations
 prohibit animated interaction and ambient motion, independently of transparency.
 The panel remains dark and never runs an ambient loop.
 
 Preferences expose Effects, Transparency and Material, reset with appearance settings.
 An explicit material applies only when the trusted profile lists it as compatible;
-the default follows the theme. Glassmorphism permits all three glass materials.
-Account, tracking, consent and first-use state remain kept. ThemeManager exposes
+the default follows the theme. The 2026-10-08 owner-approved correction replaces
+the earlier selective material allowlists: all 22 built-in profiles permit all four materials,
+including opaque, with transparent background opacity 0.80 light / 0.74 dark.
+Transparency Off forces opacity. Custom themes remain static and opaque.
+Restore defaults preserves connector metadata, credentials, consent, and data
+source, while resetting tracking and first-use dismissal. ThemeManager exposes
 `getEffectState(popupOpen = false)` and `subscribeEffects(callback)` returning an
 unsubscribe function. Notifications follow theme, scheme, mode, transparency and
 system `enable-animations` changes, even when CSS is unchanged. Subscribers read
@@ -225,6 +230,7 @@ changes during St's lazy style/painter path invalidated text allocation and
 produced native shadow/offscreen errors. Pending label work is cancelled on
 destruction. Closing retains its fixed anchor and rendering policy until the
 popup is hidden, while decorative animation and blur work stop immediately.
-Close, Off, lock, and disable remove owned work. Theme JSON cannot select arbitrary
+Close, lock, and disable remove owned effect work. Off removes animation and
+decoration while retaining the selected background material for an open popup. Theme JSON cannot select arbitrary
 renderer code. Semantic pixel checks and the 22-theme light/dark inventory are
 recorded in the validation record; hardware performance remains a separate gate.

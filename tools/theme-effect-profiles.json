@@ -5,11 +5,14 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "analog-newspaper-broadsheet": {
@@ -18,11 +21,14 @@
     "texture": "paper",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "aurora-mesh-gradient": {
@@ -31,10 +37,12 @@
     "texture": "grain",
     "particleCount": 0,
     "opacity": {
-      "light": 0.96,
-      "dark": 0.9
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
+      "opaque",
+      "translucent",
       "decorative-glass",
       "frosted-glass"
     ]
@@ -45,11 +53,14 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "card-based-ui": {
@@ -58,11 +69,14 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "cyberpunk": {
@@ -71,11 +85,14 @@
     "texture": "chamfer",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "de-stijl": {
@@ -84,11 +101,14 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "expressive-variable-typography": {
@@ -97,11 +117,14 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "flat-design": {
@@ -110,11 +133,14 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "glassmorphism": {
@@ -123,10 +149,11 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 0.9,
-      "dark": 0.82
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
+      "opaque",
       "translucent",
       "decorative-glass",
       "frosted-glass"
@@ -138,11 +165,14 @@
     "texture": "strokes",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "holographic-foil-iridescent": {
@@ -151,11 +181,14 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "decorative-glass"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "isometric": {
@@ -164,11 +197,14 @@
     "texture": "grid",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "linear-saas": {
@@ -177,12 +213,14 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 0.96,
-      "dark": 0.94
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
       "opaque",
-      "translucent"
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "lunarpunk": {
@@ -191,11 +229,13 @@
     "texture": "none",
     "particleCount": 4,
     "opacity": {
-      "light": 0.94,
-      "dark": 0.88
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
+      "opaque",
       "translucent",
+      "decorative-glass",
       "frosted-glass"
     ]
   },
@@ -205,11 +245,14 @@
     "texture": "grain",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "nanopunk": {
@@ -218,11 +261,14 @@
     "texture": "grid",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "organic-biophilic": {
@@ -231,11 +277,14 @@
     "texture": "paper",
     "particleCount": 8,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "sistema-gnome": {
@@ -244,11 +293,14 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "solarpunk": {
@@ -257,11 +309,14 @@
     "texture": "botanical",
     "particleCount": 8,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "terminal-tui": {
@@ -270,11 +325,14 @@
     "texture": "scanlines",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   },
   "web-brutalism": {
@@ -283,11 +341,14 @@
     "texture": "none",
     "particleCount": 0,
     "opacity": {
-      "light": 1,
-      "dark": 1
+      "light": 0.8,
+      "dark": 0.74
     },
     "compatibleMaterials": [
-      "opaque"
+      "opaque",
+      "translucent",
+      "decorative-glass",
+      "frosted-glass"
     ]
   }
 }

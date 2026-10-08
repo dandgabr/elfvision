@@ -4,7 +4,7 @@ A guide for working on the code. For what the extension is and how to install
 it, read the [README](../README.md); for why it is built this way, the
 [ADRs](adr/README.md).
 
-**Contents:** [Setup](#setup) · [Layout](#layout) · [Architecture rules](#architecture-rules) · [Tests](#tests) ·
+**Contents:** [Setup](#setup) · [Layout](#layout) · [Connector identities](#connector-identities) · [Architecture rules](#architecture-rules) · [Tests](#tests) ·
 [Running and checking](#running-and-checking-the-extension) · [Static analysis](#static-analysis) ·
 [Package](#package) · [Signing in to OAuth providers](#signing-in-to-oauth-providers) ·
 [Themes](#themes) · [Translations](#translations) · [Tools](#tools) · [Contributing](#contributing) ·
@@ -70,6 +70,34 @@ po/                 gettext template and translations
 tests/              unit tests (no GNOME Shell needed)
 tools/              build, translation, theme generation and test-shell scripts
 ```
+
+## Connector identities
+
+`lib/core/connectors.js` validates a versioned, nonsecret collection of at most
+32 connectors and 16 KiB. A connector records `{id, providerId, label, username}`.
+Provider IDs select the endpoint, public OAuth configuration, and trusted provider
+name; connector IDs key polling, cards, caches, status, tracking, credential
+revision targets, and preference routing. Default legacy IDs remain provider IDs;
+added IDs are `providerId--UUID`. Renaming never changes identity.
+
+Legacy credentials retain their exact `{provider, kind}` address. Added connectors
+use a separate libsecret schema with `{provider, connector, kind}`. Credential
+mutation leases remain provider-wide, while addressing and conditional token
+replacement operate on the exact connector. Per-connector removal prunes only its
+snapshot and alert state. Disconnect-all searches both extension-owned namespaces
+so missing registry metadata cannot hide a credential.
+
+Accounts uses a list and editor, sharing connector-keyed controllers with setup.
+Explicit registry recovery reads credential identities rather than secret values
+and rebuilds metadata after confirmation. Demo uses separate connector metadata
+and simulated controllers; its connect/remove actions cannot start a browser,
+keyring operation, or provider request. Keep this separation in probes.
+
+Restore defaults resets `untracked-providers` and `first-use-done` alongside
+appearance and notification settings. It preserves live/demo connector lists,
+credentials, terms, coordination state, public client configuration, and the data
+source. See the [connector design](temp/specs/2026-10-08-connectors-design.md)
+for the accepted identity and deletion boundaries.
 
 ## Architecture rules
 
@@ -439,6 +467,13 @@ source or the generator, regenerate, then review the diff. `--effect-profiles <f
 selects an explicit canonical source for developer checks. The generator and its
 profile source are development tools; shipped theme files already contain their
 validated effect data.
+
+Review changed character/background color pairs in both schemes, including
+focused, hovered, and checked states. The current Cyberpunk light palette and
+material corrections are tracked in the
+[material diagnosis](temp/reviews/2026-10-08-theme-material-diagnosis.md) and
+[manual regression record](temp/reviews/2026-10-08-manual-regressions.md).
+Those records distinguish source changes from completed native acceptance.
 
 ## Translations
 

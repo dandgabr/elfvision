@@ -43,7 +43,12 @@ dbus-run-session -- bash -c '
             timeout 40 gjs -m "$GAQ_TEST_ROOT/tests/prefsStates.js" "${args[@]}"
         done
     }
-    if [ "$GAQ_SMOKE_MODE" = states ]; then
+    if [ "$GAQ_SMOKE_MODE" = connectors ]; then
+        for variant in "" "rtl" "expanded" "rtl expanded"; do
+            read -r -a args <<< "$variant"
+            timeout 40 gjs -m "$GAQ_TEST_ROOT/tests/prefsConnectors.js" "${args[@]}"
+        done
+    elif [ "$GAQ_SMOKE_MODE" = states ]; then
         run_states
     elif [ "$GAQ_SMOKE_MODE" != startup ]; then
         timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsSmoke.js"
@@ -55,7 +60,7 @@ dbus-run-session -- bash -c '
         timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsLifecycle.js"
         run_states
     fi
-    if [ "$GAQ_SMOKE_MODE" != states ]; then
+    if [ "$GAQ_SMOKE_MODE" != states ] && [ "$GAQ_SMOKE_MODE" != connectors ]; then
         timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsStartup.js"
     fi
 '

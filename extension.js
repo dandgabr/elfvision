@@ -5,6 +5,8 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
 import {accountStatus} from './lib/core/accountStatus.js';
 import {createProvider, createProviders, isConnected} from './lib/providers/index.js';
+import {createConnectorStore} from './lib/services/connectorStore.js';
+import {providerIdForConnector} from './lib/core/connectors.js';
 import {availableProviders} from './lib/providers/registry.js';
 import {AlertService} from './lib/services/alertService.js';
 import {AlertStore} from './lib/services/alertStore.js';
@@ -80,7 +82,10 @@ export default class GnomeAiQuotaExtension extends Extension {
             this._controller?.credentialsChanged(touched);
             await this._syncProviders();
         });
-        this._untrackedChangedId = this._settings.connect('changed::untracked-providers', () => this._syncProviders());
+        this._untrackedChangedId = this._settings.connect('changed::untracked-providers', () => { if (this._settings.get_string('data-source') === 'demo') rebuild(); else this._syncProviders(); });
+        this._connectorChangedIds = ['connectors', 'demo-connectors', 'demo-connected-connectors'].map(key => this._settings.connect(`changed::${key}`, () => {
+            if (this._settings.get_string('data-source') === 'demo') rebuild(); else this._syncProviders();
+        }));
         // The test button of the preferences window raises this number; it carries nothing else.
         this._testChangedId = this._settings.connect('changed::test-notification', () => this._notifier?.show({kind: 'test'}));
         const gate = this._disconnectGate;
@@ -100,10 +105,11 @@ export default class GnomeAiQuotaExtension extends Extension {
         this._syncGeneration = (this._syncGeneration ?? 0) + 1;
         if (this._positionChangedId)
             this._settings?.disconnect(this._positionChangedId);
-        for (const id of [this._scenarioChangedId, this._sourceChangedId, this._credentialsChangedId, this._untrackedChangedId, this._testChangedId]) {
+        for (const id of [...(this._connectorChangedIds ?? []), this._scenarioChangedId, this._sourceChangedId, this._credentialsChangedId, this._untrackedChangedId, this._testChangedId]) {
             if (id)
                 this._settings?.disconnect(id);
         }
+        this._connectorChangedIds = [];
         this._sourceChangedId = 0;
         this._credentialsChangedId = 0;
         this._untrackedChangedId = 0;
@@ -123,12 +129,22 @@ export default class GnomeAiQuotaExtension extends Extension {
 
     _createController() {
         const source = this._settings.get_string('data-source');
-        const providers = createProviders({source, scenario: this._settings.get_string('demo-scenario')});
+        const store = createConnectorStore(this._settings, {demo: source === 'demo'});
+        let connectors;
+        try { connectors = store.list(); this._connectorRegistryProblem = false; } catch (_error) { connectors = []; this._connectorRegistryProblem = true; console.warn('gnome-ai-quota: connector registry unavailable; open Preferences to recover it'); } finally { store.dispose(); }
+        const templates = createProviders({source, scenario: this._settings.get_string('demo-scenario')});
+        const untracked = this._settings.get_strv('untracked-providers');
+        const connected = this._settings.get_strv('demo-connected-connectors');
+        const providers = source === 'demo' ? [...connectors.filter(c => connected.includes(c.id) && !untracked.includes(c.id)).map(connector => {
+            const template = createProviders({source, scenario: this._settings.get_string('demo-scenario')}).find(p => p.id === connector.providerId);
+            return {...template, id: connector.id};
+        }), ...templates.filter(p => p.id === 'example-credits')] : [];
         // Demo and real data must never share a cache: they use the same ids.
         const cacheDirectory = GLib.build_filenamev([GLib.get_user_cache_dir(), 'gnome-ai-quota', ...(source === 'demo' ? ['demo', this._settings.get_string('demo-scenario')] : [])]);
         const gate = source === 'live' ? this._disconnectGate : null;
         this._controllerEpoch = null;
-        this._controller = new QuotaController({providers, cache: new CacheStore(cacheDirectory, {gate}), order: availableProviders().map(meta => meta.id)});
+        this._controller = new QuotaController({providers, cache: new CacheStore(cacheDirectory, {gate}), order: availableProviders().flatMap(meta => connectors.filter(c => c.providerId === meta.id).map(c => c.id))});
+        this._controller.registryProblem = this._connectorRegistryProblem;
         if (source === 'demo')
             this._controller.markSynced();
         if (source === 'live') {
@@ -199,17 +215,20 @@ export default class GnomeAiQuotaExtension extends Extension {
             await gate.ready();
             const epoch = gate.snapshot().epoch;
             const untracked = this._settings.get_strv('untracked-providers');
-            const candidates = availableProviders().filter(meta => !untracked.includes(meta.id) && !gate.isBlocked(meta.id));
-            const captured = await Promise.all(candidates.map(meta => gate.capture(meta.id)));
+            const store = createConnectorStore(this._settings);
+            let entries; try { entries = store.list(); controller.registryProblem = false; } catch (_error) { entries = []; controller.registryProblem = true; } finally { store.dispose(); }
+            const candidates = entries.filter(connector => !untracked.includes(connector.id) && !gate.isBlocked(connector.providerId));
+            const captured = await Promise.all(candidates.map(connector => gate.capture(connector.providerId)));
             const tickets = new Map(candidates.map((meta, index) => [meta.id, captured[index]]));
-            const answers = await Promise.all(candidates.map(meta => isConnected(meta, {gate, ticket: tickets.get(meta.id)})));
+            const answers = await Promise.all(candidates.map(connector => isConnected(availableProviders().find(meta => meta.id === connector.providerId), {gate, ticket: tickets.get(connector.id), connectorId: connector.id})));
             const wanted = candidates.filter((_meta, index) => answers[index]).map(meta => meta.id);
             // A newer sync, a rebuild or a disable happened while the keyring was asked.
             if (generation !== this._syncGeneration || controller !== this._controller || this._disconnectGate !== gate
                 || gate.snapshot().epoch !== epoch || this._settings?.get_string('data-source') !== 'live')
                 return;
             this._controllerEpoch = epoch;
-            controller.sync(wanted, id => createProvider(id, {gate, ticket: tickets.get(id)}));
+            controller.sync(wanted, id => createProvider(id, {gate, ticket: tickets.get(id), providerId: providerIdForConnector(id)}),
+                availableProviders().flatMap(meta => entries.filter(c => c.providerId === meta.id).map(c => c.id)));
             controller.markSynced();
         } catch (error) {
             console.error(`gnome-ai-quota: cannot sync the providers: ${error.message}\n${error.stack ?? ''}`);
@@ -228,7 +247,7 @@ export default class GnomeAiQuotaExtension extends Extension {
             return;
         const next = {};
         for (const snapshot of this._controller?.snapshots() ?? []) {
-            if (!this._disconnectGate.isBlocked(snapshot.id) && availableProviders().some(meta => meta.id === snapshot.id))
+            if (!this._disconnectGate.isBlocked(providerIdForConnector(snapshot.id)) && providerIdForConnector(snapshot.id))
                 next[snapshot.id] = accountStatus(snapshot);
         }
         try {

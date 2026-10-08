@@ -123,7 +123,9 @@
         result.cases.push('cached optical primitives');
         indicator._settings.set_string('theme', 'glassmorphism');
         indicator._settings.set_string('effects-mode', 'off');
-        check(indicator._effects.inspect().sources === 0 && !indicator._effects.inspect().active, 'effects-off removes decorations');
+        check(indicator._effects.inspect().sources === 0 && indicator._effects.inspect().actors === 0
+            && indicator._effects.inspect().active && indicator._effects.inspect().blurEffects === 1,
+            'effects-off removes decorations while the requested frost remains live');
         indicator.menu.close(false);
         for (let i = 0; i < 100; i++) { indicator.menu.open(false); indicator.menu.close(false); }
         check(indicator._effects.inspect().sources === 0 && indicator._effects.inspect().actors === 0, 'actual popup100cycles leave zero resources');
@@ -133,7 +135,7 @@
         result.cases.push('live popup lifecycle');
         indicator.menu.open(false);
         await wait(100);
-        const attributes = [...indicator._cards.values()][0]._hero.clutter_text.get_attributes();
+        const attributes = [...indicator._cards.values()][0]._hero.clutter_text.get_layout().get_attributes();
         check(attributes?.to_string().includes('tnum'), 'native numeric text uses tabular font features');
         const {default: Pango} = await import('gi://Pango');
         const numeric = [...indicator._cards.values()][0]._hero;
@@ -150,7 +152,7 @@
         numeric.set_style('font-size: 25px; color: #abcdef;');
         indicator.menu.close(false); indicator.menu.open(false);
         await wait(100);
-        const finalAttributes = numeric.clutter_text.get_attributes().to_string();
+        const finalAttributes = numeric.clutter_text.get_layout().get_attributes().to_string();
         check(finalAttributes.split('font-features').length === 2 && finalAttributes.includes('foreground'), 'repeat updates/remapping preserve one feature plus themed foreground');
         result.numeric.finalAttributes = finalAttributes;
         result.numeric.fontComparisons = [];
@@ -175,6 +177,7 @@
         result.focus = [];
         // Opaque mode gives every theme the same deterministic native backgrounds.
         indicator._settings.set_string('effects-mode', 'off');
+        indicator._settings.set_boolean('transparency-enabled', false);
         indicator._untracked.update([{id: 'codex', name: 'Codex'}]);
         const controls = [['Not tracked', indicator._untracked._toggle], ['footer', indicator._legendButton]];
         const sides = [St.Side.TOP, St.Side.RIGHT, St.Side.BOTTOM, St.Side.LEFT];
@@ -216,8 +219,12 @@
                         if (parent.get_theme_node)
                             ancestors.unshift(parent.get_theme_node().get_background_color());
                     }
-                    check(ancestors.some(color => color.alpha === 255), `${id}/${scheme} ${name} has a native opaque backing`);
-                    const background = ancestors.reduce((behind, color) => composite(color, behind), hexToRgb(palette.bg));
+                    const materialBacking = indicator._effectBackground.get_theme_node().get_background_color();
+                    check((indicator._effectBackground.visible && materialBacking.alpha === 255)
+                        || ancestors.some(color => color.alpha === 255), `${id}/${scheme} ${name} has a native opaque backing`);
+                    const base = indicator._effectBackground.visible
+                        ? composite(materialBacking, hexToRgb(palette.bg)) : hexToRgb(palette.bg);
+                    const background = ancestors.reduce((behind, color) => composite(color, behind), base);
                     const fill = focused.get_background_color();
                     const fillRgb = composite(fill, background);
                     const ratios = colors.map(color => Math.min(

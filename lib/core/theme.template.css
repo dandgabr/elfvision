@@ -26,6 +26,16 @@
 .popup-menu-boxpointer.gaq-menu .popup-menu-content {
     background-color: {{p:bg}};
     border-radius: {{menu-radius}};
+    border-width: 0;
+    padding: 0;
+}
+
+.gaq-menu .gaq-popup-item {
+    padding: 0;
+    margin: 0;
+    spacing: 0;
+    background-color: transparent;
+    transition-duration: 0;
 }
 
 .gaq-bar,
@@ -270,6 +280,9 @@
     font-size: 13px;
     font-weight: 700;
     max-width: 150px;
+    /* Display faces can paint ink beyond their logical advance. Keep that ink
+     * inside the title allocation instead of clipping the final glyph. */
+    padding-right: 3px;
 }
 
 .gaq-card-plan {
@@ -395,6 +408,12 @@
     spacing: 8px;
     padding-top: 8px;
     border-top: 1px solid {{p:border}};
+    background-color: transparent;
+}
+
+.gaq-footer .gaq-muted {
+    color: {{p:fg}};
+    text-shadow: 0 0 2px {{p:bg}};
 }
 
 .gaq-footer-buttons {
@@ -551,11 +570,267 @@
     color: {{p:fg}};
     text-shadow: 0 0 2px {{p:bg}};
 }
-.gaq-effects-active .gaq-footer,
 .gaq-effects-active .gaq-untracked-row,
 .gaq-effects-active .gaq-legend {
     background-color: {{p:bg}};
 }
 .gaq-effects-active .gaq-button {
     background-color: {{p:surface}};
+}
+
+/* Builtin style signatures. The indicator owns these classes; user themes
+ * never inherit a gallery identity merely by reusing a builtin slug. Static
+ * typography and framing remain identical in Off, Subtle and Full. */
+.gaq-theme-flat-design .gaq-card {
+    box-shadow: none;
+    border-radius: 4px;
+}
+.gaq-theme-flat-design .gaq-section {
+    letter-spacing: 0;
+}
+
+.gaq-theme-card-based-ui .gaq-card {
+    padding: 16px;
+    spacing: 10px;
+}
+.gaq-theme-card-based-ui .gaq-card-name {
+    font-size: 14px;
+}
+.gaq-theme-card-based-ui .gaq-section {
+    font-size: 13px;
+    letter-spacing: 0;
+    border-bottom: 1px solid {{p:border}};
+    padding-bottom: 6px;
+}
+
+.gaq-theme-bento-grid .gaq-card {
+    border-radius: 18px;
+    padding: 16px;
+}
+.gaq-theme-bento-grid .gaq-card-header {
+    spacing: 10px;
+}
+.gaq-theme-bento-grid .gaq-hero {
+    font-size: 28px;
+    font-weight: 800;
+}
+.gaq-theme-bento-grid .gaq-section {
+    font-size: 14px;
+    letter-spacing: 0;
+}
+
+.gaq-theme-ai-native-generative-ui .gaq-section {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+.gaq-theme-ai-native-generative-ui .gaq-card-name {
+    font-size: 14px;
+}
+.gaq-theme-ai-native-generative-ui .gaq-hero {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.gaq-theme-linear-saas .gaq-card {
+    padding: 12px 14px;
+    box-shadow: none;
+}
+.gaq-theme-linear-saas .gaq-section {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+.gaq-theme-linear-saas .gaq-hero {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.gaq-theme-analog-newspaper-broadsheet .gaq-card {
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    box-shadow: none;
+}
+.gaq-theme-analog-newspaper-broadsheet .gaq-section {
+    {{font-display-decl}}
+    font-size: 14px;
+    letter-spacing: 0;
+    border-top: 1px solid {{p:fg}};
+    border-bottom: 1px solid {{p:fg}};
+    padding: 6px 0;
+}
+.gaq-theme-analog-newspaper-broadsheet .gaq-card-name {
+    {{font-display-decl}}
+    font-size: 16px;
+}
+
+.gaq-theme-expressive-variable-typography .gaq-hero {
+    {{font-display-decl}}
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+.gaq-theme-expressive-variable-typography .gaq-card-name {
+    {{font-display-decl}}
+    font-size: 18px;
+    font-weight: 800;
+}
+.gaq-theme-expressive-variable-typography .gaq-section {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+    border-top: 3px solid {{p:fg}};
+    padding-top: 8px;
+}
+
+.gaq-theme-hand-drawn-sketch .gaq-section {
+    {{font-display-decl}}
+    font-size: 15px;
+    letter-spacing: 0;
+    border-bottom: 2px solid {{p:fg}};
+    padding-bottom: 4px;
+}
+.gaq-theme-hand-drawn-sketch .gaq-card-name {
+    {{font-display-decl}}
+    font-size: 16px;
+}
+
+.gaq-theme-organic-biophilic .gaq-section,
+.gaq-theme-solarpunk .gaq-section,
+.gaq-theme-mid-century-modern .gaq-section {
+    {{font-display-decl}}
+    font-size: 15px;
+    letter-spacing: 0;
+}
+.gaq-theme-organic-biophilic .gaq-card-name,
+.gaq-theme-solarpunk .gaq-card-name,
+.gaq-theme-mid-century-modern .gaq-card-name {
+    {{font-display-decl}}
+    font-size: 15px;
+}
+.gaq-theme-organic-biophilic .gaq-hero,
+.gaq-theme-solarpunk .gaq-hero {
+    {{font-display-decl}}
+    font-size: 26px;
+}
+.gaq-theme-mid-century-modern .gaq-section {
+    border-bottom: 2px solid {{p:border}};
+    padding-bottom: 5px;
+}
+
+.gaq-theme-lunarpunk .gaq-section {
+    {{font-display-decl}}
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+.gaq-theme-lunarpunk .gaq-card-name {
+    {{font-display-decl}}
+    font-size: 14px;
+}
+.gaq-theme-lunarpunk .gaq-hero {
+    {{font-display-decl}}
+    font-size: 26px;
+}
+
+.gaq-theme-terminal-tui .gaq-section,
+.gaq-theme-terminal-tui .gaq-card-name,
+.gaq-theme-terminal-tui .gaq-hero,
+.gaq-theme-terminal-tui .gaq-pill,
+.gaq-theme-nanopunk .gaq-section,
+.gaq-theme-nanopunk .gaq-hero {
+    font-family: Monospace;
+}
+.gaq-theme-terminal-tui .gaq-section {
+    font-size: 12px;
+    letter-spacing: 0;
+    border-bottom: 1px solid {{p:border}};
+    padding-bottom: 5px;
+}
+.gaq-theme-terminal-tui .gaq-hero {
+    font-size: 24px;
+}
+.gaq-theme-nanopunk .gaq-section {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+}
+.gaq-theme-nanopunk .gaq-card-header {
+    border-bottom: 1px solid {{p:border}};
+    padding-bottom: 6px;
+}
+
+.gaq-theme-web-brutalism .gaq-card,
+.gaq-theme-de-stijl .gaq-card {
+    border-width: 2px;
+    box-shadow: none;
+}
+.gaq-theme-web-brutalism .gaq-section {
+    font-size: 16px;
+    border-bottom: 3px solid {{p:fg}};
+    letter-spacing: 0;
+    padding-bottom: 4px;
+}
+.gaq-theme-web-brutalism .gaq-hero {
+    font-size: 26px;
+}
+.gaq-theme-de-stijl .gaq-section {
+    border-bottom: 4px solid {{p:fg}};
+    border-left: 6px solid {{p:accent}};
+    letter-spacing: 0;
+    padding: 6px 8px;
+}
+
+.gaq-theme-isometric .gaq-card {
+    border-bottom-width: 3px;
+    border-right-width: 3px;
+}
+.gaq-theme-isometric .gaq-section {
+    font-size: 13px;
+    border-left: 3px solid {{p:fg}};
+    padding-left: 8px;
+}
+.gaq-theme-isometric .gaq-hero {
+    font-size: 26px;
+}
+
+.gaq-theme-cyberpunk .gaq-section {
+    {{font-display-decl}}
+    font-size: 13px;
+    letter-spacing: 2px;
+    border-bottom: 2px solid {{p:accent}};
+    padding-bottom: 6px;
+}
+.gaq-theme-cyberpunk .gaq-card {
+    border-left-width: 3px;
+}
+.gaq-theme-cyberpunk .gaq-card-header {
+    border-bottom: 1px solid {{p:accent}};
+    padding-bottom: 6px;
+}
+.gaq-theme-cyberpunk .gaq-card-name {
+    {{font-display-decl}}
+    font-size: 14px;
+    letter-spacing: 0;
+}
+.gaq-theme-cyberpunk .gaq-hero {
+    {{font-display-decl}}
+    font-size: 24px;
+}
+
+.gaq-theme-aurora-mesh-gradient .gaq-section,
+.gaq-theme-glassmorphism .gaq-section,
+.gaq-theme-holographic-foil-iridescent .gaq-section {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
+}
+.gaq-theme-aurora-mesh-gradient .gaq-card,
+.gaq-theme-glassmorphism .gaq-card,
+.gaq-theme-holographic-foil-iridescent .gaq-card {
+    border-top-width: 2px;
+}
+.gaq-theme-aurora-mesh-gradient .gaq-hero,
+.gaq-theme-glassmorphism .gaq-hero,
+.gaq-theme-holographic-foil-iridescent .gaq-hero {
+    font-size: 25px;
+    font-weight: 600;
 }

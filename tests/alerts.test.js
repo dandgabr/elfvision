@@ -12,6 +12,16 @@ const snap = (percentUsed, extra = {}, id = 'claude') => ({
     id, name: 'Claude', plan: 'Max', state: 'ok', source: {kind: 'fresh', fetchedAt: T0}, metrics: [metric(percentUsed)], ...extra,
 });
 
+test('alerts: two connectors of the same provider have independent crossing history', () => {
+    const first = 'claude--11111111-1111-4111-8111-111111111111';
+    const second = 'claude--22222222-2222-4222-8222-222222222222';
+    const {events, state} = run([[snap(90, {}, first), T0], [snap(90, {}, second), T0],
+        [snap(96, {}, first), T0 + MIN], [snap(96, {}, second), T0 + MIN]]);
+    assertEqual(events.map(event => event.providerId), [first, second]);
+    const {state: persisted} = parseAlertState(serializeAlertState(state));
+    assertEqual(Object.keys(persisted.levels).sort(), Object.keys(state.levels).sort());
+});
+
 /** Feed a series of snapshots (each at a time) and collect every event. */
 function run(steps, {state = emptyAlertState(), settings, intervalMs = 300_000} = {}) {
     const events = [];

@@ -1,0 +1,44 @@
+[
+  {
+    "scheme": "light",
+    "mode": "off",
+    "clicks": 4,
+    "samples": 80,
+    "bitmapSHA256": "3ac27f0ff443ddbf2b98cc1201c39cb01aedd44ae92370bdca285a1c97e03fa8"
+  },
+  {
+    "scheme": "light",
+    "mode": "subtle",
+    "clicks": 4,
+    "samples": 80,
+    "bitmapSHA256": "3ac27f0ff443ddbf2b98cc1201c39cb01aedd44ae92370bdca285a1c97e03fa8"
+  },
+  {
+    "scheme": "light",
+    "mode": "full",
+    "clicks": 4,
+    "samples": 80,
+    "bitmapSHA256": "3ac27f0ff443ddbf2b98cc1201c39cb01aedd44ae92370bdca285a1c97e03fa8"
+  },
+  {
+    "scheme": "dark",
+    "mode": "off",
+    "clicks": 4,
+    "samples": 80,
+    "bitmapSHA256": "4ecf46460f073d4f741179f769d6f5d68dcb34aeb316db2cf51a7ce7ace11cc8"
+  },
+  {
+    "scheme": "dark",
+    "mode": "subtle",
+    "clicks": 4,
+    "samples": 80,
+    "bitmapSHA256": "4ecf46460f073d4f741179f769d6f5d68dcb34aeb316db2cf51a7ce7ace11cc8"
+  },
+  {
+    "scheme": "dark",
+    "mode": "full",
+    "clicks": 4,
+    "samples": 80,
+    "bitmapSHA256": "4ecf46460f073d4f741179f769d6f5d68dcb34aeb316db2cf51a7ce7ace11cc8"
+  }
+]

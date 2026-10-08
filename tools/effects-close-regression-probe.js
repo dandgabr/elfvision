@@ -19,6 +19,17 @@
         await wait(450);
         pointer = Clutter.get_default_backend().get_default_seat()
             .create_virtual_device(Clutter.InputDeviceType.POINTER_DEVICE);
+        // A newly created virtual pointer starts at the hot corner. Move it
+        // before input so the fixture does not reopen Overview during the click.
+        const monitor = Main.layoutManager.primaryMonitor;
+        pointer.notify_absolute_motion(GLib.get_monotonic_time(),
+            monitor.x + monitor.width / 2, monitor.y + monitor.height / 2);
+        await wait(200);
+        Main.overview.hide();
+        for (let tick = 0; tick < 30 && Main.overview.visible; tick++)
+            await wait(100);
+        check(!Main.overview.visible, 'Virtual pointer fixture settles on desktop');
+        await wait(450);
         const click = (x, y) => {
             pointer.notify_absolute_motion(GLib.get_monotonic_time(), x, y);
             pointer.notify_button(GLib.get_monotonic_time(), Clutter.BUTTON_PRIMARY, Clutter.ButtonState.PRESSED);

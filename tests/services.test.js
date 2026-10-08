@@ -169,7 +169,7 @@ test('timers: a bad delay never fires at once or overflows, and a timer can be c
 import {restoreDefaults} from '../lib/prefs/about.js';
 import {KEPT_KEYS, RESET_KEYS} from '../lib/core/defaults.js';
 
-test('restore defaults: looks and notifications reset while the data source and every account-related setting stay', () => {
+test('restore defaults: tracking and setup reset while connector data and credentials stay', () => {
     const source = Gio.SettingsSchemaSource.new_from_directory(`${GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')))}/schemas`, null, false);
     const settings = Gio.Settings.new_full(source.lookup('org.gnome.shell.extensions.gnome-ai-quota', false), Gio.memory_settings_backend_new(), null);
     // Change one of each kind that is restored, including the enum ones.
@@ -184,12 +184,13 @@ test('restore defaults: looks and notifications reset while the data source and 
     // ... and every one that is kept.
     const kept = {
         'credentials-revision': ['i', 7], 'credentials-touched': ['s', 'codex'], 'command-code-username': ['s', 'someone'],
-        'untracked-providers': ['as', ['codex']], 'terms-acknowledged': ['as', ['claude']], 'prefs-target': ['s', 'claude'],
-        'first-use-done': ['b', true],
+        'connectors': ['s', '{"version":1,"connectors":[]}'], 'demo-connectors': ['s', '{"version":1,"connectors":[]}'], 'demo-connected-connectors': ['as', ['codex']], 'terms-acknowledged': ['as', ['claude']], 'prefs-target': ['s', 'claude'],
         'test-notification': ['i', 3], 'demo-scenario': ['s', 'flaky'],
     };
     for (const [key, [type, value]] of Object.entries(kept))
         settings.set_value(key, new GLib.Variant(type, value));
+    settings.set_strv('untracked-providers', ['codex']);
+    settings.set_boolean('first-use-done', true);
     settings.set_value('account-status', new GLib.Variant('a{ss}', {claude: 'rejected'}));
 
     restoreDefaults(settings);
@@ -203,7 +204,7 @@ test('restore defaults: looks and notifications reset while the data source and 
         assertTrue(settings.get_user_value(key) !== null, `${key} was kept`);
     assertEqual([settings.get_strv('untracked-providers'), settings.get_strv('terms-acknowledged'), settings.get_string('command-code-username'),
         settings.get_int('credentials-revision'), settings.get_value('account-status').deepUnpack()],
-    [['codex'], ['claude'], 'someone', 7, {claude: 'rejected'}]);
+    [[], ['claude'], 'someone', 7, {claude: 'rejected'}]);
 });
 
 test('restore defaults: the shell is told once, not once for every key', () => {
@@ -234,7 +235,7 @@ test('restore defaults: later edits and setup dismissal reach an independent obs
     assertEqual([observer.get_string('position'), observer.get_boolean('first-use-done')], ['center', true]);
     assertEqual(settings.get_has_unapplied(), false);
     restoreDefaults(settings);
-    assertEqual([observer.get_string('position'), observer.get_boolean('first-use-done')], ['right', true]);
+    assertEqual([observer.get_string('position'), observer.get_boolean('first-use-done')], ['right', false]);
     settings.set_int('bar-count', 5);
     assertEqual(observer.get_int('bar-count'), 5);
 });

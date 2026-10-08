@@ -12,8 +12,9 @@ test('theme effects: a user override never acquires builtin effects', () => {
     assertEqual(effectPolicy({...input, origin: 'unknown'}), none);
 });
 
-test('theme effects: off and closed popup have no motion or live material', () => {
-    assertEqual(effectPolicy({...input, mode: 'off'}), none);
+test('theme effects: off stops motion while the chosen material remains live', () => {
+    assertEqual(effectPolicy({...input, mode: 'off'}), {motion: 'none', material: 'frosted-glass', particleCount: 0});
+    assertEqual(effectPolicy({...input, mode: 'off', transparencyEnabled: false}), none);
     assertEqual(effectPolicy({...input, popupOpen: false}), none);
     assertEqual(effectPolicy({...input, mode: 'invalid'}), none);
 });
@@ -72,9 +73,9 @@ test('theme effects: executable fields, paths, URLs, unknown presets and arrays 
         assertEqual(validateEffectProfile({texture}).profile.texture, texture);
 });
 
-test('theme effects: preferences are reset settings, account and first-use state stays kept', () => {
+test('theme effects: preferences and first-use state reset while account terms stay kept', () => {
     assertTrue(RESET_KEYS.includes('effects-mode') && RESET_KEYS.includes('transparency-enabled'));
-    assertTrue(KEPT_KEYS.includes('first-use-done') && KEPT_KEYS.includes('terms-acknowledged'));
+    assertTrue(RESET_KEYS.includes('first-use-done') && KEPT_KEYS.includes('terms-acknowledged'));
 });
 
 import Gio from 'gi://Gio';
@@ -93,7 +94,7 @@ test('theme effects: stored controls have safe defaults and preserve accounts on
     for (const key of RESET_KEYS)
         settings.reset(key);
     assertEqual([settings.get_string('effects-mode'), settings.get_boolean('transparency-enabled')], ['subtle', true]);
-    assertEqual([settings.get_boolean('first-use-done'), settings.get_strv('terms-acknowledged')], [true, ['claude']]);
+    assertEqual([settings.get_boolean('first-use-done'), settings.get_strv('terms-acknowledged')], [false, ['claude']]);
 });
 
 

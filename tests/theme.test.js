@@ -344,8 +344,9 @@ test('themes: every reviewed source profile validates exactly and matches the sh
         assertEqual([id, problems, profile], [id, [], profiles[id]]);
         assertEqual(JSON.parse(read(`themes/builtin/${id}/theme.json`)).effects, profile);
         const options = {origin: 'builtin', profile, mode: 'full', animationsEnabled: true, transparencyEnabled: true, popupOpen: true};
-        for (const override of [{mode: 'off'}, {origin: 'user'}, {popupOpen: false}])
+        for (const override of [{origin: 'user'}, {popupOpen: false}])
             assertEqual(effectPolicy({...options, ...override}), {motion: 'none', material: 'opaque', particleCount: 0});
+        assertEqual(effectPolicy({...options, mode: 'off'}), {motion: 'none', material: profile.material, particleCount: 0});
         assertEqual(effectPolicy({...options, animationsEnabled: false}).motion, 'none');
         assertEqual(effectPolicy({...options, mode: 'subtle'}).particleCount, 0);
         assertEqual(effectPolicy({...options, transparencyEnabled: false}).material, 'opaque');
@@ -354,9 +355,8 @@ test('themes: every reviewed source profile validates exactly and matches the sh
         if (profile.compatibleMaterials.every(material => material === 'opaque'))
             assertEqual(effectPolicy({...options, materialPreference: 'frosted-glass'}).material, 'opaque');
     }
-    assertEqual(profiles['glassmorphism'].compatibleMaterials, ['translucent', 'decorative-glass', 'frosted-glass']);
-    for (const id of ['analog-newspaper-broadsheet', 'de-stijl', 'flat-design', 'terminal-tui'])
-        assertEqual(profiles[id].compatibleMaterials, ['opaque']);
+    for (const id of EXPECTED_THEME_IDS)
+        assertEqual(profiles[id].compatibleMaterials, ['opaque', 'translucent', 'decorative-glass', 'frosted-glass']);
     assertEqual(profiles['sistema-gnome'].particleCount, 0);
     assertEqual(profiles['sistema-gnome'].texture, 'none');
 });
@@ -478,4 +478,46 @@ test('themes: card scroll gutters reserve the validated shadow footprint without
         assertTrue(compileTheme(TEMPLATE, custom, {scheme: 'dark'}).includes(`padding: ${padding};`), `${shadow} must reserve bounded safe geometry`);
     }
     assertTrue(!TEMPLATE.includes('clip-to-allocation: false'), 'gutters must not disable popup clipping');
+});
+
+
+test('themes: explicit materials work in every theme independently of the motion mode', () => {
+    let cases = 0;
+    for (const id of builtinIds()) {
+        const {theme, problems} = loadTheme(id);
+        assertEqual(problems, []);
+        for (const scheme of ['light', 'dark']) {
+            assertTrue(theme.effects.opacity[scheme] >= 0.72 && theme.effects.opacity[scheme] <= 0.8,
+                `${id}/${scheme} must transmit enough of the background for explicit translucent materials`);
+            for (const mode of ['off', 'subtle', 'full']) {
+                const options = {origin: 'builtin', profile: theme.effects, mode, popupOpen: true,
+                    animationsEnabled: true, transparencyEnabled: true};
+                assertEqual(effectPolicy({...options, materialPreference: 'theme'}).material, theme.effects.material, `${id} retains its default material`);
+                for (const material of ['opaque', 'translucent', 'decorative-glass', 'frosted-glass']) {
+                    const policy = effectPolicy({...options, materialPreference: material});
+                    assertEqual(policy.material, material, `${id}/${scheme}/${mode}: the explicit material must apply`);
+                    if (mode === 'off')
+                        assertEqual([policy.motion, policy.particleCount], ['none', 0], `${id} off disables motion only`);
+                    assertEqual(effectPolicy({...options, transparencyEnabled: false, materialPreference: material}).material,
+                        'opaque', `${id} transparency off has priority`);
+                    assertEqual(effectPolicy({...options, origin: 'user', materialPreference: material}),
+                        {motion: 'none', material: 'opaque', particleCount: 0}, `${id} retains the builtin trust boundary`);
+                    cases++;
+                }
+            }
+        }
+    }
+    assertEqual(cases, 528);
+});
+
+
+test('themes: Cyberpunk light has visible structural framing on its reading surface', () => {
+    const {theme} = loadTheme('cyberpunk');
+    const colors = resolvedColors(theme, 'light');
+    const luminance = color => hexToRgb(color).map(value => {
+        const channel = value / 255;
+        return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+    }).reduce((total, value, index) => total + value * [0.2126, 0.7152, 0.0722][index], 0);
+    const values = [luminance(colors.border), luminance(colors.surface)].sort((a, b) => b - a);
+    assertTrue((values[0] + 0.05) / (values[1] + 0.05) >= 3, 'daylight HUD outlines must remain distinguishable');
 });

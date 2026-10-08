@@ -22,15 +22,18 @@ read [Provider access and consent](#provider-access-and-consent) before connecti
 
 ## How it works
 
-Connect the providers you want to monitor in Preferences. The top bar shows the
-highest used percentage for each provider, with a small progress bar and a quota
+Add a connector for each account you want to monitor in Preferences. You can
+connect several accounts from the same provider. Each connector has its own
+quota card and status; usage and balances are never combined. The top bar shows the
+highest used percentage for each connector, with a small progress bar and a quota
 window label. Warning, critical, stale and error states have symbols as well as
 colors. Hover for the state and time until reset.
 
 Click the indicator to open the popup. Provider cards show usage windows, reset
 times, available plan information and a pacing marker for steady usage. The footer
 offers a legend, Refresh and Preferences. Providers that cannot fit on the bar stay
-accessible in the popup. You can pause tracking without removing an account.
+accessible in the popup. Local connector names distinguish accounts in the cards.
+You can pause one connector without removing its account.
 
 Before connecting an account, the popup offers **Add account**. Preferences opens
 an optional setup assistant that guides you through providers, panel display and
@@ -51,7 +54,9 @@ notifications. Every provider is optional; selecting one does not sign you in.
 
 The installable file is named
 `gnome-ai-quota@dandgabr.github.io.shell-extension.zip`. The local v0.1 delivery is
-under `dist/v0.1/`; there is currently no published GitHub release asset or
+under `dist/v0.1/`, with checksums and a source manifest. It includes the connector,
+settings and material corrections described here. There is currently no published
+GitHub release asset or
 extensions.gnome.org listing. Run this from the folder containing that local
 delivery, or replace the path with the supplied ZIP's location:
 
@@ -85,7 +90,10 @@ check the checkout's `metadata.json` for its declared version and shell support.
 
 ### Connect accounts
 
-Open **Preferences → Accounts**.
+Open **Preferences → Accounts → Add connector…**, choose a provider, and give
+the connector a name such as “Codex work”. Creating a connector does not sign you
+in. Its editor lets you rename it, configure access, and control tracking. Add
+another connector for another account, including an account from the same provider.
 
 For **Command Code**, enter your account name to open the key-management link,
 then paste your API key into the key field and save it. The extension stores the
@@ -104,7 +112,8 @@ checkout, use `python3 -I tools/import-client-ids.py` instead. Run it again afte
 installing another client. It reads public OAuth client configuration, never the
 client's saved account tokens, and writes the extension's own local configuration.
 
-Return to Accounts, press **Connect**, review the provider notice and sign in
+Return to the connector editor, press **Check configuration again** if needed,
+then **Connect**, review the provider notice, and sign in
 through your browser. If the browser cannot return to this computer, paste the
 final callback address or displayed code into the field offered by Preferences.
 The setup assistant can copy the helper command; you run it yourself.
@@ -152,7 +161,7 @@ requires an explicit acknowledgement before an OAuth connection starts.
 ## Features
 
 - **Panel and popup:** choose left, center or right placement, show one to five
-  providers, and use automatic, always or never compact mode. Provider cards can
+  connector items, and use automatic, always, or never compact mode. Connector cards can
   open automatically when they need attention.
 - **Reset times:** follow GNOME's clock setting or choose 12/24-hour time; display
   countdowns as `1h 20min` or `1h20`.
@@ -162,15 +171,17 @@ requires an explicit acknowledgement before an OAuth connection starts.
   Connection notices and a test notification have their own controls.
 - **Themes:** 22 built-in themes, each with light and dark variants. Follow the
   system scheme or choose one explicitly; add your own theme files.
-- **Native effects:** supported themes offer translucency, decorative glass,
-  frost, textures and motion through GNOME's graphics stack. Choose Off, Subtle or
-  Full, disable transparency or select a compatible material. System animation settings override motion. Ambient
-  effects stop when the popup closes; opaque fallbacks keep text readable.
+- **Native materials and effects:** every built-in theme lets you choose an opaque
+  background, translucency, decorative glass, or frost. Effects Off stops motion
+  and textures while preserving the selected material. Turn Transparency off for
+  an opaque background. Subtle and Full control motion, with system animation
+  settings taking precedence; ambient work stops when the popup closes.
 - **Optional fonts:** review an explicit download of four Poppins, Inter and
   JetBrains Mono files. Sources and SHA-256 hashes are pinned, with OFL-1.1 licenses
   included. Choosing a theme never downloads fonts; missing fonts use fallbacks.
-- **Demo mode:** try `steady`, `flaky` and `drift` with fictional providers and
-  visible demo labels, without connecting an account.
+- **Demo mode:** try `steady`, `flaky`, and `drift` with fictional quotas. Accounts
+  provides a separate demo connector list with simulated connect, disconnect,
+  and remove actions. These actions use no browser, keyring, or provider request.
 - **Languages:** English and Brazilian Portuguese follow the GNOME session
   language. Other languages fall back to English.
 
@@ -189,17 +200,27 @@ Open Preferences from the popup or run:
 gnome-extensions prefs gnome-ai-quota@dandgabr.github.io
 ```
 
-**Accounts** connects, disconnects and pauses providers. **General** controls the
+**Accounts** creates, configures, disconnects, and pauses connectors. **General** controls the
 panel, popup, themes, fonts and demo data. **Notifications** controls thresholds,
 connection notices and the test notification. The [usage and settings
 reference](docs/usage.md) describes every option and notification rule.
 
-**Restore defaults** resets appearance and notification settings while preserving
-accounts, tracking choices, consent, the selected data source and setup dismissal.
-**Disconnect all accounts…** removes this extension's local credentials, quota
-snapshots and alert history after confirmation. It keeps settings, themes, fonts
-and local client configuration, and does not revoke remote sessions or API keys.
-Use the provider's account settings to revoke access there.
+**Restore defaults** resets appearance, notifications, tracking, and setup
+dismissal. All connectors are tracked again and setup becomes available. Saved
+connectors, credentials, terms acknowledgements, client configuration, and the
+selected live/demo data source stay saved.
+
+**Remove connector…** removes only the selected connector, its local credential,
+and its quota and alert data after confirmation. Other accounts stay saved.
+**Disconnect all accounts…** removes this extension's local credentials across
+all connectors, including credentials missing from the connector list, along
+with quota snapshots and alert history. It keeps settings, connector metadata,
+themes, fonts, and client configuration. Local deletion does not guarantee remote
+logout or revoke an API key on the provider's site.
+
+If the connector list is invalid, **Recover list…** rebuilds it from saved
+credential identities after confirmation. Secret values are not read or deleted;
+connector names and usernames may need to be entered again.
 
 For custom themes, open **General → Your themes**. The [theme
 reference](docs/themes.md) describes the file format.
@@ -213,22 +234,23 @@ helper reads installed program files only for public OAuth configuration.
 
 Quota requests go to the configured provider hosts over HTTPS. Choosing a theme
 does not contact a font server; optional font downloads require a separate action.
-Notification text includes the provider, quota window, percentage and reset time;
-it excludes account names, plans and raw errors.
+Notification text includes the trusted provider name, quota window, percentage,
+and reset time; it excludes local connector labels, account identities, plans,
+and raw errors.
 
 ## Troubleshooting
 
 | Problem | What to check |
 |---|---|
 | Extension is missing after installation | Confirm GNOME Shell 50, log out and back in, then run the enable command. |
-| Only the extension icon appears | Connect an account in Accounts or select Demo under General → Advanced. |
-| Connect asks for client configuration | Install the official client and run the packaged helper, then retry. |
+| Only the extension icon appears | Add and connect an account in Accounts. In Demo, use Simulate connect for a fictional connector. |
+| Connect asks for client configuration | Install the official client and run the packaged helper, then choose Check configuration again in the connector editor. |
 | The browser cannot complete the return | Use the callback address/code field in Preferences. Never put tokens or callback URLs in an issue. |
 | Keyring is locked or unavailable | Unlock the desktop keyring and retry. The extension cannot store secrets in ordinary files. |
 | Usage is stale or an account is rejected | Refresh; check connectivity and account status in Accounts. Reconnect explicitly if requested. |
 | Some providers disappear from the bar | Increase the provider count or use compact mode; open the popup to see hidden providers. |
 | Notification banners do not appear | Check the master switch and GNOME Do Not Disturb, then send a test notification. Warnings are opt-in. |
-| Motion or transparency is absent | Check Effects, Transparency, material compatibility and the system animation setting. |
+| Motion or transparency is absent | Effects Off stops motion and textures. Select a material and turn Transparency on for glass or translucency; check the system animation setting for motion. |
 | A quota field disappears after a provider update | Unofficial endpoints can change. Report the provider and fixed error category without credentials or response bodies. |
 
 GNOME disables extensions while the screen is locked. Quota notices resume after

@@ -12,7 +12,7 @@ won: it shows level and number at once and needs no custom drawing.
 
 ## Decision
 
-Per provider the item shows a monochrome 16 px icon, the number (14 px, weight 700,
+Per connector the item shows a monochrome 16 px icon, the number (14 px, weight 700,
 tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M`;
 `W` reads `S` in Portuguese) and a 3 px bar under the item (track at 20% opacity).
 
@@ -24,8 +24,9 @@ tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M
   - not signed in: `–` with a password icon, provider icon at 50%;
   - failing (network, rate limit, bad reply): the last value with a `~` prefix and a
     warning icon.
-- **Count:** 1 to 5 providers, setting `bar-count`, default 3.
-- **Selection:** automatic (the N worst) or manual. `lib/core/selection.js` supports
+- **Count:** 1 to 5 connector items, setting `bar-count`, default 3. Separate
+  accounts using the same provider occupy separate slots and retain independent quotas.
+- **Selection:** automatic (the N worst connectors) or manual. `lib/core/selection.js` supports
   both, but no setting exposes manual selection yet. Automatic ranks by severity
   (critical, warning, error or not signed in, stale, normal; ties by the highest
   percentage) but draws the selected items in the fixed provider order, so the bar

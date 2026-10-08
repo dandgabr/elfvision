@@ -1,4 +1,5 @@
 import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
 
 import {assertEqual, assertTrue, flush, test} from './harness.js';
 import {createLoginGate} from '../lib/core/firstUse.js';
@@ -8,9 +9,163 @@ import {apiKeySubtitle, createApiKeyController} from '../lib/prefs/apiKeyControl
 import {createOAuthController} from '../lib/prefs/oauthController.js';
 import {oauthPrimary, oauthSubtitle} from '../lib/prefs/accountText.js';
 import {encodeSecret} from '../lib/oauth/secret.js';
+import {createDemoAccountController} from '../lib/prefs/demoAccountController.js';
+import {restoreDefaults} from '../lib/prefs/about.js';
+import * as DisconnectDialog from '../lib/prefs/disconnectDialog.js';
+import {recoverConnectorRegistry} from '../lib/prefs/accounts.js';
 
 const _ = s => s;
 const TOKENS = {access: 'a', refresh: 'r', expiresAt: Date.now() + 3600_000, scope: 's'};
+
+test('connector recovery: only explicit acceptance reconstructs metadata and failure never reports success', async () => {
+    let recovered = 0;
+    const store = {recover: async () => { recovered++; }};
+    assertEqual(await recoverConnectorRegistry({store, confirm: async () => false}), false);
+    assertEqual(recovered, 0);
+    assertEqual(await recoverConnectorRegistry({store, confirm: async () => true}), true);
+    assertEqual(recovered, 1);
+    let rejected = false;
+    try { await recoverConnectorRegistry({store: {recover: async () => { throw new Error('synthetic'); }}, confirm: async () => true}); }
+    catch (_error) { rejected = true; }
+    assertEqual(rejected, true);
+});
+
+test('disconnect presentation: a scoped delete never claims all accounts or caches were removed', () => {
+    const target = {id: 'codex--second', provider: 'codex', kind: 'oauth-token'};
+    const completed = DisconnectDialog.disconnectPresentation({transaction: {phase: 'complete', target, files: {snapshots: 'preserved', alerts: 'preserved'}}}, _);
+    assertTrue(completed.subtitle.includes('Other accounts and cached data were kept.'));
+    assertEqual(completed.label, 'Disconnect all');
+    const failed = DisconnectDialog.disconnectPresentation({transaction: {phase: 'failed', target, problem: 'deletion-incomplete', files: {snapshots: 'preserved', alerts: 'preserved'}}}, _);
+    assertTrue(failed.subtitle.includes('connector’s settings'), 'an exact deletion retries in its connector editor');
+    assertEqual(failed.label, 'Disconnect all', 'the all-accounts action must not masquerade as exact retry');
+    const all = DisconnectDialog.disconnectPresentation({transaction: {phase: 'complete', files: {snapshots: 'absent', alerts: 'absent'}}}, _);
+    assertTrue(all.subtitle.includes('Local credentials and cached data removed.'));
+});
+
+for (const type of ['api-key', 'oauth']) {
+    test(`${type} controller: failed exact removal can be retried while writes are blocked and keeps its sibling`, async () => {
+        const meta = providerMeta(type === 'api-key' ? 'command-code' : 'claude');
+        const id = `${meta.id}--second`, sibling = `${meta.id}--sibling`;
+        const credentials = new Map([[id, encodeSecret({gen: 'synthetic', ...TOKENS})], [sibling, 'sibling-credential']]);
+        let blocked = false, removals = 0;
+        const gate = {capture: async () => { if (blocked) throw new Error('blocked'); return {epoch: 1, provider: meta.id}; },
+            assertCurrent: async () => {}, subscribe: () => () => {}, registerCanceller: () => () => {}, isBlocked: () => blocked};
+        const deps = {gate, lookupSecret: async key => credentials.get(key) ?? null,
+            clearSecret: async key => { removals++; if (removals === 1) { blocked = true; throw new Error('synthetic deletion failure'); } credentials.delete(key); blocked = false; },
+            announceChange() {}, revoke() {}, readLocalConfig: async () => ({providers: {}, problems: []})};
+        const context = {meta, connectorId: id, settings: fakeSettings(), gettext: _, confirmTerms: async () => true, deps};
+        const controller = type === 'api-key' ? createApiKeyController(context) : createOAuthController(context);
+        try {
+            const remove = () => type === 'api-key' ? controller.remove() : controller.disconnect();
+            assertEqual(await remove(), false);
+            assertEqual(blocked, true);
+            assertEqual(await remove(), true, 'blocked write admission must not prevent retrying the exact local deletion');
+            assertEqual([credentials.has(id), credentials.get(sibling), removals], [false, 'sibling-credential', 2]);
+        } finally { controller.dispose(); }
+    });
+}
+
+test('restore defaults: real memory settings reset appearance tracking and setup while keeping connector metadata and consent', () => {
+    const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
+    const source = Gio.SettingsSchemaSource.new_from_directory(`${root}/schemas`, null, false);
+    const settings = Gio.Settings.new_full(source.lookup('org.gnome.shell.extensions.gnome-ai-quota', false), Gio.memory_settings_backend_new(), null);
+    settings.set_string('theme', 'glassmorphism'); settings.set_string('color-scheme', 'dark'); settings.set_int('bar-count', 5);
+    settings.set_string('data-source', 'demo'); settings.set_strv('untracked-providers', ['codex']); settings.set_boolean('first-use-done', true);
+    settings.set_strv('terms-acknowledged', ['codex']); settings.set_string('command-code-username', 'synthetic-user');
+    restoreDefaults(settings);
+    assertEqual([settings.get_string('theme'), settings.get_string('color-scheme'), settings.get_int('bar-count')], ['sistema-gnome', 'system', 3]);
+    assertEqual([settings.get_strv('untracked-providers'), settings.get_boolean('first-use-done')], [[], false]);
+    assertEqual([settings.get_string('data-source'), settings.get_strv('terms-acknowledged'), settings.get_string('command-code-username')], ['demo', ['codex'], 'synthetic-user']);
+    settings.set_string('theme', 'cyberpunk');
+    assertEqual(settings.get_string('theme'), 'cyberpunk', 'later edits remain immediately observable');
+});
+
+test('demo account controller: simulation isolates connector state and persists without credential operations', async () => {
+    const settings = fakeSettings();
+    const first = createDemoAccountController({connectorId: 'codex', settings});
+    const second = createDemoAccountController({connectorId: 'codex--second', settings});
+    try {
+        assertEqual(first.snapshot().connected, false);
+        await first.connect();
+        assertEqual([first.snapshot().connected, second.snapshot().connected], [true, false]);
+        await second.connect();
+        assertEqual(await first.disconnect(), true);
+        assertEqual([first.snapshot().connected, second.snapshot().connected], [false, true]);
+        const reopened = createDemoAccountController({connectorId: 'codex--second', settings});
+        assertEqual(reopened.snapshot().connected, true);
+        reopened.dispose();
+        assertEqual(settings.values['demo-connected-connectors'], ['codex--second']);
+    } finally { first.dispose(); second.dispose(); }
+});
+
+test('api controller: two connectors address separate credentials and publish separate status', async () => {
+    const keys = new Map(), announced = [];
+    const meta = providerMeta('command-code');
+    const settings = fakeSettings({'account-status': {'command-code': 'ok', 'command-code--second': 'rejected'}});
+    const make = connectorId => createApiKeyController({meta, connectorId, settings, gettext: _, deps: {
+        gate: null, lookupSecret: async id => keys.get(id) ?? null,
+        storeSecret: async (id, _kind, value) => keys.set(id, value),
+        clearSecret: async id => keys.delete(id), announceChange: (_settings, id) => announced.push(id),
+    }});
+    const first = make('command-code'), second = make('command-code--second');
+    try {
+        assertEqual(await first.save('cc_' + 'a'.repeat(32)), 'saved');
+        assertEqual(await second.save('cc_' + 'b'.repeat(32)), 'saved');
+        await Promise.all([first.refresh(), second.refresh()]);
+        assertEqual(keys.size, 2, 'a second connector must not replace the first credential');
+        assertEqual([first.snapshot().result, second.snapshot().result], ['ok', 'rejected']);
+        assertEqual(await second.remove(), true, 'removal reports verified success to the metadata owner');
+        await first.refresh();
+        assertEqual(first.snapshot().hasKey, true);
+        assertEqual(announced, ['command-code', 'command-code--second', 'command-code--second']);
+    } finally { first.dispose(); second.dispose(); }
+});
+
+test('api controller: unsuccessful credential removal cannot permit connector metadata deletion', async () => {
+    const controller = createApiKeyController({meta: providerMeta('command-code'), connectorId: 'command-code--second',
+        settings: fakeSettings(), gettext: _, deps: {gate: null, lookupSecret: async () => 'synthetic',
+            clearSecret: async () => { throw new Error('synthetic failure'); }, announceChange: () => { throw new Error('must not announce success'); }}});
+    try { assertEqual(await controller.remove(), false); } finally { controller.dispose(); }
+});
+
+test('api controller: verified removal succeeds after its durable deletion changes the gate epoch', async () => {
+    let epoch = 1, removed = false, announced = 0;
+    const gate = {capture: async () => ({epoch, provider: 'command-code'}),
+        assertCurrent: async ticket => { if (ticket.epoch !== epoch) throw new Error('stale'); },
+        subscribe: () => () => {}, registerCanceller: () => () => {}, isBlocked: () => false};
+    const controller = createApiKeyController({meta: providerMeta('command-code'), connectorId: 'command-code--second',
+        settings: fakeSettings(), gettext: _, deps: {gate, lookupSecret: async () => removed ? null : 'synthetic',
+            clearSecret: async () => { epoch++; removed = true; }, announceChange: () => { announced++; }}});
+    try {
+        assertEqual(await controller.remove(), true, 'a successful delete intentionally invalidates its old ticket');
+        assertEqual([removed, announced], [true, 1]);
+    } finally { controller.dispose(); }
+});
+
+test('oauth controller: credential and status identity is connector while configuration and terms identity is provider', async () => {
+    const id = 'claude--second', login = fakeLogin(), stored = [], lookups = [], announces = [];
+    let value = null;
+    const settings = fakeSettings({'account-status': {[id]: 'expired'}});
+    const controller = createOAuthController({meta: providerMeta('claude'), connectorId: id, settings, gettext: _, confirmTerms: async () => true,
+        deps: {gate: null, lookupSecret: async key => { lookups.push(key); return value; },
+            storeSecret: async (key, _kind, secret) => { stored.push(key); value = secret; }, clearSecret: async () => { value = null; },
+            announceChange: (_settings, key) => announces.push(key), revoke: () => {},
+            readLocalConfig: async () => ({providers: {claude: {clientId: 'synthetic'}}, problems: []}),
+            createHttp: () => ({dispose() {}}), createPkce: () => ({}), randomBytes: n => new Uint8Array(n),
+            startLogin: () => login, timers: {after: () => 1, every: () => 2, cancel() {}}}});
+    try {
+        await controller.refresh();
+        assertEqual(controller.snapshot().result, 'expired');
+        await controller.connect();
+        assertEqual(settings.values['terms-acknowledged'], ['claude']);
+        login.finish(TOKENS);
+        await flush(40);
+        assertEqual(stored, [id]);
+        assertEqual(announces, [id]);
+        assertTrue(lookups.every(key => key === id));
+        assertEqual(await controller.disconnect(), true);
+    } finally { controller.dispose(); }
+});
 
 function fakeSettings(initial = {}) {
     const values = {'terms-acknowledged': [], 'account-status': {}, ...initial};

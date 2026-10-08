@@ -32,7 +32,8 @@ for money balances are planned as options, not implemented.
   (with a critical `!` pill in its header if any hidden provider is critical). Cards
   never jump by severity. A collapsed "Not tracked (N)" section lists the providers the
   user paused, each with a Resume button; it opens by itself when nothing else is on the popup.
-- **Card.** Icon, name, plan, state pill, and a hero value (the highest percentage,
+- **Card.** One card per connector, with trusted provider name, sanitized local
+  connector label, icon, plan, state pill, and a hero value (the highest percentage,
   or the money balance) with the window it belongs to (`97 % · week`). The whole
   header is the toggle button, so Enter and Space work on the focused header. Each
   window is a row: label, percentage, a thin bar with a **pacing tick** (a straight
@@ -41,8 +42,8 @@ for money balances are planned as options, not implemented.
   pacing line shows only when the deviation is relevant.
 - **Actions.** *Try again* lives in the card body of a provider that can recover by
   retrying. A button named for the state (Connect, Reconnect, Replace key) opens Preferences on
-  that account, and resuming a paused provider is the Resume button of "Not tracked". Planned and not
-  built: a `⋯` menu with Refresh this one, Do not track and Remove connector (confirmed inline, no modal).
+  that account, and resuming a paused provider is the Resume button of "Not tracked". The planned popup `⋯` action menu remains unbuilt. Connector
+  tracking and confirmed removal instead live in the Accounts editor (ADR 0009).
 - **Footer.** "Updated N min ago", with the number of providers in trouble next to
   it, then a "?" toggle that opens the legend of the marks on the bar, Refresh and Preferences (the status has
   a line of its own). The popup is at most 70% of the monitor height;
