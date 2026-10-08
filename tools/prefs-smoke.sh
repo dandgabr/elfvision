@@ -45,6 +45,7 @@ dbus-run-session -- bash -c '
     }
     if [ "$GAQ_SMOKE_MODE" = popup ]; then
         timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsPopup.js"
+        timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsPopup.js" live
     elif [ "$GAQ_SMOKE_MODE" = reports ]; then
         timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsReports.js"
     elif [ "$GAQ_SMOKE_MODE" = connectors ]; then
@@ -63,6 +64,7 @@ dbus-run-session -- bash -c '
         timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsSmoke.js" rtl expanded large-font
         timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsLifecycle.js"
         timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsPopup.js"
+        timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsPopup.js" live
         timeout 30 gjs -m "$GAQ_TEST_ROOT/tests/prefsReports.js"
         run_states
     fi
