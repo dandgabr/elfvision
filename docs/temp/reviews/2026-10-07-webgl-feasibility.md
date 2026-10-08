@@ -1,5 +1,10 @@
 # Optional WebGL preview feasibility — 2026-10-07
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Recommendation: retain native/static preferences previews and native Shell rendering for the accepted four options. An optional isolated WebKit preview can render real WebGL on this host, but must remain an optional future enhancement. A one-shot synthetic browser snapshot can reach a Shell actor; this does not establish a viable animated WebGL-in-popup bridge. No WebKit dependency, browser widget or executable theme field was added to the packaged extension.
 
 ## Verified environment and boundaries

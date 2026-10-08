@@ -1,6 +1,6 @@
 # 0006. Theming: 22 themes, light and dark, tokens
 
-Status: accepted. Implemented, except the items listed under "Not implemented".
+Status: accepted and implemented. Validation limits are listed under "Validation and follow-ups".
 
 ## Context
 
@@ -45,6 +45,13 @@ Missing optional values are derived: `surface-2` equals `surface`, `ok` and `err
 get fixed defaults chosen by the background's brightness (`error` is distinct from
 warn and danger), and `accent-fg` is picked for contrast with the accent. A theme
 may also carry extra fields, such as the generator's audit, which the loader ignores.
+
+Keyboard focus has a compiler-derived `focus` color; it is not an authorable JSON
+token. The resolved accent is retained only when it has at least 3:1 contrast
+against popup/card surfaces and their foreground tints through checked state.
+Otherwise focus uses the foreground color. Normal accents and meter fills stay
+unchanged. Built-in palettes are checked across both schemes and every System
+accent; custom authors remain responsible for readable foreground/surface pairs.
 
 ### Validation
 
@@ -97,7 +104,7 @@ addition consists of Organic/Biophilic and Glassmorphism.
 ### Fidelity
 
 The initial version 1 delivered two levels for its twenty themes: tokens (colors, radii, border,
-shadow, fonts) and shapes expressible in St CSS (a hard offset shadow, a thick
+shadow, and fonts) and shapes expressible in St CSS (a hard offset shadow, a thick
 border, an asymmetric radius, a simple gradient). Effects St cannot do in CSS (blur,
 chamfered corners, scanlines, textures, hand-drawn strokes) were outside that initial delivery.
 They require `St.DrawingArea` or effects, as flags only built-in themes may
@@ -106,13 +113,13 @@ request.
 ### Card layout and shadow bounds
 
 The card list reserves each validated outer shadow's footprint inside the scroll
-clip, using blur, spread and signed offsets. Each gutter is bounded to64px;
+clip, using blur, spread, and signed offsets. Each gutter is bounded to 64 px;
 extreme custom shadows can exceed that bound and remain clipped. Inset shadows
 do not reserve outside space. The theme's original shadow token is unchanged.
 
 Every card places its primary reading and availability/window suffix below the
 provider identity, inside the same keyboard-activatable header. Identity, status,
-reading and budget labels wrap rather than hiding values behind an ellipsis.
+reading, and budget labels wrap rather than hiding values behind an ellipsis.
 This deliberately changes the original single-row header so fixed-width popups
 can preserve complete values with shadow gutters, RTL and enlarged text. A
 monetary-only row change exposed incomplete quota suffix paint under enlarged
@@ -130,16 +137,17 @@ because those faces read smaller at the same size.
 ### Picker and settings
 
 The theme is chosen on a sub-page of Preferences: grouped rows, a one-line
-description, a four-color sketch (background, surface, accent, text, in the scheme in
+description, a four-color sketch (background, surface, accent, and text, in the scheme in
 use) and a check mark on the current theme. The page rescans the folders each time it
-opens. The group names and descriptions of the built-in themes are translated from
-`lib/prefs/themeCatalog.js`; a user theme shows its own `description` under "Your
-themes".
+opens. The names, group names, and descriptions of trusted built-in themes come from
+`lib/prefs/themeCatalog.js`. A user theme, including an override of the System
+slug, shows its own name and description under "Your themes". Both the picker
+and selected-theme label use loader-owned provenance.
 
 Related settings: `theme`, `color-scheme` (`system`, `light`, `dark`), `clock-format`
 (`system`, `12h`, `24h`), `reset-format` (`long`, `short`) and `auto-open`.
 
-### Open work
+### Validation and follow-ups
 
 - Optional suggested-font installation is implemented after explicit confirmation.
   The maintained manifest pins four licensed Poppins/Inter/JetBrains Mono files,
@@ -164,7 +172,7 @@ Related settings: `theme`, `color-scheme` (`system`, `light`, `dark`), `clock-fo
 The accepted post-MVP design adds a data-only `effects` profile without changing
 existing color validation or requiring effects in old theme files. The full
 format is in [Themes](../themes.md#optional-effect-profiles). The core validator
-allowlists material, motion and texture presets, bounds particle counts to twelve
+allowlists material, motion, and texture presets, bounds particle counts to twelve
 and background opacity to 0.72–1 per scheme, and rejects executable fields,
 URLs, paths, unsupported arrays and non-finite numbers. Invalid optional data falls back to
 an opaque static profile with deterministic problem texts; base tokens still load.
@@ -192,7 +200,7 @@ state with their actual popup-open flag; snapshots contain only validated theme
 data and settings, and mutating a snapshot does not change manager state.
 Disable publishes the inactive policy and releases listeners.
 
-The renderer uses shared native particle, material, cached texture and optical
+The renderer uses shared native particle, material, cached texture, and optical
 primitives behind persistent controls. Eight reused leaf sprites have one bounded
 timer; their time-based positions are quantized to device pixels and rotation
 to half degrees, with unchanged transforms skipped. Particle count, speed and
@@ -217,6 +225,6 @@ changes during St's lazy style/painter path invalidated text allocation and
 produced native shadow/offscreen errors. Pending label work is cancelled on
 destruction. Closing retains its fixed anchor and rendering policy until the
 popup is hidden, while decorative animation and blur work stop immediately.
-Close, Off, lock and disable remove owned work. Theme JSON cannot select arbitrary
+Close, Off, lock, and disable remove owned work. Theme JSON cannot select arbitrary
 renderer code. Semantic pixel checks and the 22-theme light/dark inventory are
 recorded in the validation record; hardware performance remains a separate gate.

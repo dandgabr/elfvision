@@ -1,0 +1,503 @@
+== build
+compiled schemas/gschemas.compiled
+compiled locale/pt_BR/LC_MESSAGES/gnome-ai-quota.mo
+== unit tests
+ok    severity thresholds
+ok    most critical metric prefers the shorter window on a tie
+ok    failures are never displayed as percentages
+ok    failures rank between warnings and healthy providers
+ok    money formatting shapes
+ok    durations use short units
+ok    clock honors 12 and 24 hour settings
+ok    pacing
+ok    bar selection: automatic picks the worst but keeps the fixed order
+ok    bar selection: count is clamped and manual mode is honored
+ok    bar selection: untracked providers never take a slot
+ok    bar view: critical provider
+ok    bar view: pool provider names the pool and the window
+ok    bar view: money provider shows the balance
+ok    bar view: signed out is never a number
+ok    card view: windows, pace and reset text
+ok    card view: pools are grouped in order
+ok    card view: money card
+ok    summary and updated text
+ok    fmt handles placeholders and escaped percent signs
+ok    account countdown: padded seconds are formatted in English and translated templates
+ok    fit: candidate layouts go from rich to lean
+ok    fit: picks the richest layout that fits, else the leanest
+ok    fit: side width mirrors the panel allocation
+ok    fit: the sticky choice does not flip on small width changes
+ok    robustness: a provider without metrics does not break the card or the bar
+ok    robustness: a window without a reset time still renders
+ok    robustness: out-of-range and invalid numbers are clamped
+ok    robustness: selection survives a bad count and odd manual lists
+ok    clock: the weekday loses its dot, a dotted time does not
+ok    view model: hero names the window, labels read as used, severity is spoken
+ok    view model: a stale provider without a timestamp says so
+ok    view model: the weekday appears when the reset is on another calendar day
+ok    failures: each code gets its own pill, message and retry line
+ok    failures: a signed-out provider has no retry and no value
+ok    failures: the last value is marked approximate and drawn neutral
+ok    failures: the first fetch failing without data explains itself
+ok    summary and footer tell signed-out apart from failing, and do not hide problems
+ok    command code: the credits reply becomes two percent metrics and a balance
+ok    command code: a missing or broken field is dropped, never shown as zero
+ok    http statuses map to provider states
+ok    command code provider: sends the key as a bearer token to one https endpoint
+ok    command code provider: no key, a locked keyring and bad replies are explicit failures
+ok    command code provider: a key that could not be a header value is never sent
+ok    credential failures keep their reason through the scheduler and say the right thing
+ok    account status: one word per situation, shared by the extension and the preferences
+ok    a demo provider that needs an account does not offer to open Preferences
+ok    a balance beside percent windows is a plain labeled line without a meter
+ok    sign-in failures: expired, refused and missing setup each get their own words
+ok    codex: both windows are read, with their length, reset in seconds and plan
+ok    codex: a null window is absent, a odd length is unlabeled, and nothing usable is a change
+ok    codex provider: asks the usage endpoint with the access token and reads the plan
+ok    codex provider: a refused token is renewed once; a second refusal means the sign-in expired
+ok    codex provider: 403, rate limits, odd replies and every token failure are told apart
+ok    claude: both windows are read with their percentage and RFC 3339 reset
+ok    claude: a missing window is absent, a bad reset is dropped, nothing usable is a change
+ok    claude provider: sends the beta header with the bearer token and renews once after a 401
+ok    antigravity: buckets become two pools with a five-hour and a weekly window each
+ok    antigravity: unknown pools and windows, repeated buckets and bad fractions are skipped
+ok    antigravity provider: a POST with an empty JSON body and a User-Agent that names the program
+ok    antigravity: names from the server cannot reach into the parser, and a zero that was left out counts
+ok    oauth usage: a token that is refused even after a renewal is not renewed again at every poll
+ok    a number that belongs to a pool says which pool, for the eye and for a screen reader
+ok    legend: every mark the bar can show is explained, in the bar's own words
+ok    bar tooltip: the item's own words plus the reset, made when it is shown, and nothing else
+ok    not tracked: only known providers, in the registry's order
+ok    alerts: the first reading is never announced, even above the threshold
+ok    alerts: crossing the threshold is announced once, then stays quiet
+ok    alerts: hysteresis re-arms only after the usage falls 3 points below the threshold
+ok    alerts: a window that resets re-arms the alert, even if the usage did not fall
+ok    alerts: the threshold and the switch are per quota type
+ok    alerts: an old or failed reading says nothing about the quota
+ok    alerts: no more than three quota notices an hour, then one summary
+ok    alerts: a provider that is paused or removed is forgotten and never alerts
+ok    alerts: a rejected sign-in is announced after ten minutes, once, and again only after a success
+ok    alerts: a locked keyring and a provider never set up are not outages
+ok    alerts: the production network keyring failure stays quiet across repeated checks
+ok    alerts: entering keyring failure clears an outage and ordinary network recovery starts a fresh wait
+ok    alerts: a network trouble waits for fifteen minutes and for three poll intervals
+ok    alerts: data that is stale counts from when it was last fresh
+ok    alerts: right after a resume the connection alert waits, and still fires after the grace
+ok    alerts: events carry no text from the provider, and the input state is not changed
+ok    alerts: settings are re-checked, because dconf can be edited by hand
+ok    alerts: the saved state survives a restart, and a bad file is an empty one
+ok    alerts: a threshold exactly at the limit, and the edges of the hysteresis
+ok    alerts: a hysteresis of zero cannot make an alert fire on every poll
+ok    alerts: one outage is one alert, whatever its cause turns into
+ok    alerts: a time in the future in the state cannot silence alerts
+ok    alerts: what was seen long ago is forgotten, so a restart does not announce an old state
+ok    alerts: a metric that is briefly missing keeps its memory, and a removed provider starts over
+ok    alerts: a state this module does not know is never an outage
+ok    alerts: warning escalates once to critical; jumping both announces only critical
+ok    alerts: independent warning and critical hysteresis rearms each level
+ok    alerts: settings edits seed a fresh baseline instead of announcing backlog
+ok    alerts: v1 migration retains cap/connection and suppresses initial backlog
+ok    alerts: invalid enabled pair keeps previous valid thresholds
+ok    alerts: stale input cannot establish a settings baseline or create warning backlog
+ok    alerts: saved dual latches dedupe after restart and window reset rearms both
+ok    alerts: several metrics coalesce at the highest newly crossed level
+ok    alerts: live records remain bounded even for many valid synthetic metrics
+ok    alerts: invalid warning enable preserves a critical-only custom threshold of one
+ok    alerts: migrated fired latch belongs only to its known reset window
+ok    alerts: invalid warning pair preserves customized critical on restart without previous state
+ok    alerts: missing malformed or impossible v2 rule signatures require a quiet fresh baseline
+ok    alerts: persisted valid rule backup is canonical bounded and rejects foreign/invalid data
+ok    alert text: a critical crossing says the severity in words, the window, the percent and the reset
+ok    alert text: several crossings share one notification, credits have no reset
+ok    alert text: a reset in the past or an unknown one is left out, and bad numbers never print as numbers
+ok    alert text: connection alerts name the provider and a generic reason, nothing else
+ok    alert text: an id the registry does not know, or a hostile event, prints only fixed words
+ok    alert text: every sentence goes through the translator
+ok    alert text: controls and bidirectional overrides are removed from names and translations, and lengths are capped
+ok    alert text: the test notification is plainly a test and carries nothing else
+ok    safe text: controls and direction overrides go, a newline stays, the length is capped
+ok    alert service: a crossing reported by the controller is announced once
+ok    alert service: disconnect stop does not flush or later recreate erased alert state
+ok    alert service: a rejected sign-in produces one snapshot, and the timer is what announces it
+ok    alert service: the quiet window after a resume holds the connection alert back
+ok    alert service: with notifications off nothing is shown, and turning them on does not replay the past
+ok    alert service: the switches and thresholds come from the settings, re-checked
+ok    alert service: a removed provider is forgotten, and the state is saved after a short wait and on stop
+
+(gjs:1804914): Gjs-Console-CRITICAL **: 09:31:43.394: gnome-ai-quota: cannot show a notification: null
+ok    alert service: a notifier that throws does not stop the others, and stop is final
+ok    alert service: nothing is announced until the providers are known, and the settings are read once
+ok    alert service: a stop while the file is being read, or a restart, leaves nothing behind
+ok    power: a wake-up is reported, a suspend is told apart, and a stop ends the subscription
+
+(gjs:1804914): Gjs-Console-WARNING **: 09:31:43.395: gnome-ai-quota: cannot watch for suspend: no bus
+ok    power: a stop while the bus is being reached, or no bus at all, is harmless
+ok    alert service: rapid invalid pair edits retain cached valid rules without backlog
+ok    alert service: migrated v1 records and warning opt-in seed without startup notifications
+ok    alert service: valid settings persist before any snapshot and invalid edits survive six restarts
+ok    alert service: atomic invalid dconf pair retains exact persisted sixty/ninety across restart
+ok    contract: unknown states and unusable metrics are cleaned, not trusted
+ok    contract: a snapshot without an id is reported
+ok    contract: freshness turns stale after two intervals and expires after a day
+ok    cache: a round trip keeps the numbers and drops error messages
+ok    cache: garbage, another version and entries without an id are ignored
+ok    scheduler: providers are spread, fetched once and stamped fresh
+ok    scheduler: a success is followed by the next poll one interval later
+ok    scheduler: failures back off exponentially and are capped
+ok    scheduler: a failure keeps the last metrics and the original timestamp
+ok    scheduler: a rate limit honors a longer retry hint
+ok    scheduler: retry jitter 0 respects uncapped backoff
+ok    scheduler: retry jitter 0 respects capped backoff
+ok    scheduler: retry jitter 0 respects long positive hint
+ok    scheduler: retry jitter 0 respects short positive hint
+ok    scheduler: retry jitter 0 respects hint at cap
+ok    scheduler: retry jitter 0 respects hint above cap
+ok    scheduler: retry jitter 0 respects zero hint
+ok    scheduler: retry jitter 0 respects negative hint
+ok    scheduler: retry jitter 1 respects uncapped backoff
+ok    scheduler: retry jitter 1 respects capped backoff
+ok    scheduler: retry jitter 1 respects long positive hint
+ok    scheduler: retry jitter 1 respects short positive hint
+ok    scheduler: retry jitter 1 respects hint at cap
+ok    scheduler: retry jitter 1 respects hint above cap
+ok    scheduler: retry jitter 1 respects zero hint
+ok    scheduler: retry jitter 1 respects negative hint
+ok    scheduler: auth_required stops polling until credentials change
+ok    scheduler: only one fetch runs at a time per provider
+ok    scheduler: manual refreshes are rate limited, except for a signed-out provider
+ok    scheduler: a fetch that never answers times out as a network error
+ok    scheduler: invalid provider output is cleaned and reported
+ok    scheduler: stop cancels every timer, remove forgets a provider
+ok    scheduler: a provider added while running is scheduled, duplicates are rejected
+ok    scheduler: seeded snapshots are returned in registration order
+ok    demo: the steady scenario always answers with metrics that match the fixtures
+ok    demo: the flaky scenario walks through every failure code
+ok    demo: the drift scenario climbs toward the limit
+ok    contract: redact removes URLs and token-like strings
+ok    cache: limits protect against oversized or hostile files
+ok    scheduler: a manual refresh of a signed-out provider resumes its schedule
+ok    scheduler: removing a provider during a fetch leaves no timer and no emission
+ok    scheduler: new credentials during a fetch in flight cause one more fetch
+ok    scheduler: credential changes suppress an old success and cancel its context
+ok    scheduler: credential changes suppress an old failure and cancel its context
+ok    scheduler: a bad interval cannot make a tight loop, a huge retry hint is capped
+ok    scheduler: a seed never overwrites data the provider already has
+ok    scheduler: a listener that throws is reported and does not count as a failed fetch
+ok    scheduler: a reply with only unusable metrics keeps the last good data
+ok    scheduler: unknown error codes become network errors; retry time and redaction are recorded
+ok    scheduler: the fetch is told when it was abandoned after a timeout
+ok    scheduler: a provider with a recent cached value is not fetched again at once (a screen lock restarts everything)
+ok    scheduler: when the network is back, providers that failed for lack of it are tried at once
+ok    contract: text from a provider is bounded before it reaches the cache or a widget
+ok    themes: the reviewed inventory ships the exact expected theme slugs and each validates
+ok    themes: every theme compiles in both schemes with no placeholder left
+ok    themes: the popup follows the scheme, the top bar always uses the dark one
+ok    themes: the system accent follows the GNOME color and brightens in the dark scheme
+ok    themes: alpha placeholders become rgba values
+ok    themes: a template that asks for an unknown token fails loudly
+ok    themes: files that are not themes, or that try to inject CSS, are rejected
+ok    themes: fonts, sizes and shadows are sanitized
+ok    themes: a hard offset shadow and a strong border survive (neo-brutalism)
+ok    themes: scheme choice honors the preference, then the system
+ok    theme files: a good theme loads, a mismatched id and bad ids do not
+ok    theme files: symlinks to endless files, pipes and huge files are refused without blocking
+ok    theme files: scanThemes lists good themes first and reports rejected folders
+ok    themes: hostile numbers, shadows and optional tokens
+ok    themes: a font keeps its generic family
+ok    themes: a warning-like system accent does not color the meter fills
+ok    themes: every generated theme has its own error color and a visible accent
+ok    themes: serif and monospace themes get larger small text, with a description kept
+ok    themes: swatches give four hex colors per scheme, even for the system accent
+ok    themes: optional effects validate without weakening hex colors or old theme compatibility
+ok    theme files: origin is loader-owned and a user override never gains builtin provenance
+ok    themes: renderer colors are resolved hex values detached from theme data
+ok    themes: every reviewed source profile validates exactly and matches the shipped effect data
+ok    themes: generator applies the canonical valid profile deterministically
+ok    themes: generator rejects unknown profile fields and presets before writing output
+ok    themes: effect headings expose the material while reading cards and controls remain opaque
+ok    themes: card scroll gutters reserve the validated shadow footprint without changing its identity
+ok    theme effects: a user override never acquires builtin effects
+ok    theme effects: off and closed popup have no motion or live material
+ok    theme effects: subtle allows interactions but never ambient particles
+ok    theme effects: reduced motion wins live while transparency is independent
+ok    theme effects: every allowlisted material and motion is a bounded preset
+ok    theme effects: omitted profiles remain valid static data
+ok    theme effects: opacity and counts are finite bounded numbers, separate from hex colors
+ok    theme effects: executable fields, paths, URLs, unknown presets and arrays fall back safely
+ok    theme effects: preferences are reset settings, account and first-use state stays kept
+ok    theme effects: stored controls have safe defaults and preserve accounts on restore
+ok    theme effects: compatible materials are a bounded unique allowlist
+ok    theme effects: material preference applies only to compatible trusted profiles
+ok    http: an already cancelled context prevents dispatch to a working server
+ok    http: a disposed client prevents further dispatch to a working server
+ok    http: a JSON reply, its status and the headers sent
+ok    http: other hosts, plain http and bad addresses are refused before any request
+ok    http: a reply over the size limit and a closed port are provider failures without the address
+ok    http: redirects are not followed
+ok    http: a status Soup has no name for (429) is read, with its Retry-After
+ok    http: a server that drips bytes is cut at the total deadline, and by the scheduler giving up
+ok    http: dispose cancels what is in flight; another port on the allowed host is refused
+ok    http: a POST carries its body and type, and a header that is not allowed is refused
+ok    structure: the pure core and the registry import no gi:// module
+ok    structure: the core depends on nothing outside the core
+ok    structure: shell toolkit modules stay on the shell side
+ok    structure: GTK and Adwaita stay in the preferences window
+ok    structure: the system bus is reached from the services only
+ok    registry: ordered, unique, and only complete providers are available
+Gjs-Console-Message: 09:31:47.185:     (no local configuration here: the check has nothing to compare)
+ok    secrets: no value of the local configuration appears in the repository or its history
+ok    secrets: no tracked file holds a token whose hash is on the known-ids list
+ok    secret check: a clean change passes
+ok    secret check: credential formats are found, and the finding does not print the secret
+ok    secret check: a word whose hash is on the known list is found, wherever it sits
+ok    structure: what the alert code subscribes to, it also lets go of
+ok    defaults: every setting is either restored or kept, and none is both
+ok    pkce: the challenge of the RFC 7636 appendix B verifier
+ok    pkce: base64url has no padding and uses the URL alphabet
+ok    pkce: verifier and state are 43 characters, differ and never repeat
+ok    pkce: a short or missing random read fails instead of weakening the secret
+ok    callback: a valid redirect gives the code; the state is checked first
+ok    callback: long, repeated and badly escaped queries are malformed, and nothing is echoed
+ok    oauth protocol: the authorization url is built from constants and escaped
+ok    oauth protocol: token replies are read strictly and errors keep only a known code
+ok    oauth sign-in: the code is exchanged with the verifier, the secret and the redirect
+ok    oauth sign-in: a forged request does not end it, and the page reflects nothing
+ok    oauth sign-in: denied, cancelled and timeout each end it with a code; forged requests do not
+ok    oauth sign-in: a token error, a missing refresh token and a busy port are reported plainly
+ok    oauth protocol: a refresh is a form, or JSON when the provider wants it
+ok    oauth protocol: an error wrapped as {code} is read, and a spec cannot override the PKCE fields
+ok    manual sign-in: the pasted address or a bare code is read; a foreign state is not accepted
+ok    oauth sign-in: pasting the address finishes it when the browser cannot reach the server
+ok    oauth protocol: the code exchange is a form, or JSON with the state when the provider wants it
+ok    tokens: the secret round trips and anything malformed is nothing
+ok    tokens: a token with time left is returned without calling the server
+ok    tokens: an expiring token is renewed, the rotated refresh token is saved
+ok    tokens: concurrent callers share one renewal
+ok    tokens: a new sign-in during the renewal wins and the old result is dropped
+ok    tokens: disconnecting during the renewal is not undone
+ok    tokens: a refused refresh token is expired, once, without a retry loop
+ok    tokens: a network failure or a server error does not mark the sign-in as lost
+ok    tokens: not connected, and a failing keyring keeps the new pair in memory then asks to reconnect
+ok    tokens: invalidate forces a renewal even for a token that looks valid
+ok    tokens: the renewed pair survives a keyring that fails right after the renewal
+ok    tokens: a pair waiting to be written is not written after a disconnect or a new sign-in
+ok    tokens: a 401 from the token endpoint and a wrapped error code both mean expired, once
+ok    tokens: invalidate during a running renewal does not force a second one
+ok    tokens: conditional replacement includes original generation and refresh and rejects a superseded write
+ok    tokens: pre-save comparison losing to login never returns the old rotated access token
+ok    tokens: pre-save comparison losing to delete never returns the old rotated access token
+ok    tokens: reset during success refresh reload value rejects the obsolete context
+ok    tokens: reset during success refresh reload failure rejects the obsolete context
+ok    tokens: stale-ticket during success refresh reload value rejects the obsolete context
+ok    tokens: stale-ticket during success refresh reload failure rejects the obsolete context
+ok    tokens: reset during rejected refresh reload value rejects the obsolete context
+ok    tokens: reset during rejected refresh reload failure rejects the obsolete context
+ok    tokens: stale-ticket during rejected refresh reload value rejects the obsolete context
+ok    tokens: stale-ticket during rejected refresh reload failure rejects the obsolete context
+ok    tokens: reset during pending-load-failure never returns the old renewed access
+ok    tokens: stale-ticket during pending-load-failure never returns the old renewed access
+ok    tokens: reset during save-failure never returns the old renewed access
+ok    tokens: stale-ticket during save-failure never returns the old renewed access
+ok    tokens: conditional credential replacement rejects a new generation even when refresh is unchanged
+ok    local config: a good entry gets its defaults; optional fields are kept
+ok    local config: bad entries are left out and named without their values
+ok    local config: not JSON, wrong version and oversized files give nothing
+ok    local config: the file is read only when just its owner can read it
+ok    local config: asynchronous reader preserves missing, unsafe, valid, oversized and symlink decisions
+ok    controller: disconnect stop cancels pending work without recreating the cache
+ok    controller: providers can be added and removed while running, in display order
+ok    controller: sync keeps what runs, removes what is not wanted and creates the rest
+ok    controller: nothing is claimed until the providers are known, and the cache keeps values meanwhile
+ok    controller: changes are reported with the previous snapshot, which the cache provides after a restart
+
+(gjs:1804914): Gjs-Console-CRITICAL **: 09:31:48.904: gnome-ai-quota: a change listener failed: boom
+ok    controller: a change listener that fails does not stop the others or the polling
+
+(gjs:1804914): Gjs-Console-CRITICAL **: 09:31:48.905: gnome-ai-quota: a change listener failed: null
+
+(gjs:1804914): Gjs-Console-CRITICAL **: 09:31:48.905: gnome-ai-quota: a change listener failed: null
+ok    controller: a listener that throws nothing useful does not stop the pipeline, and a late snapshot of a removed provider is ignored
+ok    controller: a cached value that is hours old reaches the listeners as stale, not as a live reading
+ok    controller: stop returns settlement of accepted provider rotation without delaying disposal
+ok    controller: stop also awaits a rotation from a provider already removed
+ok    command code: cancel during key lookup prevents credential dispatch
+ok    command code: dispose during key lookup prevents credential dispatch
+ok    command code: a current fetch sends its key and parses the credit balance
+ok    loopback: it listens on the loopback addresses only, never on the network
+ok    loopback: a foreign Host, another method and another path are turned away, and the sign-in goes on
+ok    cache: what is saved comes back, privately, and a missing file is not a problem
+ok    cache: a huge file and a corrupt one are ignored, and the last write is the one that stays
+ok    alert store: the state comes back, privately; a missing, huge or corrupt file is an empty state
+ok    alert store: a symbolic link in place of the file is not followed
+ok    timers: a bad delay never fires at once or overflows, and a timer can be cleared
+ok    restore defaults: looks and notifications reset while the data source and every account-related setting stay
+ok    restore defaults: the shell is told once, not once for every key
+ok    restore defaults: later edits and setup dismissal reach an independent observer
+ok    cache: creating a private owned directory preserves existing ancestor permissions
+ok    cache: a store retains its load ticket and cannot recreate a file after disconnection
+ok    credentials: retired rotation uses its captured gate without creating a replacement participant
+ok    credentials: lazy default gate and explicit delete gate retain conditional mutation semantics
+ok    oauth controller: it reads the keyring, and a keyring that is not there is said apart from not connected
+ok    oauth controller: the terms are asked once, and only the user's yes is written
+ok    oauth controller: one sign-in at a time, and it ends without leaving a timer or a port
+ok    oauth controller: a finished sign-in is stored, announced to the shell and shown as connected
+ok    oauth controller: a failure says why, plainly, and never blocks the next try
+ok    oauth controller: a busy port falls back to the client's own port, once
+ok    oauth controller: without a client id nothing starts, and the state says what is missing
+ok    oauth controller: a window that closes mid sign-in ends it, frees the port and goes quiet
+ok    oauth controller: what is pasted is handed to the sign-in, and a refusal says so without keeping it
+ok    oauth controller: disconnecting deletes the sign-in first, tells the shell, then revokes
+ok    api key controller: a key is checked, stored, announced, and never appears in a message
+ok    api key controller: a keyring that refuses the key is reported, and removing a key tells the shell
+ok    oauth controller: leaving during the terms dialog prevents a late acceptance from starting login
+ok    oauth controller: repeated connect while terms are open asks only once
+ok    oauth controller: cancellation after a reply resolves prevents a late credential write
+ok    oauth controller: the browser failure exposes paste immediately
+ok    oauth controller: an older keyring lookup cannot overwrite a newer one
+ok    oauth controller: shared gate prevents concurrent logins across providers and releases after cancel
+ok    account helper: exact shell arguments survive spaces and quotes with no trailing newline
+ok    api key controller: failed saving remains visible until successful retry without retaining the key
+ok    api key controller: newer lookup wins when an old success or failure arrives late
+ok    oauth controller: snapshots never read configuration and async recheck recovers the keyring
+ok    oauth controller: stale async configuration cannot overwrite the latest recheck
+ok    oauth controller: cancellation during async configuration cannot open consent or start login
+ok    oauth controller: cancel after storage starts finishes exactly one write and announcement
+ok    oauth controller: dispose after storage starts finishes exactly one write and announcement
+ok    oauth controller: each failed start and fallback owns a disposable HTTP client
+ok    oauth controller: dispose during async configuration drops the late result and consent
+ok    oauth controller: HTTP client closes exactly once on success before storage
+ok    oauth controller: HTTP client closes exactly once on failure before storage
+ok    oauth controller: HTTP client closes exactly once on cancel before storage
+ok    oauth controller: disposal never starts another configuration or credential lookup
+ok    oauth controller: token exchange completion closes HTTP before a pending keyring save
+ok    api key controller: started save completes after disposal without starting a lookup or UI update
+ok    oauth controller: cancel during gate assertion prevents late terms
+ok    oauth controller: cancel during gate assertion prevents late begin
+ok    oauth controller: cancel during gate assertion prevents late store
+ok    oauth controller: dispose during gate assertion prevents late terms
+ok    oauth controller: dispose during gate assertion prevents late begin
+ok    oauth controller: dispose during gate assertion prevents late store
+ok    oauth controller: obsolete success after gate cancellation cannot tear down a replacement attempt
+ok    oauth controller: obsolete failure after gate cancellation cannot tear down a replacement attempt
+ok    oauth controller: already issued store success cannot clobber a replacement attempt
+ok    oauth controller: already issued store failure cannot clobber a replacement attempt
+ok    oauth controller: obsolete connecting failure cannot release a replacement consent/login reservation
+ok    first use: shared critical proposal validates every enabled warning before writes
+ok    first use: opens only for a new live user without an account target
+ok    first use: selection is opt-in, in registry order, and filters unknown ids
+ok    first use: summary distinguishes saved, rejected, failed and skipped accounts
+ok    first use: a shared gate serializes sign-ins and stale release cannot free a new owner
+ok    first use: completion and eligibility reflect account failures without blocking other providers
+ok    first use: unavailable keyring and API-save failure each override otherwise connected summary
+ok    layout: meter fill and tick mirror as rectangles, including narrow and empty tracks
+ok    pseudo locale: expands literal text and preserves substitutions, percent escapes and context
+ok    bar model: demo descriptions preserve current item output and fixed order
+ok    bar model: empty and paused providers produce no items
+ok    bar model: stale and error states retain readable current descriptions
+ok    bar model: unchanged input is equal and latest response updates headline
+ok    fonts: denied consent performs no installation
+ok    fonts: accepted explicit consent installs the maintained plan
+ok    fonts: closing during confirmation invalidates a late answer
+ok    fonts: cancellation suppresses stale progress and completion
+ok    fonts: manifest pins bounded TTF files and rejects untrusted paths and oversized plans
+ok    fonts: atomic commit disables cancellation of an already installed batch
+ok    fonts: conflicts produce a fixed actionable reason without external error text
+ok    font service: verified streamed files publish as one private batch
+ok    font service: identical existing files are recognized without redownload
+ok    font service: an existing conflicting user file is preserved
+ok    font service: wrong digest and nonfont headers leave no installed or staged files
+ok    font service: redirects stay inside the exact manifest address allowlist
+ok    font service: counted streaming rejects a longer body without Content-Length
+ok    font service: cancellation during download removes staging and blocks late publication
+ok    font service: an app font directory symlink never redirects installation
+ok    font service: short asynchronous writes still publish the complete verified font
+ok    font service: a valid reviewed redirect has a positive installation control
+ok    font service: deadline cancels stalled network reads with no late publication
+ok    font service: discovery writes and cleanup never call synchronous filesystem APIs
+ok    font service: destroy terminates a pending bounded cache refresh child
+ok    font service: an incomplete pre-existing batch reports conflict without repairing user files
+ok    font service: shipped exact-revision licenses are verified and included locally
+ok    font service: post-commit callback and refresh failures preserve truthful installed state
+ok    disconnect: durable cross-process gate is available
+ok    disconnect: completion rejects old login tickets and permits explicit new ones
+ok    disconnect: issued keyring write drains before deletion across two clients
+ok    disconnect: crashed issued write never expires within the same boot
+ok    disconnect: prior boot permits tombstone recovery and exact repeated deletion
+ok    disconnect: keyring refusal retains affected gate without false disconnected success
+ok    disconnect: retry removes credentials and published data recreated after partial success
+ok    disconnect: asynchronous cache commit holds serialization until completed
+ok    disconnect: cancellation callbacks run and stale file writers are fenced
+ok    disconnect: overlapping same-process deletion is rejected without replacing transaction
+ok    disconnect: crashed remote deletion holds tombstone until prior boot
+ok    disconnect: corrupt and unexpected metadata fields fail closed
+ok    disconnect: token rotation completion after reset cannot issue a credential store
+ok    disconnect: delayed OAuth configuration cannot start an old sign-in after completion
+ok    disconnect: API save holds a lease and its late completion cannot announce old credentials
+ok    disconnect: a live unacknowledged writer timeout is never treated as expired
+ok    disconnect: observed legacy Shell fence survives same-boot replacement and clears only on a new boot
+ok    disconnect: a closed issued writer retires its participant after settlement across reenables
+ok    disconnect: closing lazy facade detaches immediately and never erases its replacement singleton
+ok    disconnect: closing an issued deletion retires the coordinator participant after callbacks settle
+ok    disconnect: normal retirement keeps accepted writer operations alive until idle
+ok    disconnect: a replacement gate still cancels a retiring accepted rotation before late storage
+ok    disconnect: lazy retirement detaches singleton while idle work is still pending
+ok    disconnect: same-provider writes exclude each other across clients without blocking metadata or other providers
+ok    disconnect: conditional rotation compares inside provider exclusion after login
+ok    disconnect: conditional rotation compares inside provider exclusion after delete
+ok    disconnect: conditional rotation compares inside provider exclusion after unchanged
+ok    disconnect: old token manager cannot resurrect credentials after completed login before lease acquisition
+ok    disconnect: old token manager cannot resurrect credentials after completed delete before lease acquisition
+ok    disconnect: queued mutation rechecks epoch while disconnect enters drain
+ok    disconnect: same-boot orphaned store excludes later mutation without expiry
+ok    disconnect: same-boot orphaned delete excludes later mutation without expiry
+ok    disconnect: individual deletion registers a durable delete lease and settles before queued login
+ok    disconnect: a provider mutation wait times out without removing the accepted lease
+ok    credential signal: fences old success before account synchronization finishes
+ok    credential signal: fences old authentication failure before account synchronization finishes
+ok    credential signal: a late synchronization after disable cannot refresh a replacement controller
+ok    credential signal: an unknown touched provider does not fetch a registered account
+ok    provider config: concurrent reads wait for one asynchronous read and TTL starts on completion
+ok    provider config: a failed read gives no stale client settings and retries after TTL
+ok    provider config: usage waits for asynchronous config and uses the prefetched User-Agent
+ok    provider config: renewal uses asynchronous client settings and keeps accepted rotation storage
+ok    provider config: held configuration cannot dispatch after disconnect
+ok    provider config: held configuration cannot dispatch after scheduler cancellation
+ok    provider config: held configuration cannot dispatch after dispose
+ok    provider config: a renewal waiting for expired config cannot start HTTP after disconnect
+ok    provider config: a renewal waiting for expired config cannot start HTTP after scheduler cancellation
+ok    provider config: a renewal waiting for expired config cannot start HTTP after dispose
+ok    provider config: disposal after renewal HTTP starts still stores the accepted rotation
+ok    provider config: async file reader accepts the byte boundary and refuses one byte more
+ok    provider config: opened-stream permissions are rechecked before reading a replaced file
+ok    provider config: opened-stream policy refuses nonregular object
+ok    provider config: opened-stream policy refuses foreign owner
+ok    provider config: opened-stream policy refuses oversized object
+ok    provider config: asynchronous metadata has a total cancellation deadline
+ok    provider config: counted async reading refuses a file growing past the initial size
+ok    provider config: a private regular opened stream retains valid configuration
+ok    theme catalog: on-disk System override is presented as a user theme in both views
+ok    theme catalog: genuine System, other built-ins and unavailable selections remain distinct
+
+464 passed, 0 failed
+== cross-process disconnect
+PASS legacy nonparticipating Shell rejected before delete; absent-Shell positive control succeeds
+PASS cross-process killed writer remains blocked; zero credential deletions
+PASS different session bus is rejected by immutable boot pin
+== private keyring disconnect
+PASS exact presence-only keyring deletion, absent idempotence and unrelated-item preservation
+PASS full private-keyring transaction removes exact live cache files and preserves unrelated data/settings
+PASS unavailable keyring does not report absence
+== script syntax
+== javascript syntax
+== eslint
+
+> lint
+> eslint extension.js prefs.js lib tests tools/*.js eslint.config.js --max-warnings=0
+
+== extension enables in a shell
+== shellcheck
+== schemas
+== translation template
+== translation catalogs
+1 catalog(s) checked, 0 problem(s)
+== whitespace

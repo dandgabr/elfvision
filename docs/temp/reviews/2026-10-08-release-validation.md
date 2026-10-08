@@ -1,5 +1,10 @@
 # Final release validation
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Target: `feat/post-mvp-effects`, based on `800465f`. This review follows the
 owner's reported popup, heading, transparency, reset, value and shadow regressions.
 Work was coordinated by file ownership; corrective implementations received an

@@ -1,5 +1,10 @@
 # Retry after partial disconnection
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Independent security review found that a completed provider could reconnect while
 another provider's deletion remained partial. A retry copied the previous
 `absent` journal entries, skipping credentials and cache files recreated since

@@ -21,7 +21,11 @@
             indicator._settings.set_string('color-scheme', scheme);
             indicator.menu.open(false);
             await wait(600);
-            const card = indicator._cards.values().next().value;
+            // Map insertion order depends on initial account lookup completion.
+            // Inspect the first displayed card, rather than an offscreen map entry.
+            const card = indicator._onBarBox.get_first_child();
+            if (!card)
+                throw new Error('A displayed synthetic provider card is required');
             const [x, y] = card.get_transformed_position();
             const [width, height] = card.get_transformed_size();
             const [sx, sy] = indicator._scroll.get_transformed_position();

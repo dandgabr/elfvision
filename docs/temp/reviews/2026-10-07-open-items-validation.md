@@ -1,5 +1,10 @@
 # Open-items validation
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 This follow-up starts at `800465f` on `feat/post-mvp-effects`. Fetching origin
 produced no remote-only commits or unmerged paths. The owner authorized resolution
 of the product proposals and synthetic accounts; all credential tests use private

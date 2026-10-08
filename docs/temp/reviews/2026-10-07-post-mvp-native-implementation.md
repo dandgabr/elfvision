@@ -1,5 +1,10 @@
 # Tasks 4–6 implementation report
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Status: native motion/material/blur renderer implemented. Final quick, semantic light/dark
 visual and 44-image inventory gates pass. Final clean benchmark completed after the strict nested allocation fix; strict critical/JS/disposed checks pass. Full hardware
 frame-processing acceptance remains unmeasured.

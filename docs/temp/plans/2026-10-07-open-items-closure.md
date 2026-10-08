@@ -1,5 +1,10 @@
 # Post-MVP open-items closure
 
+> Historical snapshot: this document preserves the decisions, findings, and test
+> results recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](../reviews/2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 **Scope accepted:** the owner requested resolution of all conflicts and open items on 2026-10-07. This extends the previously approved post-MVP execution to the three product proposals. Real credentials and destructive actions still require their own explicit UI consent.
 
 **Baseline:** `800465f` on `feat/post-mvp-effects`. After fetching origin, the branch is five commits ahead of `origin/main` with no remote-only commits and no unmerged paths.

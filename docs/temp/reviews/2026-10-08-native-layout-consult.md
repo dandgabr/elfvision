@@ -1,5 +1,10 @@
 # Native allocation consultation — 2026-10-08
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Read-only product review of `feat/post-mvp-effects`, starting at HEAD `800465f`
 with the current uncommitted changes. No native sessions, scanners, font installs,
 credentials or product changes were performed by this consultant.

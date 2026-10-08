@@ -31,6 +31,41 @@ async function failureOf(promise) {
     return null;
 }
 
+test('http: an already cancelled context prevents dispatch to a working server', async () => {
+    const server = serve({'/ok': {status: 200, body: '{"ok":true}'}});
+    const http = createHttp({allowedHosts: [], allowLoopbackHttp: true});
+    try {
+        const url = `${server.base}/ok`;
+        const current = await http.get(url, {context: {isCancelled: () => false}});
+        assertEqual([current.status, current.json, server.seen.length], [200, {ok: true}, 1]);
+        const error = await failureOf(http.get(url, {
+            headers: {Authorization: 'Bearer synthetic-key'}, context: {isCancelled: () => true},
+        }));
+        assertEqual(server.seen.length, 1, 'cancelled request must never reach the server');
+        assertEqual(error?.code, 'network');
+    } finally {
+        http.dispose();
+        server.stop();
+    }
+});
+
+test('http: a disposed client prevents further dispatch to a working server', async () => {
+    const server = serve({'/ok': {status: 200, body: '{"ok":true}'}});
+    const http = createHttp({allowedHosts: [], allowLoopbackHttp: true});
+    try {
+        const url = `${server.base}/ok`;
+        assertEqual((await http.get(url)).status, 200);
+        assertEqual(server.seen.length, 1);
+        http.dispose();
+        const error = await failureOf(http.request(url, {method: 'POST', body: 'synthetic-body'}));
+        assertEqual(server.seen.length, 1, 'disposed client must never reach the server again');
+        assertEqual(error?.code, 'network');
+    } finally {
+        http.dispose();
+        server.stop();
+    }
+});
+
 test('http: a JSON reply, its status and the headers sent', async () => {
     const server = serve({'/ok': {status: 200, body: '{"a":1}'}, '/limit': {status: 503, headers: {'Retry-After': '45'}, body: 'slow down'}});
     const http = createHttp({allowedHosts: [], allowLoopbackHttp: true});

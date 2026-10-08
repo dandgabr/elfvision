@@ -1,6 +1,20 @@
 import {assertEqual, test} from './harness.js';
 import {firstUsePolicy, selectedProviders, connectionSummary, createLoginGate, connectableProviders, stepComplete} from '../lib/core/firstUse.js';
 import {availableProviders} from '../lib/providers/registry.js';
+import * as setupPolicy from '../lib/core/firstUse.js';
+
+test('first use: shared critical proposal validates every enabled warning before writes', () => {
+    const rules = [{warningEnabled: false, warningPercent: 99}, {warningEnabled: true, warningPercent: 80},
+        {warningEnabled: true, warningPercent: 60}, {warningEnabled: false, warningPercent: 95}];
+    assertEqual(setupPolicy.validSetupThreshold(70, rules), false);
+    assertEqual(setupPolicy.validSetupThreshold(80, rules), false);
+    assertEqual(setupPolicy.validSetupThreshold(90, rules), true);
+    assertEqual(setupPolicy.validSetupThreshold(100, rules), true);
+    for (const value of [0, 101, 95.5, NaN, '95'])
+        assertEqual(setupPolicy.validSetupThreshold(value, rules), false);
+    assertEqual(setupPolicy.validSetupThreshold(1, [{warningEnabled: false, warningPercent: 80}]), true);
+    assertEqual(setupPolicy.validSetupThreshold(95, [{warningEnabled: true, warningPercent: NaN}]), false);
+});
 
 test('first use: opens only for a new live user without an account target', () => {
     const fresh = {done: false, source: 'live', target: '', states: [{connected: false}, {hasKey: false}]};

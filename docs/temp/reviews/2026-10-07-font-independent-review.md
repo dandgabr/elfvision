@@ -1,5 +1,10 @@
 # Independent font review
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Read-only inputs: lib/core/fontManifest.js, lib/core/fontInstall.js, lib/services/fontInstaller.js, lib/prefs/suggestedFonts.js, prefs integration and relevant fontInstaller tests. No duplicate native/network tests during GPU diagnostics.
 
 Spec and quality/security verdict: APPROVED current shipped path; no Critical/Important finding.

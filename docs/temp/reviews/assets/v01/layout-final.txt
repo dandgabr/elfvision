@@ -1,0 +1,1 @@
+(true, '"GAQ_LAYOUT_OK: LTR/normal/normal-font, LTR/normal/large-font, LTR/expanded/normal-font, LTR/expanded/large-font, RTL/normal/normal-font, RTL/normal/large-font, RTL/expanded/normal-font, RTL/expanded/large-font, glassmorphism/LTR/large-currency, glassmorphism/RTL/large-currency, aurora-mesh-gradient/LTR/large-currency, aurora-mesh-gradient/RTL/large-currency"')

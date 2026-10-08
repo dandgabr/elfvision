@@ -1,5 +1,10 @@
 # Accessibility and fractional-monitor verification — 2026-10-07
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Independent private-session evidence uses demo providers, memory preferences and synthetic wallpaper/windows. No real credentials or host monitor/settings changes were used. Renderer was released after the sequential runs. No long benchmark was duplicated.
 
 ## Fractional monitor and backdrop regression — fixed

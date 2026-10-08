@@ -43,7 +43,7 @@ once, here, after a review by UI, UX, frontend and security consultants.
 
 ### Tokens and the refresh race
 
-- One secret per provider in the keyring, `provider` and `kind=oauth` attributes,
+- One secret per provider in the keyring, `provider` and `kind=oauth-token` attributes,
   JSON `{v, gen, access, refresh, expiresAt, scope}`, at most 12 KiB. The `id_token` and any
   identity claim are never stored.
 - Only the shell refreshes, one refresh at a time per provider. It reads the secret,
@@ -104,7 +104,11 @@ once, here, after a review by UI, UX, frontend and security consultants.
 port and host, and optionally a `clientSecret` and a `userAgent`. Fields are
 validated (printable ASCII, no CR or LF, port 1024 to 65535). Endpoints are in the
 code, never in this file. `providers.example.json` in the repository has
-placeholders. Without the file or the provider's entry the Connect button is off and
+placeholders. Shell and preferences read this configuration asynchronously, with
+a 16 KiB streaming limit and cancellation after at most 5 seconds for metadata,
+open, and read operations. Stream closure is awaited afterward; the 5-second
+limit is not a hard deadline for the complete promise. Shell callers share the
+read and cache its result for one minute. Without the file or the provider's entry the Connect button is off and
 shows the path; the shell reports `auth_required` with the reason `no_config`.
 
 Where the ids come from: a helper the user runs once looks for the client id each

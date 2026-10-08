@@ -115,6 +115,27 @@ test('alerts: a locked keyring and a provider never set up are not outages', () 
     }
 });
 
+test('alerts: the production network keyring failure stays quiet across repeated checks', () => {
+    const locked = snap(10, {state: 'network', metrics: [], reason: 'keyring'});
+    const result = run([[locked, T0], [locked, T0 + OUTAGE_ALERT_AFTER_MS], [locked, T0 + 3600_000]]);
+    assertEqual(result.events, []);
+    assertEqual(result.state.connection, {}, 'keyring availability must not establish an outage');
+});
+
+test('alerts: entering keyring failure clears an outage and ordinary network recovery starts a fresh wait', () => {
+    const network = snap(10, {state: 'network', metrics: []});
+    const locked = snap(10, {state: 'network', metrics: [], reason: 'keyring'});
+    const prior = run([[network, T0], [network, T0 + OUTAGE_ALERT_AFTER_MS]]);
+    assertEqual(prior.events, [{kind: 'connection', providerId: 'claude', cause: 'error'}], 'ordinary network trouble still alerts');
+    const quiet = run([[locked, T0 + OUTAGE_ALERT_AFTER_MS + 1], [locked, T0 + 3600_000]], {state: prior.state});
+    assertEqual([quiet.events, quiet.state.connection], [[], {}], 'entering and remaining in keyring failure clears the old outage');
+    const resumedAt = T0 + 3600_000 + 1;
+    const waiting = run([[network, resumedAt], [network, resumedAt + OUTAGE_ALERT_AFTER_MS - 1]], {state: quiet.state});
+    assertEqual(waiting.events, [], 'time spent waiting for keyring does not shorten the new network outage delay');
+    const later = run([[network, resumedAt + OUTAGE_ALERT_AFTER_MS], [network, resumedAt + 2 * OUTAGE_ALERT_AFTER_MS]], {state: waiting.state});
+    assertEqual(later.events, [{kind: 'connection', providerId: 'claude', cause: 'error'}], 'ordinary network trouble rearms and announces once');
+});
+
 test('alerts: a network trouble waits for fifteen minutes and for three poll intervals', () => {
     const bad = {state: 'network', metrics: []};
     assertEqual(run([[snap(10, bad), T0], [snap(10, bad), T0 + OUTAGE_ALERT_AFTER_MS - 1]]).events, []);

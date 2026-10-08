@@ -75,9 +75,10 @@ export default class GnomeAiQuotaExtension extends Extension {
         // after it stores or removes a credential.
         this._credentialsChangedId = this._settings.connect('changed::credentials-revision', async () => {
             const touched = this._settings.get_string('credentials-touched');
-            await this._syncProviders();
-            // Only the provider that changed is asked again; unknown ids ask nobody.
+            // Fence old requests immediately, before keyring lookups can wait. Sync
+            // starts newly connected providers; a late sync must not poke a replacement.
             this._controller?.credentialsChanged(touched);
+            await this._syncProviders();
         });
         this._untrackedChangedId = this._settings.connect('changed::untracked-providers', () => this._syncProviders());
         // The test button of the preferences window raises this number; it carries nothing else.

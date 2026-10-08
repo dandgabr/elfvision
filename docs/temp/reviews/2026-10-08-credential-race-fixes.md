@@ -1,5 +1,10 @@
 # Credential races and OAuth cancellation fixes — 2026-10-08
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Implementation evidence for the two reproduced P1 issues in the independent
 security/architecture review. This document is the implementer's record, not an
 independent approval. Worktree: `/home/daniel/Code/gnome-ai-quota-post-mvp`.

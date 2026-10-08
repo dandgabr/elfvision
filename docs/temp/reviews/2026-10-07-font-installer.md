@@ -1,5 +1,10 @@
 # Optional font installer — implementation and provenance
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 The explicit preferences action installs four maintained font files after a Cancel-default
 review. Creating preferences, choosing a theme and rendering a popup perform no download or
 installation. Installed-font fallbacks remain available offline or after cancellation.

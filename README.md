@@ -1,256 +1,252 @@
-# gnome-ai-quota
+# Gnome AI Quota
 
-A GNOME Shell extension that shows how much of your quota you have used on your AI
-providers, in the top bar and in a popup. The idea is the one behind the System
-Monitor extension: a glance at the bar tells you whether anything needs attention.
+Gnome AI Quota is a GNOME Shell extension that puts your AI quota usage and reset
+times in the top bar. Check Command Code, Codex, Claude and Antigravity without
+opening each service, then click the indicator for a breakdown of each quota window.
 
-**Bar.** One item per provider, up to five. Each item has a provider icon, the
-highest usage percentage among its windows, a window suffix (`5h`, `W`, `M`) and a
-3 px bar underneath. A warning (80% and above) adds a `▲`, a critical state (95%
-and above) turns the item into a bordered pill with a `!`, and stale or failing
-data is marked with `~` or `⚠`, so color is never the only signal. When other
-extensions leave little room, the bar first drops the `%` and the suffix, then whole providers,
-instead of being clipped. Hovering an item shows a short sentence with its state and the time until the reset.
+Version **0.1** supports **GNOME Shell 50**. It runs inside GNOME Shell with native
+widgets and effects. The OAuth integrations are unofficial and carry account risks;
+read [Provider access and consent](#provider-access-and-consent) before connecting.
 
-**Popup.** Click the bar to open one collapsible card per provider. A card shows
-the plan, a state pill, the worst usage as a large number and one row per window
-with a progress bar, a pacing tick (where an even rate of use would be) and the
-reset time. Providers that do not fit on the bar are listed under "Hidden from the
-bar", and the ones you paused under "Not tracked", each with a Resume button. The footer shows
-when the data was last updated, a **?** button that explains every mark of the bar, a Refresh button
-and a Preferences button.
+## Table of contents
 
-## Status
+- [How it works](#how-it-works)
+- [Getting started](#getting-started)
+- [Providers](#providers)
+- [Features](#features)
+- [Configuration](#configuration)
+- [Privacy](#privacy)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
 
-The project is built in milestones (M0 to M4, see the [Roadmap](#roadmap)); M0 to M4 are done. The [conformance review](docs/temp/reviews/2026-10-07-m4-plan-conformance.md) records the original-plan adaptations and completed audit fixes. Four providers are real: **Command
-Code** (an API key pasted on the Accounts page of Preferences) and **Codex**, **Claude** and
-**Antigravity** (a sign-in through the browser, started from the same page). A provider you have
-not connected is not shown on the bar. An Advanced option switches to demo data (three
-scenarios of made-up providers that exercise every state).
+## How it works
 
-The extension is for personal use and is not published to extensions.gnome.org: the three
-sign-in providers are reached with another application's OAuth client, which their terms may
-not allow (see the architecture decision record [ADR 0003](docs/adr/0003-security-model.md)).
+Connect the providers you want to monitor in Preferences. The top bar shows the
+highest used percentage for each provider, with a small progress bar and a quota
+window label. Warning, critical, stale and error states have symbols as well as
+colors. Hover for the state and time until reset.
 
-## Providers
+Click the indicator to open the popup. Provider cards show usage windows, reset
+times, available plan information and a pacing marker for steady usage. The footer
+offers a legend, Refresh and Preferences. Providers that cannot fit on the bar stay
+accessible in the popup. You can pause tracking without removing an account.
 
-| Provider | Authentication |
-|---|---|
-| Command Code | API key in the keyring |
-| Codex | OAuth 2 with Proof Key for Code Exchange (PKCE) |
-| Claude | OAuth 2 with PKCE |
-| Antigravity | OAuth 2 with PKCE (Google); its terms forbid this use, see First use |
+Before connecting an account, the popup offers **Add account**. Preferences opens
+an optional setup assistant that guides you through providers, panel display and
+notifications. Every provider is optional; selecting one does not sign you in.
 
-Providers billed by money, such as OpenRouter, fit the same data model as a `money` metric and may
-follow these four.
+## Getting started
 
-## First use
+### Requirements
 
-1. Open Preferences and go to **Accounts**.
-2. **Command Code:** paste an API key (the page links to where keys are created).
-3. **Codex**, **Claude** and **Antigravity:** from the folder you cloned, run
-   `python3 -I tools/import-client-ids.py` (add `codex`, `claude` or `antigravity` to import one provider only). It
-   reads only the tools installed on this computer, finds the public client id each one signs in
-   with and stores it in `~/.config/gnome-ai-quota/providers.local.json`, private to you. Run it
-   again after installing another tool. Then press **Connect** and sign in in the browser. If the
-   browser cannot return to this computer, paste the address it ended on (or the code the page shows)
-   into the field the page offers.
+- GNOME Shell **50**; other versions are not declared compatible.
+- A desktop Secret Service, such as GNOME Keyring, for API keys and sign-ins.
+- Python 3 for the optional OAuth client-ID helper.
+- To build from source: `gnome-extensions`, `glib-compile-schemas`, `msgfmt`, Python
+  3 and the `zip`/`unzip` commands. On Fedora, the schema and translation tools are
+  provided by `glib2-devel` and `gettext`.
 
-   **Antigravity's terms forbid this** and Google could suspend your whole Google
-   account; the page asks you to confirm before it connects.
+### Install a supplied ZIP
 
-Until an account is connected the bar shows only the extension's icon, and the popup says that no
-account is connected and has an **Add account** button. The first-use assistant walks through these steps when Preferences opens for the first time.
-
-Notifications are on from the start (see [Notifications](#notifications)); the **Notifications**
-page of Preferences changes them.
-
-## Requirements
-
-- GNOME Shell 50 (developed on Fedora 44) and a Secret Service for the keys and sign-ins
-  (GNOME Keyring or any other that provides `org.freedesktop.secrets`).
-- To build: `glib-compile-schemas` and `msgfmt`
-  (`sudo dnf install glib2-devel gettext`), and `python3`.
-- To run the tests: `gjs`; `shellcheck` is used by `tools/check.sh` when installed.
-- To try it in a window: `mutter-devkit` (`sudo dnf install mutter-devkit`).
-
-## Install
-
-There is no release package yet: install from a clone, as a package built from it or as a link.
+The installable file is named
+`gnome-ai-quota@dandgabr.github.io.shell-extension.zip`. The local v0.1 delivery is
+under `dist/v0.1/`; there is currently no published GitHub release asset or
+extensions.gnome.org listing. Run this from the folder containing that local
+delivery, or replace the path with the supplied ZIP's location:
 
 ```sh
-git clone https://github.com/dandgabr/gnome-ai-quota.git
-cd gnome-ai-quota
-tools/pack.sh                                   # builds dist/gnome-ai-quota@dandgabr.github.io.shell-extension.zip
+gnome-extensions install --force dist/v0.1/gnome-ai-quota@dandgabr.github.io.shell-extension.zip
+```
+
+**Log out and log back in**, then enable the extension:
+
+```sh
+gnome-extensions enable gnome-ai-quota@dandgabr.github.io
+gnome-extensions prefs gnome-ai-quota@dandgabr.github.io
+```
+
+A new login also loads an updated build. On Wayland, the running shell does not
+reload newly installed extension code.
+
+### Build the checked-out revision
+
+From a checkout containing the revision you want to install:
+
+```sh
+tools/pack.sh
 gnome-extensions install --force dist/gnome-ai-quota@dandgabr.github.io.shell-extension.zip
 ```
 
-Then **log out and back in**: on Wayland the shell only finds a newly installed extension at
-login. After that, `gnome-extensions enable gnome-ai-quota@dandgabr.github.io` turns it on.
-Installing a new build also needs a new login.
+The pack script compiles schemas and translations, then creates the standard GNOME
+extension ZIP in `dist/`. Log out and back in, and run the enable command above.
+The default repository branch may differ from the locally supplied v0.1 build;
+check the checkout's `metadata.json` for its declared version and shell support.
 
-To work on the code, link the folder instead of installing a package:
+### Connect accounts
 
-```sh
-tools/build.sh                                   # compiles the schema and the translations
-mkdir -p ~/.local/share/gnome-shell/extensions
-ln -s "$PWD" ~/.local/share/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io
-```
+Open **Preferences → Accounts**.
 
-`tools/build.sh` must run again after changing `schemas/` or `po/`.
+For **Command Code**, enter your account name to open the key-management link,
+then paste your API key into the key field and save it. The extension stores the
+key in the desktop keyring.
 
-## Try it without touching your session
-
-Both scripts start a throwaway GNOME Shell with its own D-Bus session, temporary
-settings and a temporary data directory, and enable this checkout in it.
+For **Codex**, **Claude** or **Antigravity**, first install the corresponding
+official client on this computer. Run the packaged helper yourself in a terminal
+to import public client configuration from those installed programs:
 
 ```sh
-tools/nested-shell.sh          # a shell in a window on your desktop
-tools/nested-shell.sh prefs    # the same, with the preferences window open
-tools/headless-shell.sh        # no window: boot, print the extension state and shell errors
-
-# The throwaway shells have an empty keyring, so no account is connected. To see the bar, the popup
-# and the notifications working, start with made-up data (drift climbs toward the limits):
-DATA_SOURCE=demo DEMO_SCENARIO=drift tools/nested-shell.sh
+python3 -I "${XDG_DATA_HOME:-$HOME/.local/share}/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/tools/import-client-ids.py"
 ```
 
-[docs/development.md](docs/development.md) explains what each one is for.
+Add `codex`, `claude` or `antigravity` to import one provider only. From a source
+checkout, use `python3 -I tools/import-client-ids.py` instead. Run it again after
+installing another client. It reads public OAuth client configuration, never the
+client's saved account tokens, and writes the extension's own local configuration.
 
-## Settings
+Return to Accounts, press **Connect**, review the provider notice and sign in
+through your browser. If the browser cannot return to this computer, paste the
+final callback address or displayed code into the field offered by Preferences.
+The setup assistant can copy the helper command; you run it yourself.
 
-Open them from the popup (Preferences) or with `gnome-extensions prefs`.
+## Providers
 
-For a new live-data user with no accounts, Preferences opens a setup assistant once:
-Welcome, Providers, Connect, Top bar, Notifications and a summary. Every provider is optional;
-choosing one never connects it. Skip, Escape or closing dismisses setup. General → Set up again
-reopens it, and Restore defaults leaves that choice alone. Existing accounts, demo mode and a
-request to show a particular account do not trigger setup. A keyring that cannot be checked does
-not count as an empty account list.
+These are the four implemented live providers. Available quotas depend on the
+provider's response and your account; a missing metric is not shown as zero.
 
-When OAuth client ids are missing, setup shows and copies one command for the selected providers.
-Run it yourself in a terminal; the installed package includes the helper. The assistant never runs
-it, starts a sign-in or accepts terms for you. Only an explicit Connect action does that.
-
-| Page and group | Option | What it does |
+| Provider | Authentication | Quotas shown when available |
 |---|---|---|
-| Accounts, each provider | Status, key or Connect | Shows the key field (Command Code) or Connect, Cancel and Disconnect (the others), with what the last check said. |
-| Accounts, each provider | Track | When off, stops fetching and hides the provider from the bar and the popup. Your credentials stay saved. |
-| Accounts, Local account data | Disconnect all accounts… | After confirmation, removes extension credentials, live quota snapshots and alert history. Settings, themes, fonts and terms stay saved. Cancel is the default; provider sessions are not revoked. |
-| General, Top bar | Position | Puts the items in the left, center or right box of the panel. Default: right. |
-| General, Top bar | Providers on the bar | Shows up to this many, 1 to 5, the most critical first. Default: 3. |
-| General, Top bar | Compact mode | Automatic shrinks the bar only when space runs out; always compact drops the `%` and the suffix; never compact hides providers instead. |
-| General, Colors and theme | Light or dark | Follows the system, or forces light or dark for the popup. The top bar is always dark. |
-| General, Colors and theme | Theme | Opens the theme picker. Default: System (GNOME). |
-| General, Colors and theme | Your themes | Opens the folder for your own themes. |
-| General, Suggested fonts | Install suggested fonts… | Reviews four licensed Poppins, Inter and JetBrains Mono files before an optional download. Cancel is the default; theme selection never installs fonts. |
-| General, Colors and theme | Effects | Off, Subtle or Full. Default: Subtle. Full enables ambient effects on compatible built-in themes; the system animation preference takes precedence. |
-| General, Colors and theme | Transparency | Allows transparent backgrounds. Off keeps reading surfaces and backgrounds opaque. Default: on. |
-| General, Colors and theme | Material | Follows the theme, or chooses translucency, decorative glass or frost where the theme supports it. Default: follow the theme. |
-| General, Popup | Clock | Follows the GNOME clock setting, or forces 12 or 24 hours for reset times. |
-| General, Popup | Time until reset | Writes the countdown as `1h 20min` or `1h20`. |
-| General, Popup | Open cards that need attention | Opens cards in a warning, critical or error state on their own. A card you open or close by hand keeps that choice until its state changes. |
-| General, Advanced | Data source, Demo scenario | Switches to made-up providers (`steady`, `flaky` or `drift`) so every state can be seen without an account. The popup says when the data is made up. |
-| General, last group | Set up again | Reopens the optional setup assistant. Its dismissal is stored in `first-use-done`, which Restore defaults keeps. |
-| General, last group | About | Shows the version, the license and the links. |
-| General, last group | Restore defaults | After a confirmation, puts the look, the bar, the popup, the theme and the notifications back to their defaults. The selected data source, accounts, tracked providers and your terms acknowledgements are preserved. |
-| Notifications | Send notifications | Is the master switch. It also silences the connection alert. Off leaves the bar and the popup as they are. |
-| Notifications | Send a test notification | Sends one notification that says it is a test, to check the banner and Do Not Disturb. |
-| Notifications, Quotas | 5-hour, weekly, monthly, credits | Each kind has a critical threshold (default 95%) and an optional earlier warning (default 80%, off). Warning must be lower than critical. |
-| Notifications, Connection | Notify about connection problems | Notifies once when an account is rejected or its data stops arriving. Never for a provider you stopped tracking. |
+| **Command Code** | API key | Five-hour and weekly usage; remaining monthly credits in USD |
+| **Codex** | Browser OAuth with PKCE | Primary and secondary rate-limit windows, their reset times and plan |
+| **Claude** | Browser OAuth with PKCE | Five-hour and seven-day usage with reset times |
+| **Antigravity** | Google browser OAuth with PKCE | Five-hour and weekly usage for Gemini and the shared Claude/GPT pool |
 
-## Notifications
+PKCE means Proof Key for Code Exchange. The extension creates its own sign-in;
+it does not reuse the official clients' saved sessions. OpenRouter is not an
+implemented provider. Account sign-ins and quota requests have automated synthetic
+coverage; a successful real-account round trip has not been recorded for v0.1.
 
-The extension sends a system notification when a quota reaches its threshold (95% by default, set
-separately for the 5-hour, weekly, monthly and credit quotas) and when an account is rejected or its
-data stops arriving. The rules keep it quiet:
+### Provider access and consent
 
-- Each enabled warning/critical level notifies once on crossing. A jump over both sends only critical; a later critical crossing can follow a warning. Each level rearms after usage falls 3 points below its threshold or the quota resets. Existing high values, migrated records and configuration changes establish a quiet baseline. Warning notices are opt-in; existing critical thresholds and notification choices are preserved.
-- At most three quota notifications are sent an hour. The rest become one "several quotas need
-  attention".
-- A rejected sign-in notifies after ten minutes. Missing data notifies after at least fifteen minutes
-  and three poll intervals. Each problem notifies once, and never for a provider you stopped tracking
-  or for a locked keyring. After the computer wakes up, the connection alert stays quiet for 90 seconds.
-- The text is fixed and translated: the provider name, the window, the percentage and the time to
-  reset. It never carries an account, a plan or an error message.
-- Do Not Disturb holds the banner, and the notification waits in the list. The **Send a test
-  notification** button on the Notifications page lets you check this.
+This is a personal-use project. The three OAuth integrations use another
+application's public client configuration and unofficial quota endpoints. A
+successful sign-in does not mean the provider permits this access. Preferences
+requires an explicit acknowledgement before an OAuth connection starts.
 
-## Known limitations
+- **Codex:** access may conflict with [OpenAI's Terms of Use](https://openai.com/policies/terms-of-use/),
+  including restrictions on automated extraction and bypassing limits. Provider
+  permission for this extension is not established.
+- **Claude:** [Anthropic's credential-use rules](https://code.claude.com/docs/en/legal-and-compliance#authentication-and-credential-use)
+  prohibit third-party Claude.ai sign-in and collecting or storing subscription
+  session tokens. This integration uses that unofficial access; an account may be
+  limited or suspended. Acknowledgement does not grant permission.
+- **Antigravity:** [its additional terms](https://antigravity.google/terms) prohibit
+  third-party tools accessing the service and identify account suspension or
+  termination as possible consequences. The extension also warns about risk to
+  your wider Google account and requests the Google Cloud scope. Connect only if
+  you accept the notice.
+- **Command Code:** API-key authentication appears in the [official Provider API
+  documentation](https://commandcode.ai/docs/provider). That documentation does
+  not certify this extension's quota endpoint.
 
-- GNOME turns the extension off while the screen is locked, so no notification is sent then. A
-  notification you did not read before locking is gone after unlocking, though the bar and the popup
-  still show the state. A quota that crossed its threshold during the lock is announced on the first
-  look after unlocking.
-- The three sign-in providers are reached with another application's OAuth client, and their terms may
-  not allow it (see [Security](#security)).
-- The extension is for personal use and is not published to extensions.gnome.org.
+## Features
 
-## Themes
+- **Panel and popup:** choose left, center or right placement, show one to five
+  providers, and use automatic, always or never compact mode. Provider cards can
+  open automatically when they need attention.
+- **Reset times:** follow GNOME's clock setting or choose 12/24-hour time; display
+  countdowns as `1h 20min` or `1h20`.
+- **Notifications:** critical quota notices are enabled at **95%** by default.
+  Earlier warning notices are opt-in, initially **80%**. Configure five-hour,
+  weekly, monthly and credit rules separately, with warnings below critical.
+  Connection notices and a test notification have their own controls.
+- **Themes:** 22 built-in themes, each with light and dark variants. Follow the
+  system scheme or choose one explicitly; add your own theme files.
+- **Native effects:** supported themes offer translucency, decorative glass,
+  frost, textures and motion through GNOME's graphics stack. Choose Off, Subtle or
+  Full, disable transparency or select a compatible material. System animation settings override motion. Ambient
+  effects stop when the popup closes; opaque fallbacks keep text readable.
+- **Optional fonts:** review an explicit download of four Poppins, Inter and
+  JetBrains Mono files. Sources and SHA-256 hashes are pinned, with OFL-1.1 licenses
+  included. Choosing a theme never downloads fonts; missing fonts use fallbacks.
+- **Demo mode:** try `steady`, `flaky` and `drift` with fictional providers and
+  visible demo labels, without connecting an account.
+- **Languages:** English and Brazilian Portuguese follow the GNOME session
+  language. Other languages fall back to English.
 
-The extension ships 22 themes, each with a light and a dark variant; the default, System (GNOME),
-follows the shell. Organic/Biophilic adds warm paper and botanical forms; Glassmorphism
-offers the supported glass materials. You can add your own by putting a `theme.json` in
-`~/.local/share/gnome-ai-quota/themes/<id>/`. The format, the tokens and the validation rules are in
-[docs/themes.md](docs/themes.md).
+The built-in theme catalog contains System (GNOME), AI-native / Generative UI,
+Broadsheet Newspaper, Aurora / Mesh Gradient, Bento Grid, Card-based UI, Cyberpunk
+& Tactical HUD, De Stijl, Variable Type & Anti-Hero, Flat Design, Glassmorphism &
+Spatial UI, Hand-drawn / Sketch, Holographic Foil, Isometric, Linear SaaS,
+Lunarpunk, Mid-century Modern, Nanopunk, Organic / Biophilic, Solarpunk & Biomorphic,
+Terminal / TUI and Web Brutalism & Data-Dense.
 
-## Languages
+## Configuration
 
-English and Brazilian Portuguese, through gettext. The extension follows the language of the
-GNOME Shell session; a language without a translation shows English. There is no language setting. To add a language, see
-[docs/development.md](docs/development.md#translations).
-
-## Project layout
-
-The code is split into `lib/core` (pure logic), `lib/providers`, `lib/oauth`, `lib/services`, `lib/prefs` and
-`lib/ui`, with the entry points `extension.js` and `prefs.js`. Each directory, and the rules for what may
-import what, are in the [development guide](docs/development.md#layout).
-
-## Development and tests
+Open Preferences from the popup or run:
 
 ```sh
-tools/check.sh      # build, tests, syntax, the extension enabled in a headless shell, ShellCheck,
-                    # schemas and translations in one run
-tools/sast.sh       # the CI scanners (bandit, Semgrep, ShellCheck, zizmor, gitleaks), run locally
-tools/build.sh      # compile the schema and translations
-gjs -m tests/run.js # only the tests (add -- <text> to run the ones whose name contains it)
+gnome-extensions prefs gnome-ai-quota@dandgabr.github.io
 ```
 
-[docs/development.md](docs/development.md) covers the architecture rules, adding a
-theme, translations and the pitfalls of writing St code. The decisions behind the
-design are in [docs/adr](docs/adr/README.md).
+**Accounts** connects, disconnects and pauses providers. **General** controls the
+panel, popup, themes, fonts and demo data. **Notifications** controls thresholds,
+connection notices and the test notification. The [usage and settings
+reference](docs/usage.md) describes every option and notification rule.
 
-## Roadmap
+**Restore defaults** resets appearance and notification settings while preserving
+accounts, tracking choices, consent, the selected data source and setup dismissal.
+**Disconnect all accounts…** removes this extension's local credentials, quota
+snapshots and alert history after confirmation. It keeps settings, themes, fonts
+and local client configuration, and does not revoke remote sessions or API keys.
+Use the provider's account settings to revoke access there.
 
-| Milestone | Content | Status |
-|---|---|---|
-| M0 | Skeleton: panel button, bar, popup with demo cards | done |
-| M1 | Data layer (contract, scheduler, cache), themes, appearance settings | done |
-| M2 | Command Code with an API key stored in libsecret | done |
-| M3 | OAuth with PKCE in the preferences window: Codex, Claude, Antigravity | done |
-| M4 | Notifications and polish | done |
-| M5 | Indicator model, coalescing, keyboard behavior, CI lint and tabular numbers | implemented |
-| M6 | Native effects and 22 theme profiles | implemented; frost hardware gates open |
-| M7 | Optional WebGL study and product proposals | documented; product decisions open |
+For custom themes, open **General → Your themes**. The [theme
+reference](docs/themes.md) describes the file format.
 
-What each milestone holds, and which follow-up items remain, is in [ADR 0008](docs/adr/0008-mvp-roadmap.md).
+## Privacy
 
-## Security
+API keys and OAuth tokens are stored through libsecret in the desktop keyring,
+with no plaintext fallback. The extension keeps its own credentials and does not
+read or change the official AI clients' sessions. The manually run client-ID
+helper reads installed program files only for public OAuth configuration.
 
-While it runs, the extension does not read or change files, tokens or settings of any AI tool
-(Claude Code, Codex CLI and others). It keeps its own credentials. The one exception is
-`tools/import-client-ids.py`, which you run yourself: it reads the installed program of a tool
-only to find the public client id that tool signs in with, never a token. Secrets are stored
-in the desktop keyring through libsecret, never in GSettings, files or logs, and there
-is no plaintext fallback. The Command Code key is sent only to `api.commandcode.ai`
-over HTTPS, without following redirects.
+Quota requests go to the configured provider hosts over HTTPS. Choosing a theme
+does not contact a font server; optional font downloads require a separate action.
+Notification text includes the provider, quota window, percentage and reset time;
+it excludes account names, plans and raw errors.
 
-Credentials stay out of the repository. A check that needs only git and Python
-(`tools/check-secrets.py`, run by the pre-commit hook: `git config core.hooksPath .githooks`)
-refuses a commit that contains a credential pattern, a known client id or a value from your local
-configuration; gitleaks runs as well when installed. GitHub Actions also scan every change
-with gitleaks, CodeQL, bandit, Semgrep, ShellCheck and zizmor. `.gitignore` keeps credential files out. The full model, including the terms-of-service risk of
-the OAuth providers, is in [ADR 0003](docs/adr/0003-security-model.md).
+## Troubleshooting
+
+| Problem | What to check |
+|---|---|
+| Extension is missing after installation | Confirm GNOME Shell 50, log out and back in, then run the enable command. |
+| Only the extension icon appears | Connect an account in Accounts or select Demo under General → Advanced. |
+| Connect asks for client configuration | Install the official client and run the packaged helper, then retry. |
+| The browser cannot complete the return | Use the callback address/code field in Preferences. Never put tokens or callback URLs in an issue. |
+| Keyring is locked or unavailable | Unlock the desktop keyring and retry. The extension cannot store secrets in ordinary files. |
+| Usage is stale or an account is rejected | Refresh; check connectivity and account status in Accounts. Reconnect explicitly if requested. |
+| Some providers disappear from the bar | Increase the provider count or use compact mode; open the popup to see hidden providers. |
+| Notification banners do not appear | Check the master switch and GNOME Do Not Disturb, then send a test notification. Warnings are opt-in. |
+| Motion or transparency is absent | Check Effects, Transparency, material compatibility and the system animation setting. |
+| A quota field disappears after a provider update | Unofficial endpoints can change. Report the provider and fixed error category without credentials or response bodies. |
+
+GNOME disables extensions while the screen is locked. Quota notices resume after
+unlocking; an earlier unread extension notification may disappear. See
+[lock screen and suspend](docs/usage.md#lock-screen-and-suspend).
+
+## Contributing
+
+Bug reports and pull requests are welcome at the [project
+repository](https://github.com/dandgabr/gnome-ai-quota). Include your GNOME version,
+extension version, steps to reproduce and the visible error category. Remove
+account details and credentials from logs or screenshots.
+
+The [development guide](docs/development.md#contributing) covers local setup,
+checks, isolated shells, themes and translations. The [documentation
+index](docs/README.md) links the reference guides.
 
 ## License
 
-AGPL-3.0. See [LICENSE](LICENSE).
+AGPL-3.0. See [LICENSE](LICENSE). Optional font files retain their bundled
+OFL-1.1 licenses.

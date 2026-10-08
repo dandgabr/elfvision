@@ -64,8 +64,10 @@ Implemented in `lib/core/scheduler.js`, `lib/core/contract.js` and
   provider, with a 30 s timeout. A fetch receives a context with `isCancelled()`,
   true once the scheduler gave up on it (timeout, provider removed).
 - An interval below 5 s is raised; a missing or invalid one falls back to 5 min.
-- Backoff on failure doubles from 30 s (30 s, 1 min, 2 min, and so on), capped at 1 h. A server's retry
-  hint is honored but never longer than the cap. Every failure snapshot records
+- Backoff on failure doubles from 30 s (30 s, 1 min, 2 min, and so on), capped at 1 h.
+  Ordinary backoff has ±10% jitter. A finite server retry hint is bounded to
+  0–1 h and acts as a floor after jitter; jitter never exceeds the 1 h cap.
+  Every failure snapshot records
   `nextRetryAt`, so the UI can say when the next attempt happens.
 - `auth_required` pauses the provider. A manual refresh, `credentialsChanged` or a
   successful fetch resumes it; new credentials during a fetch in flight cause one

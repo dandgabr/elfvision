@@ -1,5 +1,10 @@
 # M4 original-plan conformance review
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Date: 2026-10-07. Baseline: committed ADRs and development rules at
 `4345b85` (`docs: decide the first-use assistant (ADR 0010)`). Subject:
 the current `feat/m4-first-use` working tree, including the inherited account

@@ -4,7 +4,7 @@ Status: accepted. M4 is implemented. Findings from the
 [original-plan audit](../temp/reviews/2026-10-07-m4-plan-conformance.md) are fixed
 and verified; documented adaptations and human/live-account validation limits
 remain explicit in that record.
-Follow-up items outside the MVP are under "Pending".
+Implemented follow-ups and remaining validation limits are listed below.
 The first-use design was reviewed by UI, UX, frontend and security consultants; the implementation
 and the RTL/long-text pass also received independent reviews.
 
@@ -122,8 +122,8 @@ English msgids. There is no language setting, no language step in the assistant 
   setting, which the extension already follows). The "Add account" line stays separate and quiet below
   it: it means "never connected", which is not the same as paused. The section opens by itself when
   nothing else is on the popup, until the user opens or closes it by hand.
-- **About:** `Adw.AboutDialog` with the version from `metadata.json`, the license, constant
-  `https://` links and an own application icon in `icons/hicolor`. No paths or user name.
+- **About:** `Adw.AboutDialog` with `version-name` from `metadata.json`, the AGPL-3.0 license, and constant
+  `https://` links and its own application icon in `icons/hicolor`. No paths or user name.
 - **Restore defaults:** every schema key is classified as reset or kept, and a test fails for an
   unclassified key. It resets appearance, bar, popup, notification and threshold settings, the theme
   and keeps the selected data source, accounts, tracking state, terms acknowledgements,
@@ -142,7 +142,7 @@ English msgids. There is no language setting, no language step in the assistant 
   - *Where and when.* It is a pushed subpage of the Preferences window with its own
     `Adw.NavigationView` (a dialog or a second window would hide toasts and flip `is-active` during
     the browser round-trip). It opens by itself once, when Preferences opens with `first-use-done`
-    unset, no account known, `prefs-target` empty and the live data source on. Skip, Finish and closing
+    unset, no account known, `prefs-target` empty and the live data source on. Skip, Finish, and closing
     the window all set `first-use-done`: nagging is worse than missing the assistant. An existing user
     with an account has the flag set silently. "Set up again" in the About group reopens it without
     touching the flag; Restore defaults leaves the flag alone (it is in `KEPT_KEYS`). The popup's empty
@@ -159,7 +159,7 @@ English msgids. There is no language setting, no language step in the assistant 
   - *Connect.* One scrollable page with a group per chosen provider, so a failure blocks nothing. It
     reuses the sign-in code of the Accounts page, split into a controller (state, terms, sign-in,
     cancel, paste) and two thin views, so there is one sign-in implementation and one security review.
-    One sign-in runs at a time. Moving away, Skip or closing cancels it (the port closes and the PKCE
+    One sign-in runs at a time. Moving away, Skip, or closing cancels it (the port closes and the PKCE
     verifier goes with the closure). The terms dialog is the existing one, per provider, with Cancel as
     the default and the stronger text for Antigravity; the assistant never pre-acknowledges, batches or
     writes `terms-acknowledged` itself.
@@ -173,7 +173,7 @@ English msgids. There is no language setting, no language step in the assistant 
     defaults filled in. The Notifications step shows the master switch (notifications are on by
     default, as decided in the bar round, so the step explains and lets the user turn them off) and
     the one threshold, with a link to the Notifications page; it sends no test notification.
-  - *Done.* A summary of what is connected, skipped and failed, each with a link that closes the
+  - *Done.* A summary of what is connected, skipped, and failed, each with a link that closes the
     assistant on that account; "Close setup" ends it.
   - *Stored.* One boolean, `first-use-done`; nothing about accounts, providers or steps. A new key may
     only show or hide the assistant: no setting can start a sign-in, store a credential or acknowledge
@@ -184,6 +184,10 @@ English msgids. There is no language setting, no language step in the assistant 
     timers, released when the subpage is popped, so "Set up again" does not leak. Step completion informs
     the connection status; it never blocks Continue or Skip. The common threshold changes all four
     quota types only when edited; existing per-type choices are kept until then.
+    The proposed critical value must exceed every enabled warning. Invalid edits
+    preserve existing values and show fixed validation feedback. Valid edits apply
+    all four critical values in one GSettings transaction through a separate
+    settings object, leaving unrelated settings outside that transaction.
     Done subscribes to account changes and validation results, updates rows in place,
     and releases subscriptions on departure. Account views discard late UI callbacks
     after disposal; fixed nonsecret save failures remain visible until recovery.
@@ -214,7 +218,7 @@ monitor. Tooltip labels are reused across focus changes and destroyed during cle
 - `structure.test.js` also checks that `alerts.js` imports no `gi://`, that `MessageTray` appears
   only in `lib/ui/` and that `Gio.DBus` appears only in `lib/services/`.
 
-## Pending
+## Follow-ups and validation limits
 
 The M5 follow-ups are implemented: the bar model lives in pure `lib/core`,
 provider response bursts coalesce, keyboard focus opens bar tooltips, the first

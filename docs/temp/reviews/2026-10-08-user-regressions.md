@@ -1,5 +1,10 @@
 # User-observed regressions — 2026-10-08
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Scope: the owner reported four initial regressions and later two additional layout defects while testing the isolated nested Shell. These observations require fresh evidence after the final renderer/CSS changes; previous frame measurements do not certify the current source. Synthetic accounts and private keyrings remain the test inputs.
 
 ## Popup flashes at the upper-left corner when closing
@@ -70,7 +75,7 @@ The debugger identified the “On the bar” heading, rather than a numeric labe
 
 Further geometry separated the valid source anchor from the dirty popup: the indicator/anchor retained positive allocations while the BoxPointer and foreground reported no valid allocation despite positive cached boxes; decorative siblings remained allocated. Recursive eager style evaluation alone did not eliminate the criticals. The cause was decorative child sizing inside allocation notifications while native BinLayout still allocated later siblings. The callback now queues coalesced HIGH_IDLE layout with generation/lifecycle cancellation and source accounting. Fresh production 12-case layout, strict100-cycle lifecycle and quick/numeric-destruction checks pass without native criticals. Root's later final layout also exits0. The [native consultation](2026-10-08-native-layout-consult.md) distinguishes the causal control from product-source checks.
 
-The shadow sampler uses the selected theme's actual gutter, including light Glassmorphism's3px extent. Its final identical-geometry paired capture passes all four strips: light left/right20.468/20.709; dark left/right13.061/13.694. Independent review viewed both original light/dark captures and read the exact pixel record; [the capture archive](assets/open-items/card-shadow/) preserves both controls. These results certify the recorded configuration and viewport, not every hardware/scale.
+The shadow sampler uses the selected theme's actual gutter, including light Glassmorphism's 3 px extent. Its final identical-geometry paired capture passes all four strips: light left/right 20.468/20.709; dark left/right 13.061/13.694. Independent review viewed both original light/dark captures and read the exact pixel record; [the capture archive](assets/open-items/card-shadow/) preserves both controls. These results certify the recorded configuration and viewport, not every hardware/scale.
 
 ## Enlarged quota header clips its primary reading
 

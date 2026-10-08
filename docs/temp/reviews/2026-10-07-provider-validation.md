@@ -1,5 +1,10 @@
 # Provider validation and owner-assisted acceptance
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Reviewed on 2026-10-07. Synthetic tests and public policy review are separate from successful authentication with a real account. The owner offered to participate; no real credential values have been inspected or copied by an agent.
 
 ## Current official policy evidence

@@ -1,5 +1,10 @@
 # Durable local disconnect implementation
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Date: 2026-10-07. Worktree: `gnome-ai-quota-post-mvp`; integration baseline `800465f`. Implementation owner: reused architecture/security/frontend reviewer thread; no child agents or commits. Parent independently reviewed coordinator, metadata, UI-result and directory-permission boundaries during implementation; each actionable finding received a targeted regression and correction.
 
 ## Implemented scope

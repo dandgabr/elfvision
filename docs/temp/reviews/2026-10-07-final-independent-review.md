@@ -1,5 +1,10 @@
 # Final independent review
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Date:2026-10-07. Worktree:`gnome-ai-quota-post-mvp`. Independent read-only source/test review of dual-alert persistence and local disconnect coordination. No implementation edits, commits, child agents, graphical tests or real credential/config reads. This document is reviewer-owned; other workers continued implementation during review.
 
 ## Findings and disposition

@@ -6,12 +6,12 @@ import Gtk from 'gi://Gtk';
 
 import {firstUsePolicy} from './lib/core/firstUse.js';
 import {openFirstUse} from './lib/prefs/firstUse.js';
-import {DEFAULT_THEME, scanThemes} from './lib/services/themeFiles.js';
+import {scanThemes} from './lib/services/themeFiles.js';
 import {buildAboutGroup} from './lib/prefs/about.js';
 import {buildAccountsPage} from './lib/prefs/accounts.js';
 import {buildNotificationsPage} from './lib/prefs/notifications.js';
 import {createSuggestedFontsGroup} from './lib/prefs/suggestedFonts.js';
-import {builtinCatalog} from './lib/prefs/themeCatalog.js';
+import {builtinCatalog, selectedThemeName, themePresentation} from './lib/prefs/themeCatalog.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 /**
@@ -117,15 +117,10 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         const groups = new Map(titles.map(title => [title, new Adw.PreferencesGroup({title})]));
         const used = new Set();
         for (const theme of themes) {
-            const info = theme.builtin ? catalog.byId[theme.id] : null;
-            const system = theme.id === DEFAULT_THEME;
-            const groupTitle = system ? titles[0] : (info?.group ?? titles[titles.length - 1]);
-            const name = system ? _('System (GNOME)') : theme.name;
+            const {group: groupTitle, name, description} = themePresentation(theme, _);
             const row = new Adw.ActionRow({
                 title: GLib.markup_escape_text(name, -1),
-                subtitle: GLib.markup_escape_text(system
-                    ? _('Follows the GNOME accent color and the light or dark setting.')
-                    : (info?.description ?? theme.description), -1),
+                subtitle: GLib.markup_escape_text(description, -1),
                 activatable: true,
             });
             row.add_prefix(swatchStrip(theme.swatches[dark ? 'dark' : 'light'], name));
@@ -208,11 +203,6 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         ], _('Light or dark'), _('Applies to the popup. The top bar always stays dark.'), handlerIds);
         look.add(scheme);
 
-        const themeName = (themes, id) => {
-            if (id === DEFAULT_THEME)
-                return _('System (GNOME)');
-            return themes.find(theme => theme.id === id)?.name ?? _('%s (unavailable)').format(id);
-        };
         const {themes: firstScan, rejected: firstRejected} = scanThemes(this.path);
         const themeRow = new Adw.ActionRow({
             title: _('Theme'),
@@ -220,7 +210,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
             activatable: true,
         });
         const themeLabel = new Gtk.Label({
-            label: themeName(firstScan, settings.get_string('theme')),
+            label: selectedThemeName(firstScan, settings.get_string('theme'), _),
             css_classes: ['dim-label'],
             ellipsize: 3,
             valign: Gtk.Align.CENTER,
@@ -229,7 +219,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         themeRow.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         themeRow.connect('activated', () => window.push_subpage(this._themePage(window, settings, _)));
         handlerIds.push(settings.connect('changed::theme', () => {
-            themeLabel.label = themeName(scanThemes(this.path).themes, settings.get_string('theme'));
+            themeLabel.label = selectedThemeName(scanThemes(this.path).themes, settings.get_string('theme'), _);
         }));
         look.add(themeRow);
 

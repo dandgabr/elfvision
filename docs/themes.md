@@ -32,9 +32,19 @@ scheme and a few shape and font choices:
 }
 ```
 
-Colors must be hex values. Invalid themes are listed, with the reason, at the top
-of the picker. [ADR 0006](adr/0006-theming.md) lists every token and the
-validation rules.
+Colors must be hex values; the accent also accepts `system-accent`. Invalid
+themes are listed, with the reason, at the top of the picker.
+[ADR 0006](adr/0006-theming.md) describes the base format and validation rules.
+The complete current token handling is in [the validator](../lib/core/theme.js)
+and [CSS template](../lib/core/theme.template.css).
+
+Keyboard focus uses a derived `focus` color, rather than another JSON field.
+The compiler keeps the resolved accent when it has at least 3:1 contrast against
+popup/card backgrounds and their hover, focus and checked tints; otherwise it
+uses the theme's foreground color. This preserves the original accent and meter
+fill. Built-in palettes are checked in both schemes and with every System accent.
+Custom theme authors still need to choose readable foreground and surface colors;
+hex validation alone does not establish accessible contrast.
 
 Font names remain local fallback choices. General → Suggested fonts offers a
 separate explicit installation of four maintained Poppins/Inter/JetBrains Mono
@@ -74,7 +84,9 @@ use opaque/no motion/no texture and opacity 1. Colors remain hex without alpha.
 
 Trust comes from the file the loader selected. A theme in the user folder,
 including one with a built-in ID or an `origin` field, cannot activate built-in
-effects. The picker identifies such overrides as user themes.
+effects. The picker and selected-theme label identify such overrides as user
+themes, with the user-supplied name and description, including overrides of
+System (GNOME).
 
 General exposes Effects (`Off`, `Subtle`, `Full`), Transparency and a material choice.
 The material follows the theme by default; an explicit choice applies only when the
@@ -86,7 +98,7 @@ Full permits ambient motion only in compatible built-in profiles. System
 animation disablement overrides motion immediately. Transparency can be disabled
 independently. Off and a closed popup produce an opaque, motionless policy; no
 ambient effect runs on the panel. Restore defaults resets all three controls and
-preserves accounts, tracking, consent and first-use state.
+preserves accounts, tracking, consent, and first-use state.
 
 Built-in profiles are maintained in `tools/theme-effect-profiles.json`. The generator
 reads this allowlisted source after compiling gallery tokens; it never imports gallery

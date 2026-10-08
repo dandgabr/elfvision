@@ -1,5 +1,10 @@
 # Tasks 4–6 independent QA and UI review
 
+> Historical snapshot: this document preserves the findings and test results
+> recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Final status: APPROVED for implemented native scope in verified headless and nested devkit backends; hardware/manual gates remain open. Initial findings and subsequent fixed reviews below preserve the audit trail. Read-only production review; no graphics edits or commits.
 
 ## Inputs

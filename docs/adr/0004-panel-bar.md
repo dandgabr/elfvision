@@ -42,7 +42,7 @@ tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M
   `$1.2K`) and the bar is the share of the budget spent. In headline mode, money
   shows only when it is the worst case.
 - **Adaptive layout.** The bar measures the room the panel leaves it and picks the
-  richest layout that fits, so other extensions never clip it. Candidates, in order:
+  richest layout that fits the measured space. Candidates, in order:
   full; compact with N providers; compact with N-1 down to 2; headline (the worst
   provider plus `+N`); one compact provider. The room is the side width the shell
   allocates, `(panel width - center natural width + work area offset) / 2`, minus

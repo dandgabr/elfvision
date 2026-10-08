@@ -69,13 +69,13 @@ function scripted(id, outcomes, intervalMs = 5 * MINUTE) {
 
 const body = percent => ({metrics: [{id: 'w', kind: 'percent', window: 'week', windowSecs: 604800, percentUsed: percent}]});
 
-function setup(providers, settings = {}) {
+function setup(providers, settings = {}, random = () => 0.5) {
     const clock = new FakeClock();
     const emitted = [];
     const problems = [];
     // random() = 0.5 makes jitter zero and the initial spread 1 s.
     const scheduler = new PollScheduler({
-        timers: clock, onSnapshot: s => emitted.push(s), random: () => 0.5,
+        timers: clock, onSnapshot: s => emitted.push(s), random,
         onProblem: m => problems.push(m), settings,
     });
     providers.forEach(p => scheduler.add(p));
@@ -205,6 +205,38 @@ test('scheduler: a rate limit honors a longer retry hint', async () => {
     await clock.advance(2 * MINUTE);
     assertEqual(codex.calls, 2);
 });
+
+for (const random of [0, 1]) {
+    const cap = 60 * MINUTE;
+    const scenarios = [
+        {name: 'uncapped backoff', base: 30 * SECOND, expected: random ? 33 * SECOND : 27 * SECOND},
+        {name: 'capped backoff', base: cap, expected: random ? cap : 54 * MINUTE},
+        {name: 'long positive hint', base: 30 * SECOND, hint: 10 * MINUTE, expected: random ? 11 * MINUTE : 10 * MINUTE},
+        {name: 'short positive hint', base: 30 * SECOND, hint: 29 * SECOND, expected: random ? 33 * SECOND : 29 * SECOND},
+        {name: 'hint at cap', base: 30 * SECOND, hint: cap, expected: cap},
+        {name: 'hint above cap', base: 30 * SECOND, hint: cap * 2, expected: cap},
+        {name: 'zero hint', base: 30 * SECOND, hint: 0, expected: random ? 33 * SECOND : 27 * SECOND},
+        {name: 'negative hint', base: 30 * SECOND, hint: -SECOND, expected: random ? 33 * SECOND : 27 * SECOND},
+    ];
+    for (const scenario of scenarios) {
+        test(`scheduler: retry jitter ${random} respects ${scenario.name}`, async () => {
+            const failure = new ProviderError('rate_limited', 'synthetic', {retryAfterMs: scenario.hint});
+            const provider = scripted('synthetic', [failure, body(10)]);
+            const {clock, scheduler, emitted} = setup([provider], {initialSpreadMs: 0, backoffBaseMs: scenario.base}, () => random);
+            scheduler.start();
+            await clock.advance(0);
+            assertEqual(provider.calls, 1);
+            assertEqual(emitted[0].nextRetryAt - clock.now(), scenario.expected, 'published retry must respect server floor and hard cap');
+            await clock.advance(scenario.expected - 1);
+            assertEqual(provider.calls, 1, 'the actual scheduled request must not start before its published retry');
+            await clock.advance(1);
+            assertEqual(provider.calls, 2, 'the actual scheduled request starts at its published retry');
+            assertEqual(emitted[1].state, 'ok');
+            scheduler.stop();
+            assertEqual(clock.pending, 0);
+        });
+    }
+}
 
 test('scheduler: auth_required stops polling until credentials change', async () => {
     const claude = scripted('claude', [new ProviderError('auth_required'), body(20)]);

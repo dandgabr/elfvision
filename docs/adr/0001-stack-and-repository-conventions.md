@@ -11,7 +11,8 @@ into the shell is discouraged, and a crash in it takes the whole session down.
 
 ## Decision
 
-- **GJS only**, as ES modules, with no build step.
+- **GJS only**, as ES modules, with no JavaScript compilation step.
+  `tools/build.sh` compiles schemas and translation catalogs.
 - Preferences use GTK 4 and libadwaita (`prefs.js`).
 - Plain JavaScript with JSDoc types where they help.
 - Target: GNOME Shell 50, developed on Fedora 44.
@@ -21,7 +22,7 @@ into the shell is discouraged, and a crash in it takes the whole session down.
   `po/pt_BR.po`.
 - CSS classes start with `gaq-`. The extension uuid is
   `gnome-ai-quota@dandgabr.github.io` and user directories use `gnome-ai-quota`.
-- License: AGPL-3.0.
+- License: [AGPL-3.0](../../LICENSE).
 
 ## Consequences
 

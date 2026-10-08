@@ -1,5 +1,10 @@
 # M4 audit fixes implementation plan
 
+> Historical snapshot: this document preserves the decisions, findings, and test
+> results recorded on its date. Counts, source references, open items, and performance
+> observations describe that snapshot. See the [v0.1 audit](../reviews/2026-10-08-v01-audit.md)
+> for current dispositions and release verification.
+
 Goal: resolve every actionable finding in the original-plan conformance audit
 without changing the recorded consent, manual-helper or started-write boundaries.
 The user explicitly requested development-agent execution. Existing work is
