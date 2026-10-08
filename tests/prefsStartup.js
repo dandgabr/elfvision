@@ -2,8 +2,10 @@
 import Adw from 'gi://Adw';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
+import Gtk from 'gi://Gtk';
 import System from 'system';
 import {fmt} from '../lib/core/viewmodel.js';
+import {scanThemes} from '../lib/services/themeFiles.js';
 
 String.prototype.format = function (...args) { return fmt(String(this), ...args); };
 Gio.Resource.load('/usr/share/gnome-shell/org.gnome.Shell.Extensions.src.gresource')._register();
@@ -47,6 +49,16 @@ app.connect('activate', () => {
                 await wait();
                 check(s.get_boolean('first-use-done') && s.get_string('prefs-target') === '', 'target dismisses setup and is consumed');
                 check(!walk(window).some(w => w instanceof Adw.NavigationPage && w.title === 'Welcome'), 'target removes setup');
+            }
+            if (mode === 'demo') {
+                const themePage = preferences._themePage(window, s, text => text);
+                window.push_subpage(themePage); await wait();
+                const catalog = scanThemes(root).themes;
+                const icons = walk(themePage).filter(w => w instanceof Gtk.Image);
+                for (const [capability, label] of [['transparency', 'Supports transparency'], ['effects', 'Supports visual effects']])
+                    check(icons.filter(w => w.tooltip_text === label).length === catalog.filter(t => t.capabilities[capability]).length,
+                        `native theme picker: ${capability} icons reflect all validated profiles`);
+                window.pop_subpage(); await wait();
             }
             window.close();
             await wait();

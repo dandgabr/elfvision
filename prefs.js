@@ -124,6 +124,18 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
                 activatable: true,
             });
             row.add_prefix(swatchStrip(theme.swatches[dark ? 'dark' : 'light'], name));
+            // Capacity belongs to the validated packaged profile, independent of current settings.
+            for (const [available, iconName, label] of [
+                [theme.capabilities.transparency, 'view-reveal-symbolic', _('Supports transparency')],
+                [theme.capabilities.effects, 'starred-symbolic', _('Supports visual effects')],
+            ]) {
+                if (!available)
+                    continue;
+                const icon = new Gtk.Image({icon_name: iconName, pixel_size: 16,
+                    valign: Gtk.Align.CENTER, tooltip_text: label, focusable: false});
+                icon.update_property([Gtk.AccessibleProperty.LABEL], [label]);
+                row.add_suffix(icon);
+            }
             if (theme.id === current)
                 row.add_suffix(new Gtk.Image({icon_name: 'object-select-symbolic', valign: Gtk.Align.CENTER}));
             row.connect('activated', () => {

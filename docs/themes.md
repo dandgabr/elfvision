@@ -114,3 +114,13 @@ System keeps ordinary interactions with no decorative ambience.
 Profiles permit a material; they do not prove that its renderer is available or that its
 contrast/performance has passed validation. Opaque reading zones and runtime
 fallbacks remain renderer requirements.
+
+## Theme picker capabilities
+
+Informational icons identify transparency and visual effects from the validated
+built-in profile. Transparency includes compatible material overrides; effects
+include interaction motion, ambient motion, or texture. The icons have translated
+accessible labels and tooltips and do not add keyboard stops. They indicate what
+a theme supports, independently of the current Effects/Transparency settings.
+User themes, including overrides using a built-in ID, cannot claim built-in
+effect permissions.

@@ -22,8 +22,8 @@ test('connectors: legacy defaults remain stable, rename and removal isolate sibl
     const settings = settingsFixture(); const store = createConnectorStore(settings, {uuid: () => '12345678-1234-4234-8234-123456789abc'});
     const extra = store.add('codex', 'Work'); assertEqual(extra.id, id); assertEqual(store.list().filter(c => c.providerId === 'codex').length, 2);
     store.update(id, {label: 'Renamed'}); assertEqual(store.get(id).label, 'Renamed'); assertEqual(store.get('codex').id, 'codex');
-    const demo = createConnectorStore(settings, {demo: true}); assertEqual(demo.list().length, 4);
-    store.remove(id); assertEqual(store.list().length, 4); assertEqual(demo.list().length, 4);
+    const demo = createConnectorStore(settings, {demo: true}); assertEqual(demo.list().length, 5);
+    store.remove(id); assertEqual(store.list().length, 4); assertEqual(demo.list().length, 5);
     for (const connector of store.list()) store.remove(connector.id); assertEqual(createConnectorStore(settings).list(), []);
     store.dispose(); demo.dispose();
 });
@@ -46,7 +46,7 @@ test('connectors: corrupt registries recover identities from metadata without co
     const recovered = await store.recover(); assertEqual(calls, 1); assertEqual(recovered.filter(c => c.providerId === 'codex').length, 2);
     assertEqual(store.get(id), {id, providerId: 'codex', label: '', username: ''});
     settings.set_string('demo-connectors', 'broken'); const demo = createConnectorStore(settings, {demo: true, enumerate: async () => { throw new Error('demo must not read keyring'); }});
-    assertEqual((await demo.recover()).length, 4); store.dispose(); demo.dispose();
+    assertEqual((await demo.recover()).length, 5); store.dispose(); demo.dispose();
 });
 
 import Gio from 'gi://Gio';
@@ -84,12 +84,12 @@ for (const source of ['live', 'demo']) {
         const settings = settingsFixture(); settings.set_string('data-source', source); settings.set_string(source === 'demo' ? 'demo-connectors' : 'connectors', '{bad');
         settings.get_strv = () => [];
         let running;
-        const construct = new Function('createConnectorStore', 'createProviders', 'GLib', 'CacheStore', 'QuotaController', 'availableProviders', body);
+        const construct = new Function('createConnectorStore', 'createProviders', 'GLib', 'CacheStore', 'QuotaController', 'availableProviders', 'availableDemoProviders', body);
         class Controller { constructor({providers}) { running = providers; } markSynced() {} subscribe() { return () => {}; } start() { return Promise.resolve(); } }
         const extension = {_settings: settings, _disconnectGate: {}, _syncProviders() {}, _createAlerts() {}};
-        construct.call(extension, createConnectorStore, () => [{id: 'example-credits'}], GLib, class {}, Controller, () => []);
+        construct.call(extension, createConnectorStore, () => [{id: 'example-credits'}], GLib, class {}, Controller, () => [], () => []);
         assertTrue(extension._controller !== null); assertEqual(extension._controller.registryProblem, true);
-        assertEqual(running.map(provider => provider.id), source === 'demo' ? ['example-credits'] : []);
+        assertEqual(running.map(provider => provider.id), []);
     });
 }
 
@@ -118,4 +118,149 @@ test('connectors: recovery exceeding the identity bound fails explicitly without
     const store = createConnectorStore(settings, {enumerate: async () => metadata});
     let rejected = false; try { await store.recover(); } catch (_) { rejected = true; }
     assertTrue(rejected); assertEqual(settings.get_string('connectors'), '{corrupt'); store.dispose();
+});
+
+test('connectors: demo credit identities persist only in the demo registry', () => {
+    const settings = settingsFixture();
+    const demo = createConnectorStore(settings, {demo: true, uuid: () => '12345678-1234-4234-8234-123456789abc'});
+    assertEqual(demo.list().map(entry => entry.id), ['command-code', 'codex', 'claude', 'antigravity', 'example-credits']);
+    const credit = demo.add('example-credits', 'Preview credits');
+    assertEqual(demo.get(credit.id).providerId, 'example-credits');
+    assertEqual(providerIdForConnector(credit.id), null);
+    assertEqual(providerIdForConnector(credit.id, {demo: true}), 'example-credits');
+    const live = createConnectorStore(settings);
+    let rejected = false; try { live.add('example-credits'); } catch (_) { rejected = true; }
+    assertTrue(rejected); assertEqual(live.list().length, 4);
+    demo.clear(); assertEqual(createConnectorStore(settings, {demo: true}).list(), []);
+    assertEqual(live.list().length, 4); live.dispose(); demo.dispose();
+});
+
+import {disconnectAll} from '../lib/services/disconnectAll.js';
+test('connectors: delete all demo isolates live data and keeps an empty registry after restart', async () => {
+    const settings = settingsFixture(); const arrays = new Map([
+        ['demo-connected-connectors', ['codex', 'example-credits']], ['untracked-providers', ['example-credits', 'openai-api']]]);
+    settings.get_strv = key => arrays.get(key) ?? [];
+    settings.set_strv = (key, value) => { arrays.set(key, value); return true; };
+    const live = createConnectorStore(settings); live.add('codex', 'Real'); const before = settings.get_string('connectors');
+    const result = await disconnectAll({settings, demo: true, gate: {ready() { throw new Error('demo touched gate'); }},
+        removeCredential() { throw new Error('demo touched credentials'); }, requireShell() { throw new Error('demo touched session'); }});
+    assertEqual(result.phase, 'complete'); assertEqual(settings.get_string('connectors'), before);
+    assertEqual(createConnectorStore(settings, {demo: true}).list(), []);
+    assertEqual(settings.get_strv('demo-connected-connectors'), []);
+    assertEqual(settings.get_strv('untracked-providers'), ['openai-api']); live.dispose();
+});
+test('connectors: live whole deletion retains metadata on failed credentials and failed settings writes', async () => {
+    const settings = settingsFixture(); settings.get_strv = () => []; settings.set_strv = () => true;
+    settings.get_int = () => 1; settings.set_int = () => true; settings.set_value = () => true;
+    const live = createConnectorStore(settings); live.add('codex', 'Real'); const before = settings.get_string('connectors');
+    let credential = 'failed', file = 'absent';
+    const gate = {snapshot: () => ({transaction: {credentials: {codex: {'oauth-token': credential}}, files: {snapshots: file, alerts: 'absent'}}}),
+        disconnect: async deps => { try { await deps.clearStatus(gate.snapshot().transaction); return {phase: 'complete'}; } catch (_) { return {phase: 'failed'}; } }};
+    assertEqual((await disconnectAll({settings, demo: false, gate, requireShell: async () => {}})).phase, 'failed');
+    assertEqual(settings.get_string('connectors'), before);
+    credential = 'absent'; file = 'failed';
+    assertEqual((await disconnectAll({settings, demo: false, gate, requireShell: async () => {}})).phase, 'failed');
+    assertEqual(settings.get_string('connectors'), before); file = 'absent';
+    const original = settings.set_string;
+    settings.set_string = (key, value) => key === 'credentials-touched' ? false : original(key, value);
+    assertEqual((await disconnectAll({settings, demo: false, gate, requireShell: async () => {}})).phase, 'failed');
+    assertEqual(settings.get_string('connectors'), before);
+    settings.set_string = original;
+    assertEqual((await disconnectAll({settings, demo: false, gate, requireShell: async () => {}})).phase, 'complete');
+    assertEqual(live.list(), []); live.dispose();
+});
+
+import * as AccountViews from '../lib/prefs/accounts.js';
+import * as DemoControllers from '../lib/prefs/demoAccountController.js';
+test('connectors: auth labels distinguish API keys and OAuth from fictional mode', () => {
+    assertEqual(AccountViews.connectorAuth({auth: 'api-key'}, text => text), {icon: 'dialog-password-symbolic', label: 'API key'});
+    assertEqual(AccountViews.connectorAuth({auth: 'api-key', quotaSupport: 'unavailable'}, text => text), {icon: 'web-browser-symbolic', label: 'Dashboard only'});
+    assertEqual(AccountViews.connectorAuth({auth: 'oauth2'}, text => text), {icon: 'web-browser-symbolic', label: 'OAuth 2'});
+});
+test('connectors: unavailable quota controller never reads or stores a credential', async () => {
+    const controller = DemoControllers.createUnavailableAccountController();
+    await controller.refresh(); assertEqual(controller.snapshot().connected, true);
+    assertEqual(controller.snapshot().result, 'unavailable'); assertEqual(await controller.remove(), true);
+    controller.dispose();
+});
+
+test('connectors: failed demo registry write cannot report completed deletion', async () => {
+    const settings = settingsFixture(); const arrays = new Map([['demo-connected-connectors', ['example-credits']], ['untracked-providers', ['example-credits']]]);
+    settings.get_strv = key => arrays.get(key) ?? [];
+    settings.set_strv = (key, value) => { arrays.set(key, value); return true; };
+    const demo = createConnectorStore(settings, {demo: true}); demo.update('example-credits', {label: 'Kept after failure'});
+    const before = settings.get_string('demo-connectors'); const original = settings.set_string;
+    settings.set_string = (key, value) => key === 'demo-connectors' ? false : original(key, value);
+    let failure = false; try { await disconnectAll({settings, demo: true}); } catch (_) { failure = true; }
+    assertTrue(failure); assertEqual(settings.get_string('demo-connectors'), before);
+    settings.set_string = original;
+    assertEqual((await disconnectAll({settings, demo: true})).phase, 'complete'); assertEqual(demo.list(), []); demo.dispose();
+});
+
+
+import {QuotaController} from '../lib/services/controller.js';
+import {createDemoProviders} from '../lib/providers/demo.js';
+import {availableDemoProviders} from '../lib/providers/registry.js';
+import {demoSnapshots} from '../lib/core/fixtures.js';
+
+test('connectors: deleting Example and every demo connector prevents cache ghosts across restart and scenario changes', async () => {
+    const settings = settingsFixture(); settings.set_string('data-source', 'demo');
+    settings.get_strv = key => key === 'demo-connected-connectors' ? ['command-code', 'codex', 'claude', 'antigravity', 'example-credits'] : [];
+    const root = GLib.path_get_dirname(GLib.path_get_dirname(GLib.filename_from_uri(import.meta.url)[0]));
+    const text = new TextDecoder().decode(GLib.file_get_contents(`${root}/extension.js`)[1]);
+    const body = text.match(/ {4}_createController\(\) \{([\s\S]*?)\n {4}\}\n\n {4}\/\*\*/)[1];
+    const construct = new Function('createConnectorStore', 'createProviders', 'GLib', 'CacheStore', 'QuotaController', 'availableProviders', 'availableDemoProviders', body);
+    const saved = [];
+    class Cached {
+        async load() { return {snapshots: demoSnapshots(), problems: []}; }
+        save(snapshots) { saved.push(snapshots.map(snapshot => snapshot.id)); }
+    }
+    const store = createConnectorStore(settings, {demo: true});
+    store.remove('example-credits');
+    for (const clearAll of [false, true]) {
+        if (clearAll) store.clear();
+        for (const scenario of ['steady', 'flaky', 'drift']) {
+            settings.set_string('demo-scenario', scenario);
+            const extension = {_settings: settings, _createAlerts() {}};
+            construct.call(extension, createConnectorStore, ({scenario: selected}) => createDemoProviders(selected), GLib, Cached, QuotaController, () => [], availableDemoProviders);
+            await extension._controller.start();
+            assertEqual(extension._controller.providerIds(), clearAll ? [] : ['command-code', 'codex', 'claude', 'antigravity']);
+            assertTrue(!extension._controller.snapshots().some(snapshot => snapshot.id === 'example-credits'));
+            if (clearAll) assertEqual(extension._controller.snapshots(), []);
+            await extension._controller.stop();
+            assertTrue(!saved.at(-1).includes('example-credits'));
+        }
+    }
+    store.dispose();
+});
+
+test('connectors: new API runtimes isolate sibling keys and fence a delayed lookup before HTTP', async () => {
+    for (const providerId of ['openai-api', 'anthropic-api', 'cursor', 'openrouter']) {
+        const reads = [], captures = [], hosts = [], requests = [];
+        let current = true;
+        const gate = {capture: async provider => { captures.push(provider); return {provider}; },
+            assertCurrent: async () => { if (!current) throw new Error('synthetic fenced lookup'); }};
+        const deps = {lookupSecret: async key => { reads.push(key); return 'synthetic-api-key'; },
+            createHttp: options => { hosts.push(options.allowedHosts); return {dispose() {}, request: async url => {
+                requests.push(url);
+                if (url.endsWith('/spend_limit')) return {status: 404, json: null};
+                const json = providerId === 'openai-api' ? {data: [], has_more: false} :
+                    providerId === 'anthropic-api' ? {data: [], has_more: false} :
+                        providerId === 'cursor' ? {teamMemberSpend: [], totalMembers: 0, totalPages: 0} :
+                            {data: {limit: 1, limit_remaining: 0.5, limit_reset: null}};
+                return {status: 200, json};
+            }}; }};
+        const siblings = ['12345678-1234-4234-8234-123456789abc', 'abcdef12-1234-4234-8234-123456789abc'].map(uuid => `${providerId}--${uuid}`);
+        for (const connectorId of siblings) {
+            const runtime = createProvider(connectorId, {gate, deps});
+            assertEqual([runtime.id, runtime.providerId], [connectorId, providerId]);
+            assertTrue((await runtime.fetch()).metrics.length > 0); runtime.dispose();
+        }
+        assertEqual(reads, siblings); assertEqual(captures, [providerId, providerId]);
+        assertTrue(hosts.every(list => list.length === 1 && requests.some(url => url.startsWith(`https://${list[0]}/`))));
+        const before = requests.length;
+        const runtime = createProvider(siblings[0], {gate, deps: {...deps, lookupSecret: async () => { current = false; return 'synthetic-api-key'; }}});
+        let failed = false; try { await runtime.fetch(); } catch (_error) { failed = true; }
+        assertTrue(failed); assertEqual(requests.length, before, 'fenced key lookup dispatches no reporting request'); runtime.dispose();
+    }
 });

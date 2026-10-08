@@ -5,7 +5,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
 import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
-import {PROVIDERS, LIVE_PROVIDER_IDS, providerMeta} from '../lib/providers/registry.js';
+import {PROVIDERS, LIVE_PROVIDER_IDS, DEMO_PROVIDERS, availableDemoProviders, providerMeta} from '../lib/providers/registry.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
 const decoder = new TextDecoder();
@@ -63,16 +63,21 @@ test('structure: the system bus is reached from the services only', () => {
 });
 
 test('registry: ordered, unique, and only complete providers are available', () => {
-    assertEqual(PROVIDERS.map(p => p.id), ['command-code', 'codex', 'claude', 'antigravity']);
+    assertEqual(PROVIDERS.map(p => p.id), ['command-code', 'codex', 'claude', 'antigravity', 'openai-api', 'anthropic-api', 'cursor', 'openrouter']);
     assertEqual(new Set(PROVIDERS.map(p => p.id)).size, PROVIDERS.length);
-    assertEqual(LIVE_PROVIDER_IDS, ['command-code', 'codex', 'claude', 'antigravity']);
+    assertEqual(LIVE_PROVIDER_IDS, ['command-code', 'codex', 'claude', 'antigravity', 'openai-api', 'anthropic-api', 'cursor', 'openrouter']);
     for (const meta of PROVIDERS) {
         assertTrue(['api-key', 'oauth-pkce'].includes(meta.auth), meta.id);
+        assertTrue(GLib.file_test(`${root}/icons/${meta.id}-symbolic.svg`, GLib.FileTest.IS_REGULAR), `${meta.id} has a packaged provider icon`);
         assertTrue(meta.apiHosts.every(host => /^[a-z0-9.-]+$/.test(host)), `${meta.id} hosts`);
     }
     assertEqual([providerMeta('claude').terms, providerMeta('antigravity').terms], ['terms', 'strong']);
     assertEqual(providerMeta('command-code').terms, null);
     assertEqual(providerMeta('nope'), undefined);
+    assertEqual(DEMO_PROVIDERS.map(meta => meta.id), ['example-credits']);
+    assertEqual(availableDemoProviders().map(meta => meta.id), [...LIVE_PROVIDER_IDS, 'example-credits']);
+    assertTrue(!LIVE_PROVIDER_IDS.includes('example-credits'));
+    assertEqual(PROVIDERS.filter(meta => meta.quotaSupport === 'unavailable').map(meta => [meta.id, meta.apiHosts]), []);
 });
 
 // ---- secrets stay out of the repository (docs/adr/0003, 0009)

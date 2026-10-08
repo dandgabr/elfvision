@@ -95,3 +95,24 @@ Implemented in `lib/core/scheduler.js`, `lib/core/contract.js` and
 - The user logs in once per provider inside the extension.
 - Provider modules are independent, so a broken endpoint affects one card.
 - The extension cannot show data for a provider the user has not connected.
+
+## Amendment: API reporting and deletion actions (2026-10-08)
+
+The live registry now includes OpenAI API, Anthropic API, Cursor and OpenRouter
+in addition to the four subscription providers. Exact endpoints, credential
+permissions, billing units and limitations have one canonical reference in
+[Provider data](../providers.md). Gemini and Z.ai are deferred by explicit user
+choice after research did not verify ordinary-key quota/balance endpoints.
+
+Monetary metrics distinguish `kind: spend` with `amount` and optional `limit` from
+prepaid `kind: money`. Key allowance uses `basis: allowance` and may have a
+day/week/month reset. A missing cap produces no percentage or meter; normalized
+cache entries discard arbitrary response fields. Organization costs never imply
+subscription quota or prepaid balance.
+
+Accounts now offers Delete all connectors for the current data source. Demo
+includes a persistent, removable Example Credits connector; empty lists stay
+empty across restarts. Live metadata clears only after credential/cache deletion
+succeeds under the durable gate. General alone offers Restore configuration,
+preserving connectors and credentials. About adds Daniel G. Araujo's credit/link
+and separate public bug and private vulnerability reporting paths.

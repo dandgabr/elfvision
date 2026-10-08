@@ -364,3 +364,18 @@ test('alerts: persisted valid rule backup is canonical bounded and rejects forei
     }
     const invalid=JSON.parse(text);invalid.session.percent=75;assertEqual(parseAlertRuleBackup(JSON.stringify(invalid)),null);
 });
+
+import {normalizeSnapshot} from '../lib/core/contract.js';
+
+test('alerts: monetary reports without caps stay quiet while known monthly caps cross', () => {
+    const report = (amount, limit) => normalizeSnapshot({id: 'openai-api', name: 'OpenAI API', state: 'ok',
+        source: {kind: 'fresh', fetchedAt: T0}, metrics: [{id: 'cost', kind: 'spend', amount, currency: 'USD', window: 'month', ...(limit === undefined ? {} : {limit})}]}).snapshot;
+    const unknown = run([[report(90), T0], [report(100000), T0 + MIN]]);
+    assertEqual(unknown.events, []);
+    assertEqual(unknown.state.levels, {});
+    const known = run([[report(90, 100), T0], [report(96, 100), T0 + MIN]]);
+    assertEqual(known.events.length, 1);
+    assertEqual([known.events[0].crossings[0].type, known.events[0].crossings[0].percent], ['month', 96]);
+    const balance = value => normalizeSnapshot({id: 'p', state: 'ok', metrics: [{id: 'usd', kind: 'money', balance: value, currency: 'USD'}]}).snapshot;
+    assertEqual(run([[balance(5), T0], [balance(-500), T0 + MIN]]).events, []);
+});

@@ -65,8 +65,8 @@ print('PASS exact presence-only keyring deletion, absent idempotence and unrelat
 const directory = `${GLib.get_user_cache_dir()}/gnome-ai-quota`;
 GLib.mkdir_with_parents(directory, 0o700);
 for (const name of ['snapshots.json', 'alerts.json', 'keep-user-data.json']) GLib.file_set_contents(`${directory}/${name}`, '{}');
-const changes = [], settings = {set_value: key => changes.push(key), set_string: key => changes.push(key),
-    set_int: key => changes.push(key), get_int: () => 1};
+const changes = [], settings = {set_value: key => { changes.push(key); return true; }, set_string: key => { changes.push(key); return true; },
+    set_int: key => { changes.push(key); return true; }, set_strv: key => { changes.push(key); return true; }, get_strv: () => [], get_string: () => '', get_int: () => 1};
 const result = await disconnectAll({settings, gate, directory});
 check(result.phase === 'complete', 'full local transaction succeeds');
 check(await credentialPresence('codex', OAUTH_TOKENS) === 'absent', 'known remaining credential removed');
@@ -75,6 +75,6 @@ check(await rawPresence('unrelated-test', API_KEY) === 'present', 'unrelated key
 check(await rawPresence('codex', 'unrelated-kind') === 'present', 'unknown keyring kind still preserved');
 check(!Gio.File.new_for_path(`${directory}/snapshots.json`).query_exists(null) && !Gio.File.new_for_path(`${directory}/alerts.json`).query_exists(null), 'exact cache files removed');
 check(Gio.File.new_for_path(`${directory}/keep-user-data.json`).query_exists(null), 'other files preserved');
-check(JSON.stringify(changes) === JSON.stringify(['account-status', 'credentials-touched', 'credentials-revision']), 'only status IPC changed, preferences retained');
+check(JSON.stringify(changes) === JSON.stringify(['account-status', 'credentials-touched', 'credentials-revision', 'untracked-providers', 'connectors']), 'status IPC, live metadata and tracking references changed; other preferences retained');
 print('PASS full private-keyring transaction removes exact live cache files and preserves unrelated data/settings');
 await gate.close();

@@ -4,8 +4,9 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Gtk from 'gi://Gtk';
 import System from 'system';
-import {buildAccountsPage} from '../lib/prefs/accounts.js';
+import {buildAccountsPage, apiKeyGroup} from '../lib/prefs/accounts.js';
 import {createConnectorStore} from '../lib/services/connectorStore.js';
+import {availableProviders, availableDemoProviders} from '../lib/core/providerRegistry.js';
 import {expandText} from '../lib/core/pseudoLocale.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
@@ -39,7 +40,18 @@ app.connect('activate', () => {
     window.add(accounts.page); window.present();
     (async () => {
         await wait();
-        check(accounts.controllers.size === 4, 'four independent legacy default connectors');
+        for (const meta of availableProviders().filter(entry => entry.credentialScope)) {
+            const synthetic = {snapshot: () => ({hasKey: false, blocked: false, saving: false, keyringDown: false}),
+                subscribe: () => () => {}, refresh: async () => {}};
+            const localHandlers = [];
+            const view = apiKeyGroup({meta, window, settings, gettext: _, handlerIds: localHandlers, controller: synthetic});
+            check(walk(view.group).filter(item => item instanceof Adw.PasswordEntryRow).length === 1, `${meta.name} offers one key field`);
+            check(!walk(view.group).some(item => item instanceof Adw.EntryRow && !(item instanceof Adw.PasswordEntryRow)), `${meta.name} does not ask for Command Code username`);
+            if (meta.credentialScope === 'organization-admin' || meta.credentialScope === 'team-admin')
+                check(walk(view.group).some(item => item instanceof Adw.ActionRow && item.title.includes('Admin API key')), `${meta.name} explains admin credential requirement`);
+            view.dispose();
+        }
+        check(accounts.controllers.size === 5, 'five independent default demo connectors including credits');
         check(walk(accounts.page).some(item => item instanceof Adw.ActionRow && item.title === _('Demo connectors')), 'explicit synthetic notice');
         check(!walk(accounts.page).some(item => item instanceof Adw.PasswordEntryRow), 'demo cannot expose a live credential entry');
         const add = button(accounts.page, 'Add connector…'); contained(add, window); add.emit('clicked');
@@ -47,13 +59,14 @@ app.connect('activate', () => {
         const dialog = window.get_visible_dialog();
         check(dialog instanceof Adw.AlertDialog && dialog.close_response === 'cancel', 'Add is cancellable');
         const provider = walk(dialog).find(item => item instanceof Adw.ComboRow);
+        check(provider.model.get_n_items() === availableDemoProviders().length, 'Add lists every available synthetic provider dynamically');
         provider.selected = 1;
         const name = walk(dialog).find(item => item instanceof Adw.EntryRow);
         name.text = 'Work Codex';
         dialog.emit('response', 'add'); dialog.close(); await wait();
         const work = store.list().find(item => item.label === 'Work Codex');
         check(work && work.providerId === 'codex' && work.id !== 'codex', 'second provider connector created with independent identity');
-        check(accounts.controllers.size === 5, 'new controller added without replacing default');
+        check(accounts.controllers.size === 6, 'new controller added without replacing default');
         let connect = button(window, 'Simulate connect'); contained(connect, window); connect.emit('clicked'); await wait();
         check(accounts.controllers.get(work.id).snapshot().connected, 'second connector connected');
         check(!accounts.controllers.get('codex').snapshot().connected, 'first connector unchanged');
@@ -69,16 +82,29 @@ app.connect('activate', () => {
         remove.emit('response', 'remove'); remove.close(); await wait();
         check(!store.get(work.id) && store.get('codex'), 'confirmed removal affects only the chosen connector');
         check(!settings.get_strv('demo-connected-connectors').includes(work.id), 'simulated credential state removed');
-        settings.set_string('theme', 'glassmorphism'); settings.set_strv('untracked-providers', ['codex']); settings.set_boolean('first-use-done', true);
-        button(accounts.page, 'Restore…').emit('clicked'); await wait(); const restore = window.get_visible_dialog();
-        check(restore.default_response === 'cancel', 'restore defaults to Cancel');
-        restore.emit('response', 'restore'); restore.close(); await wait();
-        check(settings.get_string('theme') === 'sistema-gnome' && !settings.get_strv('untracked-providers').length && !settings.get_boolean('first-use-done'),
-            'confirmed reset restores actual appearance/tracking/setup values');
-        check(store.list().length === 4 && settings.get_string('data-source') === 'demo', 'reset preserves connector list and synthetic source');
-        accounts.show('codex'); await wait();
-        connect = button(window, 'Simulate connect'); check(connect && connect.sensitive, 'configuration remains available after reset');
-        window.pop_subpage(); await wait();
+        check(!button(accounts.page, 'Restore…'), 'Accounts has no configuration restore action');
+        const credit = store.get('example-credits');
+        check(credit && accounts.controllers.has(credit.id), 'credits is an ordinary persisted connector');
+        settings.set_strv('demo-connected-connectors', store.list().map(entry => entry.id));
+        settings.set_strv('untracked-providers', ['example-credits', 'unrelated-live']);
+        settings.set_string('theme', 'glassmorphism');
+        const liveBefore = settings.get_string('connectors');
+        const deleteAll = button(accounts.page, 'Delete all connectors'); contained(deleteAll, window);
+        deleteAll.emit('clicked'); await wait(); let deletion = window.get_visible_dialog();
+        check(deletion.default_response === 'cancel' && deletion.close_response === 'cancel', 'bulk deletion defaults to Cancel');
+        check(deletion.heading === _('Delete all fictional connectors?'), 'bulk confirmation identifies fictional scope');
+        deletion.emit('response', 'cancel'); deletion.close(); await wait();
+        check(store.list().length === 5 && settings.get_strv('demo-connected-connectors').length === 5, 'bulk Cancel preserves every connector and connection');
+        deleteAll.emit('clicked'); await wait(); deletion = window.get_visible_dialog();
+        deletion.emit('response', 'disconnect'); deletion.close(); await wait();
+        check(store.list().length === 0 && accounts.controllers.size === 0, 'bulk deletion removes all five demo connectors including credits');
+        check(settings.get_strv('demo-connected-connectors').length === 0, 'bulk deletion clears every simulated connection');
+        check(settings.get_strv('untracked-providers').join(',') === 'unrelated-live', 'bulk deletion removes only selected tracking references');
+        check(settings.get_string('connectors') === liveBefore && settings.get_string('theme') === 'glassmorphism', 'live registry and appearance survive demo deletion');
+        const reopened = createConnectorStore(settings, {demo: true});
+        check(reopened.list().length === 0, 'empty registry stays empty on reopening'); reopened.dispose();
+        settings.set_string('demo-scenario', 'drift'); await wait();
+        check(store.list().length === 0 && accounts.controllers.size === 0, 'scenario changes do not recreate deleted connectors');
         settings.set_string('demo-connectors', 'synthetic corrupt registry'); await wait();
         const recover = button(accounts.page, 'Recover list…');
         check(recover && recover.sensitive && !button(accounts.page, 'Add connector…').sensitive, 'invalid metadata exposes a recovery action instead of silent reset');
@@ -88,9 +114,21 @@ app.connect('activate', () => {
         check(settings.get_string('demo-connectors') === 'synthetic corrupt registry', 'cancel does not reconstruct metadata');
         recover.emit('clicked'); await wait(); recovery = window.get_visible_dialog();
         recovery.emit('response', 'recover'); recovery.close(); await wait();
-        check(store.list().length === 4 && button(accounts.page, 'Add connector…').sensitive, 'confirmed demo recovery reconstructs safe fictional metadata');
+        check(store.list().length === 5 && button(accounts.page, 'Add connector…').sensitive, 'confirmed demo recovery reconstructs safe fictional metadata');
         check(settings.get_string('connectors') === '', 'demo recovery never rewrites live connector metadata');
-        print(`Native connectors: add/connect/rename/cancel/remove/reset/reconfigure/recovery passed (${ARGV.join(' ') || 'LTR'})`);
+        const demoBefore = settings.get_string('demo-connectors');
+        settings.set_string('connectors', JSON.stringify({version: 1, connectors: []}));
+        settings.set_string('data-source', 'live'); await wait();
+        check(accounts.controllers.size === 0, 'live and demo lists remain independent');
+        button(accounts.page, 'Add connector…').emit('clicked'); await wait();
+        const liveAdd = window.get_visible_dialog();
+        const livePicker = walk(liveAdd).find(item => item instanceof Adw.ComboRow);
+        check(livePicker.model.get_n_items() === availableProviders().length, 'live Add lists all live providers and excludes demo credits');
+        liveAdd.emit('response', 'cancel'); liveAdd.close(); await wait();
+        check(!availableProviders().some(meta => ['gemini-api', 'zai'].includes(meta.id)), 'deferred providers absent');
+        settings.set_string('data-source', 'demo'); await wait();
+        check(settings.get_string('demo-connectors') === demoBefore && accounts.controllers.size === 5, 'switching mode keeps recovered demo identities');
+        print(`Native connectors: add/connect/rename/cancel/remove/bulk-delete/restart/recovery passed (${ARGV.join(' ') || 'LTR'})`);
     })().catch(error => { failed = true; printerr(`FAIL native connectors: ${error.message}\n${error.stack}`); })
         .finally(() => { window.close(); handlers.forEach(id => settings.disconnect(id)); store.dispose(); app.release(); app.quit(); });
 });

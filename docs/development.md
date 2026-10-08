@@ -577,3 +577,22 @@ original shadow versus no shadow. Reject native criticals and failed Eval result
 as well as failed pixel checks. Decoration allocation changes are coalesced into
 an owned idle source, outside the parent's allocation callback. Inspection counts
 that pending source; close and destroy cancel it along with animation sources.
+
+## Reporting connector checks
+
+The administrative reporting parsers are pure; transport adapters use fixed
+HTTPS hosts, bounded pagination and keyring credentials. See [provider data and
+permissions](providers.md) before adding or changing an endpoint. Never test with
+a real billing credential in the automated suite. Use an empty temporary
+`XDG_CONFIG_HOME` for checks to prevent local client configuration from being read.
+
+`tools/prefs-smoke.sh connectors` checks add, rename, removal, bulk deletion and
+mode isolation with synthetic identities. `tools/prefs-smoke.sh reports` checks
+About, fixed report destinations, launcher failure and a disposed deletion view
+in a private compositor. Report launches are intercepted, so no issue or security
+advisory is created. Both fixtures are included in the broader native workflow
+(`connectors` is a separate scenario; reports also runs in `all`).
+
+GitHub loads forms from the default branch after merge. The bug form resides in
+`.github/ISSUE_TEMPLATE/bug_report.yml`; the private security form resides in
+`.github/VULNERABILITY_REPORT.yml`, not a public issue template.
