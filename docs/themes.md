@@ -10,6 +10,12 @@ the light or dark preference. The others are derived from a gallery of visual
 styles and are grouped in the picker (clean and functional, typography and
 editorial, surface and materials, and so on).
 
+The shipped pairs have individually authored palettes and geometry. Their design
+references and light/dark acceptance criteria are recorded in the
+[theme research](temp/theme-evolution-research.md). Fonts remain local choices;
+the native decoration and geometry also carry the identity when a suggested
+font is absent.
+
 A theme is a folder with a `theme.json`. Put your own in
 `~/.local/share/gnome-ai-quota/themes/<id>/theme.json`; a theme there replaces a
 built-in one with the same id. The file lists colors for a `light` and a `dark`
@@ -52,6 +58,23 @@ files with pinned source, hashes and licenses. Choosing a theme never downloads
 fonts, and theme JSON cannot add download addresses. Missing fonts continue to
 use installed fallbacks; existing user files are preserved.
 
+Validated theme font stacks retain intermediate fallback families, including
+cursive. The Shell selects an installed family through Pango and emits one safe
+family name, because native St does not reliably resolve browser-style stacks.
+The compiler rejects unsafe font syntax. Card shadows use a bounded six-pixel
+paint budget with constant gutters; changing a theme, material or Effects mode
+does not reserve its original blur radius as a large lateral content inset.
+The scrollbar has a separate eight-pixel clearance beyond the shadow budget.
+
+Transparent materials include cached, smooth background protection in exposed
+summary/footer reading zones. Two edge surfaces avoid blending an unused
+transparent center; overlapping reading regions share one surface. It follows
+the actual reading allocations, keeps
+individual label backgrounds transparent, and leaves the center's material
+visible. Its stronger tint near text is intentional: a busy desktop and
+overlapping decorative layers must not defeat contrast. Effects Off retains
+this static material protection without ambient animation or decorative texture.
+
 
 ## Optional effect profiles
 
@@ -93,7 +116,8 @@ General exposes Effects (`Off`, `Subtle`, `Full`), Transparency, and Material.
 The material follows the theme by default. Every built-in theme also accepts an
 explicit opaque, translucent, decorative-glass, or frosted-glass material.
 Transparent built-in backgrounds use opacity 0.80 in light mode and 0.74 in dark
-mode, with opaque reading zones. Disable Transparency to make them opaque.
+mode, with a contrast-safe tint around exposed reading zones. Disable
+Transparency to make the background opaque.
 Effects Off disables motion and textures while retaining the selected material;
 Subtle permits short interactions and static decoration, and Full permits ambient
 motion where the built-in profile supports it. System animation settings disable
@@ -112,7 +136,7 @@ effect JavaScript. The shipped set adds Organic/Biophilic and Glassmorphism, whi
 System keeps ordinary interactions with no decorative ambience.
 
 Profiles permit a material; they do not prove that its renderer is available or that its
-contrast/performance has passed validation. Opaque reading zones and runtime
+contrast/performance has passed validation. Contrast-safe reading zones and runtime
 fallbacks remain renderer requirements.
 
 ## Theme picker default backgrounds

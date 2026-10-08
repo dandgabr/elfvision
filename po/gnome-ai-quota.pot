@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-08 15:48-0300\n"
+"POT-Creation-Date: 2026-10-08 17:26-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -618,8 +618,8 @@ msgid ""
 "source stays the same."
 msgstr ""
 
-#: lib/prefs/about.js:94 lib/prefs/accounts.js:61 lib/prefs/accounts.js:221
-#: lib/prefs/accounts.js:257 lib/prefs/accounts.js:374
+#: lib/prefs/about.js:94 lib/prefs/accounts.js:61 lib/prefs/accounts.js:224
+#: lib/prefs/accounts.js:260 lib/prefs/accounts.js:377
 #: lib/prefs/disconnectDialog.js:38 lib/prefs/oauthGroup.js:58
 #: lib/prefs/oauthGroup.js:150 lib/prefs/suggestedFonts.js:17
 #: lib/prefs/suggestedFonts.js:34 lib/prefs/termsDialog.js:33
@@ -708,8 +708,8 @@ msgid ""
 "with the same provider."
 msgstr ""
 
-#: lib/prefs/accounts.js:43 lib/prefs/accounts.js:209 lib/prefs/accounts.js:221
-#: lib/ui/indicator.js:184
+#: lib/prefs/accounts.js:43 lib/prefs/accounts.js:212 lib/prefs/accounts.js:224
+#: lib/ui/indicator.js:206
 msgid "Add connector"
 msgstr ""
 
@@ -731,7 +731,7 @@ msgid ""
 "provider request is used."
 msgstr ""
 
-#: lib/prefs/accounts.js:49 lib/ui/indicator.js:495
+#: lib/prefs/accounts.js:49 lib/ui/indicator.js:553
 msgid "Connector configuration is unavailable"
 msgstr ""
 
@@ -785,7 +785,7 @@ msgstr ""
 msgid "Add a connector to start tracking an account."
 msgstr ""
 
-#: lib/prefs/accounts.js:79
+#: lib/prefs/accounts.js:79 lib/prefs/popup.js:136
 msgid "No connectors"
 msgstr ""
 
@@ -793,11 +793,11 @@ msgstr ""
 msgid "Paused"
 msgstr ""
 
-#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:300
+#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:303
 msgid "Demo connected"
 msgstr ""
 
-#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:300
+#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:303
 msgid "Demo not connected"
 msgstr ""
 
@@ -814,198 +814,198 @@ msgstr ""
 msgid "Configure %s"
 msgstr ""
 
-#: lib/prefs/accounts.js:209
+#: lib/prefs/accounts.js:212
 msgid ""
 "Choose a provider and a name that helps you distinguish this account. "
 "Creating a connector does not sign in."
 msgstr ""
 
-#: lib/prefs/accounts.js:212
+#: lib/prefs/accounts.js:215
 msgid "Provider"
 msgstr ""
 
-#: lib/prefs/accounts.js:213 lib/prefs/accounts.js:239
+#: lib/prefs/accounts.js:216 lib/prefs/accounts.js:242
 msgid "Connector name"
 msgstr ""
 
-#: lib/prefs/accounts.js:228
+#: lib/prefs/accounts.js:231
 msgid ""
 "The connector could not be created. Check the name and the number of "
 "connectors."
 msgstr ""
 
-#: lib/prefs/accounts.js:242
+#: lib/prefs/accounts.js:245
 msgid "Enter a valid connector name."
 msgstr ""
 
-#: lib/prefs/accounts.js:251
+#: lib/prefs/accounts.js:254
 msgid ""
 "Delete this connector and its local credential. Other accounts are kept."
 msgstr ""
 
-#: lib/prefs/accounts.js:251
+#: lib/prefs/accounts.js:254
 msgid "Delete this fictional connector. Other fictional accounts are kept."
 msgstr ""
 
-#: lib/prefs/accounts.js:251 lib/prefs/accounts.js:257
+#: lib/prefs/accounts.js:254 lib/prefs/accounts.js:260
 msgid "Remove connector"
 msgstr ""
 
-#: lib/prefs/accounts.js:252
+#: lib/prefs/accounts.js:255
 msgid "Remove…"
 msgstr ""
 
-#: lib/prefs/accounts.js:255
+#: lib/prefs/accounts.js:258
 #, javascript-format
 msgid "Remove %s?"
 msgstr ""
 
-#: lib/prefs/accounts.js:256
+#: lib/prefs/accounts.js:259
 msgid ""
 "Its local credential and quota data are removed. Access may remain valid on "
 "the provider’s site. Other connectors are kept."
 msgstr ""
 
-#: lib/prefs/accounts.js:256
+#: lib/prefs/accounts.js:259
 msgid ""
 "This removes only this fictional connector. No real credential is changed."
 msgstr ""
 
-#: lib/prefs/accounts.js:271
+#: lib/prefs/accounts.js:274
 msgid ""
 "The credential was removed, but the connector list could not be updated. "
 "Retry removing the connector."
 msgstr ""
 
-#: lib/prefs/accounts.js:271
+#: lib/prefs/accounts.js:274
 msgid ""
 "The fictional connector list could not be updated. Retry removing the "
 "connector."
 msgstr ""
 
-#: lib/prefs/accounts.js:273
+#: lib/prefs/accounts.js:276
 msgid ""
 "The credential could not be removed. The connector was kept. Unlock the "
 "keyring and retry."
 msgstr ""
 
-#: lib/prefs/accounts.js:273
+#: lib/prefs/accounts.js:276
 msgid ""
 "The fictional connector could not be removed. Retry removing the connector."
 msgstr ""
 
-#: lib/prefs/accounts.js:295
+#: lib/prefs/accounts.js:298
 msgid "Simulation only. No real account, browser or keyring is used."
 msgstr ""
 
-#: lib/prefs/accounts.js:296 lib/prefs/accounts.js:314
+#: lib/prefs/accounts.js:299 lib/prefs/accounts.js:317
 #: lib/prefs/oauthGroup.js:56
 msgid "Status"
 msgstr ""
 
-#: lib/prefs/accounts.js:301
+#: lib/prefs/accounts.js:304
 msgid "Simulate connect"
 msgstr ""
 
-#: lib/prefs/accounts.js:301
+#: lib/prefs/accounts.js:304
 msgid "Simulate disconnect"
 msgstr ""
 
-#: lib/prefs/accounts.js:312
+#: lib/prefs/accounts.js:315
 #, javascript-format
 msgid "The key is kept in the system keyring and sent only to %s."
 msgstr ""
 
-#: lib/prefs/accounts.js:314 lib/prefs/oauthGroup.js:56
+#: lib/prefs/accounts.js:317 lib/prefs/oauthGroup.js:56
 msgid "Checking the keyring…"
 msgstr ""
 
-#: lib/prefs/accounts.js:316
+#: lib/prefs/accounts.js:319
 msgid "Remove key"
 msgstr ""
 
-#: lib/prefs/accounts.js:317
+#: lib/prefs/accounts.js:320
 #, javascript-format
 msgid "Remove the %s key"
 msgstr ""
 
-#: lib/prefs/accounts.js:323 lib/prefs/accounts.js:482
+#: lib/prefs/accounts.js:326 lib/prefs/accounts.js:485
 msgid "API key"
 msgstr ""
 
-#: lib/prefs/accounts.js:332
+#: lib/prefs/accounts.js:335
 msgid ""
 "Use an organization Admin API key. A personal inference key cannot read "
 "organization costs."
 msgstr ""
 
-#: lib/prefs/accounts.js:333
+#: lib/prefs/accounts.js:336
 msgid ""
 "Use a Team Admin API key. A personal subscription sign-in cannot read team "
 "spending."
 msgstr ""
 
-#: lib/prefs/accounts.js:371
+#: lib/prefs/accounts.js:374
 #, javascript-format
 msgid "Remove the %s key?"
 msgstr ""
 
-#: lib/prefs/accounts.js:372
+#: lib/prefs/accounts.js:375
 #, javascript-format
 msgid "It is deleted from the keyring. The key stays valid on the %s site."
 msgstr ""
 
-#: lib/prefs/accounts.js:375
+#: lib/prefs/accounts.js:378
 msgid "Remove"
 msgstr ""
 
-#: lib/prefs/accounts.js:421
+#: lib/prefs/accounts.js:424
 #, javascript-format
 msgid "Track %s"
 msgstr ""
 
-#: lib/prefs/accounts.js:422
+#: lib/prefs/accounts.js:425
 msgid ""
 "Off stops fetching and hides it from the bar. Your credentials stay saved."
 msgstr ""
 
-#: lib/prefs/accounts.js:443
+#: lib/prefs/accounts.js:446
 msgid "Open the provider’s API key settings."
 msgstr ""
 
-#: lib/prefs/accounts.js:443 lib/prefs/accounts.js:451
+#: lib/prefs/accounts.js:446 lib/prefs/accounts.js:454
 msgid "Where do I get a key?"
 msgstr ""
 
-#: lib/prefs/accounts.js:448
+#: lib/prefs/accounts.js:451
 #, javascript-format
 msgid "Your %s username"
 msgstr ""
 
-#: lib/prefs/accounts.js:452
+#: lib/prefs/accounts.js:455
 #, javascript-format
 msgid "Opens your keys page. Enter your %s username above first."
 msgstr ""
 
-#: lib/prefs/accounts.js:481
+#: lib/prefs/accounts.js:484
 msgid "Dashboard only"
 msgstr ""
 
-#: lib/prefs/accounts.js:483
+#: lib/prefs/accounts.js:486
 msgid "Fictional account"
 msgstr ""
 
-#: lib/prefs/accounts.js:484
+#: lib/prefs/accounts.js:487
 msgid "OAuth 2"
 msgstr ""
 
-#: lib/prefs/accounts.js:489
+#: lib/prefs/accounts.js:492
 msgid ""
 "Automatic quota reporting is unavailable for this service. No API key is "
 "requested or stored. Check usage in the provider dashboard."
 msgstr ""
 
-#: lib/prefs/accounts.js:490
+#: lib/prefs/accounts.js:493
 msgid "Open provider dashboard"
 msgstr ""
 
@@ -1326,27 +1326,27 @@ msgid ""
 "as you make them."
 msgstr ""
 
-#: lib/prefs/firstUse.js:154 prefs.js:179
+#: lib/prefs/firstUse.js:154 prefs.js:180
 msgid "Top bar"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:182
+#: lib/prefs/firstUse.js:156 prefs.js:183
 msgid "Center"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:181
+#: lib/prefs/firstUse.js:156 prefs.js:182
 msgid "Left"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:184
+#: lib/prefs/firstUse.js:156 prefs.js:185
 msgid "Position"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:183
+#: lib/prefs/firstUse.js:156 prefs.js:184
 msgid "Right"
 msgstr ""
 
-#: lib/prefs/firstUse.js:160 prefs.js:188
+#: lib/prefs/firstUse.js:160 prefs.js:189
 msgid "Providers on the bar"
 msgstr ""
 
@@ -1472,7 +1472,7 @@ msgstr ""
 msgid "Notifies at %d%% used"
 msgstr ""
 
-#: lib/prefs/notifications.js:117 prefs.js:233
+#: lib/prefs/notifications.js:117 prefs.js:234
 msgid "Off"
 msgstr ""
 
@@ -1641,6 +1641,85 @@ msgid ""
 "revoke it there."
 msgstr ""
 
+#: lib/prefs/popup.js:12
+msgid "Fits the available space on the current monitor."
+msgstr ""
+
+#: lib/prefs/popup.js:13
+msgid ""
+"Logical pixels. The screen limits the displayed size without changing this "
+"value."
+msgstr ""
+
+#: lib/prefs/popup.js:40 lib/prefs/popup.js:165
+msgid "Connector order and visibility"
+msgstr ""
+
+#: lib/prefs/popup.js:41
+msgid ""
+"Hidden connectors keep updating, sending alerts and appearing on the top "
+"bar. Use the arrow buttons to change popup order."
+msgstr ""
+
+#: lib/prefs/popup.js:78
+msgid "Connector configuration is unavailable. Recover the list in Accounts."
+msgstr ""
+
+#: lib/prefs/popup.js:95
+msgid "Show in popup"
+msgstr ""
+
+#: lib/prefs/popup.js:98
+msgid "Move up"
+msgstr ""
+
+#: lib/prefs/popup.js:99
+msgid "Move down"
+msgstr ""
+
+#: lib/prefs/popup.js:124
+#, javascript-format
+msgid "%s: Show in popup"
+msgstr ""
+
+#: lib/prefs/popup.js:125
+#, javascript-format
+msgid "%s: Move up"
+msgstr ""
+
+#: lib/prefs/popup.js:126
+#, javascript-format
+msgid "%s: Move down"
+msgstr ""
+
+#: lib/prefs/popup.js:136
+msgid "Add a connector in Accounts."
+msgstr ""
+
+#: lib/prefs/popup.js:157
+msgid "Popup connectors"
+msgstr ""
+
+#: lib/prefs/popup.js:163
+msgid "Automatic width"
+msgstr ""
+
+#: lib/prefs/popup.js:163
+msgid "Popup width"
+msgstr ""
+
+#: lib/prefs/popup.js:164
+msgid "Automatic height"
+msgstr ""
+
+#: lib/prefs/popup.js:164
+msgid "Maximum popup height"
+msgstr ""
+
+#: lib/prefs/popup.js:166
+msgid "Choose which connectors appear in the popup and their order."
+msgstr ""
+
 #: lib/prefs/suggestedFonts.js:12
 msgid "Suggested fonts"
 msgstr ""
@@ -1792,7 +1871,7 @@ msgstr ""
 msgid "Follows the GNOME accent color and the light or dark setting."
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:12 prefs.js:116
+#: lib/prefs/themeCatalog.js:12 prefs.js:117
 msgid "System"
 msgstr ""
 
@@ -1800,7 +1879,7 @@ msgstr ""
 msgid "System (GNOME)"
 msgstr ""
 
-#: lib/prefs/themeCatalog.js:14 prefs.js:116 prefs.js:250
+#: lib/prefs/themeCatalog.js:14 prefs.js:117 prefs.js:251
 msgid "Your themes"
 msgstr ""
 
@@ -2004,77 +2083,80 @@ msgstr ""
 msgid "Raw HTML and dense tables."
 msgstr ""
 
-#: lib/ui/indicator.js:224
+#: lib/ui/indicator.js:199
+msgid "Choose connectors"
+msgstr ""
+
+#: lib/ui/indicator.js:248
 msgid "Refresh"
 msgstr ""
 
-#: lib/ui/indicator.js:225
+#: lib/ui/indicator.js:249
 msgid "Preferences"
 msgstr ""
 
-#: lib/ui/indicator.js:249 lib/ui/indicator.js:250
+#: lib/ui/indicator.js:273 lib/ui/indicator.js:274
 msgid "What the marks on the bar mean"
 msgstr ""
 
-#: lib/ui/indicator.js:344
+#: lib/ui/indicator.js:369
 msgid "Refreshing…"
 msgstr ""
 
-#: lib/ui/indicator.js:417 prefs.js:300
+#: lib/ui/indicator.js:475 prefs.js:302
 msgid "Demo data (made up)"
 msgstr ""
 
-#: lib/ui/indicator.js:483
+#: lib/ui/indicator.js:541
 msgid "Waiting for the first update…"
 msgstr ""
 
-#: lib/ui/indicator.js:488
+#: lib/ui/indicator.js:546
 msgid "Nothing connected yet."
 msgstr ""
 
-#: lib/ui/indicator.js:488
+#: lib/ui/indicator.js:546
 msgid "Nothing is being tracked."
 msgstr ""
 
-#: lib/ui/indicator.js:490
+#: lib/ui/indicator.js:548
 msgid "Resume a provider below to see its quota."
 msgstr ""
 
-#: lib/ui/indicator.js:491
+#: lib/ui/indicator.js:549
 msgid "Add or configure a connector in Accounts to see your quotas here."
 msgstr ""
 
-#: lib/ui/indicator.js:496
+#: lib/ui/indicator.js:554
 msgid ""
 "Open Preferences to recover the connector list. Saved credentials have not "
 "been changed."
 msgstr ""
 
-#: lib/ui/indicator.js:628
+#: lib/ui/indicator.js:688
 msgid "Nothing connected yet"
 msgstr ""
 
-#: lib/ui/indicator.js:634
+#: lib/ui/indicator.js:694
 msgid "Waiting for the first update"
 msgstr ""
 
-#: lib/ui/indicator.js:661
+#: lib/ui/indicator.js:721
 #, javascript-format
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/ui/indicator.js:671
-msgid "On the bar"
+#: lib/ui/indicator.js:743
+msgid "No connectors shown"
 msgstr ""
 
-#: lib/ui/indicator.js:674
-#, javascript-format
-msgid "Hidden from the bar (%d)"
-msgid_plural "Hidden from the bar (%d)"
-msgstr[0] ""
-msgstr[1] ""
+#: lib/ui/indicator.js:744
+msgid ""
+"Choose which connectors appear in the popup. Collection and alert settings "
+"have not changed."
+msgstr ""
 
 #: lib/ui/notifier.js:71
 msgid "Open"
@@ -2118,89 +2200,89 @@ msgstr ""
 msgid "Try again"
 msgstr ""
 
-#: prefs.js:92
+#: prefs.js:93
 msgid "Some themes could not be loaded"
 msgstr ""
 
-#: prefs.js:157 prefs.js:214
+#: prefs.js:158 prefs.js:215
 msgid "Theme"
 msgstr ""
 
-#: prefs.js:175
+#: prefs.js:176
 msgid "General"
 msgstr ""
 
-#: prefs.js:184
+#: prefs.js:185
 msgid "Where the quota items sit on the top bar."
 msgstr ""
 
-#: prefs.js:189
+#: prefs.js:190
 msgid "Up to this many providers are shown (1 to 5), most critical first."
 msgstr ""
 
-#: prefs.js:196
+#: prefs.js:197
 msgid "Automatic"
 msgstr ""
 
-#: prefs.js:197
+#: prefs.js:198
 msgid "Always compact"
 msgstr ""
 
-#: prefs.js:198
+#: prefs.js:199
 msgid "Never compact"
 msgstr ""
 
-#: prefs.js:199
+#: prefs.js:200
 msgid ""
 "Automatic: only when space runs out. Always: drops the % sign and the window "
 "suffix. Never: hides providers instead."
 msgstr ""
 
-#: prefs.js:199
+#: prefs.js:200
 msgid "Compact mode"
 msgstr ""
 
-#: prefs.js:204
+#: prefs.js:205
 msgid "Colors and theme"
 msgstr ""
 
-#: prefs.js:206 prefs.js:275
+#: prefs.js:207 prefs.js:276
 msgid "Follow the system"
 msgstr ""
 
-#: prefs.js:207
+#: prefs.js:208
 msgid "Light"
 msgstr ""
 
-#: prefs.js:208
+#: prefs.js:209
 msgid "Dark"
 msgstr ""
 
-#: prefs.js:209
+#: prefs.js:210
 msgid "Applies to the popup. The top bar always stays dark."
 msgstr ""
 
-#: prefs.js:209
+#: prefs.js:210
 msgid "Light or dark"
 msgstr ""
 
-#: prefs.js:215
+#: prefs.js:216
 msgid "Each theme has a light and a dark variant."
 msgstr ""
 
-#: prefs.js:233
+#: prefs.js:234
 msgid "Full"
 msgstr ""
 
-#: prefs.js:233
+#: prefs.js:234
 msgid "Subtle"
 msgstr ""
 
-#: prefs.js:234
+#: prefs.js:235
 msgid "Effects"
 msgstr ""
 
-#: prefs.js:234
+#: prefs.js:235
 msgid ""
 "Off stops motion and decoration; material and transparency remain available. "
 "Subtle adds short transitions and static decoration. Full adds background "
@@ -2208,135 +2290,135 @@ msgid ""
 "priority."
 msgstr ""
 
-#: prefs.js:237
+#: prefs.js:238
 msgid "Transparency"
 msgstr ""
 
-#: prefs.js:238
+#: prefs.js:239
 msgid ""
 "Allows translucent and glass backgrounds in compatible themes. Off keeps "
 "backgrounds opaque."
 msgstr ""
 
-#: prefs.js:243
+#: prefs.js:244
 msgid "Follow the theme"
 msgstr ""
 
-#: prefs.js:243
+#: prefs.js:244
 msgid "Translucent"
 msgstr ""
 
-#: prefs.js:244
+#: prefs.js:245
 msgid "Decorative glass"
 msgstr ""
 
-#: prefs.js:244
+#: prefs.js:245
 msgid "Frosted glass"
 msgstr ""
 
-#: prefs.js:245
+#: prefs.js:246
 msgid ""
 "Applies only where the theme supports this material. Transparency off keeps "
 "the background opaque."
 msgstr ""
 
-#: prefs.js:245
+#: prefs.js:246
 msgid "Material"
 msgstr ""
 
-#: prefs.js:251
+#: prefs.js:252
 #, javascript-format
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr ""
 
-#: prefs.js:254
+#: prefs.js:255
 msgid "Open folder"
 msgstr ""
 
-#: prefs.js:256
+#: prefs.js:257
 msgid "Open the themes folder"
 msgstr ""
 
-#: prefs.js:273
+#: prefs.js:274
 msgid "Popup"
 msgstr ""
 
-#: prefs.js:276
+#: prefs.js:277
 msgid "12 hours"
 msgstr ""
 
-#: prefs.js:277
+#: prefs.js:278
 msgid "24 hours"
 msgstr ""
 
-#: prefs.js:278
+#: prefs.js:279
 msgid "Clock"
 msgstr ""
 
-#: prefs.js:278
+#: prefs.js:279
 msgid "How reset times are written."
 msgstr ""
 
-#: prefs.js:281
+#: prefs.js:282
 msgid "1h 20min"
 msgstr ""
 
-#: prefs.js:282
+#: prefs.js:283
 msgid "1h20"
 msgstr ""
 
-#: prefs.js:283
+#: prefs.js:284
 msgid "How the countdown to a reset is written."
 msgstr ""
 
-#: prefs.js:283
+#: prefs.js:284
 msgid "Time until reset"
 msgstr ""
 
-#: prefs.js:286
+#: prefs.js:287
 msgid "Open cards that need attention"
 msgstr ""
 
-#: prefs.js:287
+#: prefs.js:288
 msgid "Cards in warning, critical or error states open on their own."
 msgstr ""
 
-#: prefs.js:295
+#: prefs.js:297
 msgid "Advanced"
 msgstr ""
 
-#: prefs.js:296
+#: prefs.js:298
 msgid "Demo data, to try every state without an account."
 msgstr ""
 
-#: prefs.js:299
+#: prefs.js:301
 msgid "Real providers"
 msgstr ""
 
-#: prefs.js:301
+#: prefs.js:303
 msgid "Data source"
 msgstr ""
 
-#: prefs.js:301
+#: prefs.js:303
 msgid "Demo data queries no account."
 msgstr ""
 
-#: prefs.js:303
+#: prefs.js:305
 msgid "Steady"
 msgstr ""
 
-#: prefs.js:304
+#: prefs.js:306
 msgid "Flaky"
 msgstr ""
 
-#: prefs.js:305
+#: prefs.js:307
 msgid "Drifting"
 msgstr ""
 
-#: prefs.js:307
+#: prefs.js:309
 msgid "Demo scenario"
 msgstr ""
 
-#: prefs.js:307
+#: prefs.js:309
 msgid "Steady: all fine. Flaky: errors come and go. Drifting: usage climbs."
 msgstr ""

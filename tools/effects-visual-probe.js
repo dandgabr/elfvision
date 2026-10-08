@@ -62,7 +62,7 @@
         const deco = new Clutter.Actor({x_expand: true, y_expand: true});
         box.add_child(bg); box.add_child(deco); Main.uiGroup.add_child(box);
         engine = new ThemeEffects({backgroundActor: bg, decorationActor: deco, extensionPath: root});
-        const theme = {origin: 'builtin', colors: {bg: '#242c34', accent: '#ffffff', border: '#ffffff'},
+        const theme = {origin: 'builtin', colors: {bg: '#242c34', fg: '#ffffff', muted: '#ffffff', accent: '#ffffff', border: '#ffffff'},
             profile: {material: 'translucent', motion: 'none', texture: 'none', opacity: {light: 0.72, dark: 0.72}}, radius: {card: 14}};
         for (const material of ['translucent', 'frosted-glass']) {
             engine.apply({theme: {...theme, profile: {...theme.profile, material}}, scheme: 'dark', policy: {motion: 'none', material, particleCount: 0}});

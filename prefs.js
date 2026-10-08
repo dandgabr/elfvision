@@ -9,6 +9,7 @@ import {openFirstUse} from './lib/prefs/firstUse.js';
 import {scanThemes} from './lib/services/themeFiles.js';
 import {buildAboutGroup} from './lib/prefs/about.js';
 import {buildAccountsPage} from './lib/prefs/accounts.js';
+import {addPopupControls, popupPresentationPage} from './lib/prefs/popup.js';
 import {buildNotificationsPage} from './lib/prefs/notifications.js';
 import {createSuggestedFontsGroup} from './lib/prefs/suggestedFonts.js';
 import {builtinCatalog, selectedThemeName, themeDefaultIndicators, themePresentation} from './lib/prefs/themeCatalog.js';
@@ -288,6 +289,7 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         });
         settings.bind('auto-open', autoOpen, 'active', 0);
         popup.add(autoOpen);
+        addPopupControls({group: popup, window, settings, gettext: _, handlerIds});
         page.add(popup);
 
         const advanced = new Adw.PreferencesGroup();
@@ -326,6 +328,17 @@ export default class GnomeAiQuotaPreferences extends ExtensionPreferences {
         window.add(accounts.page);
         window.add(page);
         window.add(notificationsPage);
+        const showPopup = () => {
+            if (settings.get_string('prefs-target') !== 'popup')
+                return;
+            settings.set_string('prefs-target', '');
+            closeSetup();
+            window.set_visible_page(page);
+            window.push_subpage(popupPresentationPage({window, settings, gettext: _, handlerIds}));
+        };
+        handlerIds.push(settings.connect('changed::prefs-target', showPopup));
+        if (initialTarget === 'popup')
+            showPopup();
         const considerSetup = () => {
             if (closed || assistant || accounts.registryUnavailable?.())
                 return;

@@ -1,0 +1,40 @@
+{
+  "visual": {
+    "popupRegion": [
+      794,
+      78,
+      6,
+      451
+    ],
+    "popupTranslucentEdge": 1.6367305751765893,
+    "popupFrostEdge": 0.12337706020854355,
+    "popupDecorativeDifference": 6.940133037694014,
+    "popupFrostDifference": 12.64449371766445,
+    "popupMovingWindowDifference": 14.64350825326435,
+    "leafPhaseDifference": 4.873244641537324,
+    "outsideBlurDifference": 0.0,
+    "controlTranslucentEdge": 3.4878048780487805,
+    "controlFrostEdge": 0.13877207737594618,
+    "controlMovingWindowDifference": 5.365393518518519,
+    "controlOutsideDifference": 0.0
+  },
+  "visual-dark": {
+    "popupRegion": [
+      794,
+      78,
+      6,
+      451
+    ],
+    "popupTranslucentEdge": 2.1933400605449043,
+    "popupFrostEdge": 0.09808274470232088,
+    "popupDecorativeDifference": 8.46119733924612,
+    "popupFrostDifference": 18.402069475240207,
+    "popupMovingWindowDifference": 19.89369302783937,
+    "leafPhaseDifference": 4.275190933727519,
+    "outsideBlurDifference": 0.0,
+    "controlTranslucentEdge": 3.4878048780487805,
+    "controlFrostEdge": 0.13877207737594618,
+    "controlMovingWindowDifference": 5.365393518518519,
+    "controlOutsideDifference": 0.0
+  }
+}

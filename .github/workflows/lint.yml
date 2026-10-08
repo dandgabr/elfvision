@@ -31,3 +31,5 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Check JavaScript
         run: npm run lint
+      - name: Check authored theme variants
+        run: python3 -I tools/test-theme-generation.py

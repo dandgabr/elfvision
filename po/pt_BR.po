@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-ai-quota\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/gnome-ai-quota/issues\n"
-"POT-Creation-Date: 2026-10-08 15:48-0300\n"
+"POT-Creation-Date: 2026-10-08 17:26-0300\n"
 "PO-Revision-Date: 2026-10-06 21:45-0300\n"
 "Last-Translator: gnome-ai-quota authors\n"
 "Language-Team: Brazilian Portuguese\n"
@@ -643,8 +643,8 @@ msgstr ""
 "cliente salvos são mantidos. Todos os conectores voltam a ser acompanhados e "
 "a configuração inicial fica disponível. A fonte de dados permanece a mesma."
 
-#: lib/prefs/about.js:94 lib/prefs/accounts.js:61 lib/prefs/accounts.js:221
-#: lib/prefs/accounts.js:257 lib/prefs/accounts.js:374
+#: lib/prefs/about.js:94 lib/prefs/accounts.js:61 lib/prefs/accounts.js:224
+#: lib/prefs/accounts.js:260 lib/prefs/accounts.js:377
 #: lib/prefs/disconnectDialog.js:38 lib/prefs/oauthGroup.js:58
 #: lib/prefs/oauthGroup.js:150 lib/prefs/suggestedFonts.js:17
 #: lib/prefs/suggestedFonts.js:34 lib/prefs/termsDialog.js:33
@@ -741,8 +741,8 @@ msgstr ""
 "Crie um conector separado para cada conta, inclusive para várias contas do "
 "mesmo provedor."
 
-#: lib/prefs/accounts.js:43 lib/prefs/accounts.js:209 lib/prefs/accounts.js:221
-#: lib/ui/indicator.js:184
+#: lib/prefs/accounts.js:43 lib/prefs/accounts.js:212 lib/prefs/accounts.js:224
+#: lib/ui/indicator.js:206
 msgid "Add connector"
 msgstr "Adicionar conector"
 
@@ -766,7 +766,7 @@ msgstr ""
 "Contas fictícias. A conexão e a remoção são simuladas, sem usar o navegador "
 "ou o chaveiro nem enviar solicitações ao provedor."
 
-#: lib/prefs/accounts.js:49 lib/ui/indicator.js:495
+#: lib/prefs/accounts.js:49 lib/ui/indicator.js:553
 msgid "Connector configuration is unavailable"
 msgstr "A configuração dos conectores está indisponível"
 
@@ -832,7 +832,7 @@ msgstr ""
 msgid "Add a connector to start tracking an account."
 msgstr "Adicione um conector para começar a acompanhar uma conta."
 
-#: lib/prefs/accounts.js:79
+#: lib/prefs/accounts.js:79 lib/prefs/popup.js:136
 msgid "No connectors"
 msgstr "Nenhum conector"
 
@@ -840,11 +840,11 @@ msgstr "Nenhum conector"
 msgid "Paused"
 msgstr "Pausado"
 
-#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:300
+#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:303
 msgid "Demo connected"
 msgstr "Conectado na demonstração"
 
-#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:300
+#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:303
 msgid "Demo not connected"
 msgstr "Não conectado na demonstração"
 
@@ -861,7 +861,7 @@ msgstr "Fictício"
 msgid "Configure %s"
 msgstr "Configurar %s"
 
-#: lib/prefs/accounts.js:209
+#: lib/prefs/accounts.js:212
 msgid ""
 "Choose a provider and a name that helps you distinguish this account. "
 "Creating a connector does not sign in."
@@ -869,15 +869,15 @@ msgstr ""
 "Escolha um provedor e um nome que ajude a distinguir esta conta. Criar um "
 "conector não inicia uma sessão."
 
-#: lib/prefs/accounts.js:212
+#: lib/prefs/accounts.js:215
 msgid "Provider"
 msgstr "Provedor"
 
-#: lib/prefs/accounts.js:213 lib/prefs/accounts.js:239
+#: lib/prefs/accounts.js:216 lib/prefs/accounts.js:242
 msgid "Connector name"
 msgstr "Nome do conector"
 
-#: lib/prefs/accounts.js:228
+#: lib/prefs/accounts.js:231
 msgid ""
 "The connector could not be created. Check the name and the number of "
 "connectors."
@@ -885,36 +885,36 @@ msgstr ""
 "Não foi possível criar o conector. Verifique o nome e a quantidade de "
 "conectores."
 
-#: lib/prefs/accounts.js:242
+#: lib/prefs/accounts.js:245
 msgid "Enter a valid connector name."
 msgstr "Informe um nome válido para o conector."
 
-#: lib/prefs/accounts.js:251
+#: lib/prefs/accounts.js:254
 msgid ""
 "Delete this connector and its local credential. Other accounts are kept."
 msgstr ""
 "Exclua este conector e a credencial local correspondente. As outras contas "
 "são mantidas."
 
-#: lib/prefs/accounts.js:251
+#: lib/prefs/accounts.js:254
 msgid "Delete this fictional connector. Other fictional accounts are kept."
 msgstr ""
 "Exclua este conector fictício. As outras contas fictícias são mantidas."
 
-#: lib/prefs/accounts.js:251 lib/prefs/accounts.js:257
+#: lib/prefs/accounts.js:254 lib/prefs/accounts.js:260
 msgid "Remove connector"
 msgstr "Remover conector"
 
-#: lib/prefs/accounts.js:252
+#: lib/prefs/accounts.js:255
 msgid "Remove…"
 msgstr "Remover…"
 
-#: lib/prefs/accounts.js:255
+#: lib/prefs/accounts.js:258
 #, javascript-format
 msgid "Remove %s?"
 msgstr "Remover %s?"
 
-#: lib/prefs/accounts.js:256
+#: lib/prefs/accounts.js:259
 msgid ""
 "Its local credential and quota data are removed. Access may remain valid on "
 "the provider’s site. Other connectors are kept."
@@ -922,14 +922,14 @@ msgstr ""
 "A credencial local e os dados de cota deste conector são removidos. O acesso "
 "pode continuar válido no site do provedor. Os outros conectores são mantidos."
 
-#: lib/prefs/accounts.js:256
+#: lib/prefs/accounts.js:259
 msgid ""
 "This removes only this fictional connector. No real credential is changed."
 msgstr ""
 "Esta ação remove apenas este conector fictício. Nenhuma credencial real é "
 "alterada."
 
-#: lib/prefs/accounts.js:271
+#: lib/prefs/accounts.js:274
 msgid ""
 "The credential was removed, but the connector list could not be updated. "
 "Retry removing the connector."
@@ -937,7 +937,7 @@ msgstr ""
 "A credencial foi removida, mas não foi possível atualizar a lista de "
 "conectores. Tente remover o conector novamente."
 
-#: lib/prefs/accounts.js:271
+#: lib/prefs/accounts.js:274
 msgid ""
 "The fictional connector list could not be updated. Retry removing the "
 "connector."
@@ -945,7 +945,7 @@ msgstr ""
 "Não foi possível atualizar a lista de conectores fictícios. Tente remover o "
 "conector novamente."
 
-#: lib/prefs/accounts.js:273
+#: lib/prefs/accounts.js:276
 msgid ""
 "The credential could not be removed. The connector was kept. Unlock the "
 "keyring and retry."
@@ -953,53 +953,53 @@ msgstr ""
 "Não foi possível remover a credencial. O conector foi mantido. Desbloqueie o "
 "chaveiro e tente novamente."
 
-#: lib/prefs/accounts.js:273
+#: lib/prefs/accounts.js:276
 msgid ""
 "The fictional connector could not be removed. Retry removing the connector."
 msgstr "Não foi possível remover o conector fictício. Tente novamente."
 
-#: lib/prefs/accounts.js:295
+#: lib/prefs/accounts.js:298
 msgid "Simulation only. No real account, browser or keyring is used."
 msgstr ""
 "Apenas simulação. Nenhuma conta real é usada, e o navegador e o chaveiro não "
 "são acessados."
 
-#: lib/prefs/accounts.js:296 lib/prefs/accounts.js:314
+#: lib/prefs/accounts.js:299 lib/prefs/accounts.js:317
 #: lib/prefs/oauthGroup.js:56
 msgid "Status"
 msgstr "Situação"
 
-#: lib/prefs/accounts.js:301
+#: lib/prefs/accounts.js:304
 msgid "Simulate connect"
 msgstr "Simular conexão"
 
-#: lib/prefs/accounts.js:301
+#: lib/prefs/accounts.js:304
 msgid "Simulate disconnect"
 msgstr "Simular desconexão"
 
-#: lib/prefs/accounts.js:312
+#: lib/prefs/accounts.js:315
 #, javascript-format
 msgid "The key is kept in the system keyring and sent only to %s."
 msgstr "A chave fica no chaveiro do sistema e só é enviada a %s."
 
-#: lib/prefs/accounts.js:314 lib/prefs/oauthGroup.js:56
+#: lib/prefs/accounts.js:317 lib/prefs/oauthGroup.js:56
 msgid "Checking the keyring…"
 msgstr "Consultando o chaveiro…"
 
-#: lib/prefs/accounts.js:316
+#: lib/prefs/accounts.js:319
 msgid "Remove key"
 msgstr "Remover chave"
 
-#: lib/prefs/accounts.js:317
+#: lib/prefs/accounts.js:320
 #, javascript-format
 msgid "Remove the %s key"
 msgstr "Remover a chave do %s"
 
-#: lib/prefs/accounts.js:323 lib/prefs/accounts.js:482
+#: lib/prefs/accounts.js:326 lib/prefs/accounts.js:485
 msgid "API key"
 msgstr "Chave de API"
 
-#: lib/prefs/accounts.js:332
+#: lib/prefs/accounts.js:335
 msgid ""
 "Use an organization Admin API key. A personal inference key cannot read "
 "organization costs."
@@ -1007,7 +1007,7 @@ msgstr ""
 "Use uma chave de API de administrador da organização. Uma chave pessoal de "
 "inferência não permite consultar os custos da organização."
 
-#: lib/prefs/accounts.js:333
+#: lib/prefs/accounts.js:336
 msgid ""
 "Use a Team Admin API key. A personal subscription sign-in cannot read team "
 "spending."
@@ -1015,65 +1015,65 @@ msgstr ""
 "Use uma chave de API de administrador da equipe. O acesso de uma assinatura "
 "pessoal não permite consultar os gastos da equipe."
 
-#: lib/prefs/accounts.js:371
+#: lib/prefs/accounts.js:374
 #, javascript-format
 msgid "Remove the %s key?"
 msgstr "Remover a chave do %s?"
 
-#: lib/prefs/accounts.js:372
+#: lib/prefs/accounts.js:375
 #, javascript-format
 msgid "It is deleted from the keyring. The key stays valid on the %s site."
 msgstr "Ela é apagada do chaveiro. A chave continua válida no site do %s."
 
-#: lib/prefs/accounts.js:375
+#: lib/prefs/accounts.js:378
 msgid "Remove"
 msgstr "Remover"
 
-#: lib/prefs/accounts.js:421
+#: lib/prefs/accounts.js:424
 #, javascript-format
 msgid "Track %s"
 msgstr "Acompanhar o %s"
 
-#: lib/prefs/accounts.js:422
+#: lib/prefs/accounts.js:425
 msgid ""
 "Off stops fetching and hides it from the bar. Your credentials stay saved."
 msgstr ""
 "Desligado, para de consultar e some da barra. Suas credenciais continuam "
 "guardadas."
 
-#: lib/prefs/accounts.js:443
+#: lib/prefs/accounts.js:446
 msgid "Open the provider’s API key settings."
 msgstr "Abra as configurações de chaves de API do provedor."
 
-#: lib/prefs/accounts.js:443 lib/prefs/accounts.js:451
+#: lib/prefs/accounts.js:446 lib/prefs/accounts.js:454
 msgid "Where do I get a key?"
 msgstr "Onde consigo uma chave?"
 
-#: lib/prefs/accounts.js:448
+#: lib/prefs/accounts.js:451
 #, javascript-format
 msgid "Your %s username"
 msgstr "Seu usuário no %s"
 
-#: lib/prefs/accounts.js:452
+#: lib/prefs/accounts.js:455
 #, javascript-format
 msgid "Opens your keys page. Enter your %s username above first."
 msgstr ""
 "Abre a sua página de chaves. Informe antes o seu usuário no %s, no campo "
 "acima."
 
-#: lib/prefs/accounts.js:481
+#: lib/prefs/accounts.js:484
 msgid "Dashboard only"
 msgstr "Somente painel"
 
-#: lib/prefs/accounts.js:483
+#: lib/prefs/accounts.js:486
 msgid "Fictional account"
 msgstr "Conta fictícia"
 
-#: lib/prefs/accounts.js:484
+#: lib/prefs/accounts.js:487
 msgid "OAuth 2"
 msgstr "OAuth 2"
 
-#: lib/prefs/accounts.js:489
+#: lib/prefs/accounts.js:492
 msgid ""
 "Automatic quota reporting is unavailable for this service. No API key is "
 "requested or stored. Check usage in the provider dashboard."
@@ -1082,7 +1082,7 @@ msgstr ""
 "chave de API é solicitada ou armazenada. Consulte o uso no painel do "
 "provedor."
 
-#: lib/prefs/accounts.js:490
+#: lib/prefs/accounts.js:493
 msgid "Open provider dashboard"
 msgstr "Abrir painel do provedor"
 
@@ -1471,27 +1471,27 @@ msgstr ""
 "Escolha onde as cotas aparecem e quantos provedores são exibidos. As "
 "mudanças são aplicadas na hora."
 
-#: lib/prefs/firstUse.js:154 prefs.js:179
+#: lib/prefs/firstUse.js:154 prefs.js:180
 msgid "Top bar"
 msgstr "Barra superior"
 
-#: lib/prefs/firstUse.js:156 prefs.js:182
+#: lib/prefs/firstUse.js:156 prefs.js:183
 msgid "Center"
 msgstr "Centro"
 
-#: lib/prefs/firstUse.js:156 prefs.js:181
+#: lib/prefs/firstUse.js:156 prefs.js:182
 msgid "Left"
 msgstr "Esquerda"
 
-#: lib/prefs/firstUse.js:156 prefs.js:184
+#: lib/prefs/firstUse.js:156 prefs.js:185
 msgid "Position"
 msgstr "Posição"
 
-#: lib/prefs/firstUse.js:156 prefs.js:183
+#: lib/prefs/firstUse.js:156 prefs.js:184
 msgid "Right"
 msgstr "Direita"
 
-#: lib/prefs/firstUse.js:160 prefs.js:188
+#: lib/prefs/firstUse.js:160 prefs.js:189
 msgid "Providers on the bar"
 msgstr "Provedores na barra"
 
@@ -1627,7 +1627,7 @@ msgstr "Limite de aviso"
 msgid "Notifies at %d%% used"
 msgstr "Notifica com %d%% usado"
 
-#: lib/prefs/notifications.js:117 prefs.js:233
+#: lib/prefs/notifications.js:117 prefs.js:234
 msgid "Off"
 msgstr "Desligado"
 
@@ -1806,6 +1806,89 @@ msgid ""
 msgstr ""
 "O login é apagado do chaveiro e a extensão para de ler esta cota. O acesso "
 "concedido pode continuar listado na sua conta do %s até você revogá-lo lá."
+
+#: lib/prefs/popup.js:12
+msgid "Fits the available space on the current monitor."
+msgstr "Ajusta-se ao espaço disponível no monitor atual."
+
+#: lib/prefs/popup.js:13
+msgid ""
+"Logical pixels. The screen limits the displayed size without changing this "
+"value."
+msgstr ""
+"Pixels lógicos. A tela limita o tamanho exibido sem alterar este valor."
+
+#: lib/prefs/popup.js:40 lib/prefs/popup.js:165
+msgid "Connector order and visibility"
+msgstr "Ordem e visibilidade dos conectores"
+
+#: lib/prefs/popup.js:41
+msgid ""
+"Hidden connectors keep updating, sending alerts and appearing on the top "
+"bar. Use the arrow buttons to change popup order."
+msgstr ""
+"Conectores ocultos continuam atualizando, enviando alertas e aparecendo na "
+"barra superior. Use as setas para mudar a ordem no popup."
+
+#: lib/prefs/popup.js:78
+msgid "Connector configuration is unavailable. Recover the list in Accounts."
+msgstr ""
+"A configuração dos conectores está indisponível. Recupere a lista em Contas."
+
+#: lib/prefs/popup.js:95
+msgid "Show in popup"
+msgstr "Mostrar no popup"
+
+#: lib/prefs/popup.js:98
+msgid "Move up"
+msgstr "Mover para cima"
+
+#: lib/prefs/popup.js:99
+msgid "Move down"
+msgstr "Mover para baixo"
+
+#: lib/prefs/popup.js:124
+#, javascript-format
+msgid "%s: Show in popup"
+msgstr "%s: Mostrar no popup"
+
+#: lib/prefs/popup.js:125
+#, javascript-format
+msgid "%s: Move up"
+msgstr "%s: Mover para cima"
+
+#: lib/prefs/popup.js:126
+#, javascript-format
+msgid "%s: Move down"
+msgstr "%s: Mover para baixo"
+
+#: lib/prefs/popup.js:136
+msgid "Add a connector in Accounts."
+msgstr "Adicione um conector em Contas."
+
+#: lib/prefs/popup.js:157
+msgid "Popup connectors"
+msgstr "Conectores do popup"
+
+#: lib/prefs/popup.js:163
+msgid "Automatic width"
+msgstr "Largura automática"
+
+#: lib/prefs/popup.js:163
+msgid "Popup width"
+msgstr "Largura do popup"
+
+#: lib/prefs/popup.js:164
+msgid "Automatic height"
+msgstr "Altura automática"
+
+#: lib/prefs/popup.js:164
+msgid "Maximum popup height"
+msgstr "Altura máxima do popup"
+
+#: lib/prefs/popup.js:166
+msgid "Choose which connectors appear in the popup and their order."
+msgstr "Escolha quais conectores aparecem no popup e sua ordem."
 
 #: lib/prefs/suggestedFonts.js:12
 msgid "Suggested fonts"
@@ -1986,7 +2069,7 @@ msgstr "Entendi, conectar"
 msgid "Follows the GNOME accent color and the light or dark setting."
 msgstr "Segue a cor de destaque do GNOME e a configuração de claro ou escuro."
 
-#: lib/prefs/themeCatalog.js:12 prefs.js:116
+#: lib/prefs/themeCatalog.js:12 prefs.js:117
 msgid "System"
 msgstr "Sistema"
 
@@ -1994,7 +2077,7 @@ msgstr "Sistema"
 msgid "System (GNOME)"
 msgstr "Sistema (GNOME)"
 
-#: lib/prefs/themeCatalog.js:14 prefs.js:116 prefs.js:250
+#: lib/prefs/themeCatalog.js:14 prefs.js:117 prefs.js:251
 msgid "Your themes"
 msgstr "Seus temas"
 
@@ -2198,47 +2281,51 @@ msgstr "Uma interface de terminal em texto."
 msgid "Raw HTML and dense tables."
 msgstr "HTML cru e tabelas densas."
 
-#: lib/ui/indicator.js:224
+#: lib/ui/indicator.js:199
+msgid "Choose connectors"
+msgstr "Escolher conectores"
+
+#: lib/ui/indicator.js:248
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: lib/ui/indicator.js:225
+#: lib/ui/indicator.js:249
 msgid "Preferences"
 msgstr "Preferências"
 
-#: lib/ui/indicator.js:249 lib/ui/indicator.js:250
+#: lib/ui/indicator.js:273 lib/ui/indicator.js:274
 msgid "What the marks on the bar mean"
 msgstr "O que significam as marcas da barra"
 
-#: lib/ui/indicator.js:344
+#: lib/ui/indicator.js:369
 msgid "Refreshing…"
 msgstr "Atualizando…"
 
-#: lib/ui/indicator.js:417 prefs.js:300
+#: lib/ui/indicator.js:475 prefs.js:302
 msgid "Demo data (made up)"
 msgstr "Dados de demonstração (fictícios)"
 
-#: lib/ui/indicator.js:483
+#: lib/ui/indicator.js:541
 msgid "Waiting for the first update…"
 msgstr "Aguardando a primeira atualização…"
 
-#: lib/ui/indicator.js:488
+#: lib/ui/indicator.js:546
 msgid "Nothing connected yet."
 msgstr "Nada conectado ainda."
 
-#: lib/ui/indicator.js:488
+#: lib/ui/indicator.js:546
 msgid "Nothing is being tracked."
 msgstr "Nada está sendo acompanhado."
 
-#: lib/ui/indicator.js:490
+#: lib/ui/indicator.js:548
 msgid "Resume a provider below to see its quota."
 msgstr "Retome um provedor abaixo para ver a cota."
 
-#: lib/ui/indicator.js:491
+#: lib/ui/indicator.js:549
 msgid "Add or configure a connector in Accounts to see your quotas here."
 msgstr "Adicione ou configure um conector em Contas para ver suas cotas aqui."
 
-#: lib/ui/indicator.js:496
+#: lib/ui/indicator.js:554
 msgid ""
 "Open Preferences to recover the connector list. Saved credentials have not "
 "been changed."
@@ -2246,31 +2333,30 @@ msgstr ""
 "Abra as Preferências para recuperar a lista de conectores. As credenciais "
 "salvas não foram alteradas."
 
-#: lib/ui/indicator.js:628
+#: lib/ui/indicator.js:688
 msgid "Nothing connected yet"
 msgstr "Nada conectado ainda"
 
-#: lib/ui/indicator.js:634
+#: lib/ui/indicator.js:694
 msgid "Waiting for the first update"
 msgstr "Aguardando a primeira atualização"
 
-#: lib/ui/indicator.js:661
+#: lib/ui/indicator.js:721
 #, javascript-format
 msgid "%d more provider"
 msgid_plural "%d more providers"
 msgstr[0] "mais %d provedor (abra para ver)"
 msgstr[1] "mais %d provedores (abra para ver)"
 
-#: lib/ui/indicator.js:671
-msgid "On the bar"
-msgstr "Na barra"
+#: lib/ui/indicator.js:743
+msgid "No connectors shown"
+msgstr "Nenhum conector visível"
 
-#: lib/ui/indicator.js:674
-#, javascript-format
-msgid "Hidden from the bar (%d)"
-msgid_plural "Hidden from the bar (%d)"
-msgstr[0] "Oculto da barra (%d)"
-msgstr[1] "Ocultos da barra (%d)"
+#: lib/ui/indicator.js:744
+msgid ""
+"Choose which connectors appear in the popup. Collection and alert settings "
+"have not changed."
+msgstr "Escolha quais conectores aparecem no popup. As configurações de coleta e alertas continuam iguais."
 
 #: lib/ui/notifier.js:71
 msgid "Open"
@@ -2314,39 +2400,39 @@ msgstr "Expandir %s"
 msgid "Try again"
 msgstr "Tentar de novo"
 
-#: prefs.js:92
+#: prefs.js:93
 msgid "Some themes could not be loaded"
 msgstr "Alguns temas não puderam ser carregados"
 
-#: prefs.js:157 prefs.js:214
+#: prefs.js:158 prefs.js:215
 msgid "Theme"
 msgstr "Tema"
 
-#: prefs.js:175
+#: prefs.js:176
 msgid "General"
 msgstr "Geral"
 
-#: prefs.js:184
+#: prefs.js:185
 msgid "Where the quota items sit on the top bar."
 msgstr "Onde os itens de cota ficam na barra superior."
 
-#: prefs.js:189
+#: prefs.js:190
 msgid "Up to this many providers are shown (1 to 5), most critical first."
 msgstr "Quantos provedores aparecem, de 1 a 5, os mais críticos primeiro."
 
-#: prefs.js:196
+#: prefs.js:197
 msgid "Automatic"
 msgstr "Automático"
 
-#: prefs.js:197
+#: prefs.js:198
 msgid "Always compact"
 msgstr "Sempre compactar"
 
-#: prefs.js:198
+#: prefs.js:199
 msgid "Never compact"
 msgstr "Nunca compactar"
 
-#: prefs.js:199
+#: prefs.js:200
 msgid ""
 "Automatic: only when space runs out. Always: drops the % sign and the window "
 "suffix. Never: hides providers instead."
@@ -2354,51 +2440,51 @@ msgstr ""
 "Automático: só quando falta espaço. Sempre: remove o % e o sufixo da janela. "
 "Nunca: oculta provedores."
 
-#: prefs.js:199
+#: prefs.js:200
 msgid "Compact mode"
 msgstr "Modo compacto"
 
-#: prefs.js:204
+#: prefs.js:205
 msgid "Colors and theme"
 msgstr "Cores e tema"
 
-#: prefs.js:206 prefs.js:275
+#: prefs.js:207 prefs.js:276
 msgid "Follow the system"
 msgstr "Seguir o sistema"
 
-#: prefs.js:207
+#: prefs.js:208
 msgid "Light"
 msgstr "Claro"
 
-#: prefs.js:208
+#: prefs.js:209
 msgid "Dark"
 msgstr "Escuro"
 
-#: prefs.js:209
+#: prefs.js:210
 msgid "Applies to the popup. The top bar always stays dark."
 msgstr "Vale para o popup. A barra superior continua escura."
 
-#: prefs.js:209
+#: prefs.js:210
 msgid "Light or dark"
 msgstr "Claro ou escuro"
 
-#: prefs.js:215
+#: prefs.js:216
 msgid "Each theme has a light and a dark variant."
 msgstr "Todo tema tem variante clara e escura."
 
-#: prefs.js:233
+#: prefs.js:234
 msgid "Full"
 msgstr "Completo"
 
-#: prefs.js:233
+#: prefs.js:234
 msgid "Subtle"
 msgstr "Sutil"
 
-#: prefs.js:234
+#: prefs.js:235
 msgid "Effects"
 msgstr "Efeitos"
 
-#: prefs.js:234
+#: prefs.js:235
 msgid ""
 "Off stops motion and decoration; material and transparency remain available. "
 "Subtle adds short transitions and static decoration. Full adds background "
@@ -2410,11 +2496,11 @@ msgstr ""
 "decoração estática. Completo adiciona movimento de fundo nos temas "
 "compatíveis. As preferências de animação do sistema têm prioridade."
 
-#: prefs.js:237
+#: prefs.js:238
 msgid "Transparency"
 msgstr "Transparência"
 
-#: prefs.js:238
+#: prefs.js:239
 msgid ""
 "Allows translucent and glass backgrounds in compatible themes. Off keeps "
 "backgrounds opaque."
@@ -2422,23 +2508,23 @@ msgstr ""
 "Permite fundos translúcidos e de vidro em temas compatíveis. Desativar "
 "mantém os fundos opacos."
 
-#: prefs.js:243
+#: prefs.js:244
 msgid "Follow the theme"
 msgstr "Seguir o tema"
 
-#: prefs.js:243
+#: prefs.js:244
 msgid "Translucent"
 msgstr "Translúcido"
 
-#: prefs.js:244
+#: prefs.js:245
 msgid "Decorative glass"
 msgstr "Vidro decorativo"
 
-#: prefs.js:244
+#: prefs.js:245
 msgid "Frosted glass"
 msgstr "Vidro fosco"
 
-#: prefs.js:245
+#: prefs.js:246
 msgid ""
 "Applies only where the theme supports this material. Transparency off keeps "
 "the background opaque."
@@ -2446,106 +2532,122 @@ msgstr ""
 "Aplica-se apenas quando o tema permite este material. Desativar a "
 "transparência mantém o fundo opaco."
 
-#: prefs.js:245
+#: prefs.js:246
 msgid "Material"
 msgstr "Material"
 
-#: prefs.js:251
+#: prefs.js:252
 #, javascript-format
 msgid "One folder per theme, with a theme.json inside: %s"
 msgstr "Uma pasta por tema, com um theme.json dentro: %s"
 
-#: prefs.js:254
+#: prefs.js:255
 msgid "Open folder"
 msgstr "Abrir pasta"
 
-#: prefs.js:256
+#: prefs.js:257
 msgid "Open the themes folder"
 msgstr "Abrir a pasta de temas"
 
-#: prefs.js:273
+#: prefs.js:274
 msgid "Popup"
 msgstr "Popup"
 
-#: prefs.js:276
+#: prefs.js:277
 msgid "12 hours"
 msgstr "12 horas"
 
-#: prefs.js:277
+#: prefs.js:278
 msgid "24 hours"
 msgstr "24 horas"
 
-#: prefs.js:278
+#: prefs.js:279
 msgid "Clock"
 msgstr "Relógio"
 
-#: prefs.js:278
+#: prefs.js:279
 msgid "How reset times are written."
 msgstr "Como os horários de reinício são escritos."
 
-#: prefs.js:281
+#: prefs.js:282
 msgid "1h 20min"
 msgstr "1h 20min"
 
-#: prefs.js:282
+#: prefs.js:283
 msgid "1h20"
 msgstr "1h20"
 
-#: prefs.js:283
+#: prefs.js:284
 msgid "How the countdown to a reset is written."
 msgstr "Como a contagem até o reinício é escrita."
 
-#: prefs.js:283
+#: prefs.js:284
 msgid "Time until reset"
 msgstr "Tempo até o reinício"
 
-#: prefs.js:286
+#: prefs.js:287
 msgid "Open cards that need attention"
 msgstr "Abrir cartões que pedem atenção"
 
-#: prefs.js:287
+#: prefs.js:288
 msgid "Cards in warning, critical or error states open on their own."
 msgstr "Cartões em atenção, críticos ou com erro abrem sozinhos."
 
-#: prefs.js:295
+#: prefs.js:297
 msgid "Advanced"
 msgstr "Avançado"
 
-#: prefs.js:296
+#: prefs.js:298
 msgid "Demo data, to try every state without an account."
 msgstr "Dados de demonstração, para ver todos os estados sem uma conta."
 
-#: prefs.js:299
+#: prefs.js:301
 msgid "Real providers"
 msgstr "Provedores reais"
 
-#: prefs.js:301
+#: prefs.js:303
 msgid "Data source"
 msgstr "Fonte dos dados"
 
-#: prefs.js:301
+#: prefs.js:303
 msgid "Demo data queries no account."
 msgstr "Os dados de demonstração não consultam nenhuma conta."
 
-#: prefs.js:303
+#: prefs.js:305
 msgid "Steady"
 msgstr "Estável"
 
-#: prefs.js:304
+#: prefs.js:306
 msgid "Flaky"
 msgstr "Instável"
 
-#: prefs.js:305
+#: prefs.js:307
 msgid "Drifting"
 msgstr "Subindo"
 
-#: prefs.js:307
+#: prefs.js:309
 msgid "Demo scenario"
 msgstr "Cenário de demonstração"
 
-#: prefs.js:307
+#: prefs.js:309
 msgid "Steady: all fine. Flaky: errors come and go. Drifting: usage climbs."
 msgstr "Estável: tudo certo. Instável: erros vão e vêm. Subindo: o uso sobe."
+
+#~ msgid ""
+#~ "Your accounts are still being tracked. Choose which connectors appear in "
+#~ "the popup."
+#~ msgstr ""
+#~ "Suas contas continuam sendo acompanhadas. Escolha quais conectores "
+#~ "aparecem no popup."
+
+#~ msgid "On the bar"
+#~ msgstr "Na barra"
+
+#, javascript-format
+#~ msgid "Hidden from the bar (%d)"
+#~ msgid_plural "Hidden from the bar (%d)"
+#~ msgstr[0] "Oculto da barra (%d)"
+#~ msgstr[1] "Ocultos da barra (%d)"
 
 #~ msgid "Add account"
 #~ msgstr "Adicionar conta"

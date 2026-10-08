@@ -5,33 +5,33 @@
   "difficulty": "hard",
   "schemes": {
     "light": {
-      "bg": "#f4f7f9",
-      "surface": "#ffffff",
-      "surface-2": "#e6f1f5",
-      "fg": "#0a0f14",
-      "muted": "#47606d",
-      "border": "#bcd2dc",
-      "accent": "#007c99",
+      "bg": "#e5eceb",
+      "surface": "#f6fffc",
+      "surface-2": "#d4e6e1",
+      "fg": "#163a37",
+      "muted": "#496963",
+      "border": "#6b9990",
+      "accent": "#00665a",
       "accent-fg": "#ffffff",
       "ok": "#00775a",
       "warn": "#8a5a00",
       "danger": "#b3261e",
-      "shadow": "0 1px 0 #fff inset,0 0 0 1px rgba(0,124,153,.12),0 8px 24px rgba(0,60,80,.08)",
+      "shadow": "none",
       "error": "#8b4a9a"
     },
     "dark": {
-      "bg": "#0d1011",
-      "surface": "#171a1b",
-      "surface-2": "#212526",
-      "fg": "#e9f0f2",
-      "muted": "#a2adb1",
-      "border": "#313536",
-      "accent": "#4baccb",
+      "bg": "#081e1c",
+      "surface": "#13352e",
+      "surface-2": "#204c42",
+      "fg": "#ebfff4",
+      "muted": "#acd4bc",
+      "border": "#5eaa91",
+      "accent": "#81e6c5",
       "accent-fg": "#0d0d12",
       "ok": "#76d3b2",
       "warn": "#f5c079",
       "danger": "#fc8d7e",
-      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "shadow": "none",
       "error": "#e59ff6"
     }
   },
@@ -40,30 +40,29 @@
       "error"
     ],
     "dark": [
-      "error",
-      "border"
+      "error"
     ]
   },
   "audit": {
     "light": {
-      "fg": 19.2,
-      "muted": 6.6,
-      "accent": 4.8,
-      "accent-fg": 4.8,
-      "ok": 5.5,
-      "warn": 5.9,
-      "danger": 6.5,
-      "error": 5.9
+      "fg": 12.2,
+      "muted": 5.9,
+      "accent": 6.8,
+      "accent-fg": 6.9,
+      "ok": 5.4,
+      "warn": 5.8,
+      "danger": 6.4,
+      "error": 5.8
     },
     "dark": {
-      "fg": 15.2,
-      "muted": 7.6,
-      "accent": 6.7,
-      "accent-fg": 7.4,
-      "ok": 9.8,
-      "warn": 10.6,
-      "danger": 7.7,
-      "error": 8.9
+      "fg": 12.8,
+      "muted": 8.2,
+      "accent": 8.9,
+      "accent-fg": 13.0,
+      "ok": 7.4,
+      "warn": 8.1,
+      "danger": 5.9,
+      "error": 6.7
     }
   },
   "fonts": {

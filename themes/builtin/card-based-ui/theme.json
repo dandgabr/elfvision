@@ -5,66 +5,64 @@
   "difficulty": "easy",
   "schemes": {
     "light": {
-      "bg": "#eceff4",
+      "bg": "#edf1f5",
       "surface": "#ffffff",
-      "surface-2": "#f3f5f9",
-      "fg": "#1c2230",
-      "muted": "#586075",
-      "border": "#d5d9e2",
-      "accent": "#3b5bdb",
+      "surface-2": "#e7edf3",
+      "fg": "#16283a",
+      "muted": "#536578",
+      "border": "#99aabd",
+      "accent": "#17618b",
       "accent-fg": "#ffffff",
       "ok": "#17803d",
       "warn": "#a35f00",
       "danger": "#c92a2a",
-      "shadow": "0 1px 2px rgba(20,30,60,.06),0 4px 14px rgba(20,30,60,.06)",
+      "shadow": "0 1px 3px rgba(17,35,53,.2)",
       "error": "#8b4a9a"
     },
     "dark": {
-      "bg": "#0e0f12",
-      "surface": "#18191c",
-      "surface-2": "#232427",
-      "fg": "#eceef4",
-      "muted": "#a7abb4",
-      "border": "#323437",
-      "accent": "#7799fa",
+      "bg": "#111b26",
+      "surface": "#203247",
+      "surface-2": "#2b415b",
+      "fg": "#edf6ff",
+      "muted": "#aec2d7",
+      "border": "#738ba4",
+      "accent": "#8dcfff",
       "accent-fg": "#0d0d12",
       "ok": "#78d68e",
       "warn": "#fcbb7e",
       "danger": "#fc8d82",
-      "shadow": "0 1px 2px rgba(0,0,0,.45)",
+      "shadow": "0 1px 3px rgba(0,0,0,.4)",
       "error": "#e59ff6"
     }
   },
   "adjusted": {
     "light": [
-      "error",
-      "border"
+      "error"
     ],
     "dark": [
-      "error",
-      "border"
+      "error"
     ]
   },
   "audit": {
     "light": {
-      "fg": 15.9,
-      "muted": 6.3,
-      "accent": 5.7,
-      "accent-fg": 5.7,
+      "fg": 15.0,
+      "muted": 6.0,
+      "accent": 6.7,
+      "accent-fg": 6.7,
       "ok": 5.0,
       "warn": 5.0,
       "danger": 5.5,
       "error": 5.9
     },
     "dark": {
-      "fg": 15.2,
-      "muted": 7.6,
-      "accent": 6.5,
-      "accent-fg": 7.1,
-      "ok": 9.9,
-      "warn": 10.5,
-      "danger": 7.8,
-      "error": 8.9
+      "fg": 12.0,
+      "muted": 7.1,
+      "accent": 7.8,
+      "accent-fg": 11.5,
+      "ok": 7.3,
+      "warn": 7.8,
+      "danger": 5.8,
+      "error": 6.6
     }
   },
   "fonts": {
@@ -74,8 +72,8 @@
     "googleFontsUrl": "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap"
   },
   "radius": {
-    "card": "14px",
-    "control": "8px"
+    "card": "8px",
+    "control": "6px"
   },
   "border": "hairline",
   "hardShadow": false,

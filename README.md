@@ -4,7 +4,7 @@ Gnome AI Quota is a GNOME Shell extension that puts your AI quota usage and rese
 times and API spending in the top bar. Check your configured providers without
 opening each service, then click the indicator for a breakdown of each quota window.
 
-Version **0.1** supports **GNOME Shell 50**. It runs inside GNOME Shell with native
+Version **0.2.0** supports **GNOME Shell 50**. It runs inside GNOME Shell with native
 widgets and effects. The OAuth integrations are unofficial and carry account risks;
 read [Provider access and consent](#provider-access-and-consent) before connecting.
 
@@ -33,7 +33,9 @@ Click the indicator to open the popup. Provider cards show usage windows, reset
 times, available plan information and a pacing marker for steady usage. The footer
 offers a legend, Refresh and Preferences. Providers that cannot fit on the bar stay
 accessible in the popup. Local connector names distinguish accounts in the cards.
-You can pause one connector without removing its account.
+You can pause one connector without removing its account. Choose the popup's
+connector order and visibility separately: hiding a card keeps its polling,
+notifications and top-bar eligibility active.
 
 The extension starts without connectors in both Live and Demo mode. The popup's
 **Add connector** action opens **Accounts**, without selecting a provider. Preferences opens
@@ -55,7 +57,7 @@ notifications. Every provider is optional; selecting one does not sign you in.
 
 The installable file is named
 `gnome-ai-quota@dandgabr.github.io.shell-extension.zip`. Download it and
-`SHA256SUMS` from the [v0.1 release](https://github.com/dandgabr/gnome-ai-quota/releases/tag/v0.1).
+`SHA256SUMS` from the [releases page](https://github.com/dandgabr/gnome-ai-quota/releases).
 The release also includes a build manifest identifying the source commit.
 There is no extensions.gnome.org listing. From the download folder, verify and
 install the archive:
@@ -75,6 +77,15 @@ gnome-extensions prefs gnome-ai-quota@dandgabr.github.io
 A new login also loads an updated build. On Wayland, the running shell does not
 reload newly installed extension code.
 
+### Update without losing accounts
+
+Install the new release ZIP with the same `gnome-extensions install --force`
+command, then log out and back in to load its code. Ordinary updates replace the
+extension files and preserve connectors, keyring credentials, preferences,
+custom themes and public client configuration. Do not uninstall or delete the
+extension's configuration directories to update it. Restore configuration and
+Delete all connectors are separate, explicitly confirmed actions.
+
 ### Build the checked-out revision
 
 From a checkout containing the revision you want to install:
@@ -86,7 +97,7 @@ gnome-extensions install --force dist/gnome-ai-quota@dandgabr.github.io.shell-ex
 
 The pack script compiles schemas and translations, then creates the standard GNOME
 extension ZIP in `dist/`. Log out and back in, and run the enable command above.
-The default repository branch may differ from the published v0.1 build;
+The default repository branch may differ from the published release;
 check the checkout's `metadata.json` for its declared version and shell support.
 
 ### Connect accounts
@@ -174,7 +185,10 @@ requires an explicit acknowledgement before an OAuth connection starts.
 
 - **Panel and popup:** choose left, center or right placement, show one to five
   connector items, and use automatic, always, or never compact mode. Connector cards can
-  open automatically when they need attention.
+  open automatically when they need attention. Set popup width and maximum
+  height in logical pixels, or use automatic sizing; the current monitor limits
+  its displayed size. Choose which cards appear and arrange them with accessible
+  up/down controls independently of the bar's priority order.
 - **Reset times:** follow GNOME's clock setting or choose 12/24-hour time; display
   countdowns as `1h 20min` or `1h20`.
 - **Notifications:** critical quota notices are enabled at **95%** by default.
@@ -225,7 +239,8 @@ Its quota card appears automatically after connecting.
 **General → Restore configuration** resets appearance, notifications, tracking, and setup
 dismissal. All connectors are tracked again and setup becomes available. Saved
 connectors, credentials, terms acknowledgements, client configuration, and the
-selected live/demo data source stay saved.
+selected live/demo data source stay saved. Popup dimensions, order and visibility
+return to their defaults; ordinary upgrades preserve those choices.
 
 **Remove connector…** removes only the selected connector, its local credential,
 and its quota and alert data after confirmation. Other accounts stay saved.

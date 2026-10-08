@@ -1,0 +1,55 @@
+{
+  "baseline": "ok    themes: the popup follows the scheme, the top bar always uses the dark one\nok    indicator connectors: popup order follows registry presentation without changing panel snapshots\nok    popup presentation: user order ignores stale and duplicate IDs and appends new connectors\nok    popup presentation: hiding affects presentation only, and bounds untrusted metadata\nok    popup presentation: accessible movement preserves hidden entries and registry identity\nok    popup dimensions: automatic uses work area and chrome, with screen-edge clearance\nok    popup dimensions: clamps effective dimensions without mutating preferences or losing chrome\nok    popup presentation: visibility writes retain a newly added hidden sibling\nok    popup presentation: hostile IDs and oversized registry are bounded independently\nok    popup dimensions: supports the maximum integer and rejects overflow and fractional requests\nok    popup dimensions: tiny preferences retain a usable content area while respecting a smaller screen\n\n11 passed, 0 failed\n",
+  "killed": 12,
+  "total": 12,
+  "mutants": [
+    {
+      "name": "automatic width",
+      "killed": true
+    },
+    {
+      "name": "height share",
+      "killed": true
+    },
+    {
+      "name": "width edge clearance",
+      "killed": true
+    },
+    {
+      "name": "height edge clearance",
+      "killed": true
+    },
+    {
+      "name": "hide suppression",
+      "killed": true
+    },
+    {
+      "name": "order ignored",
+      "killed": true
+    },
+    {
+      "name": "movement reversed",
+      "killed": true
+    },
+    {
+      "name": "live/demo isolation",
+      "killed": true
+    },
+    {
+      "name": "ID length limit removed",
+      "killed": true
+    },
+    {
+      "name": "dimension upper bound off by one",
+      "killed": true
+    },
+    {
+      "name": "registry cap removed",
+      "killed": true
+    },
+    {
+      "name": "noninteger size accepted",
+      "killed": true
+    }
+  ]
+}

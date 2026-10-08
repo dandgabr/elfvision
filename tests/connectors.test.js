@@ -30,7 +30,8 @@ function settingsFixture(seed = true) {
         values.set('connectors', JSON.stringify({version: 1, connectors: legacyFixture()}));
         values.set('demo-connectors', JSON.stringify({version: 1, connectors: legacyFixture(true)}));
     }
-    return {get_string: key => values.get(key) ?? '', set_string(key, value) { values.set(key, value); for (const entry of listeners.values()) if (entry.key === `changed::${key}`) entry.fn(); return true; },
+    return {get_strv: key => values.get(key) ?? [], set_strv(key, value) { values.set(key, value); return true; },
+        get_string: key => values.get(key) ?? '', set_string(key, value) { values.set(key, value); for (const entry of listeners.values()) if (entry.key === `changed::${key}`) entry.fn(); return true; },
         connect(key, fn) { listeners.set(++serial, {key, fn}); return serial; }, disconnect: key => listeners.delete(key), listeners};
 }
 test('connectors: validates exact provider identity and bounded plain labels', () => {
@@ -286,3 +287,71 @@ test('connectors: new API runtimes isolate sibling keys and fence a delayed look
         assertTrue(failed); assertEqual(requests.length, before, 'fenced key lookup dispatches no reporting request'); runtime.dispose();
     }
 });
+
+test('connectors: successful deletion prunes only exact presentation IDs in its own mode', () => {
+    const settings = settingsFixture();
+    settings.set_strv('popup-connector-order', ['codex', 'claude']);
+    settings.set_strv('popup-hidden-connectors', ['codex', 'claude']);
+    settings.set_strv('demo-popup-connector-order', ['codex']);
+    settings.set_strv('demo-popup-hidden-connectors', ['codex']);
+    const store = createConnectorStore(settings);
+    store.remove('codex');
+    assertEqual(settings.get_strv('popup-connector-order'), ['claude']);
+    assertEqual(settings.get_strv('popup-hidden-connectors'), ['claude']);
+    assertEqual(settings.get_strv('demo-popup-hidden-connectors'), ['codex']);
+    store.clear();
+    assertEqual(settings.get_strv('popup-connector-order'), []);
+    assertEqual(settings.get_strv('popup-hidden-connectors'), []);
+    assertEqual(settings.get_strv('demo-popup-connector-order'), ['codex']);
+    store.dispose();
+    const demo = createConnectorStore(settings, {demo: true});
+    demo.clear();
+    assertEqual(settings.get_strv('demo-popup-connector-order'), []);
+    assertEqual(settings.get_strv('demo-popup-hidden-connectors'), []);
+    demo.dispose();
+});
+test('connectors: failed deletion keeps presentation preferences intact', () => {
+    const settings = settingsFixture();
+    settings.set_strv('popup-connector-order', ['codex', 'claude']);
+    settings.set_strv('popup-hidden-connectors', ['codex']);
+    settings.set_string = () => false;
+    const store = createConnectorStore(settings);
+    let failed = false;
+    try { store.remove('codex'); } catch (_error) { failed = true; }
+    assertTrue(failed);
+    assertEqual(settings.get_strv('popup-connector-order'), ['codex', 'claude']);
+    assertEqual(settings.get_strv('popup-hidden-connectors'), ['codex']);
+    store.dispose();
+});
+
+for (const demo of [false, true]) {
+    test(`connectors: delete-all ${demo ? 'Demo' : 'Live'} clears only its own presentation metadata after success`, async () => {
+        const settings = settingsFixture();
+        settings.get_int = () => 1; settings.set_int = () => true; settings.set_value = () => true;
+        const prefix = demo ? 'demo-' : '';
+        const other = demo ? '' : 'demo-';
+        settings.set_strv(`${prefix}popup-connector-order`, ['codex']);
+        settings.set_strv(`${prefix}popup-hidden-connectors`, ['codex']);
+        settings.set_strv(`${other}popup-hidden-connectors`, ['claude']);
+        const gate = {disconnect: async deps => { await deps.clearStatus({credentials: {}, files: {}}); return {phase: 'complete'}; }};
+        assertEqual((await disconnectAll({settings, demo, gate, requireShell: async () => {}})).phase, 'complete');
+        assertEqual(settings.get_strv(`${prefix}popup-connector-order`), []);
+        assertEqual(settings.get_strv(`${prefix}popup-hidden-connectors`), []);
+        assertEqual(settings.get_strv(`${other}popup-hidden-connectors`), ['claude']);
+    });
+    test(`connectors: delete-all ${demo ? 'Demo' : 'Live'} keeps presentation metadata when registry deletion fails`, async () => {
+        const settings = settingsFixture();
+        settings.get_int = () => 1; settings.set_int = () => true; settings.set_value = () => true;
+        const prefix = demo ? 'demo-' : '';
+        settings.set_strv(`${prefix}popup-connector-order`, ['codex']);
+        settings.set_strv(`${prefix}popup-hidden-connectors`, ['codex']);
+        const original = settings.set_string;
+        settings.set_string = (key, value) => key === (demo ? 'demo-connectors' : 'connectors') ? false : original(key, value);
+        const gate = {disconnect: async deps => { await deps.clearStatus({credentials: {}, files: {}}); return {phase: 'complete'}; }};
+        let rejected = false;
+        try { await disconnectAll({settings, demo, gate, requireShell: async () => {}}); } catch (_error) { rejected = true; }
+        assertTrue(rejected);
+        assertEqual(settings.get_strv(`${prefix}popup-connector-order`), ['codex']);
+        assertEqual(settings.get_strv(`${prefix}popup-hidden-connectors`), ['codex']);
+    });
+}

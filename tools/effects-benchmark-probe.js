@@ -41,8 +41,9 @@
                         const resources = await settledResources();
                         const state = manager.getEffectState(true);
                         check(resources.sources <= 1 && resources.particles <= 12 && resources.blurEffects <= 1, `${theme.id} bounded resources`);
-                        if (mode === 'off') check(resources.active && !resources.sources && !resources.actors
-                            && resources.material === state.policy.material, `${theme.id} off preserves material without decoration: ${JSON.stringify({resources, origin: state.origin, mode: state.mode, policy: state.policy, menuOpen: indicator.menu.isOpen, overviewVisible: Main.overview.visible})}`);
+                        if (mode === 'off') check(resources.active && !resources.sources && resources.actors <= 2
+                            && indicator._effectDecoration.get_children().every(actor => ['gaq-reading-veil', 'gaq-reading-veil-bottom'].includes(actor.name))
+                            && resources.material === state.policy.material, `${theme.id} off preserves material with only static reading protection: ${JSON.stringify({resources, origin: state.origin, mode: state.mode, policy: state.policy, menuOpen: indicator.menu.isOpen, overviewVisible: Main.overview.visible})}`);
                         if (!animations) check(resources.sources === 0 && state.policy.motion === 'none', `${theme.id} reduced motion`);
                         indicator._settings.set_boolean('transparency-enabled', false);
                         check(indicator._effects.inspect().material === 'opaque' && indicator._effects.inspect().blurEffects === 0, `${theme.id} opaque fallback`);

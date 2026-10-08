@@ -5,78 +5,75 @@
   "difficulty": "hard",
   "schemes": {
     "light": {
-      "bg": "#fbf7ec",
-      "surface": "#fffdf6",
-      "surface-2": "#fff3a6",
-      "fg": "#222222",
-      "muted": "#4a4a4a",
-      "border": "#222222",
-      "accent": "#169bcb",
-      "accent-fg": "#222222",
+      "bg": "#f4ecd9",
+      "surface": "#fff9e8",
+      "surface-2": "#f4e3a4",
+      "fg": "#272219",
+      "muted": "#66583e",
+      "border": "#514430",
+      "accent": "#3a6698",
+      "accent-fg": "#ffffff",
       "ok": "#1b6b34",
       "warn": "#7a4a00",
       "danger": "#b3261e",
-      "shadow": "3px 4px 0 rgba(34,34,34,.18)",
+      "shadow": "2px 2px 0 rgba(34,30,22,.3)",
       "error": "#8b4a9a"
     },
     "dark": {
-      "bg": "#120f09",
-      "surface": "#1c1912",
-      "surface-2": "#26241d",
-      "fg": "#f0eee9",
-      "muted": "#aeaba1",
-      "border": "#8c8a84",
-      "accent": "#74d2fd",
+      "bg": "#29261f",
+      "surface": "#3b3529",
+      "surface-2": "#504531",
+      "fg": "#fff5db",
+      "muted": "#d5c5a2",
+      "border": "#dac8a3",
+      "accent": "#a5c8f5",
       "accent-fg": "#0d0d12",
       "ok": "#86d395",
       "warn": "#f6bf82",
       "danger": "#fc8d7e",
-      "shadow": "3px 4px 0 #f0eee9",
+      "shadow": "2px 2px 0 rgba(0,0,0,.4)",
       "error": "#e59ff6"
     }
   },
   "adjusted": {
     "light": [
-      "accent",
-      "error",
-      "accent"
+      "error"
     ],
     "dark": [
-      "accent",
       "error"
     ]
   },
   "audit": {
     "light": {
-      "fg": 15.6,
-      "muted": 8.7,
-      "accent": 3.1,
-      "accent-fg": 5.0,
-      "ok": 6.4,
-      "warn": 7.4,
-      "danger": 6.4,
-      "error": 5.8
+      "fg": 15.0,
+      "muted": 6.6,
+      "accent": 5.7,
+      "accent-fg": 5.9,
+      "ok": 6.2,
+      "warn": 7.1,
+      "danger": 6.2,
+      "error": 5.6
     },
     "dark": {
-      "fg": 15.1,
-      "muted": 7.6,
-      "accent": 10.3,
-      "accent-fg": 11.4,
-      "ok": 9.8,
-      "warn": 10.6,
-      "danger": 7.7,
-      "error": 8.9
+      "fg": 11.2,
+      "muted": 7.1,
+      "accent": 7.1,
+      "accent-fg": 11.2,
+      "ok": 6.8,
+      "warn": 7.3,
+      "danger": 5.4,
+      "error": 6.1
     }
   },
   "fonts": {
-    "body": "'Patrick Hand','Comic Sans MS',cursive",
-    "display": "'Caveat',cursive",
+    "body": "'Patrick Hand','Comic Sans MS','DejaVu Sans',cursive",
+    "display": "'Caveat','Comic Sans MS',cursive",
     "mono": "'Gochi Hand',cursive",
     "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&family=Gochi+Hand&display=swap"
   },
   "radius": {
-    "card": "255px 15px 225px 15px/15px 225px 15px 255px",
-    "control": "15px 225px 15px 255px/255px 15px 225px 15px"
+    "card": "12px",
+    "control": "8px"
   },
   "border": "strong",
   "hardShadow": true,

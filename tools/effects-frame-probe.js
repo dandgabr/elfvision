@@ -11,6 +11,7 @@
         for (const path of ['lib/ui/indicator.js', 'lib/ui/themeEffects.js', 'lib/ui/numericText.js', 'lib/ui/providerCard.js',
             'lib/core/theme.js', 'lib/core/theme.template.css', 'lib/core/themeEffects.js', 'lib/services/themeManager.js',
             'lib/ui/effects/leaves.js', 'lib/ui/effects/frost.js', 'lib/ui/effects/glass.js',
+            'lib/ui/effects/readingVeil.js', 'lib/ui/effects/optics.js', 'lib/ui/effects/textures.js',
             'themes/builtin/solarpunk/theme.json', 'themes/builtin/glassmorphism/theme.json',
             'tools/effects-frame-probe.js']) {
             const [ok, bytes] = GLib.file_get_contents(`${indicator._extension.path}/${path}`);

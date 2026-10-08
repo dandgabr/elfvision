@@ -1,0 +1,454 @@
+{
+  "sourceSha256": "c2106042cdf44736236489381d2d412aaf1eee8eb1ed4131135e0d9f87fe82ee",
+  "results": {
+    "passed": 12,
+    "failed": 0,
+    "method": "production repaint callback with real Cairo; actor plumbing faked; exact RGBA comparison to full-surface baseline",
+    "cases": [
+      {
+        "caseid": 0,
+        "height": 500,
+        "radius": 0,
+        "bounds": {},
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 90
+          },
+          {
+            "index": 1,
+            "offset": 370,
+            "height": 130
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 1,
+        "height": 500,
+        "radius": 14,
+        "bounds": {},
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 90
+          },
+          {
+            "index": 1,
+            "offset": 370,
+            "height": 130
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 2,
+        "height": 500,
+        "radius": 40,
+        "bounds": {},
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 90
+          },
+          {
+            "index": 1,
+            "offset": 370,
+            "height": 130
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 3,
+        "height": 500,
+        "radius": 0,
+        "bounds": {
+          "topEnd": 84,
+          "bottomStart": 300
+        },
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 138
+          },
+          {
+            "index": 1,
+            "offset": 246,
+            "height": 254
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 4,
+        "height": 500,
+        "radius": 14,
+        "bounds": {
+          "topEnd": 84,
+          "bottomStart": 300
+        },
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 138
+          },
+          {
+            "index": 1,
+            "offset": 246,
+            "height": 254
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 5,
+        "height": 500,
+        "radius": 40,
+        "bounds": {
+          "topEnd": 84,
+          "bottomStart": 300
+        },
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 138
+          },
+          {
+            "index": 1,
+            "offset": 246,
+            "height": 254
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 6,
+        "height": 240,
+        "radius": 0,
+        "bounds": {
+          "topEnd": 90,
+          "bottomStart": 160
+        },
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 240
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 7,
+        "height": 240,
+        "radius": 14,
+        "bounds": {
+          "topEnd": 90,
+          "bottomStart": 160
+        },
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 240
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 8,
+        "height": 240,
+        "radius": 40,
+        "bounds": {
+          "topEnd": 90,
+          "bottomStart": 160
+        },
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 240
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 9,
+        "height": 520,
+        "radius": 0,
+        "bounds": {
+          "topEnd": 73,
+          "bottomStart": 375
+        },
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 127
+          },
+          {
+            "index": 1,
+            "offset": 321,
+            "height": 199
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 10,
+        "height": 520,
+        "radius": 14,
+        "bounds": {
+          "topEnd": 73,
+          "bottomStart": 375
+        },
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 127
+          },
+          {
+            "index": 1,
+            "offset": 321,
+            "height": 199
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "caseid": 11,
+        "height": 520,
+        "radius": 40,
+        "bounds": {
+          "topEnd": 73,
+          "bottomStart": 375
+        },
+        "layers": [
+          {
+            "index": 0,
+            "offset": 0,
+            "height": 127
+          },
+          {
+            "index": 1,
+            "offset": 321,
+            "height": 199
+          }
+        ],
+        "rgbaDifferenceExtrema": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  }
+}

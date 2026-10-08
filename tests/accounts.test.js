@@ -72,7 +72,13 @@ test('restore defaults: real memory settings reset appearance tracking and setup
     settings.set_string('theme', 'glassmorphism'); settings.set_string('color-scheme', 'dark'); settings.set_int('bar-count', 5);
     settings.set_string('data-source', 'demo'); settings.set_strv('untracked-providers', ['codex']); settings.set_boolean('first-use-done', true);
     settings.set_strv('terms-acknowledged', ['codex']); settings.set_string('command-code-username', 'synthetic-user');
+    settings.set_int('popup-width', 640); settings.set_int('popup-max-height', 500);
+    settings.set_strv('popup-connector-order', ['codex']); settings.set_strv('popup-hidden-connectors', ['codex']);
+    settings.set_strv('demo-popup-connector-order', ['claude']); settings.set_strv('demo-popup-hidden-connectors', ['claude']);
     restoreDefaults(settings);
+    assertEqual([settings.get_int('popup-width'), settings.get_int('popup-max-height')], [0, 0]);
+    for (const key of ['popup-connector-order', 'popup-hidden-connectors', 'demo-popup-connector-order', 'demo-popup-hidden-connectors'])
+        assertEqual(settings.get_strv(key), []);
     assertEqual([settings.get_string('theme'), settings.get_string('color-scheme'), settings.get_int('bar-count')], ['sistema-gnome', 'system', 3]);
     assertEqual([settings.get_strv('untracked-providers'), settings.get_boolean('first-use-done')], [[], false]);
     assertEqual([settings.get_string('data-source'), settings.get_strv('terms-acknowledged'), settings.get_string('command-code-username')], ['demo', ['codex'], 'synthetic-user']);

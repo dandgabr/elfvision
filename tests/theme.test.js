@@ -3,7 +3,7 @@ import GLib from 'gi://GLib';
 import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
 import {effectPolicy, validateEffectProfile} from '../lib/core/themeEffects.js';
 import {builtinCatalog, themeDefaultIndicators} from '../lib/prefs/themeCatalog.js';
-import {ACCENTS, compileTheme, hexToRgb, pickScheme, swatches, systemAccent, validateTheme, resolvedColors} from '../lib/core/theme.js';
+import {ACCENTS, compileTheme, hexToRgb, pickScheme, swatches, systemAccent, validateTheme, resolvedColors, textureInk, readingVeilOpacity, readingVeilStops} from '../lib/core/theme.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
 const read = path => new TextDecoder().decode(GLib.file_get_contents(`${root}/${path}`)[1]);
@@ -439,45 +439,38 @@ test('themes: effect headings expose the material while reading cards and contro
 });
 
 
-test('themes: card scroll gutters reserve the validated shadow footprint without changing its identity', () => {
+test('themes: shadows paint inside constant compact gutters in every builtin scheme', () => {
     for (const id of builtinIds()) {
         const {theme} = loadTheme(id);
         for (const scheme of ['light', 'dark']) {
-            const shadow = theme.schemes[scheme].shadow;
             const css = compileTheme(TEMPLATE, theme, {scheme});
             const padding = css.match(/\.gaq-cards\s*\{[^}]*padding:\s*([^;]+);/s)?.[1]?.trim();
-            let expected = [0, 0, 0, 0];
+            assertEqual(padding, '6px', `${id}/${scheme} must preserve reading width`);
+            const shadow = css.match(/\.gaq-card\s*\{[^}]*box-shadow:\s*([^;]+);/s)?.[1]?.trim();
             if (shadow !== 'none' && !shadow.startsWith('inset ')) {
                 const values = shadow.match(/^((?:-?[\d.]+px|0)(?: (?:-?[\d.]+px|0)){1,3}) /)[1].split(' ').map(parseFloat);
                 const [x, y, blur = 0, spread = 0] = values;
-                const radius = Math.max(0, blur) + spread;
-                expected = [radius - y, radius + x, radius + y, radius - x]
-                    .map(value => Math.min(64, Math.max(0, Math.ceil(value))));
+                assertTrue(Math.max(Math.abs(x), Math.abs(y)) + Math.max(0, blur) + Math.max(0, spread) <= 6.01,
+                    `${id}/${scheme} shadow must fit the fixed paint gutter`);
             }
-            assertEqual(padding, expected.map(value => `${value}px`).join(' '), `${id}/${scheme} scroll clip must reserve its shadow footprint`);
-            assertTrue(css.includes(`box-shadow: ${shadow};`), `${id}/${scheme} shadow identity changed`);
         }
     }
-    const {theme} = loadTheme('glassmorphism');
-    assertTrue(compileTheme(TEMPLATE, theme, {scheme: 'dark'}).includes('padding: 24px 32px 40px 32px;'), 'dark glass needs the full 32px lateral blur extent');
-    for (const [shadow, padding] of [
-        ['none', '0px 0px 0px 0px'],
-        ['inset 0 0 999px #000', '0px 0px 0px 0px'],
-        ['INSET 0 0 10PX #000', '0px 0px 0px 0px'],
-        ['2PX -3PX 5PX 4PX #000', '12px 11px 6px 7px'],
-        ['-3px 4px 0 #000', '0px 0px 4px 3px'],
-        ['0 0 999px #000', '64px 64px 64px 64px'],
-        ['0 0 12px -6px #000', '6px 6px 6px 6px'],
-        ['2px -3px 5px 4px #000', '12px 11px 6px 7px'],
-        ['0.5px 0 1.25px #000', '2px 2px 2px 1px'],
-        ['0 0 12px #000; padding: 999px', '0px 0px 0px 0px'],
-    ]) {
-        const raw = JSON.parse(read('themes/builtin/glassmorphism/theme.json'));
-        raw.schemes.dark.shadow = shadow;
-        const {theme: custom} = validateTheme(raw);
-        assertTrue(compileTheme(TEMPLATE, custom, {scheme: 'dark'}).includes(`padding: ${padding};`), `${shadow} must reserve bounded safe geometry`);
-    }
+    const raw = JSON.parse(read('themes/builtin/glassmorphism/theme.json'));
+    raw.schemes.dark.shadow = '999px -999px 999px 999px #000';
+    const css = compileTheme(TEMPLATE, validateTheme(raw).theme, {scheme: 'dark'});
+    assertTrue(css.includes('box-shadow: 2px -2px 2px 2px #000;'), 'hostile shadow must be proportionally bounded');
     assertTrue(!TEMPLATE.includes('clip-to-allocation: false'), 'gutters must not disable popup clipping');
+    assertTrue(!/\.gaq-popup\s*\{[^}]*width:/s.test(TEMPLATE), 'popup width belongs to native geometry');
+    assertTrue(/\.gaq-scroll StScrollBar\s*\{[^}]*margin-left: 8px;/s.test(TEMPLATE), 'scroll track needs independent paint clearance');
+});
+
+test('themes: safe intermediate font families and handwritten generic survive compilation', () => {
+    const raw = JSON.parse(read('themes/builtin/hand-drawn-sketch/theme.json'));
+    raw.fonts = {body: "'Patrick Hand', 'Comic Sans MS', cursive"};
+    const css = compileTheme(TEMPLATE, validateTheme(raw).theme, {scheme: 'light'});
+    assertTrue(css.includes('font-family: "Patrick Hand", "Comic Sans MS", cursive;'));
+    raw.fonts.body = "'Patrick Hand', 'Unsafe;url(x)', cursive";
+    assertEqual(validateTheme(raw).theme.fonts.body, null, 'an unsafe fallback rejects the entire font declaration');
 });
 
 
@@ -611,4 +604,97 @@ test('About: author attribution and explicit public/private report actions use f
     assertTrue(source.includes("_('Report a bug')") && source.includes("_('Report a vulnerability')"));
     assertTrue(source.includes("_('Restore configuration')"));
     assertTrue(source.includes('Gio.AppInfo.launch_default_for_uri(url, null)'));
+});
+
+
+test('themes: editorial textures use scheme-specific foreground ink instead of alert/accent colors', () => {
+    const colors = {fg: '#ffffff', accent: '#00ff00'};
+    assertEqual(textureInk('paper', colors, 'dark'), {color: '#ffffff', alpha: 0.20});
+    assertEqual(textureInk('paper', {...colors, fg: '#222222'}, 'light'), {color: '#222222', alpha: 0.12});
+    assertEqual(textureInk('strokes', colors, 'dark'), {color: '#ffffff', alpha: 0.28});
+    assertEqual(textureInk('grid', colors, 'dark'), {color: '#00ff00', alpha: 0.16});
+});
+
+test('themes: handwritten and editorial signatures retain visible structure with ambient effects off', () => {
+    const handwritten = TEMPLATE.match(/\.gaq-theme-hand-drawn-sketch \.gaq-card\s*\{([^}]+)\}/s)?.[1] ?? '';
+    assertTrue(handwritten.includes('border-left-width: 3px') && handwritten.includes('border-right-width: 1px'));
+    assertTrue(handwritten.includes('border-radius: 11px'), 'handwritten outline avoids the generic circular card');
+    const editorial = TEMPLATE.match(/\.gaq-theme-analog-newspaper-broadsheet \.gaq-card\s*\{([^}]+)\}/s)?.[1] ?? '';
+    assertTrue(editorial.includes('border-radius: 0') && editorial.includes('border-top-width: 3px'));
+});
+
+
+test('themes: continuous reading veil retains 4.5 contrast over extreme material backdrops', () => {
+    const lum = rgb => rgb.map(channel => {
+        const v = channel / 255;
+        return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+    }).reduce((sum, v, i) => sum + v * [0.2126, 0.7152, 0.0722][i], 0);
+    const blend = (front, back, alpha) => front.map((v, i) => v * alpha + back[i] * (1 - alpha));
+    for (const id of builtinIds()) {
+        const {theme} = loadTheme(id);
+        for (const scheme of ['light', 'dark']) {
+            const colors = resolvedColors(theme, scheme);
+            const opacity = theme.effects.opacity[scheme];
+            const veil = readingVeilOpacity(colors, opacity);
+            assertTrue(veil >= 0 && veil <= 1, `${id}/${scheme}: invalid veil`);
+            for (const back of [[0, 0, 0], [255, 255, 255]]) {
+                for (const decoration of [[0, 0, 0], [255, 255, 255]]) {
+                    const material = blend(hexToRgb(colors.bg), back, opacity);
+                    const painted = blend(decoration, material, 1);
+                    const protectedBg = blend(hexToRgb(colors.bg), painted, veil);
+                    for (const ink of [colors.fg, colors.muted]) {
+                        const a = lum(hexToRgb(ink)), b = lum(protectedBg);
+                        const ratio = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+                        assertTrue(ratio >= 4.5, `${id}/${scheme}: protected reading contrast ${ratio}`);
+                    }
+                }
+            }
+        }
+    }
+});
+
+
+test('themes: reading contrast protects intermediate luminances, not only black and white endpoints', () => {
+    const colors = {bg: '#ffffff', fg: '#757575', muted: '#757575'};
+    const veil = readingVeilOpacity(colors, 0.8, 1);
+    assertTrue(veil > 0, 'opposite safe endpoints can enclose an unsafe reading ink luminance');
+    const luminance = channel => {
+        const value = channel / 255;
+        return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    };
+    for (let background = 0; background <= 255; background++) {
+        const protectedChannel = 255 * veil + background * (1 - veil);
+        const foreground = luminance(117), surface = luminance(protectedChannel);
+        const ratio = (Math.max(foreground, surface) + 0.05) / (Math.min(foreground, surface) + 0.05);
+        assertTrue(ratio >= 4.5, `grey ${background} cannot erase reading ink: ${ratio}`);
+    }
+});
+
+
+test('themes: reading veil covers measured large-font regions while keeping a clear center', () => {
+    assertEqual(readingVeilStops(500), [[0, 1], [40, 1], [90, 0], [370, 0], [420, 1], [500, 1]]);
+    assertEqual(readingVeilStops(500, {topEnd: 84, bottomStart: 300}),
+        [[0, 1], [88, 1], [138, 0], [246, 0], [296, 1], [500, 1]]);
+    assertEqual(readingVeilStops(240, {topEnd: 90, bottomStart: 160}), [[0, 1], [240, 1]],
+        'overlapping reading regions require continuous protection');
+});
+
+
+test('themes: native font resolver emits one installed family while keeping data fallback chains', () => {
+    const raw = JSON.parse(read('themes/builtin/analog-newspaper-broadsheet/theme.json'));
+    const {theme} = validateTheme(raw);
+    const css = compileTheme(TEMPLATE, theme, {scheme: 'dark', fontResolver: () => 'Noto Serif'});
+    assertTrue(css.includes('font-family: "Noto Serif";'), 'native compiler must select an installed serif');
+    assertTrue(!css.includes('font-family: "Newsreader", serif;'));
+    const hostile = compileTheme(TEMPLATE, theme, {scheme: 'dark', fontResolver: () => 'Injected"; color:red;'});
+    assertTrue(!hostile.includes('Injected'), 'even a resolver result is checked before native CSS');
+});
+
+
+test('themes: handwritten display script never replaces the stable numeric face', () => {
+    const {theme} = loadTheme('hand-drawn-sketch');
+    const css = compileTheme(TEMPLATE, theme, {scheme: 'light',
+        fontResolver: font => font.name === 'Patrick Hand' ? 'DejaVu Sans' : 'Z003'});
+    const hero = css.match(/\.gaq-theme-hand-drawn-sketch \.gaq-hero\s*\{([^}]+)\}/s)?.[1] ?? '';
+    assertTrue(hero.includes('font-family: "DejaVu Sans";'), 'numeric ink must retain its legible body font');
 });

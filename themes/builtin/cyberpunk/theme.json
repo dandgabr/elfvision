@@ -5,39 +5,38 @@
   "difficulty": "hard",
   "schemes": {
     "dark": {
-      "bg": "#07060f",
-      "surface": "#12101f",
-      "surface-2": "#1a1033",
-      "fg": "#e9e6ff",
-      "muted": "#b4aedb",
-      "border": "#3b2a6b",
-      "accent": "#10a0d2",
+      "bg": "#090f16",
+      "surface": "#101e2b",
+      "surface-2": "#1a2e40",
+      "fg": "#e9faff",
+      "muted": "#a3bfce",
+      "border": "#497b91",
+      "accent": "#62e4ff",
       "accent-fg": "#07060f",
       "ok": "#3dffb0",
       "warn": "#f5e642",
       "danger": "#ff6b8b",
-      "shadow": "0 0 18px rgba(255,42,138,.25)",
+      "shadow": "2px 2px 0 rgba(48,179,208,.3)",
       "error": "#fea668"
     },
     "light": {
-      "bg": "#e8eef6",
-      "surface": "#f9fbff",
-      "surface-2": "#dae5f2",
-      "fg": "#142033",
-      "muted": "#415570",
-      "border": "#63738f",
-      "accent": "#006f91",
+      "bg": "#d8e3ed",
+      "surface": "#edf5fa",
+      "surface-2": "#cbdde8",
+      "fg": "#122a38",
+      "muted": "#3b586b",
+      "border": "#3e687c",
+      "accent": "#005975",
       "accent-fg": "#ffffff",
-      "ok": "#14623f",
-      "warn": "#7b5400",
-      "danger": "#a02e55",
+      "ok": "#167c53",
+      "warn": "#746b00",
+      "danger": "#b42f53",
       "shadow": "3px 3px 0 rgba(20,32,51,.18)",
-      "error": "#8b4a9a"
+      "error": "#9c5312"
     }
   },
   "adjusted": {
     "dark": [
-      "accent",
       "error"
     ],
     "light": [
@@ -46,24 +45,24 @@
   },
   "audit": {
     "dark": {
-      "fg": 15.4,
-      "muted": 8.9,
-      "accent": 6.2,
-      "accent-fg": 6.7,
-      "ok": 14.4,
-      "warn": 14.5,
-      "danger": 6.9,
-      "error": 9.7
+      "fg": 15.8,
+      "muted": 8.8,
+      "accent": 11.3,
+      "accent-fg": 13.5,
+      "ok": 13.0,
+      "warn": 13.1,
+      "danger": 6.2,
+      "error": 8.7
     },
     "light": {
-      "fg": 15.8,
-      "muted": 7.3,
-      "accent": 5.5,
-      "accent-fg": 5.7,
-      "ok": 7.1,
-      "warn": 6.5,
-      "danger": 6.7,
-      "error": 5.7
+      "fg": 13.5,
+      "muted": 6.8,
+      "accent": 7.1,
+      "accent-fg": 7.8,
+      "ok": 4.7,
+      "warn": 5.0,
+      "danger": 5.5,
+      "error": 5.2
     }
   },
   "fonts": {
@@ -73,10 +72,10 @@
     "googleFontsUrl": "https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@600;800&family=Share+Tech+Mono&display=swap"
   },
   "radius": {
-    "card": "0",
-    "control": "0"
+    "card": "2px",
+    "control": "2px"
   },
-  "border": "hairline",
+  "border": "strong",
   "hardShadow": false,
   "effects": {
     "material": "opaque",

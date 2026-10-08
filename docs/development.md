@@ -397,7 +397,7 @@ install` compiles the schema; unpacking the zip by hand does not.
 
 The archive follows the [standard GNOME extension layout](https://gjs.guide/extensions/overview/anatomy.html#extension-zip):
 `metadata.json` and `extension.js` sit at the ZIP root, alongside runtime folders.
-The current metadata declares `version-name: "0.1"` and Shell `50`. Keep the
+The current metadata declares `version-name: "0.2.0"` and Shell `50`. Keep the
 website-managed numeric `version` field unset for local distribution, as
 [GNOME documents](https://gjs.guide/extensions/overview/anatomy.html#version).
 A local package build does not publish a GitHub release.
@@ -447,13 +447,20 @@ instead; the picker rescans that folder whenever it opens.
 
 21 of the 22 built-in themes come from a gallery of visual styles
 (`dandgabr/estilos-visuais`). `tools/gen-themes.py` reads the gallery's design
-tokens, derives the missing light or dark scheme in OKLCH, corrects contrast to
+tokens, applies the reviewed per-style `AUTHORED_VARIANTS` and `AUTHORED_GEOMETRY`
+definitions for both schemes, and corrects contrast to
 WCAG targets (text 7:1, secondary text and status colors 4.5:1, accent 3:1) and
 writes one `theme.json` per style. Reviewed effect presets come from
 `tools/theme-effect-profiles.json`, independently of the gallery's executable effect
 files. The generator validates that canonical source and copies each selected profile
 after compiling the tokens. It rejects an invalid profile before writing output, and
 exits with status 1 if a scheme still fails contrast.
+
+Generic OKLCH derivation remains a fallback for a new unreviewed style, not the
+sole definition of the shipped theme pairs. The individual sources, typography,
+light/dark interpretations and acceptance criteria are in the
+[theme research](temp/theme-evolution-research.md). Run
+`python3 -I tools/test-theme-generation.py` for generator regressions.
 
 ```sh
 python3 -I tools/gen-themes.py --styles <path to an estilos-visuais clone> \
@@ -467,6 +474,34 @@ source or the generator, regenerate, then review the diff. `--effect-profiles <f
 selects an explicit canonical source for developer checks. The generator and its
 profile source are development tools; shipped theme files already contain their
 validated effect data.
+
+The native evolution matrix is reproducible with:
+
+```sh
+tools/popup-evolution-check.sh light
+tools/popup-evolution-check.sh dark
+# A shorter targeted run:
+tools/popup-evolution-check.sh dark holographic-foil-iridescent
+```
+
+It uses an isolated headless Shell, explicit synthetic connectors and a patterned
+backdrop. Captures and allocation/resource metadata go to `build/popup-evolution`.
+Each theme/scheme includes Off/Subtle/Full and material/transparency controls;
+inspect the actual images in addition to checking allocation assertions. No real
+settings or credentials are imported. Missing local font families are recorded
+through the actual Pango-resolved font as well as the requested stack.
+
+Ordinary package replacement and code rollback can be checked against private,
+persistent settings with:
+
+```sh
+python3 -I tools/upgrade-preservation-check.py previous.shell-extension.zip dist/gnome-ai-quota@dandgabr.github.io.shell-extension.zip
+```
+
+Both packages enable in fresh isolated Shell sessions. The check seeds synthetic
+connector identities and preferences, compares their saved values, and verifies
+that additive settings and owned data survive installation, reinstallation and
+rollback. It never reads the user's settings or credential store.
 
 Review changed character/background color pairs in both schemes, including
 focused, hovered, and checked states. The current Cyberpunk light palette and
