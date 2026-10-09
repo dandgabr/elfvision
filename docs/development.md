@@ -401,7 +401,7 @@ install` compiles the schema; unpacking the zip by hand does not.
 
 The archive follows the [standard GNOME extension layout](https://gjs.guide/extensions/overview/anatomy.html#extension-zip):
 `metadata.json` and `extension.js` sit at the ZIP root, alongside runtime folders.
-The current metadata declares `version-name: "0.2.2"` and Shell `50`. Keep the
+The current metadata declares `version-name: "0.2.3"` and Shell `50`. Keep the
 website-managed numeric `version` field unset for local distribution, as
 [GNOME documents](https://gjs.guide/extensions/overview/anatomy.html#version).
 A local package build does not publish a GitHub release.
