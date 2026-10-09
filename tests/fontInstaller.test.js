@@ -22,19 +22,34 @@ async function service() {
     try { return await import('../lib/services/fontInstaller.js'); }
     catch (_error) { assertTrue(false, 'bounded atomic font installer is implemented'); }
 }
-const licenses = {'poppins-OFL.txt': 'synthetic test license', 'inter-OFL.txt': 'synthetic test license', 'jetbrainsmono-OFL.txt': 'synthetic test license'};
-const options = directory => ({directory, manifest: fixtures(), transport: transport(), licenses, refresh: async () => true});
+const licenseNames = [...new Set(FONT_MANIFEST.map(entry => entry.licenseFile))];
+const licenses = Object.fromEntries(licenseNames.map(name => [name, 'synthetic test license']));
+const options = directory => ({directory, manifest: fixtures(), transport: transport(), licenses, refresh: async () => true, verify: async () => true});
 
 test('font service: verified streamed files publish as one private batch', async () => {
     const {FontInstaller} = await service(); const directory = `${tmpDir()}/fonts`;
     const installer = new FontInstaller(options(directory));
     const result = await installer.install(['poppins-regular', 'poppins-bold']);
     assertEqual(result.status, 'installed'); assertEqual(result.restartRequired, false);
+    assertTrue(result.batch.length < 128, 'the complete catalog has a bounded directory name');
     assertEqual(children(directory), [result.batch]);
     assertEqual(children(`${directory}/${result.batch}`).sort(), ['Poppins-Bold.ttf', 'Poppins-Regular.ttf', 'poppins-OFL.txt'].sort());
     assertEqual(file(`${directory}/${result.batch}/Poppins-Regular.ttf`).query_info('unix::mode', 0, null).get_attribute_uint32('unix::mode') & 0o777, 0o600);
     assertEqual(file(`${directory}/${result.batch}`).query_info('unix::mode', 0, null).get_attribute_uint32('unix::mode') & 0o777, 0o700);
     installer.destroy();
+});
+
+test('font service: Fontconfig inventory identifies visible families and their directory class', async () => {
+    const {FontInstaller} = await service();
+    const installer = new FontInstaller(options(`${tmpDir()}/fonts`));
+    try {
+        const inventory = await installer.fontInventory();
+        assertTrue(['available', 'unavailable'].includes(inventory.status));
+        assertTrue(Array.isArray(inventory.fonts));
+        if (inventory.status === 'available')
+            assertTrue(inventory.fonts.every(font => font.path.startsWith('/') && font.families.length > 0
+                && ['user', 'system', 'other'].includes(font.source)));
+    } finally { installer.destroy(); }
 });
 
 test('font service: identical existing files are recognized without redownload', async () => {
@@ -44,6 +59,19 @@ test('font service: identical existing files are recognized without redownload',
     const installer = new FontInstaller(input);
     await installer.install(['inter-variable']); await installer.install(['inter-variable']);
     assertEqual(calls, 1); installer.destroy();
+});
+
+test('font service: identical existing files retry cache refresh and verify availability', async () => {
+    const {FontInstaller} = await service(); const directory = `${tmpDir()}/fonts`;
+    const input = options(directory); let refreshes = 0, verifies = 0;
+    input.refresh = async () => ++refreshes > 1;
+    input.verify = async () => { verifies++; return true; };
+    const installer = new FontInstaller(input);
+    const first = await installer.install(['inter-variable']);
+    const second = await installer.install(['inter-variable']);
+    assertEqual([first.status, first.cacheStatus], ['installed', 'failed']);
+    assertEqual([second.status, second.cacheStatus, second.fontconfigStatus], ['installed', 'refreshed', 'available']);
+    assertEqual([refreshes, verifies], [2, 2]); installer.destroy();
 });
 
 test('font service: an existing conflicting user file is preserved', async () => {
@@ -60,7 +88,7 @@ test('font service: wrong digest and nonfont headers leave no installed or stage
     for (const kind of ['digest', 'header']) {
         const directory = `${tmpDir()}/fonts`; const input = options(directory);
         if (kind === 'digest') { const corrupt = bytes.slice(); corrupt[12] = 1; input.transport = transport(corrupt); }
-        else { const html = new TextEncoder().encode('<html>not a font'); input.manifest = [{...fixtures()[0], size: html.length, sha256: hash(html)}]; input.transport = transport(html); }
+        else { const html = new TextEncoder().encode('<html>not a font'); input.manifest = [{...fixtures()[0], id: 'poppins-regular', size: html.length, sha256: hash(html)}]; input.transport = transport(html); }
         const installer = new FontInstaller(input); let error;
         try { await installer.install(['poppins-regular']); } catch (caught) { error = caught; }
         assertEqual(error?.message, kind === 'digest' ? 'digest_mismatch' : 'invalid_font');
@@ -175,8 +203,8 @@ test('font service: an incomplete pre-existing batch reports conflict without re
 
 test('font service: shipped exact-revision licenses are verified and included locally', async () => {
     const {FontInstaller} = await service(); const directory = `${tmpDir()}/fonts`; const input = options(directory); input.licenses = null;
-    const installer = new FontInstaller(input); const result = await installer.install(['poppins-regular', 'inter-variable', 'jetbrains-mono-variable']);
-    for (const name of Object.keys(licenses)) {
+    const installer = new FontInstaller(input); const result = await installer.install(FONT_MANIFEST.map(entry => entry.id));
+    for (const name of licenseNames) {
         const text = new TextDecoder().decode(GLib.file_get_contents(`${directory}/${result.batch}/${name}`)[1]);
         assertTrue(text.includes('SIL OPEN FONT LICENSE Version 1.1'));
     }

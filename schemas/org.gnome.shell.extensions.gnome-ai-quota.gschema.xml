@@ -118,6 +118,23 @@
       <summary>Credentials revision</summary>
       <description>The preferences window raises this number whenever a credential is stored or removed, so the running extension asks the providers again. It holds no secret.</description>
     </key>
+    <key name="font-refresh-request" type="i">
+      <range min="0" max="2147483647"/>
+      <default>0</default>
+      <summary>Request font refresh</summary>
+      <description>The preferences process increments this number after verifying installed fonts, asking the running extension to reload its Pango font map and active theme.</description>
+    </key>
+    <key name="font-refresh-ack" type="i">
+      <range min="0" max="2147483647"/>
+      <default>0</default>
+      <summary>Font refresh acknowledgement</summary>
+      <description>The running extension copies the latest request number here after checking its Pango font map and recompiling the active theme.</description>
+    </key>
+    <key name="font-refresh-status" type="s">
+      <default>'unknown'</default>
+      <summary>Font refresh result</summary>
+      <description>The running extension reports whether every reviewed theme font is available in its Pango font map.</description>
+    </key>
     <key name="account-status" type="a{ss}">
       <default>{}</default>
       <summary>Account status</summary>

@@ -77,6 +77,7 @@
 }
 
 .gaq-number {
+    {{font-mono-decl}}
     font-size: 14px;
     font-weight: 700;
     min-width: 1.6em;
@@ -756,7 +757,7 @@
 .gaq-theme-terminal-tui .gaq-pill,
 .gaq-theme-nanopunk .gaq-section,
 .gaq-theme-nanopunk .gaq-hero {
-    font-family: Monospace;
+    {{font-mono-decl}}
 }
 .gaq-theme-terminal-tui .gaq-section {
     font-size: 12px;

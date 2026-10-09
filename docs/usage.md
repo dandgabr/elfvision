@@ -69,7 +69,7 @@ it, starts a sign-in or accepts terms for you. Only an explicit Connect action d
 | General, Colors and theme | Light or dark | Follows the system, or forces light or dark for the popup. The top bar is always dark. |
 | General, Colors and theme | Theme | Opens the theme picker. Default: System (GNOME). |
 | General, Colors and theme | Your themes | Opens the folder for your own themes. |
-| General, Suggested fonts | Install suggested fonts… | Reviews four licensed Poppins, Inter, and JetBrains Mono files before an optional download. Cancel is the default; theme selection never installs fonts. |
+| General, Suggested fonts | Install suggested fonts… | Reviews pinned, licensed fonts used by all built-in themes before an optional download. The expanded coverage list distinguishes user/system availability, fallbacks and missing families. Cancel is the default; theme selection never installs fonts. |
 | General, Colors and theme | Effects | Off stops motion and textures while preserving the selected material. Subtle allows short interactions and static decoration; Full permits compatible ambient motion. Default: Subtle. System animation settings take precedence. |
 | General, Colors and theme | Transparency | Allows transparent backgrounds. Off keeps reading surfaces and backgrounds opaque. Default: on. |
 | General, Colors and theme | Material | Follows the theme or selects Translucent, Decorative glass, or Frosted glass where supported by the built-in theme. Turn Transparency off for an opaque background. Default: follow the theme. |

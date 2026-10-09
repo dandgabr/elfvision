@@ -57,15 +57,22 @@ Custom theme authors still need to choose readable foreground and surface colors
 hex validation alone does not establish accessible contrast.
 
 Font names remain local fallback choices. General → Suggested fonts offers a
-separate explicit installation of four maintained Poppins/Inter/JetBrains Mono
-files with pinned source, hashes and licenses. Choosing a theme never downloads
-fonts, and theme JSON cannot add download addresses. Missing fonts continue to
-use installed fallbacks; existing user files are preserved.
+separate explicit installation of every reviewed family used by the built-in
+themes, with variable faces and the static weights those themes request. The
+36 font files cover 28 families; their source revision, hashes and OFL licenses
+are pinned in [the manifest](../lib/core/fontManifest.js). Choosing a theme
+never downloads fonts, and theme JSON cannot add download addresses. The
+preferences page reports each theme's body, display and monospace availability
+from the current user's Fontconfig inventory, including whether a match comes
+from the user or system directories. The installer reports cache and family
+discovery separately, then asks the running Shell to refresh Pango and recompile
+the active theme. Fonts private to another account do not count as available;
+system-owned fonts in visible system directories do.
 
 Validated theme font stacks retain intermediate fallback families, including
-cursive. The Shell selects an installed family through Pango and emits one safe
-family name, because native St does not reliably resolve browser-style stacks.
-The compiler rejects unsafe font syntax. Card shadows use a bounded six-pixel
+cursive and monospace. The Shell selects an installed family through Pango and
+emits one safe family name, because native St does not reliably resolve
+browser-style stacks. The compiler rejects unsafe font syntax. Card shadows use a bounded six-pixel
 paint budget with constant gutters; changing a theme, material or Effects mode
 does not reserve its original blur radius as a large lateral content inset.
 The scrollbar has a separate eight-pixel clearance beyond the shadow budget.

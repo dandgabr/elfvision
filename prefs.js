@@ -267,7 +267,7 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
         if (problems)
             look.add(problems);
         page.add(look);
-        const fonts = createSuggestedFontsGroup({window, gettext: _});
+        const fonts = createSuggestedFontsGroup({window, gettext: _, settings, themes: firstScan});
         page.add(fonts.group);
         window.connect('close-request', () => { fonts.destroy(); return false; });
 

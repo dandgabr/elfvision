@@ -220,9 +220,11 @@ requires an explicit acknowledgement before an OAuth connection starts.
   and textures while preserving the selected material. Turn Transparency off for
   an opaque background. Subtle and Full control motion, with system animation
   settings taking precedence; ambient work stops when the popup closes.
-- **Optional fonts:** review an explicit download of four Poppins, Inter and
-  JetBrains Mono files. Sources and SHA-256 hashes are pinned, with OFL-1.1 licenses
-  included. Choosing a theme never downloads fonts; missing fonts use fallbacks.
+- **Optional fonts:** review an explicit download of the pinned fonts used by all
+  built-in themes, with OFL-1.1 licenses included. The preferences page shows
+  per-theme font availability in the current user and system directories and
+  confirms Fontconfig and Shell/Pango refresh separately. Choosing a theme never
+  downloads fonts; missing fonts use fallbacks.
 - **Demo mode:** try `steady`, `flaky`, and `drift` with fictional quotas. Accounts
   provides a separate demo connector list with simulated connect, disconnect,
   and remove actions. These actions use no browser, keyring, or provider request.
