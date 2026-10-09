@@ -317,11 +317,17 @@ app.connect('activate', () => {
             for (const action of ['cancel', 'close', 'dispose', 'install', 'busy-cancel']) {
                 const window = newWindow(); let installed = 0, cancelled = 0, destroyed = 0; const hold = deferred();
                 let requested = [];
-                const installer = {install: async ids => {
+                const installer = {install: async (ids, callbacks) => {
                     installed++; requested = [...ids];
-                    return action === 'busy-cancel' ? hold.promise : {restartRequired: true};
+                    if (action === 'busy-cancel') { callbacks.committed(); return hold.promise; }
+                    return {restartRequired: false, cacheStatus: 'refreshed', fontconfigStatus: 'available'};
                 }, cancel() { cancelled++; }, destroy() { destroyed++; }};
-                const view = createSuggestedFontsGroup({window, gettext: _, installer});
+                const fontSettings = settings();
+                fontSettings.connect('changed::font-refresh-request', () => {
+                    fontSettings.set_string('font-refresh-status', 'available');
+                    fontSettings.set_int('font-refresh-ack', fontSettings.get_int('font-refresh-request'));
+                });
+                const view = createSuggestedFontsGroup({window, gettext: _, settings: fontSettings, installer});
                 const page = new Adw.PreferencesPage(); page.add(view.group); window.add(page); window.present(); await wait();
                 const row = walk(view.group).find(w => w instanceof Adw.ActionRow);
                 try {
@@ -339,12 +345,12 @@ app.connect('activate', () => {
                     await wait();
                     check(installed === (['install', 'busy-cancel'].includes(action) ? 1 : 0), `${action}: only explicit live consent invokes one installation`);
                     if (action === 'install') {
-                        check(requested.length === 4 && new Set(requested).size === 4, 'one install receives exactly the maintained four file IDs');
-                        check(row.subtitle.includes('Fonts installed') && row.subtitle.includes('Reopen applications'), 'verified installation reports refresh/restart guidance');
+                        check(requested.length === 36 && new Set(requested).size === 36, 'one install receives every reviewed font file ID');
+                        check(row.subtitle.includes('Fontconfig and GNOME Shell both see') && row.subtitle.includes('active theme has been refreshed'), 'verified installation reports the Shell refresh result');
                     } else if (action === 'busy-cancel') {
                         const cancel = button(view.group, 'Cancel'); check(cancel.visible, 'busy installation exposes Cancel');
                         cancel.emit('clicked'); hold.resolve({restartRequired: true}); await wait();
-                        check(cancelled > 0 && row.subtitle.includes('Cancelled') && !row.subtitle.includes('Fonts installed'), 'cancelled pending installation cannot publish late installed success');
+                        check(cancelled > 0 && row.subtitle.includes('Fontconfig did not find'), 'cancelling after publication preserves installed state and reports the incomplete verification');
                     }
                 } finally { view.destroy(); window.close(); }
                 check(destroyed === 1, 'font installer is destroyed exactly once');

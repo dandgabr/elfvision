@@ -47,6 +47,16 @@ export default class ElfvisionGnomeExtension extends Extension {
             this.disable();
             throw error;
         }
+        const refreshFontMap = () => {
+            const revision = this._settings.get_int('font-refresh-request');
+            let status = 'failed';
+            try { status = this._themes.refreshFonts() ? 'available' : 'missing'; } catch (_error) { /* keep failure status */ }
+            this._settings.set_string('font-refresh-status', status);
+            this._settings.set_int('font-refresh-ack', revision);
+        };
+        this._fontRefreshChangedId = this._settings.connect('changed::font-refresh-request', refreshFontMap);
+        if (this._settings.get_int('font-refresh-request') !== this._settings.get_int('font-refresh-ack'))
+            refreshFontMap();
         // Moving to another panel box needs a new button; a new demo scenario
         // needs new providers. Both rebuild the parts that depend on them.
         this._positionChangedId = this._settings.connect('changed::position', () => {
@@ -105,7 +115,7 @@ export default class ElfvisionGnomeExtension extends Extension {
         this._syncGeneration = (this._syncGeneration ?? 0) + 1;
         if (this._positionChangedId)
             this._settings?.disconnect(this._positionChangedId);
-        for (const id of [...(this._connectorChangedIds ?? []), this._scenarioChangedId, this._sourceChangedId, this._credentialsChangedId, this._untrackedChangedId, this._testChangedId]) {
+        for (const id of [...(this._connectorChangedIds ?? []), this._scenarioChangedId, this._sourceChangedId, this._credentialsChangedId, this._untrackedChangedId, this._testChangedId, this._fontRefreshChangedId]) {
             if (id)
                 this._settings?.disconnect(id);
         }
@@ -114,6 +124,7 @@ export default class ElfvisionGnomeExtension extends Extension {
         this._credentialsChangedId = 0;
         this._untrackedChangedId = 0;
         this._testChangedId = 0;
+        this._fontRefreshChangedId = 0;
         this._positionChangedId = 0;
         this._scenarioChangedId = 0;
         this._destroyIndicator();

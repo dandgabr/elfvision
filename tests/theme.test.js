@@ -113,6 +113,26 @@ test('themes: fonts, sizes and shadows are sanitized', () => {
     assertTrue(css.includes('font-family: "Space Grotesk", sans-serif;') && !css.includes('Evil'));
 });
 
+test('themes: mono families are validated and applied to terminal and technical accents', () => {
+    const raw = JSON.parse(read('themes/builtin/terminal-tui/theme.json'));
+    const theme = validateTheme(raw).theme;
+    assertEqual(theme.fonts.mono, null, 'theme variable references fall back to its body family');
+    assertEqual(theme.fonts.body.name, 'JetBrains Mono');
+    const resolved = font => font.name;
+    const css = compileTheme(TEMPLATE, theme, {scheme: 'dark', fontResolver: resolved});
+    assertTrue(css.includes('.gaq-theme-terminal-tui .gaq-section,') && css.includes('font-family: "JetBrains Mono";'));
+    const nanopunk = loadTheme('nanopunk').theme;
+    assertEqual(nanopunk.fonts.mono.name, 'JetBrains Mono');
+    const nanoCss = compileTheme(TEMPLATE, nanopunk, {scheme: 'dark', fontResolver: resolved});
+    assertTrue(nanoCss.includes('font-family: "JetBrains Mono";'));
+    const linear = loadTheme('linear-saas').theme;
+    assertEqual(linear.fonts.mono.name, 'JetBrains Mono', 'a generic leading token must not hide a named mono fallback');
+    assertTrue(compileTheme(TEMPLATE, linear, {scheme: 'dark', fontResolver: resolved}).includes('.gaq-number {\n    font-family: "JetBrains Mono";'));
+    const cyberpunk = loadTheme('cyberpunk').theme;
+    assertTrue(compileTheme(TEMPLATE, cyberpunk, {scheme: 'dark', fontResolver: resolved})
+        .includes('.gaq-number {\n    font-family: "Share Tech Mono";'));
+});
+
 test('themes: a hard offset shadow and a strong border survive (neo-brutalism)', () => {
     const {theme} = loadTheme('web-brutalism');
     assertTrue(theme.border === 'strong' || theme.border === 'hairline');
