@@ -153,7 +153,7 @@ test('themes: scheme choice honors the preference, then the system', () => {
 // ---- theme files (hostile input from the filesystem)
 
 import Gio from 'gi://Gio';
-import {loadTheme as loadThemeFile, scanThemes} from '../lib/services/themeFiles.js';
+import {loadTheme as loadThemeFile, scanThemes, ThemeTemplateSnapshot} from '../lib/services/themeFiles.js';
 
 function sandbox() {
     const path = tmpDir();
@@ -165,6 +165,29 @@ const writeTheme = (sandboxPath, id, text) => {
     GLib.file_set_contents(`${sandboxPath}/themes/builtin/${id}/theme.json`, text);
 };
 const goodJson = id => read('themes/builtin/linear-saas/theme.json').replace('"linear-saas"', `"${id}"`);
+
+test('theme files: a Shell session keeps its first template across an on-disk update', () => {
+    const dir = sandbox();
+    GLib.mkdir_with_parents(`${dir}/lib/core`, 0o755);
+    const templatePath = `${dir}/lib/core/theme.template.css`;
+    GLib.file_set_contents(templatePath, 'old-template');
+    const session = new ThemeTemplateSnapshot();
+    assertEqual(session.read(dir), 'old-template');
+
+    GLib.file_set_contents(templatePath, 'new-template');
+    assertEqual(session.read(dir), 'old-template');
+    assertEqual(new ThemeTemplateSnapshot().read(dir), 'new-template');
+});
+
+test('theme files: the extension retains its snapshot and the manager reads it', () => {
+    const extension = read('extension.js');
+    assertTrue(extension.includes('this._themeTemplateSnapshot ??= new ThemeTemplateSnapshot()'));
+    assertTrue(extension.includes('templateSnapshot: this._themeTemplateSnapshot'));
+
+    const manager = read('lib/services/themeManager.js');
+    assertTrue(manager.includes('this._templateSnapshot = templateSnapshot;'));
+    assertTrue(manager.includes('this._template = this._templateSnapshot.read(this._path);'));
+});
 
 test('theme files: a good theme loads, a mismatched id and bad ids do not', () => {
     const dir = sandbox();

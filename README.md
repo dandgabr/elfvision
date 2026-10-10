@@ -93,7 +93,9 @@ gnome-extensions prefs gnome-ai-quota@dandgabr.github.io
 ```
 
 A new login also loads an updated build. On Wayland, the running shell does not
-reload newly installed extension code.
+reload newly installed extension code. If you disable and re-enable the extension
+before logging in again, it keeps using the files paired with the code already
+loaded in the current Shell session; the update takes effect at the next login.
 
 ### Update without losing accounts
 
