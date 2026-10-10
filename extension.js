@@ -15,6 +15,7 @@ import {QuotaController} from './lib/services/controller.js';
 import {getDisconnectGate} from './lib/services/disconnectGate.js';
 import {PowerWatcher} from './lib/services/power.js';
 import {ThemeManager} from './lib/services/themeManager.js';
+import {ThemeTemplateSnapshot} from './lib/services/themeFiles.js';
 import GaqIndicator from './lib/ui/indicator.js';
 import {AlertNotifier} from './lib/ui/notifier.js';
 
@@ -37,7 +38,10 @@ export default class ElfvisionGnomeExtension extends Extension {
         });
         this._disconnectUnsubscribe = this._disconnectGate.subscribe(state => this._onDisconnectState(state));
         // The stylesheet must exist before the first widget is measured.
-        this._themes = new ThemeManager({extensionPath: this.path, settings: this._settings});
+        // Keep the packaged CSS template paired with modules already imported by this Shell.
+        this._themeTemplateSnapshot ??= new ThemeTemplateSnapshot();
+        this._themes = new ThemeManager({extensionPath: this.path, settings: this._settings,
+            templateSnapshot: this._themeTemplateSnapshot});
         try {
             this._themes.enable();
             this._createController();
