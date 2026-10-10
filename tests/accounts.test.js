@@ -127,6 +127,20 @@ test('api controller: two connectors address separate credentials and publish se
     } finally { first.dispose(); second.dispose(); }
 });
 
+test('api controller: harness mode never reads or writes the extension keyring', async () => {
+    let lookups = 0, writes = 0;
+    const controller = createApiKeyController({meta: providerMeta('command-code'), connectorId: 'command-code--borrowed',
+        settings: fakeSettings(), gettext: _, getCredentialMode: () => 'harness', deps: {gate: null,
+            lookupSecret: async () => { lookups++; throw new Error('extension keyring must not be used'); },
+            storeSecret: async () => { writes++; }, clearSecret: async () => { writes++; },}});
+    try {
+        await controller.refresh();
+        assertEqual([controller.snapshot().hasKey, controller.snapshot().keyringDown], [false, false]);
+        assertEqual(await controller.save('cc_' + 'a'.repeat(32)), 'keyring');
+        assertEqual([lookups, writes], [0, 0]);
+    } finally { controller.dispose(); }
+});
+
 test('api controller: unsuccessful credential removal cannot permit connector metadata deletion', async () => {
     const controller = createApiKeyController({meta: providerMeta('command-code'), connectorId: 'command-code--second',
         settings: fakeSettings(), gettext: _, deps: {gate: null, lookupSecret: async () => 'synthetic',
@@ -170,6 +184,20 @@ test('oauth controller: credential and status identity is connector while config
         assertEqual(announces, [id]);
         assertTrue(lookups.every(key => key === id));
         assertEqual(await controller.disconnect(), true);
+    } finally { controller.dispose(); }
+});
+
+test('oauth controller: harness mode does not inspect extension tokens or start its OAuth flow', async () => {
+    let lookups = 0, starts = 0;
+    const controller = createOAuthController({meta: providerMeta('codex'), connectorId: 'codex--borrowed',
+        settings: fakeSettings(), gettext: _, getCredentialMode: () => 'harness', confirmTerms: async () => true,
+        deps: {gate: null, lookupSecret: async () => { lookups++; throw new Error('extension keyring must not be used'); },
+            readLocalConfig: async () => ({providers: {codex: {clientId: 'synthetic'}}, problems: []}),
+            startLogin: () => { starts++; throw new Error('OAuth flow must not start'); }}});
+    try {
+        await controller.refresh();
+        assertEqual(await controller.connect(), false);
+        assertEqual([controller.snapshot().keyringDown, lookups, starts], [false, 0, 0]);
     } finally { controller.dispose(); }
 });
 

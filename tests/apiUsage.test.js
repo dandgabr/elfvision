@@ -1,5 +1,6 @@
 import {test, assertEqual, assertTrue} from './harness.js';
 import {createApiUsageProvider} from '../lib/providers/apiUsage.js';
+import {createOAuthUsageProvider} from '../lib/providers/oauthUsage.js';
 import {parseCostPage, parseCursorPage, parseOpenRouterKey} from '../lib/core/apiUsage.js';
 
 const NOW = Date.parse('2026-10-08T12:00:00Z');
@@ -177,4 +178,15 @@ test('API usage: keyring failures are resumable and never disclose lookup detail
     assertEqual([error.code, error.reason], ['network', 'keyring']);
     assertTrue(!error.message.includes(KEY));
     assertEqual(t.sent.length, 0);
+});
+
+test('OAuth usage: harness-owned credentials are not invalidated or retried after 401', async () => {
+    let requests = 0, reads = 0, invalidations = 0;
+    const provider = createOAuthUsageProvider({id: 'codex', name: 'Codex', url: 'https://chatgpt.com/usage',
+        parse: () => ({metrics: []}), renewOnUnauthorized: () => false,
+        http: {request: async () => { requests++; return {status: 401, json: {}}; }},
+        tokens: {accessToken: async () => { reads++; return 'synthetic-token'; }, invalidate: () => { invalidations++; }}});
+    let failure;
+    try { await provider.fetch({isCancelled: () => false}); } catch (error) { failure = error; }
+    assertEqual([failure?.code, failure?.reason, requests, reads, invalidations], ['auth_required', 'expired', 1, 1, 0]);
 });

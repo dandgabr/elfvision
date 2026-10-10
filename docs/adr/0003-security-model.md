@@ -68,3 +68,15 @@ be re-checked against the providers' current terms before each provider ships:
 - Anyone forking the project makes their own decision about these terms.
 - The keyring is readable by any process in the user's session. This limit is
   accepted.
+
+## Amendment: consented harness credential reads (2026-10-10)
+
+The default still uses extension-owned credentials. A separate per-connector
+choice permits read-only use of an exact local-tool source listed in ADR 0002.
+Before switching, Preferences names the source and destination provider host and
+explains that the credential is borrowed transiently and the owning tool must
+renew it. There is no directory scan, environment scan or keyring enumeration.
+The extension never writes, rotates, revokes or deletes an external credential.
+Missing, locked, ambiguous or rejected sources do not fall back to a different
+credential mode. API requests continue to use the provider's existing HTTPS host
+allowlist and redaction rules.
