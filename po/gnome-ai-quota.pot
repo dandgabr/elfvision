@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Elfvision\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/elfvision/issues\n"
-"POT-Creation-Date: 2026-10-09 13:33-0300\n"
+"POT-Creation-Date: 2026-10-10 03:11-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -249,7 +249,7 @@ msgid "Setup needed"
 msgstr ""
 
 #: lib/core/viewmodel.js:206 lib/core/viewmodel.js:556
-#: lib/prefs/firstUse.js:215
+#: lib/prefs/firstUse.js:204
 msgid "Not connected"
 msgstr ""
 
@@ -392,7 +392,7 @@ msgstr ""
 msgid "Replace key"
 msgstr ""
 
-#: lib/core/viewmodel.js:375 lib/prefs/oauthGroup.js:85 lib/ui/notifier.js:69
+#: lib/core/viewmodel.js:375 lib/prefs/oauthGroup.js:98 lib/ui/notifier.js:69
 msgid "Reconnect"
 msgstr ""
 
@@ -619,11 +619,12 @@ msgid ""
 "source stays the same."
 msgstr ""
 
-#: lib/prefs/about.js:94 lib/prefs/accounts.js:61 lib/prefs/accounts.js:224
-#: lib/prefs/accounts.js:260 lib/prefs/accounts.js:377
-#: lib/prefs/disconnectDialog.js:38 lib/prefs/oauthGroup.js:58
-#: lib/prefs/oauthGroup.js:150 lib/prefs/suggestedFonts.js:55
-#: lib/prefs/suggestedFonts.js:114 lib/prefs/termsDialog.js:33
+#: lib/prefs/about.js:94 lib/prefs/accounts.js:63 lib/prefs/accounts.js:229
+#: lib/prefs/accounts.js:269 lib/prefs/accounts.js:395
+#: lib/prefs/credentialModeControl.js:75 lib/prefs/disconnectDialog.js:38
+#: lib/prefs/oauthGroup.js:63 lib/prefs/oauthGroup.js:193
+#: lib/prefs/suggestedFonts.js:55 lib/prefs/suggestedFonts.js:114
+#: lib/prefs/termsDialog.js:48
 msgid "Cancel"
 msgstr ""
 
@@ -635,429 +636,560 @@ msgstr ""
 msgid "Defaults restored"
 msgstr ""
 
-#: lib/prefs/accountText.js:14 lib/prefs/apiKeyController.js:141
-#: lib/prefs/oauthController.js:384 lib/prefs/oauthGroup.js:91
+#: lib/prefs/accountText.js:9
+msgid "local tool"
+msgstr ""
+
+#: lib/prefs/accountText.js:10 lib/prefs/accountText.js:29
+#: lib/prefs/apiKeyController.js:149 lib/prefs/oauthController.js:393
+#: lib/prefs/oauthGroup.js:104
 msgid "Account changes are blocked while local disconnection is incomplete."
 msgstr ""
 
+#: lib/prefs/accountText.js:11
+#, javascript-format
+msgid "Using credentials from %s in read-only mode."
+msgstr ""
+
+#: lib/prefs/accountText.js:12
+#, javascript-format
+msgid "No usable credential was found. Sign in to %s, then check again."
+msgstr ""
+
+#: lib/prefs/accountText.js:14
+#, javascript-format
+msgid ""
+"The credential was rejected or expired. Open %s so it can renew, then check "
+"again."
+msgstr ""
+
+#: lib/prefs/accountText.js:15
+#, javascript-format
+msgid "The credential source for %s is unavailable or locked."
+msgstr ""
+
+#: lib/prefs/accountText.js:16
+msgid "The provider reply changed. The external credential was not modified."
+msgstr ""
+
 #: lib/prefs/accountText.js:17
+msgid "Could not check quota. The credential was not modified."
+msgstr ""
+
+#: lib/prefs/accountText.js:18
+#, javascript-format
+msgid ""
+"Using credentials from %s in read-only mode. The tool must renew its own "
+"token."
+msgstr ""
+
+#: lib/prefs/accountText.js:32
 #, javascript-format
 msgid "Finish signing in using your browser. %d:%02d left."
 msgstr ""
 
-#: lib/prefs/accountText.js:20 lib/prefs/apiKeyController.js:145
+#: lib/prefs/accountText.js:35 lib/prefs/apiKeyController.js:153
 msgid ""
 "No keyring found. Unlock it in Passwords and Keys, or install a Secret "
 "Service provider."
 msgstr ""
 
-#: lib/prefs/accountText.js:25
+#: lib/prefs/accountText.js:40
 msgid "Not connected."
 msgstr ""
 
-#: lib/prefs/accountText.js:27
+#: lib/prefs/accountText.js:42
 #, javascript-format
 msgid "The local configuration cannot be used: %s"
 msgstr ""
 
-#: lib/prefs/accountText.js:28
+#: lib/prefs/accountText.js:43
 #, javascript-format
 msgid ""
-"%s is not set up yet. Press \"Copy command\", run it in a terminal, then "
-"come back."
+"%s is not set up yet. Choose \"Find configuration automatically\" or copy "
+"the helper command."
 msgstr ""
 
-#: lib/prefs/accountText.js:31
+#: lib/prefs/accountText.js:46
 msgid "Connected."
 msgstr ""
 
-#: lib/prefs/accountText.js:32
+#: lib/prefs/accountText.js:47
 msgid "The sign-in expired. Reconnect to keep seeing this quota."
 msgstr ""
 
-#: lib/prefs/accountText.js:33
+#: lib/prefs/accountText.js:48
 msgid "The provider refused access. Check your account on its site."
 msgstr ""
 
-#: lib/prefs/accountText.js:34
+#: lib/prefs/accountText.js:49
 msgid "Connected. The keyring is locked, so it was not checked."
 msgstr ""
 
-#: lib/prefs/accountText.js:35
+#: lib/prefs/accountText.js:50
 msgid "Connected. Could not reach the server."
 msgstr ""
 
-#: lib/prefs/accountText.js:36
+#: lib/prefs/accountText.js:51
 msgid "Connected. The service replied in an unexpected way."
 msgstr ""
 
-#: lib/prefs/accountText.js:37
+#: lib/prefs/accountText.js:52
 msgid "Connected, but the client id is missing from the local configuration."
 msgstr ""
 
-#: lib/prefs/accountText.js:38
+#: lib/prefs/accountText.js:53
 msgid "Connected. Not checked yet."
 msgstr ""
 
-#: lib/prefs/accounts.js:35
+#: lib/prefs/accounts.js:37
 msgid "Accounts"
 msgstr ""
 
-#: lib/prefs/accounts.js:42
+#: lib/prefs/accounts.js:44
 msgid ""
 "Create separate connectors for each account, including more than one account "
 "with the same provider."
 msgstr ""
 
-#: lib/prefs/accounts.js:43 lib/prefs/accounts.js:212 lib/prefs/accounts.js:224
+#: lib/prefs/accounts.js:45 lib/prefs/accounts.js:217 lib/prefs/accounts.js:229
 #: lib/ui/indicator.js:206
 msgid "Add connector"
 msgstr ""
 
-#: lib/prefs/accounts.js:43
+#: lib/prefs/accounts.js:45
 msgid "Choose an AI service to track."
 msgstr ""
 
-#: lib/prefs/accounts.js:44
+#: lib/prefs/accounts.js:46
 msgid "Add connector…"
 msgstr ""
 
-#: lib/prefs/accounts.js:47
+#: lib/prefs/accounts.js:49
 msgid "Demo connectors"
 msgstr ""
 
-#: lib/prefs/accounts.js:47
+#: lib/prefs/accounts.js:49
 msgid ""
 "Fictional accounts. Connect and remove are simulated; no browser, keyring or "
 "provider request is used."
 msgstr ""
 
-#: lib/prefs/accounts.js:49 lib/ui/indicator.js:553
+#: lib/prefs/accounts.js:51 lib/ui/indicator.js:553
 msgid "Connector configuration is unavailable"
 msgstr ""
 
-#: lib/prefs/accounts.js:49
+#: lib/prefs/accounts.js:51
 msgid ""
 "The local connector list is invalid. Saved credentials have not been changed."
 msgstr ""
 
-#: lib/prefs/accounts.js:50
+#: lib/prefs/accounts.js:52
 msgid ""
 "Rebuild the list from saved credential identities. Credentials are kept; "
 "connector names may need to be entered again."
 msgstr ""
 
-#: lib/prefs/accounts.js:50
+#: lib/prefs/accounts.js:52
 msgid "Recover connector list"
 msgstr ""
 
-#: lib/prefs/accounts.js:51
+#: lib/prefs/accounts.js:53
 msgid "Recover list…"
 msgstr ""
 
-#: lib/prefs/accounts.js:58
+#: lib/prefs/accounts.js:60
 msgid "Recover the connector list?"
 msgstr ""
 
-#: lib/prefs/accounts.js:59
+#: lib/prefs/accounts.js:61
 msgid ""
 "Rebuild the fictional connector list. No real credential is read or changed. "
 "Connector names may need to be entered again."
 msgstr ""
 
-#: lib/prefs/accounts.js:60
+#: lib/prefs/accounts.js:62
 msgid ""
 "Read saved credential identities to rebuild the connector list. Secret "
 "values are not read or deleted. Connector names and usernames may need to be "
 "entered again."
 msgstr ""
 
-#: lib/prefs/accounts.js:61
+#: lib/prefs/accounts.js:63
 msgid "Recover list"
 msgstr ""
 
-#: lib/prefs/accounts.js:70
+#: lib/prefs/accounts.js:72
 msgid ""
 "The connector list could not be recovered. Saved credentials were kept. "
 "Unlock the keyring and retry."
 msgstr ""
 
-#: lib/prefs/accounts.js:79
+#: lib/prefs/accounts.js:81
 msgid "Add a connector to start tracking an account."
 msgstr ""
 
-#: lib/prefs/accounts.js:79 lib/prefs/popup.js:136
+#: lib/prefs/accounts.js:81 lib/prefs/popup.js:136
 msgid "No connectors"
 msgstr ""
 
-#: lib/prefs/accounts.js:100
+#: lib/prefs/accounts.js:103
 msgid "Paused"
 msgstr ""
 
-#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:303
+#: lib/prefs/accounts.js:104 lib/prefs/accounts.js:312
 msgid "Demo connected"
 msgstr ""
 
-#: lib/prefs/accounts.js:101 lib/prefs/accounts.js:303
+#: lib/prefs/accounts.js:104 lib/prefs/accounts.js:312
 msgid "Demo not connected"
 msgstr ""
 
-#: lib/prefs/accounts.js:102 lib/prefs/firstUse.js:99
+#: lib/prefs/accounts.js:105 lib/prefs/firstUse.js:104
 msgid "Quota unavailable. Open the provider dashboard for usage."
 msgstr ""
 
-#: lib/prefs/accounts.js:130
+#: lib/prefs/accounts.js:135
 msgid "Fictional"
 msgstr ""
 
-#: lib/prefs/accounts.js:131 lib/prefs/accounts.js:132
+#: lib/prefs/accounts.js:136 lib/prefs/accounts.js:137
 #, javascript-format
 msgid "Configure %s"
 msgstr ""
 
-#: lib/prefs/accounts.js:212
+#: lib/prefs/accounts.js:217
 msgid ""
 "Choose a provider and a name that helps you distinguish this account. "
 "Creating a connector does not sign in."
 msgstr ""
 
-#: lib/prefs/accounts.js:215
+#: lib/prefs/accounts.js:220
 msgid "Provider"
 msgstr ""
 
-#: lib/prefs/accounts.js:216 lib/prefs/accounts.js:242
+#: lib/prefs/accounts.js:221 lib/prefs/accounts.js:247
 msgid "Connector name"
 msgstr ""
 
-#: lib/prefs/accounts.js:231
+#: lib/prefs/accounts.js:236
 msgid ""
 "The connector could not be created. Check the name and the number of "
 "connectors."
 msgstr ""
 
-#: lib/prefs/accounts.js:245
+#: lib/prefs/accounts.js:250
 msgid "Enter a valid connector name."
 msgstr ""
 
-#: lib/prefs/accounts.js:254
+#: lib/prefs/accounts.js:259
 msgid ""
 "Delete this connector and its local credential. Other accounts are kept."
 msgstr ""
 
-#: lib/prefs/accounts.js:254
+#: lib/prefs/accounts.js:259
 msgid "Delete this fictional connector. Other fictional accounts are kept."
 msgstr ""
 
-#: lib/prefs/accounts.js:254 lib/prefs/accounts.js:260
+#: lib/prefs/accounts.js:259 lib/prefs/accounts.js:269
 msgid "Remove connector"
 msgstr ""
 
-#: lib/prefs/accounts.js:255
+#: lib/prefs/accounts.js:260
 msgid "Remove…"
 msgstr ""
 
-#: lib/prefs/accounts.js:258
+#: lib/prefs/accounts.js:264
 #, javascript-format
 msgid "Remove %s?"
 msgstr ""
 
-#: lib/prefs/accounts.js:259
-msgid ""
-"Its local credential and quota data are removed. Access may remain valid on "
-"the provider’s site. Other connectors are kept."
-msgstr ""
-
-#: lib/prefs/accounts.js:259
+#: lib/prefs/accounts.js:265
 msgid ""
 "This removes only this fictional connector. No real credential is changed."
 msgstr ""
 
-#: lib/prefs/accounts.js:274
+#: lib/prefs/accounts.js:267
+#, javascript-format
+msgid ""
+"The extension-owned credential and quota data are removed. Credentials in %s "
+"are not changed. Other connectors are kept."
+msgstr ""
+
+#: lib/prefs/accounts.js:267 lib/prefs/accounts.js:358
+msgid "the local tool"
+msgstr ""
+
+#: lib/prefs/accounts.js:268
+msgid ""
+"Its extension-owned credential and quota data are removed. Access may remain "
+"valid on the provider’s site. Other connectors are kept."
+msgstr ""
+
+#: lib/prefs/accounts.js:283
 msgid ""
 "The credential was removed, but the connector list could not be updated. "
 "Retry removing the connector."
 msgstr ""
 
-#: lib/prefs/accounts.js:274
+#: lib/prefs/accounts.js:283
 msgid ""
 "The fictional connector list could not be updated. Retry removing the "
 "connector."
 msgstr ""
 
-#: lib/prefs/accounts.js:276
+#: lib/prefs/accounts.js:285
 msgid ""
 "The credential could not be removed. The connector was kept. Unlock the "
 "keyring and retry."
 msgstr ""
 
-#: lib/prefs/accounts.js:276
+#: lib/prefs/accounts.js:285
 msgid ""
 "The fictional connector could not be removed. Retry removing the connector."
 msgstr ""
 
-#: lib/prefs/accounts.js:298
+#: lib/prefs/accounts.js:307
 msgid "Simulation only. No real account, browser or keyring is used."
 msgstr ""
 
-#: lib/prefs/accounts.js:299 lib/prefs/accounts.js:317
-#: lib/prefs/oauthGroup.js:56
+#: lib/prefs/accounts.js:308 lib/prefs/accounts.js:326
+#: lib/prefs/oauthGroup.js:61
 msgid "Status"
 msgstr ""
 
-#: lib/prefs/accounts.js:304
+#: lib/prefs/accounts.js:313
 msgid "Simulate connect"
 msgstr ""
 
-#: lib/prefs/accounts.js:304
+#: lib/prefs/accounts.js:313
 msgid "Simulate disconnect"
 msgstr ""
 
-#: lib/prefs/accounts.js:315
+#: lib/prefs/accounts.js:324 lib/prefs/accounts.js:359
 #, javascript-format
 msgid "The key is kept in the system keyring and sent only to %s."
 msgstr ""
 
-#: lib/prefs/accounts.js:317 lib/prefs/oauthGroup.js:56
+#: lib/prefs/accounts.js:326 lib/prefs/oauthGroup.js:61
 msgid "Checking the keyring…"
 msgstr ""
 
-#: lib/prefs/accounts.js:319
+#: lib/prefs/accounts.js:328
 msgid "Remove key"
 msgstr ""
 
-#: lib/prefs/accounts.js:320
+#: lib/prefs/accounts.js:329
 #, javascript-format
 msgid "Remove the %s key"
 msgstr ""
 
-#: lib/prefs/accounts.js:326 lib/prefs/accounts.js:485
+#: lib/prefs/accounts.js:335 lib/prefs/accounts.js:504
 msgid "API key"
 msgstr ""
 
-#: lib/prefs/accounts.js:335
+#: lib/prefs/accounts.js:346
 msgid ""
 "Use an organization Admin API key. A personal inference key cannot read "
 "organization costs."
 msgstr ""
 
-#: lib/prefs/accounts.js:336
+#: lib/prefs/accounts.js:347
 msgid ""
 "Use a Team Admin API key. A personal subscription sign-in cannot read team "
 "spending."
 msgstr ""
 
-#: lib/prefs/accounts.js:374
+#: lib/prefs/accounts.js:358
+#, javascript-format
+msgid ""
+"The credential stays with %s. Elfvision reads it only to request quota from "
+"%s and does not renew it."
+msgstr ""
+
+#: lib/prefs/accounts.js:392
 #, javascript-format
 msgid "Remove the %s key?"
 msgstr ""
 
-#: lib/prefs/accounts.js:375
+#: lib/prefs/accounts.js:393
 #, javascript-format
-msgid "It is deleted from the keyring. The key stays valid on the %s site."
+msgid ""
+"It is deleted from the extension keyring. The key stays valid on the %s site."
 msgstr ""
 
-#: lib/prefs/accounts.js:378
+#: lib/prefs/accounts.js:396
 msgid "Remove"
 msgstr ""
 
-#: lib/prefs/accounts.js:424
+#: lib/prefs/accounts.js:443
 #, javascript-format
 msgid "Track %s"
 msgstr ""
 
-#: lib/prefs/accounts.js:425
+#: lib/prefs/accounts.js:444
 msgid ""
 "Off stops fetching and hides it from the bar. Your credentials stay saved."
 msgstr ""
 
-#: lib/prefs/accounts.js:446
+#: lib/prefs/accounts.js:465
 msgid "Open the provider’s API key settings."
 msgstr ""
 
-#: lib/prefs/accounts.js:446 lib/prefs/accounts.js:454
+#: lib/prefs/accounts.js:465 lib/prefs/accounts.js:473
 msgid "Where do I get a key?"
 msgstr ""
 
-#: lib/prefs/accounts.js:451
+#: lib/prefs/accounts.js:470
 #, javascript-format
 msgid "Your %s username"
 msgstr ""
 
-#: lib/prefs/accounts.js:455
+#: lib/prefs/accounts.js:474
 #, javascript-format
 msgid "Opens your keys page. Enter your %s username above first."
 msgstr ""
 
-#: lib/prefs/accounts.js:484
+#: lib/prefs/accounts.js:503
 msgid "Dashboard only"
 msgstr ""
 
-#: lib/prefs/accounts.js:486
+#: lib/prefs/accounts.js:505
 msgid "Fictional account"
 msgstr ""
 
-#: lib/prefs/accounts.js:487
+#: lib/prefs/accounts.js:506
 msgid "OAuth 2"
 msgstr ""
 
-#: lib/prefs/accounts.js:492
+#: lib/prefs/accounts.js:511
 msgid ""
 "Automatic quota reporting is unavailable for this service. No API key is "
 "requested or stored. Check usage in the provider dashboard."
 msgstr ""
 
-#: lib/prefs/accounts.js:493
+#: lib/prefs/accounts.js:512
 msgid "Open provider dashboard"
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:82
+#: lib/prefs/apiKeyController.js:90
 msgid "That does not look like an API key."
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:93
+#: lib/prefs/apiKeyController.js:101
 msgid "The keyring did not accept the key."
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:102
+#: lib/prefs/apiKeyController.js:110
 msgid "Key saved. Checking…"
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:122 lib/prefs/oauthController.js:450
+#: lib/prefs/apiKeyController.js:130 lib/prefs/oauthController.js:459
 msgid ""
 "Finish removing the previous connector first, or explicitly delete all "
 "connectors."
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:123 lib/prefs/oauthController.js:451
+#: lib/prefs/apiKeyController.js:131 lib/prefs/oauthController.js:460
 msgid "The keyring is not available."
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:147
+#: lib/prefs/apiKeyController.js:155
 msgid "No key yet. Paste one in the field below."
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:149
+#: lib/prefs/apiKeyController.js:157
 msgid "Key accepted."
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:150
+#: lib/prefs/apiKeyController.js:158
 msgid "The server rejected this key."
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:151
+#: lib/prefs/apiKeyController.js:159
 msgid "Key saved. The keyring is locked, so it was not checked."
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:152
+#: lib/prefs/apiKeyController.js:160
 msgid "Key saved. Could not reach the server."
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:153
+#: lib/prefs/apiKeyController.js:161
 msgid "Key saved. The service replied in an unexpected way."
 msgstr ""
 
-#: lib/prefs/apiKeyController.js:154
+#: lib/prefs/apiKeyController.js:162
 msgid "Key saved. Not checked yet."
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:14 lib/prefs/credentialModeControl.js:21
+msgid "Use credentials from a local tool"
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:15
+msgid "No verified local credential source is available for this provider."
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:23
+#, javascript-format
+msgid ""
+"Off (default): Elfvision manages its own credential. On: read %s for quota "
+"checks; the tool keeps and renews it."
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:24
+#, javascript-format
+msgid ""
+"Off (default): Elfvision manages its own credential. On: read the %s keyring "
+"item for quota checks; the tool keeps and renews it."
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:27
+#, javascript-format
+msgid "Check quota using %s again"
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:28
+msgid "Use this after the tool renews an expired token."
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:29
+msgid "Check now"
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:60
+#, javascript-format
+msgid "Using credentials from %s. If its token expires, open %s to renew it."
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:62
+msgid "The credential mode could not be changed."
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:71
+#, javascript-format
+msgid "Use credentials from %s?"
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:73
+#, javascript-format
+msgid ""
+"Elfvision will read the selected credential from %s and send it to %s only "
+"to check quota. It will not copy, renew or remove it. If %s does not renew "
+"an expired token, quota checks will stop until you sign in there again."
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:74
+#, javascript-format
+msgid ""
+"Elfvision will read the selected credential from the %s keyring item and "
+"send it to %s only to check quota. It will not copy, renew or remove it. If "
+"%s does not renew an expired token, quota checks will stop until you sign in "
+"there again."
+msgstr ""
+
+#: lib/prefs/credentialModeControl.js:76
+msgid "Use this credential"
 msgstr ""
 
 #: lib/prefs/disconnectDialog.js:10
@@ -1210,199 +1342,180 @@ msgid ""
 "Affected accounts remain blocked."
 msgstr ""
 
-#: lib/prefs/firstUse.js:27
+#: lib/prefs/firstUse.js:32
 msgid "Setup"
 msgstr ""
 
-#: lib/prefs/firstUse.js:29 lib/prefs/firstUse.js:88
+#: lib/prefs/firstUse.js:34 lib/prefs/firstUse.js:93
 msgid "Skip this step"
 msgstr ""
 
-#: lib/prefs/firstUse.js:30
+#: lib/prefs/firstUse.js:35
 msgid "Back"
 msgstr ""
 
-#: lib/prefs/firstUse.js:31 lib/prefs/firstUse.js:89
+#: lib/prefs/firstUse.js:36 lib/prefs/firstUse.js:94
 msgid "Continue"
 msgstr ""
 
-#: lib/prefs/firstUse.js:85
+#: lib/prefs/firstUse.js:90
 #, javascript-format
 msgid "Setup · %d of 5"
 msgstr ""
 
-#: lib/prefs/firstUse.js:85
+#: lib/prefs/firstUse.js:90
 msgid "Welcome"
 msgstr ""
 
-#: lib/prefs/firstUse.js:88
+#: lib/prefs/firstUse.js:93
 msgid "Set up later"
 msgstr ""
 
-#: lib/prefs/firstUse.js:89
+#: lib/prefs/firstUse.js:94
 msgid "Close setup"
 msgstr ""
 
-#: lib/prefs/firstUse.js:92
+#: lib/prefs/firstUse.js:97
 msgid ""
 "See used quota in the top bar and details in the popup. Nothing changes "
 "until you press a button. Keys and sign-ins stay in the system keyring. You "
 "can skip any step and set up again from General."
 msgstr ""
 
-#: lib/prefs/firstUse.js:92
+#: lib/prefs/firstUse.js:97
 msgid "Your AI quotas at a glance"
 msgstr ""
 
-#: lib/prefs/firstUse.js:94
+#: lib/prefs/firstUse.js:99
 msgid "Choose providers"
 msgstr ""
 
-#: lib/prefs/firstUse.js:94
+#: lib/prefs/firstUse.js:99
 msgid ""
 "Every provider is optional. Choosing one here does not connect it or change "
 "which providers are tracked."
 msgstr ""
 
-#: lib/prefs/firstUse.js:101
+#: lib/prefs/firstUse.js:106
 msgid ""
 "OAuth sign-in · Against the terms; your whole Google account could be "
 "suspended. Skip unless you accept this risk."
 msgstr ""
 
-#: lib/prefs/firstUse.js:102
+#: lib/prefs/firstUse.js:107
 msgid ""
 "OAuth sign-in · Unofficial access; your account could be limited or "
 "suspended."
 msgstr ""
 
-#: lib/prefs/firstUse.js:103
+#: lib/prefs/firstUse.js:108
 msgid "API key · Paste a key from the provider’s site."
 msgstr ""
 
-#: lib/prefs/firstUse.js:115
+#: lib/prefs/firstUse.js:120
 msgid "No providers selected"
 msgstr ""
 
-#: lib/prefs/firstUse.js:115
+#: lib/prefs/firstUse.js:120
 msgid "You can continue now and connect accounts later in Accounts."
 msgstr ""
 
-#: lib/prefs/firstUse.js:117
+#: lib/prefs/firstUse.js:122
 msgid "Connect your accounts"
 msgstr ""
 
-#: lib/prefs/firstUse.js:121
+#: lib/prefs/firstUse.js:126
 msgid "All chosen accounts are connected."
 msgstr ""
 
-#: lib/prefs/firstUse.js:122
+#: lib/prefs/firstUse.js:127
 msgid ""
 "Connect one provider at a time. A failed sign-in does not stop you from "
 "continuing."
 msgstr ""
 
-#: lib/prefs/firstUse.js:133
-msgid ""
-"Run this command in a terminal, then come back. The helper looks for public "
-"client ids in installed programs using PATH and writes providers.local.json. "
-"This extension does not run it."
-msgstr ""
-
-#: lib/prefs/firstUse.js:133
-msgid "Set up the public client ids"
-msgstr ""
-
-#: lib/prefs/firstUse.js:140 lib/prefs/oauthGroup.js:60
-msgid "Copy command"
-msgstr ""
-
-#: lib/prefs/firstUse.js:143 lib/prefs/oauthGroup.js:142
-msgid "Command copied."
-msgstr ""
-
-#: lib/prefs/firstUse.js:154
+#: lib/prefs/firstUse.js:143
 msgid ""
 "Choose where quotas appear and how many providers are shown. Changes apply "
 "as you make them."
 msgstr ""
 
-#: lib/prefs/firstUse.js:154 prefs.js:180
+#: lib/prefs/firstUse.js:143 prefs.js:180
 msgid "Top bar"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:183
+#: lib/prefs/firstUse.js:145 prefs.js:183
 msgid "Center"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:182
+#: lib/prefs/firstUse.js:145 prefs.js:182
 msgid "Left"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:185
+#: lib/prefs/firstUse.js:145 prefs.js:185
 msgid "Position"
 msgstr ""
 
-#: lib/prefs/firstUse.js:156 prefs.js:184
+#: lib/prefs/firstUse.js:145 prefs.js:184
 msgid "Right"
 msgstr ""
 
-#: lib/prefs/firstUse.js:160 prefs.js:189
+#: lib/prefs/firstUse.js:149 prefs.js:189
 msgid "Providers on the bar"
 msgstr ""
 
-#: lib/prefs/firstUse.js:165 lib/prefs/notifications.js:36
+#: lib/prefs/firstUse.js:154 lib/prefs/notifications.js:36
 msgid "Notifications"
 msgstr ""
 
-#: lib/prefs/firstUse.js:165
+#: lib/prefs/firstUse.js:154
 msgid ""
 "Notifications are on by default. One notice is sent when a quota crosses its "
 "threshold. Do Not Disturb holds banners. This setup sends no test "
 "notification."
 msgstr ""
 
-#: lib/prefs/firstUse.js:166 lib/prefs/notifications.js:42
+#: lib/prefs/firstUse.js:155 lib/prefs/notifications.js:42
 msgid "Send notifications"
 msgstr ""
 
-#: lib/prefs/firstUse.js:169
+#: lib/prefs/firstUse.js:158
 msgid "Notify at"
 msgstr ""
 
-#: lib/prefs/firstUse.js:169
+#: lib/prefs/firstUse.js:158
 msgid "Used percentage · applies to all quota types"
 msgstr ""
 
-#: lib/prefs/firstUse.js:170 lib/prefs/notifications.js:75
+#: lib/prefs/firstUse.js:159 lib/prefs/notifications.js:75
 msgid "Warning must be lower than critical"
 msgstr ""
 
-#: lib/prefs/firstUse.js:210
+#: lib/prefs/firstUse.js:199
 msgid "More notification settings"
 msgstr ""
 
-#: lib/prefs/firstUse.js:212
+#: lib/prefs/firstUse.js:201
 msgid "Setup complete"
 msgstr ""
 
-#: lib/prefs/firstUse.js:212
+#: lib/prefs/firstUse.js:201
 msgid "You can change these choices later. Select an account to review it."
 msgstr ""
 
-#: lib/prefs/firstUse.js:215
+#: lib/prefs/firstUse.js:204
 msgid "Connected"
 msgstr ""
 
-#: lib/prefs/firstUse.js:215
+#: lib/prefs/firstUse.js:204
 msgid "Needs attention"
 msgstr ""
 
-#: lib/prefs/firstUse.js:215
+#: lib/prefs/firstUse.js:204
 msgid "Skipped"
 msgstr ""
 
-#: lib/prefs/firstUse.js:219
+#: lib/prefs/firstUse.js:208
 #, javascript-format
 msgid "%s · %s"
 msgstr ""
@@ -1526,115 +1639,145 @@ msgstr ""
 msgid "Sign-in failed. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthController.js:216
+#: lib/prefs/oauthController.js:224
 msgid "You can close this tab and go back to Preferences."
 msgstr ""
 
-#: lib/prefs/oauthController.js:217
+#: lib/prefs/oauthController.js:225
 msgid "Sign-in did not finish. You can close this tab."
 msgstr ""
 
-#: lib/prefs/oauthController.js:231
+#: lib/prefs/oauthController.js:239
 msgid "Couldn't open the browser. Copy the link and open it yourself."
 msgstr ""
 
-#: lib/prefs/oauthController.js:309
+#: lib/prefs/oauthController.js:317
 #, javascript-format
 msgid "%s connected."
 msgstr ""
 
-#: lib/prefs/oauthController.js:312
+#: lib/prefs/oauthController.js:320
 msgid "The keyring did not accept the sign-in."
 msgstr ""
 
-#: lib/prefs/oauthController.js:317
+#: lib/prefs/oauthController.js:325
 msgid "Sign-in cancelled. Nothing was saved."
 msgstr ""
 
-#: lib/prefs/oauthController.js:355
+#: lib/prefs/oauthController.js:364
 msgid "Finish or cancel the other sign-in first."
 msgstr ""
 
-#: lib/prefs/oauthController.js:418
+#: lib/prefs/oauthController.js:427
 msgid "That address belongs to another sign-in. Start again from this window."
 msgstr ""
 
-#: lib/prefs/oauthController.js:420
+#: lib/prefs/oauthController.js:429
 msgid "The sign-in was refused in the browser."
 msgstr ""
 
-#: lib/prefs/oauthController.js:421
+#: lib/prefs/oauthController.js:430
 msgid ""
 "That is not the address or the code. Copy the full address from the browser "
 "bar, or the code shown on the page."
 msgstr ""
 
-#: lib/prefs/oauthController.js:445
+#: lib/prefs/oauthController.js:454
 #, javascript-format
 msgid "%s disconnected."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:51
+#: lib/prefs/oauthGroup.js:56
 #, javascript-format
 msgid ""
 "Against the terms: %s forbids this, and Google could suspend your whole "
 "Google account."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:53
+#: lib/prefs/oauthGroup.js:58
 #, javascript-format
 msgid "Unofficial access: %s may not allow this and could limit your account."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:59
+#: lib/prefs/oauthGroup.js:64
 msgid "Copy link"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:61
+#: lib/prefs/oauthGroup.js:65
+msgid "Copy command"
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:66
 msgid "Check configuration again"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:67 lib/prefs/oauthGroup.js:151
+#: lib/prefs/oauthGroup.js:67
+msgid "Find configuration automatically"
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:68
+msgid "Cancel search"
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:74 lib/prefs/oauthGroup.js:194
 msgid "Disconnect"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:77
+#: lib/prefs/oauthGroup.js:86
 msgid "Paste the address or the code"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:85
+#: lib/prefs/oauthGroup.js:98
 msgid "Connect"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:87
+#: lib/prefs/oauthGroup.js:100
 #, javascript-format
 msgid "Connect %s"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:87
+#: lib/prefs/oauthGroup.js:100
 #, javascript-format
 msgid "Reconnect %s"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:92
+#: lib/prefs/oauthGroup.js:105
 msgid "Set up the client id and the keyring first."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:98
+#: lib/prefs/oauthGroup.js:114
 #, javascript-format
 msgid "Copies the command that finds the client id (it writes to %s)."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:137
+#: lib/prefs/oauthGroup.js:154
+msgid "No supported OAuth client configuration was found."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:154
+msgid "OAuth client configuration found."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:157
+msgid ""
+"Could not search for OAuth client configuration. You can use the command or "
+"enter the configuration manually."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:180
 msgid "Link copied."
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:147
+#: lib/prefs/oauthGroup.js:185
+msgid "Command copied."
+msgstr ""
+
+#: lib/prefs/oauthGroup.js:190
 #, javascript-format
 msgid "Disconnect %s?"
 msgstr ""
 
-#: lib/prefs/oauthGroup.js:148
+#: lib/prefs/oauthGroup.js:191
 #, javascript-format
 msgid ""
 "The sign-in is deleted from the keyring and the extension stops reading this "
@@ -1966,12 +2109,43 @@ msgid ""
 "session if the theme still uses a fallback."
 msgstr ""
 
-#: lib/prefs/termsDialog.js:21 lib/prefs/termsDialog.js:26
+#: lib/prefs/termsDialog.js:22 lib/prefs/termsDialog.js:27
+#: lib/prefs/termsDialog.js:36 lib/prefs/termsDialog.js:41
 #, javascript-format
 msgid "Using %s this way breaks its terms"
 msgstr ""
 
-#: lib/prefs/termsDialog.js:22
+#: lib/prefs/termsDialog.js:23
+msgid ""
+"Anthropic does not permit third-party applications to use Claude.ai session "
+"credentials for quota access. This extension will send the existing "
+"credential to Anthropic but will not copy or renew it. Your account could be "
+"limited or suspended; the harness must renew the token."
+msgstr ""
+
+#: lib/prefs/termsDialog.js:28
+#, javascript-format
+msgid ""
+"This extension will read the existing %s credential and send it to the quota "
+"service. The service terms forbid third-party use and Google could suspend "
+"your whole Google account. The extension will not refresh the credential; "
+"the harness must renew it."
+msgstr ""
+
+#: lib/prefs/termsDialog.js:31 lib/prefs/termsDialog.js:45
+#, javascript-format
+msgid "Using %s this way may break its terms"
+msgstr ""
+
+#: lib/prefs/termsDialog.js:32
+#, javascript-format
+msgid ""
+"This extension will use the credential held by %s to request quota from the "
+"provider. The terms may not allow third-party use; your account could be "
+"limited or suspended. The extension will not renew the credential."
+msgstr ""
+
+#: lib/prefs/termsDialog.js:37
 msgid ""
 "Anthropic does not permit third-party applications to offer Claude.ai sign-"
 "in or collect and store its session tokens. This extension uses that "
@@ -1979,7 +2153,7 @@ msgid ""
 "does not grant permission from Anthropic."
 msgstr ""
 
-#: lib/prefs/termsDialog.js:27
+#: lib/prefs/termsDialog.js:42
 #, javascript-format
 msgid ""
 "This extension signs in the way the official app does. The terms of %s "
@@ -1988,23 +2162,18 @@ msgid ""
 "your Google Cloud data. Use it only if you accept that risk."
 msgstr ""
 
-#: lib/prefs/termsDialog.js:30
-#, javascript-format
-msgid "Using %s this way may break its terms"
-msgstr ""
-
-#: lib/prefs/termsDialog.js:31
+#: lib/prefs/termsDialog.js:46
 msgid ""
 "This extension signs in the way the official app does, which the terms may "
 "not allow. Your account could be limited or suspended. Use it at your own "
 "risk."
 msgstr ""
 
-#: lib/prefs/termsDialog.js:34
+#: lib/prefs/termsDialog.js:49
 msgid "Connect anyway"
 msgstr ""
 
-#: lib/prefs/termsDialog.js:34
+#: lib/prefs/termsDialog.js:49
 msgid "I understand, connect"
 msgstr ""
 
