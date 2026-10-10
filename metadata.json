@@ -7,6 +7,6 @@
   ],
   "url": "https://github.com/dandgabr/elfvision",
   "gettext-domain": "gnome-ai-quota",
-  "version-name": "0.2.3",
+  "version-name": "0.2.4",
   "settings-schema": "org.gnome.shell.extensions.gnome-ai-quota"
 }
