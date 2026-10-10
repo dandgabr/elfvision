@@ -173,12 +173,11 @@ connector labels. Notification actions target the exact connector.
     verifier goes with the closure). The terms dialog is the existing one, per provider, with Cancel as
     the default and the stronger text for Antigravity; the assistant never pre-acknowledges, batches or
     writes `terms-acknowledged` itself.
-  - *No client id.* The page shows the whole command on screen in one line (selectable) with the
-    existing Copy command button (no trailing newline, so the user presses Enter), says what the helper
-    does (it reads the installed program for a public client id, using `PATH`, and writes
-    `providers.local.json`) and re-checks when the window becomes active again. The packaged helper is included under `tools/`; the command takes the
-    chosen providers in one call (the helper accepts several ids); the assistant never runs it,
-    never reads another tool's files, the environment or `PATH`, and never reads the clipboard.
+  - *No client config.* The connector shows **Find configuration automatically**, which runs the
+    packaged helper only for the selected provider, suppresses process output, and can be cancelled.
+    It reports whether configuration was found and re-checks when the window becomes active again.
+    Copy command remains a manual fallback. This operation reads public client configuration from
+    the installed program, never account tokens.
   - *Bar and notifications.* The Bar step asks for the position and the number of providers, with the
     defaults filled in. The Notifications step shows the master switch (notifications are on by
     default, as decided in the bar round, so the step explains and lets the user turn them off) and

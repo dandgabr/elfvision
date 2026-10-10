@@ -131,24 +131,36 @@ For **Command Code**, enter your account name to open the key-management link,
 then paste your API key into the key field and save it. The extension stores the
 key in the desktop keyring.
 
-For **Codex**, **Claude** or **Antigravity**, first install the corresponding
-official client on this computer. Run the packaged helper yourself in a terminal
-to import public client configuration from those installed programs:
+For **Codex**, **Claude** or **Antigravity**, install the corresponding client
+if you use it. In the connector editor, choose **Find configuration
+automatically** to run the packaged helper for that provider. The helper checks
+the installed client and verified public source where available, then writes the
+extension's private OAuth client configuration. You can cancel the search or use
+the copy-command fallback:
 
 ```sh
 python3 -I "${XDG_DATA_HOME:-$HOME/.local/share}/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/tools/import-client-ids.py"
 ```
 
-Add `codex`, `claude` or `antigravity` to import one provider only. From a source
-checkout, use `python3 -I tools/import-client-ids.py` instead. Run it again after
-installing another client. It reads public OAuth client configuration, never the
-client's saved account tokens, and writes the extension's own local configuration.
+Add `codex`, `claude` or `antigravity` to run the helper for one provider only.
+From a source checkout, use `python3 -I tools/import-client-ids.py` instead. It
+reads public OAuth client configuration, never account tokens.
 
-Return to the connector editor, press **Check configuration again** if needed,
-then **Connect**, review the provider notice, and sign in
+Then press **Connect**, review the provider notice, and sign in
 through your browser. If the browser cannot return to this computer, paste the
 final callback address or displayed code into the field offered by Preferences.
-The setup assistant can copy the helper command; you run it yourself.
+
+The default **Gerenciado pela extensão** mode keeps API keys and OAuth tokens in
+the desktop keyring. For Command Code, Codex, Claude or Antigravity, you can
+instead choose **Use credentials from a local tool** for that connector. This
+mode reads only the documented source for the selected provider: Command Code's
+`~/.commandcode/auth.json`, Codex's `~/.codex/auth.json`, Claude Code's
+`~/.claude/.credentials.json`, or the `service=gemini` keyring item for
+Antigravity. The token or key is sent to the provider only for quota checks and
+is not copied, refreshed or removed by the extension. If it expires, renew it in
+the owning tool and choose **Check now**. OpenAI API, Anthropic API, Cursor and
+OpenRouter admin-key connectors do not yet have a verified local-tool source;
+use their normal key field.
 
 ## Providers
 
@@ -289,13 +301,15 @@ reference](docs/themes.md) describes the file format.
 
 ## Privacy
 
-API keys and OAuth tokens are stored through libsecret in the desktop keyring,
-with no plaintext fallback. The extension keeps its own credentials and does not
-read or change the official AI clients' sessions. The manually run client-ID
-helper reads public OAuth configuration from installed program files. For Codex,
-it can also fetch the public source when local discovery fails; for Antigravity,
-it checks candidate client pairs with Google's token endpoint using a made-up
-authorization code. It never reads the clients' saved account tokens.
+In the default mode, API keys and OAuth tokens are stored through libsecret in
+the desktop keyring, with no plaintext fallback. The optional local-tool mode is
+read-only and accesses only the exact provider source listed above after the
+user selects that mode. It never writes, deletes or refreshes the tool's
+credential. The **Find configuration automatically** action runs the packaged
+helper for the selected OAuth provider; the helper reads public client
+configuration, not account tokens. For Codex it can also fetch the official
+public source; for Antigravity it checks candidate client pairs with Google's
+token endpoint using a made-up authorization code.
 
 Quota requests go to the configured provider hosts over HTTPS. Choosing a theme
 does not contact a font server; optional font downloads require a separate action.
@@ -309,7 +323,8 @@ and raw errors.
 |---|---|
 | Extension is missing after installation | Confirm GNOME Shell 50, log out and back in, then run the enable command. |
 | Only the extension icon appears | Add and connect an account in Accounts. In Demo, use Simulate connect for a fictional connector. |
-| Connect asks for client configuration | Install the official client and run the packaged helper, then choose Check configuration again in the connector editor. |
+| Connect asks for client configuration | Choose Find configuration automatically or use Copy command in the connector editor. |
+| Harness credential is missing or expired | Sign in or renew it in the named local tool, then choose Check now. The extension does not refresh borrowed credentials. |
 | The browser cannot complete the return | Use the callback address/code field in Preferences. Never put tokens or callback URLs in an issue. |
 | Keyring is locked or unavailable | Unlock the desktop keyring and retry. The extension cannot store secrets in ordinary files. |
 | Usage is stale or an account is rejected | Refresh; check connectivity and account status in Accounts. Reconnect explicitly if requested. |

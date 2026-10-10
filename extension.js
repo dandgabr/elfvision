@@ -7,6 +7,7 @@ import {accountStatus} from './lib/core/accountStatus.js';
 import {createProvider, createProviders, isConnected} from './lib/providers/index.js';
 import {createConnectorStore} from './lib/services/connectorStore.js';
 import {providerIdForConnector} from './lib/core/connectors.js';
+import {decodeConnectors} from './lib/core/connectors.js';
 import {availableProviders, availableDemoProviders} from './lib/providers/registry.js';
 import {AlertService} from './lib/services/alertService.js';
 import {AlertStore} from './lib/services/alertStore.js';
@@ -234,14 +235,18 @@ export default class ElfvisionGnomeExtension extends Extension {
             const candidates = entries.filter(connector => !untracked.includes(connector.id) && !gate.isBlocked(connector.providerId));
             const captured = await Promise.all(candidates.map(connector => gate.capture(connector.providerId)));
             const tickets = new Map(candidates.map((meta, index) => [meta.id, captured[index]]));
-            const answers = await Promise.all(candidates.map(connector => isConnected(availableProviders().find(meta => meta.id === connector.providerId), {gate, ticket: tickets.get(connector.id), connectorId: connector.id})));
+            const answers = await Promise.all(candidates.map(connector => isConnected(availableProviders().find(meta => meta.id === connector.providerId), {
+                gate, ticket: tickets.get(connector.id), connectorId: connector.id, credentialMode: connector.credentialMode,
+            })));
             const wanted = candidates.filter((_meta, index) => answers[index]).map(meta => meta.id);
             // A newer sync, a rebuild or a disable happened while the keyring was asked.
             if (generation !== this._syncGeneration || controller !== this._controller || this._disconnectGate !== gate
                 || gate.snapshot().epoch !== epoch || this._settings?.get_string('data-source') !== 'live')
                 return;
             this._controllerEpoch = epoch;
-            controller.sync(wanted, id => createProvider(id, {gate, ticket: tickets.get(id), providerId: providerIdForConnector(id)}),
+            controller.sync(wanted, id => createProvider(id, {gate, ticket: tickets.get(id), providerId: providerIdForConnector(id),
+                credentialMode: () => decodeConnectors(this._settings.get_string('connectors')).find(connector => connector.id === id)?.credentialMode ?? 'extension',
+            }),
                 availableProviders().flatMap(meta => entries.filter(c => c.providerId === meta.id).map(c => c.id)));
             controller.markSynced();
         } catch (error) {

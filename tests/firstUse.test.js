@@ -1,5 +1,5 @@
 import {assertEqual, test} from './harness.js';
-import {firstUsePolicy, selectedProviders, connectionSummary, createLoginGate, connectableProviders, stepComplete} from '../lib/core/firstUse.js';
+import {firstUsePolicy, selectedProviders, connectionSummary, createLoginGate, connectableProviders, setupAccountState, stepComplete} from '../lib/core/firstUse.js';
 import {availableProviders} from '../lib/providers/registry.js';
 import * as setupPolicy from '../lib/core/firstUse.js';
 
@@ -30,6 +30,13 @@ test('first use: opens only for a new live user without an account target', () =
 test('first use: selection is opt-in, in registry order, and filters unknown ids', () => {
     assertEqual(selectedProviders(availableProviders(), []).map(m => m.id), []);
     assertEqual(selectedProviders(availableProviders(), ['antigravity', 'claude', 'claude', 'bad']).map(m => m.id), ['claude', 'antigravity']);
+});
+
+test('first use: a successful harness quota check counts as connected without setting local credential state', () => {
+    assertEqual(setupAccountState({connected: false, hasKey: false}, {credentialMode: 'harness', result: 'ok'}),
+        {connected: true, hasKey: false, result: 'ok'});
+    assertEqual(setupAccountState({connected: false, hasKey: false}, {credentialMode: 'harness', result: 'expired'}),
+        {connected: false, hasKey: false, result: 'expired'});
 });
 
 test('first use: summary distinguishes saved, rejected, failed and skipped accounts', () => {

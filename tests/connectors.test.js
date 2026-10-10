@@ -41,6 +41,21 @@ test('connectors: validates exact provider identity and bounded plain labels', (
         let rejected = false; try { validateConnectors(value); } catch (_) { rejected = true; } assertTrue(rejected);
     }
 });
+test('connectors: credential management defaults to extension and persists an explicit harness choice', () => {
+    const legacy = {id: 'codex', providerId: 'codex', label: '', username: ''};
+    assertEqual(validateConnectors([legacy])[0].credentialMode ?? 'extension', 'extension');
+    assertEqual(validateConnectors([{...legacy, credentialMode: 'harness'}])[0].credentialMode, 'harness');
+    let refused = false;
+    try { validateConnectors([{...legacy, credentialMode: 'anything'}]); } catch (_) { refused = true; }
+    assertTrue(refused);
+    let unsupported = false;
+    try { validateConnectors([{...legacy, providerId: 'openai-api', id: 'openai-api', credentialMode: 'harness'}]); } catch (_) { unsupported = true; }
+    assertTrue(unsupported);
+    const store = createConnectorStore(settingsFixture());
+    store.update('codex', {credentialMode: 'harness'});
+    assertEqual(store.get('codex').credentialMode, 'harness');
+    store.dispose();
+});
 test('connectors: explicitly saved legacy identities remain stable, rename and removal isolate sibling and demo store', () => {
     const settings = settingsFixture(); const store = createConnectorStore(settings, {uuid: () => '12345678-1234-4234-8234-123456789abc'});
     const extra = store.add('codex', 'Work'); assertEqual(extra.id, id); assertEqual(store.list().filter(c => c.providerId === 'codex').length, 2);
@@ -60,6 +75,38 @@ test('connectors: same-provider OAuth runtimes read independent credentials and 
     assertEqual([first.id, second.id], ['codex', id]); await Promise.all([first.fetch(), second.fetch()]);
     assertEqual(reads.sort(), ['codex', id]); assertTrue(configs.every(provider => provider === 'codex')); assertEqual(captures, ['codex', 'codex']);
     await first.dispose(); await second.dispose();
+});
+
+test('connectors: harness OAuth uses a borrowed token without reading extension secrets or refreshing it', async () => {
+    let harnessReads = 0, ownReads = 0, writes = 0, configs = 0, requests = 0;
+    const gate = {capture: async provider => ({provider}), assertCurrent: async () => {}, registerCanceller: () => () => {}};
+    const provider = createProvider('codex', {gate, credentialMode: () => 'harness', deps: {
+        configCache: {get: async () => { configs++; throw new Error('must not read OAuth client configuration'); }},
+        lookupSecret: async () => { ownReads++; throw new Error('must not read extension credentials'); },
+        storeSecret: async () => { writes++; throw new Error('must not write or rotate the harness credential'); },
+        lookupHarnessCredential: async id => { harnessReads++; assertEqual(id, 'codex'); return 'synthetic-borrowed-token'; },
+        createHttp: () => ({request: async (_url, options) => {
+            requests++;
+            assertEqual(options.headers.Authorization, 'Bearer synthetic-borrowed-token');
+            return {status: 200, json: {plan_type: 'plus', rate_limit: {primary_window: {used_percent: 20, limit_window_seconds: 18000, reset_at: 2000000000}}}};
+        }, dispose() {}}),
+    }});
+    assertEqual((await provider.fetch({isCancelled: () => false})).metrics[0].percentUsed, 20);
+    assertEqual([harnessReads, ownReads, writes, configs, requests], [1, 0, 0, 0, 1]);
+    await provider.dispose();
+});
+
+test('connectors: an absent harness API key reports no_key rather than a keyring failure', async () => {
+    const gate = {capture: async provider => ({provider}), assertCurrent: async () => {}, registerCanceller: () => () => {}};
+    const provider = createProvider('command-code', {gate, credentialMode: () => 'harness', deps: {
+        lookupHarnessCredential: async () => { throw Object.assign(new Error('missing'), {code: 'missing'}); },
+        lookupSecret: async () => { throw new Error('must not read extension credentials'); },
+        createHttp: () => ({get: async () => { throw new Error('must not send a request without a key'); }, dispose() {}}),
+    }});
+    let failure;
+    try { await provider.fetch({isCancelled: () => false}); } catch (error) { failure = error; }
+    assertEqual([failure?.code, failure?.reason], ['auth_required', 'no_key']);
+    await provider.dispose();
 });
 
 test('connectors: corrupt registries recover identities from metadata without copying secrets', async () => {

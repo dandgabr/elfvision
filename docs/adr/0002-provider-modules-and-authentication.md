@@ -12,7 +12,7 @@ has a command that prints quota. The extension therefore needs its own access.
 
 ## Decision
 
-1. **Total isolation from the AI tools.** The extension does not read, write or
+1. **Default isolation from the AI tools.** In the default mode, the extension does not read, write or
    observe any of their files: no `auth.json` or `.credentials.json`, no keyring
    entries, no session logs, no `settings.json` edits, no `statusLine` hook.
 2. **Each provider is an isolated module** with its own endpoint and response parser,
@@ -95,6 +95,39 @@ Implemented in `lib/core/scheduler.js`, `lib/core/contract.js` and
 - The user logs in once per provider inside the extension.
 - Provider modules are independent, so a broken endpoint affects one card.
 - The extension cannot show data for a provider the user has not connected.
+
+## Amendment: opt-in read-only local-tool credentials (2026-10-10)
+
+The user may choose `credentialMode: harness` for an individual connector. The
+default remains extension-managed authentication and does not inspect external
+credential sources. Harness mode is available only for this explicit allowlist:
+
+| Provider | Source | Selected value |
+|---|---|---|
+| Command Code | `~/.commandcode/auth.json` | `apiKey` |
+| Codex | `~/.codex/auth.json` | `tokens.access_token` |
+| Claude | `~/.claude/.credentials.json` | `claudeAiOauth.accessToken` |
+| Antigravity | Secret Service item with `service=gemini` | `token.access_token` |
+
+The file readers open only the exact provider path, reject symlinks, non-regular,
+foreign-owned, group/world-readable and oversized files, and select only the
+declared field. Keyring access queries only the declared service and requires
+one match. Values remain transient in memory for the HTTPS request; they are
+never logged, stored in GSettings, copied into the extension keyring, refreshed,
+revoked or deleted. Unsupported providers keep using the extension-managed key
+field until a verified source is added.
+
+The per-connector choice requires confirmation naming the source and destination
+provider host, explains that the owning tool must renew its own credential, and
+retains the provider terms warning. A missing, locked or ambiguous source fails
+closed. A 401 is not retried with a refreshed token; it reports an expired
+credential and the user can renew it in the tool and choose Check now. Removing
+or switching a connector never changes the external credential.
+
+OAuth client configuration discovery is a separate, explicit Preferences
+button. It launches the provider-scoped Python helper with output silenced and
+cancellation; the helper reads public client configuration, not account tokens.
+Only verified official sources are used as fallback.
 
 ## Amendment: API reporting and deletion actions (2026-10-08)
 

@@ -413,17 +413,26 @@ The sign-in needs the provider's client id in `~/.config/gnome-ai-quota/provider
 name preserves existing configuration after the Elfvision rename; `XDG_CONFIG_HOME`
 changes its base directory. Preferences use GSettings separately; see the
 [configuration locations](usage.md#local-folders).
-Run `python3 -I tools/import-client-ids.py` once: it looks for the public client
-configuration in the installed AI tool. Codex can fall back to public source;
-Antigravity checks candidate client pairs with Google's token endpoint using a
-made-up authorization code. The helper writes the configuration with mode 0600
-without printing it. Shell and preferences
+Preferences can run `tools/import-client-ids.py` for the selected provider via
+**Find configuration automatically**; a copy-command remains available. The
+helper looks for public client configuration in the installed AI tool. Codex
+can fall back to its official public source; Antigravity checks candidate client
+pairs with Google's token endpoint using a made-up authorization code. Process
+output is silenced. The helper writes the configuration with mode 0600 without
+printing client values. Shell and preferences
 read it asynchronously with a 16 KiB streaming limit and a maximum 5-second
 cancellation timer for metadata, open, and read operations. Asynchronous stream
 closure follows cancellation; the complete promise has no hard 5-second deadline.
-Shell callers share one read and cache the result for one minute.
-The nested shell copies that file in,
-so Connect works there too, and keeps the sign-in in its own throwaway keyring.
+Shell callers share one read and cache the result for one minute. The nested
+shell copies that file in, so Connect works there too, and keeps the sign-in in
+its own throwaway keyring.
+
+The optional per-connector harness mode reads only the exact credential sources
+in ADR 0002. File reads enforce owner, private permissions, regular-file type
+and a size limit; keyring reads query one declared service and refuse ambiguous
+matches. Values stay transient and never enter the extension keyring. Harness
+mode skips extension token refresh and will not retry an OAuth 401 with another
+token; the user must renew in the source tool and choose Check now.
 
 ## Themes
 

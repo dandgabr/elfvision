@@ -115,11 +115,12 @@ limit is not a hard deadline for the complete promise. Shell callers share the
 read and cache its result for one minute. Without the file or the provider's entry the Connect button is off and
 shows the path; the shell reports `auth_required` with the reason `no_config`.
 
-Where the ids come from: a helper the user runs once looks for the client id each
-local AI tool uses (the id only, never a token or any credential file's contents) and
-writes it to this file; when none is found, the public id of that tool's open-source
-client is used; and the file can always be edited to use another. The extension itself
-never reads those tools' files while it runs (ADR 0002). The helper is `tools/import-client-ids.py`.
+Where the ids come from: the connector's **Find configuration automatically** button
+runs the provider-scoped helper, which looks for public client configuration in the
+installed program and verified official sources. It never reads a token or account
+credential file. The copy-command fallback and manual editing remain available. The
+separate opt-in harness mode is governed by the read-only source allowlist in ADR 0002.
+The helper is `tools/import-client-ids.py`.
 
 Keeping client ids out of the repository: a local test searches the repository for
 every value of the local file; the gitleaks hook gets rules for the known formats;

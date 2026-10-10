@@ -50,14 +50,20 @@ reopens it. Restore configuration clears setup dismissal so setup becomes availa
 request to show a particular account do not trigger setup. A keyring that cannot be checked does
 not count as an empty account list.
 
-When OAuth client ids are missing, setup shows and copies one command for the selected providers.
-Run it yourself in a terminal; the installed package includes the helper. The assistant never runs
-it, starts a sign-in or accepts terms for you. Only an explicit Connect action does that.
+When OAuth client configuration is missing, each connector offers **Find configuration
+automatically**, which runs the packaged helper for that provider. The helper output is not shown;
+the UI reports whether configuration was found. Copy command remains available as a manual
+fallback. This action does not start a sign-in or accept terms.
+
+For Command Code, Codex, Claude and Antigravity, the connector can optionally use a documented
+local-tool credential source in read-only mode. The user enables this per connector and accepts
+that the tool, not Elfvision, must renew its token. Other API-key providers remain in the normal
+extension-managed flow until a verified local source exists.
 
 | Page and group | Option | What it does |
 |---|---|---|
 | Accounts | Add connector… | Choose a provider and a local name. Several connectors may use the same provider; creation does not sign in. |
-| Accounts, each connector | Configure | Opens the editor to rename, save the provider’s required API key, or connect with OAuth. Check configuration again retries loading public OAuth configuration. |
+| Accounts, each connector | Configure | Opens the editor to rename, use extension-managed authentication, or explicitly opt into a supported read-only local-tool credential. Find configuration automatically runs the OAuth client helper; Check configuration again retries loading its result. |
 | Accounts, each connector | Remove connector… | After confirmation, removes only this connector, its local credential, and its quota/alert data. Other connectors stay saved. A failure keeps the row available for retry. |
 | Accounts, recovery | Recover list… | Appears when the connector list is invalid. After confirmation, rebuilds metadata from saved credential identities without reading or deleting secret values. Local names may need to be entered again. |
 | Accounts, Demo connectors | Simulate connect / disconnect | Changes a fictional account's state without a provider request, browser, or keyring. Add and remove use the separate demo connector list. |
@@ -186,7 +192,9 @@ The paths below assume the default XDG directories. Custom `XDG_CONFIG_HOME` and
 | Custom themes | `~/.local/share/gnome-ai-quota/themes/<id>/theme.json` |
 | Installed client-ID helper | `~/.local/share/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/tools/import-client-ids.py` |
 
-API keys and OAuth tokens live in the desktop keyring. There is no plaintext fallback.
+Extension-managed API keys and OAuth tokens live in the desktop keyring. In read-only local-tool
+mode, only exact allowlisted files or the named keyring service are read; credentials are never
+stored in GSettings or written back. There is no plaintext fallback for extension-managed keys.
 
 ## Provider capabilities and reporting
 
