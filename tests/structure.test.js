@@ -224,17 +224,39 @@ test('logging: nothing outside the journal sink writes to the console, and every
     assertEqual(nicks, LEVELS);
 });
 
+// Count `catch` blocks whose body holds only comments. A brace scanner, not a regular expression:
+// nested quantifiers over comments can backtrack exponentially.
+function silentCatchCount(source) {
+    const code = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+    let count = 0;
+    for (let at = code.indexOf('catch'); at !== -1; at = code.indexOf('catch', at + 5)) {
+        let index = at + 5;
+        while (index < code.length && /\s/.test(code[index])) index++;
+        if (code[index] === '(') {
+            index = code.indexOf(')', index);
+            if (index === -1) break;
+            index++;
+            while (index < code.length && /\s/.test(code[index])) index++;
+        }
+        if (code[index] !== '{') continue;
+        let depth = 1, end = index + 1;
+        while (end < code.length && depth > 0) {
+            if (code[end] === '{') depth++;
+            else if (code[end] === '}') depth--;
+            end++;
+        }
+        if (code.slice(index + 1, end - 1).trim() === '')
+            count++;
+    }
+    return count;
+}
+
 test('logging: the number of catch blocks that swallow an error silently does not grow', () => {
     // A ratchet (docs/adr/0011): a new failure path either logs, rethrows, or lowers this number.
     const SILENT_CATCHES_NOW = 21;
     let count = 0;
-    for (const path of [...sources('lib'), 'extension.js', 'prefs.js']) {
-        for (const match of text(path).matchAll(/catch\s*(?:\([^)]*\))?\s*\{((?:[^{}]|\/\/[^\n]*\n)*?)\}/g)) {
-            const body = match[1].replace(/\/\/[^\n]*/g, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
-            if (body === '')
-                count++;
-        }
-    }
+    for (const path of [...sources('lib'), 'extension.js', 'prefs.js'])
+        count += silentCatchCount(text(path));
     assertTrue(count <= SILENT_CATCHES_NOW, `${count} silent catch blocks (limit ${SILENT_CATCHES_NOW}): log the failure or lower the limit`);
 });
 
