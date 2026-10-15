@@ -54,9 +54,17 @@ def local_values():
 def staged_text():
     """What is being added: the text of every added line, by file."""
     out, current = {}, None
-    for line in git('diff', '--cached', '-U0', '--no-color').splitlines():
+    for line in git('-c', 'core.quotepath=off', 'diff', '--cached', '-U0', '--no-color').splitlines():
         if line.startswith('+++ '):
-            current = line[6:] if line.startswith('+++ b/') else None
+            rest = line[4:]
+            if rest == '/dev/null':
+                current = None                    # a deletion adds nothing
+            elif rest.startswith('b/'):
+                current = rest[2:]
+            elif rest.startswith('"b/'):
+                current = rest[3:-1]              # git quotes names with special characters
+            else:
+                current = rest                    # unknown form: scan the text anyway, fail closed
         elif line.startswith('+') and current:
             out[current] = out.get(current, '') + line[1:] + '\n'
     return out

@@ -32,8 +32,8 @@
     <key name="bar-count" type="i">
       <range min="1" max="5"/>
       <default>3</default>
-      <summary>Providers on the bar</summary>
-      <description>The most providers shown on the top bar. Fewer are shown when space runs out.</description>
+      <summary>Connectors on the bar</summary>
+      <description>The most connector items shown on the top bar. Fewer are shown when space runs out.</description>
     </key>
     <key name="compact-mode" enum="org.gnome.shell.extensions.gnome-ai-quota.CompactMode">
       <default>'auto'</default>
@@ -169,13 +169,13 @@
     </key>
     <key name="untracked-providers" type="as">
       <default>[]</default>
-      <summary>Providers not tracked</summary>
-      <description>Ids of providers whose collection is paused and that are hidden from the bar and the popup. Their credentials are kept.</description>
+      <summary>Connectors not tracked</summary>
+      <description>Ids of connectors whose collection is paused and that are hidden from the bar and the popup. Their credentials are kept.</description>
     </key>
     <key name="credentials-touched" type="s">
       <default>''</default>
-      <summary>Provider whose credentials just changed</summary>
-      <description>The preferences window writes the id of the provider it stored or removed a credential for, just before it raises the revision, so the extension asks only that provider again. It holds no secret.</description>
+      <summary>Connector whose credentials just changed</summary>
+      <description>The preferences window writes the id of the connector it stored or removed a credential for, just before it raises the revision, so the extension asks only that connector again. It holds no secret.</description>
     </key>
     <key name="test-notification" type="i">
       <range min="0" max="2147483647"/>
@@ -191,7 +191,7 @@
     <key name="prefs-target" type="s">
       <default>''</default>
       <summary>Account to show in preferences</summary>
-      <description>The extension writes a provider id here before it opens the preferences window, which then shows that account and clears the value.</description>
+      <description>The extension writes a connector id here before it opens the preferences window, which then shows that account and clears the value.</description>
     </key>
     <key name="terms-acknowledged" type="as">
       <default>[]</default>

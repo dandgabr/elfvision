@@ -214,3 +214,13 @@ test('provider config: a private regular opened stream retains valid configurati
     assertEqual(result.providers, {codex: {clientId: 'synthetic'}});
     assertTrue(f.closed());
 });
+
+test('provider config: a failed read is reported as a failure, not as a missing client id, and retries soon', async () => {
+    let at = 0, calls = 0;
+    const reader = cache({now: () => at, failedTtlMs: 5000, readConfig: async () => {
+        if (++calls === 1) return {providers: {}, problems: ['the file cannot be read'], missing: false, transient: true};
+        return {providers: {codex: {clientId: 'ok'}}};
+    }});
+    assertEqual(await reader.get('codex'), undefined); assertEqual(reader.readFailed(), true);
+    at = 5001; assertEqual(await reader.get('codex'), {clientId: 'ok'}); assertEqual(reader.readFailed(), false);
+});

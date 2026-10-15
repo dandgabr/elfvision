@@ -38,6 +38,21 @@ mv -- "dist/$uuid.shell-extension.zip" "$zip"
 # Preferences copies a command with this exact installed path. Ship only this helper,
 # not the development tools; zip preserves its tools/ directory.
 zip -q "$zip" tools/import-client-ids.py
+# The archive must hold what the extension imports at run time and nothing from development.
+listing="$(unzip -Z1 "$zip")"
+missing=0
+for required in metadata.json extension.js prefs.js lib/core/theme.template.css tools/import-client-ids.py \
+    licenses/fonts/inter-OFL.txt locale/pt_BR/LC_MESSAGES/gnome-ai-quota.mo "schemas/${schema}.gschema.xml" LICENSE; do
+    if ! grep -qxF -- "$required" <<<"$listing"; then
+        echo "pack: missing from the archive: $required" >&2
+        missing=1
+    fi
+done
+if grep -E '(^|/)(tests|docs|\.git|__pycache__|node_modules)/|\.test\.js$|\.po$|\.pot$' <<<"$listing" >&2; then
+    echo "pack: development files are in the archive" >&2
+    missing=1
+fi
+[ "$missing" -eq 0 ] || exit 1
 echo "built $zip"
 # What is inside, in one line per folder, so a missing piece is easy to see.
 unzip -Z1 "$zip" | sed 's#/[^/]*$##' | sort | uniq -c

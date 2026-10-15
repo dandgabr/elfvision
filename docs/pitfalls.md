@@ -3,8 +3,6 @@
 Things that cost time and are not obvious from the St or GNOME Shell sources. They are grouped
 by where they bite. The [development guide](development.md) covers how to work on the code.
 
-Things that cost time and are not obvious from the St or GNOME Shell sources.
-
 ## Stylesheet
 
 - The compiler substitutes every double-brace token in the template, comments
@@ -40,7 +38,7 @@ Things that cost time and are not obvious from the St or GNOME Shell sources.
   second moves the popup. Pin it with `boxPointer.setPosition(anchor)` to an
   invisible actor while it is open (`_pinPopup` in `lib/ui/indicator.js`).
 
-**Lifecycle**
+## Lifecycle
 
 - Use `connectObject` for signals on objects you do not own. A manual `disconnect`
   in `destroy()` fails with criticals when the emitter (a panel box at shell
@@ -58,7 +56,7 @@ Things that cost time and are not obvious from the St or GNOME Shell sources.
 - `St.BoxLayout` emits `child-added` and `child-removed`, not `actor-added`. A wrong
   signal name makes the extension fail to load.
 
-**Tooling**
+## Tooling
 
 - The `memory` GSettings backend is per process. Settings written in the headless
   shell are invisible to any other process, including the preferences window, which
