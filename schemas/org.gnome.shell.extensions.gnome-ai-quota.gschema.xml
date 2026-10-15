@@ -98,6 +98,26 @@
       <summary>Time until reset</summary>
       <description>long reads "resets in 1h 20min"; short reads "resets in 1h20".</description>
     </key>
+    <key name="primary-metric-bar" type="s">
+      <choices>
+        <choice value="auto"/>
+        <choice value="session"/>
+        <choice value="week"/>
+      </choices>
+      <default>'auto'</default>
+      <summary>Main metric on the top bar</summary>
+      <description>auto shows the most used window; session or week shows that window, falling back to the other when the service has no such window.</description>
+    </key>
+    <key name="primary-metric-popup" type="s">
+      <choices>
+        <choice value="auto"/>
+        <choice value="session"/>
+        <choice value="week"/>
+      </choices>
+      <default>'auto'</default>
+      <summary>Main metric in the popup</summary>
+      <description>auto shows the most used window; session or week shows that window, falling back to the other when the service has no such window.</description>
+    </key>
     <key name="auto-open" type="b">
       <default>true</default>
       <summary>Open cards that need attention</summary>

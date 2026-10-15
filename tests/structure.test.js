@@ -69,6 +69,9 @@ test('registry: ordered, unique, and only complete providers are available', () 
     for (const meta of PROVIDERS) {
         assertTrue(['api-key', 'oauth-pkce'].includes(meta.auth), meta.id);
         assertTrue(GLib.file_test(`${root}/icons/${meta.id}-symbolic.svg`, GLib.FileTest.IS_REGULAR), `${meta.id} has a packaged provider icon`);
+        const svg = text(`icons/${meta.id}-symbolic.svg`);
+        assertTrue(/viewBox="0 0 16 16"/.test(svg), `${meta.id} icon is 16x16`);
+        assertTrue(!/<(rect|circle|image|linearGradient|radialGradient)\b|\bstroke=|\bstyle=|\btransform=|opacity/.test(svg), `${meta.id} icon has no background or extra paint`);
         assertTrue(meta.apiHosts.every(host => /^[a-z0-9.-]+$/.test(host)), `${meta.id} hosts`);
     }
     assertEqual([providerMeta('claude').terms, providerMeta('antigravity').terms], ['terms', 'strong']);

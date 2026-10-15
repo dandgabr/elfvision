@@ -200,6 +200,13 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
         ], _('Compact mode'), _('Automatic: only when space runs out. Always: drops the % sign and the window suffix. Never: hides providers instead.'), handlerIds);
         bar.add(compact);
 
+        const barMetric = choiceRow(settings, 'primary-metric-bar', [
+            ['auto', _('Most used')],
+            ['session', _('Session')],
+            ['week', _('Week')],
+        ], _('Main metric'), _('Which window the bar shows. If a service does not have it, the other one is shown.'), handlerIds);
+        bar.add(barMetric);
+
         page.add(bar);
 
         const look = new Adw.PreferencesGroup({title: _('Colors and theme')});
@@ -283,6 +290,12 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
             ['short', _('1h20')],
         ], _('Time until reset'), _('How the countdown to a reset is written.'), handlerIds);
         popup.add(reset);
+        const popupMetric = choiceRow(settings, 'primary-metric-popup', [
+            ['auto', _('Most used')],
+            ['session', _('Session')],
+            ['week', _('Week')],
+        ], _('Main metric'), _('Which window the card headline shows. If a service does not have it, the other one is shown.'), handlerIds);
+        popup.add(popupMetric);
         const autoOpen = new Adw.SwitchRow({
             title: _('Open cards that need attention'),
             subtitle: _('Cards in warning, critical or error states open on their own.'),

@@ -1,5 +1,5 @@
 import {assertEqual, assertTrue, test} from './harness.js';
-import {CRIT_AT, WARN_AT, displayState, mostCriticalMetric, rankOf, severityOf} from '../lib/core/severity.js';
+import {CRIT_AT, WARN_AT, displayMetric, displayState, mostCriticalMetric, rankOf, severityOf} from '../lib/core/severity.js';
 import {formatClock, formatDuration, formatMoney, formatPercent} from '../lib/core/format.js';
 import {aheadOfPace, expectedPercent} from '../lib/core/pacing.js';
 import {selectForBar} from '../lib/core/selection.js';
@@ -29,6 +29,45 @@ test('most critical metric prefers the shorter window on a tie', () => {
     ]);
     assertEqual(metric.id, 'session');
     assertEqual(mostCriticalMetric([]), null);
+});
+
+test('display metric follows the preferred window and falls back to the other', () => {
+    const both = [
+        {id: 'session', kind: 'percent', window: 'session', percentUsed: 10, windowSecs: 18000},
+        {id: 'week', kind: 'percent', window: 'week', percentUsed: 60, windowSecs: 604800},
+    ];
+    const weekOnly = [both[1]];
+    const sessionOnly = [both[0]];
+    assertEqual(displayMetric(both, 'session').id, 'session');
+    assertEqual(displayMetric(both, 'week').id, 'week');
+    assertEqual(displayMetric(both, 'auto').id, 'week');
+    assertEqual(displayMetric(both).id, 'week');
+    assertEqual(displayMetric(weekOnly, 'session').id, 'week');
+    assertEqual(displayMetric(sessionOnly, 'week').id, 'session');
+    const money = [{id: 'balance', kind: 'money', window: 'none', percentUsed: null}];
+    assertEqual(displayMetric(money, 'session').id, 'balance');
+    assertEqual(displayMetric([], 'week'), null);
+});
+
+test('the preferred metric changes the headline but not the state', () => {
+    const snapshot = {id: 'x', name: 'X', state: 'ok', source: {kind: 'fresh'}, metrics: [
+        {id: 'session', kind: 'percent', window: 'session', percentUsed: 10, windowSecs: 18000},
+        {id: 'week', kind: 'percent', window: 'week', percentUsed: 97, windowSecs: 604800},
+    ]};
+    const bar = barView(snapshot, {barMetric: 'session'});
+    assertEqual([bar.number, bar.suffix, bar.state], ['10', '5h', 'critical']);
+    const card = cardView(snapshot, {nowMs: NOW, popupMetric: 'week'});
+    assertEqual([card.heroText, card.heroSmall, card.state], ['97', '% · week', 'critical']);
+});
+
+test('card rows go from the shortest window to the longest', () => {
+    const metric = (id, window, windowSecs) => ({id, kind: 'percent', window, windowSecs, percentUsed: 5});
+    const snapshot = {id: 'x', name: 'X', state: 'ok', source: {kind: 'fresh'}, metrics: [
+        {id: 'balance', kind: 'money', window: 'none', percentUsed: null, balance: 3, currency: 'USD'},
+        metric('month', 'month', 2592000), metric('week', 'week', 604800), metric('session', 'session', 18000),
+    ]};
+    const ids = cardView(snapshot, {nowMs: NOW}).groups.flatMap(g => g.rows.map(r => r.id));
+    assertEqual(ids, ['session', 'week', 'month', 'balance']);
 });
 
 test('failures are never displayed as percentages', () => {
@@ -864,7 +903,7 @@ test('monetary mixed quotas keep unknown spend as a currency row', () => {
         {id: 'quota', kind: 'percent', percentUsed: 40, window: 'week'}]);
     const view = cardView(snapshot, {locale: 'en'});
     assertEqual(view.heroText, '40');
-    assertEqual(view.groups[0].rows[0].valueText, '$1,234.56');
-    assertEqual(view.groups[0].rows[0].noMeter, true);
+    assertEqual(view.groups[0].rows[1].valueText, '$1,234.56');
+    assertEqual(view.groups[0].rows[1].noMeter, true);
     assertEqual(view.groups[0].topText, '40');
 });
