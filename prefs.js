@@ -10,6 +10,7 @@ import {scanThemes} from './lib/services/themeFiles.js';
 import {buildAboutGroup} from './lib/prefs/about.js';
 import {buildAccountsPage} from './lib/prefs/accounts.js';
 import {addPopupControls, popupPresentationPage} from './lib/prefs/popup.js';
+import {addBarConnectorsRow} from './lib/prefs/barConnectors.js';
 import {buildNotificationsPage} from './lib/prefs/notifications.js';
 import {createSuggestedFontsGroup} from './lib/prefs/suggestedFonts.js';
 import {builtinCatalog, selectedThemeName, themeDefaultIndicators, themePresentation} from './lib/prefs/themeCatalog.js';
@@ -192,6 +193,7 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
         });
         settings.bind('bar-count', count, 'value', 0);
         bar.add(count);
+        addBarConnectorsRow({group: bar, window, settings, gettext: _, handlerIds});
 
         const compact = choiceRow(settings, 'compact-mode', [
             ['auto', _('Automatic')],

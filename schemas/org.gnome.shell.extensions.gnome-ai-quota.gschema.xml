@@ -22,6 +22,8 @@
     <key name="popup-hidden-connectors" type="as"><default>[]</default><summary>Connectors hidden only from the popup</summary></key>
     <key name="demo-popup-connector-order" type="as"><default>[]</default><summary>Preferred popup connector order</summary></key>
     <key name="demo-popup-hidden-connectors" type="as"><default>[]</default><summary>Connectors hidden only from the popup</summary></key>
+    <key name="bar-connectors" type="as"><default>[]</default><summary>Connectors chosen for the top bar</summary><description>Empty means automatic: the most used connectors are shown.</description></key>
+    <key name="demo-bar-connectors" type="as"><default>[]</default><summary>Connectors chosen for the top bar</summary><description>Empty means automatic: the most used connectors are shown.</description></key>
     <key name="position" enum="org.gnome.shell.extensions.gnome-ai-quota.Position">
       <default>'right'</default>
       <summary>Panel position</summary>

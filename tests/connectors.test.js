@@ -347,8 +347,12 @@ test('connectors: successful deletion prunes only exact presentation IDs in its 
     settings.set_strv('popup-hidden-connectors', ['codex', 'claude']);
     settings.set_strv('demo-popup-connector-order', ['codex']);
     settings.set_strv('demo-popup-hidden-connectors', ['codex']);
+    settings.set_strv('bar-connectors', ['codex', 'claude']);
+    settings.set_strv('demo-bar-connectors', ['codex']);
     const store = createConnectorStore(settings);
     store.remove('codex');
+    assertEqual(settings.get_strv('bar-connectors'), ['claude']);
+    assertEqual(settings.get_strv('demo-bar-connectors'), ['codex']);
     assertEqual(settings.get_strv('popup-connector-order'), ['claude']);
     assertEqual(settings.get_strv('popup-hidden-connectors'), ['claude']);
     assertEqual(settings.get_strv('demo-popup-hidden-connectors'), ['codex']);
@@ -361,6 +365,7 @@ test('connectors: successful deletion prunes only exact presentation IDs in its 
     demo.clear();
     assertEqual(settings.get_strv('demo-popup-connector-order'), []);
     assertEqual(settings.get_strv('demo-popup-hidden-connectors'), []);
+    assertEqual(settings.get_strv('demo-bar-connectors'), []);
     demo.dispose();
 });
 test('connectors: failed deletion keeps presentation preferences intact', () => {
