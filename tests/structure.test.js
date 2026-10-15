@@ -5,7 +5,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
 import {assertEqual, assertTrue, test, tmpDir} from './harness.js';
-import {PROVIDERS, LIVE_PROVIDER_IDS, DEMO_PROVIDERS, availableDemoProviders, providerMeta} from '../lib/providers/registry.js';
+import {PROVIDERS, LIVE_PROVIDER_IDS, availableDemoProviders, providerMeta} from '../lib/providers/registry.js';
 
 const root = GLib.path_get_dirname(GLib.path_get_dirname(import.meta.url.replace('file://', '')));
 const decoder = new TextDecoder();
@@ -77,9 +77,8 @@ test('registry: ordered, unique, and only complete providers are available', () 
     assertEqual([providerMeta('claude').terms, providerMeta('antigravity').terms], ['terms', 'strong']);
     assertEqual(providerMeta('command-code').terms, null);
     assertEqual(providerMeta('nope'), undefined);
-    assertEqual(DEMO_PROVIDERS.map(meta => meta.id), ['example-credits']);
-    assertEqual(availableDemoProviders().map(meta => meta.id), [...LIVE_PROVIDER_IDS, 'example-credits']);
-    assertTrue(!LIVE_PROVIDER_IDS.includes('example-credits'));
+    assertEqual(availableDemoProviders().map(meta => meta.id), LIVE_PROVIDER_IDS);
+    assertEqual(providerMeta('example-credits'), undefined);
     assertEqual(PROVIDERS.filter(meta => meta.quotaSupport === 'unavailable').map(meta => [meta.id, meta.apiHosts]), []);
 });
 

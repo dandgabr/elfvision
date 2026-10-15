@@ -8,7 +8,7 @@
         throw new Error('demo fixture requires the isolated headless harness');
     const settings = Main.panel.statusArea['gnome-ai-quota@dandgabr.github.io']._settings;
     if (settings.get_string('data-source') !== 'demo') throw new Error('demo fixture requires synthetic mode');
-    const providers = ['command-code', 'codex', 'claude', 'antigravity', 'example-credits'];
+    const providers = ['command-code', 'codex', 'claude', 'antigravity', 'openrouter'];
     settings.set_string('demo-connectors', JSON.stringify({version: 1,
         connectors: providers.map(providerId => ({id: providerId, providerId, label: '', username: ''}))}));
     settings.set_strv('demo-connected-connectors', providers);

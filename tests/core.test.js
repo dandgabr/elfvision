@@ -125,13 +125,13 @@ test('pacing', () => {
 
 test('bar selection: automatic picks the worst but keeps the fixed order', () => {
     const {onBar, hidden} = selectForBar(demo(), {count: 3});
-    assertEqual(onBar.map(s => s.id), ['codex', 'claude', 'example-credits']);
-    assertEqual(hidden.map(s => s.id), ['command-code', 'antigravity']);
+    assertEqual(onBar.map(s => s.id), ['codex', 'claude', 'antigravity']);
+    assertEqual(hidden.map(s => s.id), ['command-code']);
 });
 
 test('bar selection: count is clamped and manual mode is honored', () => {
     assertEqual(selectForBar(demo(), {count: 0}).onBar.length, 1);
-    assertEqual(selectForBar(demo(), {count: 99}).onBar.length, 5);
+    assertEqual(selectForBar(demo(), {count: 99}).onBar.length, 4);
     const manual = selectForBar(demo(), {count: 2, mode: 'manual', manual: ['claude', 'command-code', 'codex']});
     assertEqual(manual.onBar.map(s => s.id), ['command-code', 'claude']);
 });
@@ -155,9 +155,8 @@ test('bar view: pool provider names the pool and the window', () => {
 });
 
 test('bar view: money provider shows the balance', () => {
-    const view = barView(byId(demo(), 'example-credits'), {locale: 'en'});
-    assertEqual([view.number, view.showPercent, view.suffix], ['$12.40', false, '']);
-    assertEqual(view.percent, 75.2);
+    const view = barView(byId(demoSnapshots(NOW, {includeApi: true}), 'openrouter'), {locale: 'en'});
+    assertEqual([view.number, view.showPercent, view.suffix], ['$7.80', false, '']);
 });
 
 test('bar view: signed out is never a number', () => {
@@ -182,13 +181,13 @@ test('card view: pools are grouped in order', () => {
 });
 
 test('card view: money card', () => {
-    const view = cardView(byId(demo(), 'example-credits'), {nowMs: NOW, locale: 'en'});
+    const view = cardView(byId(demoSnapshots(NOW, {includeApi: true}), 'openrouter'), {nowMs: NOW, locale: 'en'});
     assertEqual([view.heroText, view.heroSmall, view.money.spentText, view.money.ofText],
-        ['$12.40', ' left', '$37.60', 'of $50.00 · 75%']);
+        ['$7.80', 'Key allowance left', '$7.80', '']);
 });
 
 test('summary and updated text', () => {
-    assertEqual(summaryText(demo()), '3 ok · 1 warning · 1 critical');
+    assertEqual(summaryText(demo()), '2 ok · 1 warning · 1 critical');
     assertEqual(updatedText(30000), 'Updated just now');
     assertEqual(updatedText(130000), 'Updated 2 min ago');
 });

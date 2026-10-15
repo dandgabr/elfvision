@@ -285,8 +285,8 @@ return to their defaults; ordinary upgrades preserve those choices.
 **Remove connector…** removes only the selected connector, its local credential,
 and its quota and alert data after confirmation. Other accounts stay saved.
 **Accounts → Delete all connectors…** removes every connector in the current
-Live or Demo mode after confirmation. Demo deletion includes **Example Credits**
-and never accesses live credentials. Live deletion removes this extension's
+Live or Demo mode after confirmation. Demo deletion never accesses live
+credentials. Live deletion removes this extension's
 credentials, quota snapshots and alert history, including orphaned credential
 entries. Appearance, themes, fonts and client configuration stay saved. Local
 deletion does not revoke an API key on the provider's site. Failed deletions remain

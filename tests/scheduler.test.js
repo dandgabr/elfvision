@@ -343,7 +343,7 @@ test('scheduler: seeded snapshots are returned in registration order', () => {
 
 test('demo: the steady scenario always answers with metrics that match the fixtures', async () => {
     const providers = createDemoProviders('steady', () => 5_000_000);
-    assertEqual(providers.map(p => p.id), ['command-code', 'codex', 'claude', 'antigravity', 'example-credits', 'openai-api', 'anthropic-api', 'cursor', 'openrouter']);
+    assertEqual(providers.map(p => p.id), ['command-code', 'codex', 'claude', 'antigravity', 'openai-api', 'anthropic-api', 'cursor', 'openrouter']);
     const claude = providers.find(p => p.id === 'claude');
     const result = await claude.fetch();
     assertEqual(result.metrics.map(m => m.percentUsed), [61, 97]);
@@ -380,7 +380,7 @@ test('demo: the drift scenario climbs toward the limit', async () => {
     await codex.fetch();
     const third = (await codex.fetch()).metrics[0].percentUsed;
     assertTrue(third > first, `${third} should be above ${first}`);
-    assertEqual(createDemoProviders('nonsense').length, 9, 'an unknown scenario falls back to steady');
+    assertEqual(createDemoProviders('nonsense').length, 8, 'an unknown scenario falls back to steady');
 });
 
 // ------------------------------------------- review fixes (M1, part 1)

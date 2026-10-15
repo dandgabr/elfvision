@@ -68,7 +68,7 @@ extension-managed flow until a verified local source exists.
 | Accounts, recovery | Recover list… | Appears when the connector list is invalid. After confirmation, rebuilds metadata from saved credential identities without reading or deleting secret values. Local names may need to be entered again. |
 | Accounts, Demo connectors | Simulate connect / disconnect | Changes a fictional account's state without a provider request, browser, or keyring. Add and remove use the separate demo connector list. |
 | Accounts, each connector | Track | When off, stops fetching and hides only this connector from the bar and active popup cards. Its credential stays saved. |
-| Accounts, Local account data | Delete all connectors… | Removes all connectors in the current Live or Demo mode after confirmation. Demo includes Example Credits and never touches live credentials. Failed deletion stays blocked for retry; Cancel is the default. |
+| Accounts, Local account data | Delete all connectors… | Removes all connectors in the current Live or Demo mode after confirmation. Demo never touches live credentials. Failed deletion stays blocked for retry; Cancel is the default. |
 | General, Top bar | Position | Puts the items in the left, center or right box of the panel. Default: right. |
 | General, Top bar | Providers on the bar | Shows up to this many connector items, from 1 to 5, prioritizing those that need attention. Two accounts with the same provider take two slots. Default: 3. |
 | General, Top bar | Compact mode | Automatic shrinks the bar only when space runs out; always compact drops the `%` and the suffix; never compact hides providers instead. |
@@ -151,7 +151,7 @@ using that provider; their credentials stay saved. An explicitly confirmed
 extension credentials. Provider access can remain valid after local deletion.
 
 **Accounts → Delete all connectors…** removes the selected data source's connector
-list. In Demo, it removes the fictional accounts, including Example Credits, and
+list. In Demo, it removes the fictional accounts and
 the list stays empty after a restart; live accounts and credentials are untouched.
 In Live, it removes extension credentials in both keyring namespaces, including
 orphaned entries, plus snapshots and alert history before clearing the list.
@@ -201,7 +201,7 @@ stored in GSettings or written back. There is no plaintext fallback for extensio
 See [Providers](providers.md) for API permissions, monetary semantics and supported
 endpoints. Connection icons distinguish API keys from OAuth 2. Gemini and Z.ai
 are deferred to future versions and do not appear in the provider selector. Demo includes synthetic templates for all listed
-providers; Example Credits is an ordinary removable demo connector.
+providers; every demo connector is removable.
 
 The theme picker describes each validated built-in theme's default background.
 Its transparency icon names the default material; its effects icon names motion

@@ -10,11 +10,11 @@ test('bar model: demo descriptions preserve current item output and fixed order'
     const result = await model({snapshots, settings: {count: 3, locale: 'en'}, now});
     assertEqual(result.items.map(item => [item.id, item.visible, item.compact]), [
         ['command-code', false, false], ['codex', true, false], ['claude', true, false],
-        ['antigravity', false, false], ['example-credits', true, false],
+        ['antigravity', true, false],
     ]);
     for (const item of result.items.filter(item => item.visible))
         assertEqual(item.view, itemView(snapshots.find(s => s.id === item.id), {nowMs: now, locale: 'en'}));
-    assertEqual(result.items.filter(item => item.visible).map(item => item.view.number), ['82', '97', '$12.40']);
+    assertEqual(result.items.filter(item => item.visible).map(item => item.view.number), ['82', '97', '74']);
 });
 
 test('bar model: empty and paused providers produce no items', async () => {

@@ -27,7 +27,7 @@
         await until(() => current()._emptyBox.visible && current()._cards.size === 0);
         check(current()._addAccount.label === 'Add connector', 'truly empty registry offers Add connector');
         const store = createConnectorStore(settings, {demo: true});
-        for (const providerId of ['codex', 'example-credits']) {
+        for (const providerId of ['codex', 'openrouter']) {
             const entry = store.add(providerId, 'Renamed connector');
             await wait(300);
             check(current()._connectorEntries().some(c => c.id === entry.id), `${providerId}: saved registry recognized immediately`);
