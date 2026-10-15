@@ -2,6 +2,8 @@
 # Layout checks use only the isolated demo shell; failed Eval is a failed test.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+# The probe saves its evidence screenshots here (untracked, see .gitignore).
+mkdir -p .superpowers/sdd/2026-10-07-open-items
 scratch="$(mktemp -d)"
 trap 'rm -rf "$scratch"' EXIT
 if ! LOG="$scratch/shell.log" GAQ_TEST_MONITOR=800x900 timeout 90 tools/headless-shell.sh tools/demo-connectors-fixture.js tools/layout-probe.js sleep:20 tools/layout-verify.js >"$scratch/result" 2>&1; then

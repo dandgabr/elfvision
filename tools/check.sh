@@ -10,6 +10,7 @@ set -uo pipefail
 
 cd "$(dirname "$0")/.." || exit 1
 failed=0
+skipped=()
 scratch="$(mktemp -d)"
 trap 'rm -rf "$scratch"' EXIT
 
@@ -21,6 +22,13 @@ step() {
         printf 'FAILED: %s\n' "$name" >&2
         failed=1
     fi
+}
+
+# A step that cannot run here says so at the end: a skipped check is not a passed one.
+# GAQ_REQUIRE_ALL=1 (a release machine, CI) turns any skip into a failure.
+skip() {
+    echo "($1: skipped)"
+    skipped+=("$1")
 }
 
 syntax() {
@@ -35,7 +43,7 @@ syntax() {
 
 lint() {
     if ! command -v shellcheck >/dev/null 2>&1; then
-        echo "(shellcheck is not installed: skipped)"
+        skip "shellcheck"
         return 0
     fi
     shellcheck -S warning tools/*.sh tests/*.sh .githooks/pre-commit
@@ -43,7 +51,7 @@ lint() {
 
 js_lint() {
     if [ ! -x node_modules/.bin/eslint ]; then
-        echo "ESLint dependencies are not installed; skipped (run npm ci --ignore-scripts)"
+        skip "eslint (run npm ci --ignore-scripts)"
         return 0
     fi
     npm run lint
@@ -73,7 +81,7 @@ catalogs() {
 # The interface modules need the shell to be imported, so the unit tests never load them: a syntax
 # error in one (a name declared twice) would only show when the extension fails to enable.
 js_syntax() {
-    command -v node >/dev/null 2>&1 || { echo "node is not installed; skipping"; return 0; }
+    command -v node >/dev/null 2>&1 || { skip "javascript syntax (node)"; return 0; }
     local file status=0
     while IFS= read -r file; do
         node --input-type=module --check < "$file" 2>&1 | sed "s|^|$file: |" | head -3
@@ -87,7 +95,7 @@ js_syntax() {
 # only here.
 shell_loads() {
     if ! command -v gnome-shell >/dev/null 2>&1 || ! command -v dbus-run-session >/dev/null 2>&1; then
-        echo "gnome-shell is not available; skipping"
+        skip "extension enables in a shell (gnome-shell, dbus-run-session)"
         return 0
     fi
     local out
@@ -100,7 +108,7 @@ shell_loads() {
 }
 
 step "build" tools/build.sh
-step "unit tests" gjs -m tests/run.js
+step "unit tests" timeout 600 gjs -m tests/run.js
 step "authored theme variants" python3 -I tools/test-theme-generation.py
 step "cross-process disconnect" timeout 90 tests/disconnectDisk.sh
 step "private keyring disconnect" timeout 90 tests/disconnectSecrets.sh
@@ -115,4 +123,8 @@ step "translation template" template_in_step
 step "translation catalogs" catalogs
 step "whitespace" git diff --check HEAD
 
+if [ "${#skipped[@]}" -gt 0 ]; then
+    printf 'SKIPPED (not verified here): %s\n' "${skipped[*]}" >&2
+    [ "${GAQ_REQUIRE_ALL:-0}" = 1 ] && failed=1
+fi
 exit "$failed"

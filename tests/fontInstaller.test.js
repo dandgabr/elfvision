@@ -56,6 +56,32 @@ test('font service: Fontconfig inventory identifies visible families and their d
     } finally { installer.destroy(); }
 });
 
+test('font service: the real fc-list and fc-cache subprocess path reports the installed batch', async () => {
+    // No injected verify/refresh: this runs Gio.Subprocess and its promisified wrappers for real.
+    const {FontInstaller} = await service(); const root = tmpDir(); const directory = `${root}/fonts`;
+    const bin = `${root}/bin`; GLib.mkdir_with_parents(bin, 0o700);
+    const listing = `${root}/listing`; GLib.file_set_contents(listing, '');
+    for (const [name, body] of [['fc-list', `#!/bin/sh\ncat '${listing}'\n`], ['fc-cache', '#!/bin/sh\nexit 0\n']]) {
+        GLib.file_set_contents(`${bin}/${name}`, body); GLib.chmod(`${bin}/${name}`, 0o755);
+    }
+    const previous = GLib.getenv('PATH'); GLib.setenv('PATH', `${bin}:${previous}`, true);
+    let installer;
+    try {
+        installer = new FontInstaller({directory, manifest: fixtures(), transport: transport(), licenses});
+        const first = await installer.install(['inter-variable']);
+        assertEqual([first.status, first.cacheStatus, first.fontconfigStatus], ['installed', 'refreshed', 'missing']);
+        const entry = fixtures().find(item => item.id === 'inter-variable');
+        GLib.file_set_contents(listing, `${entry.family}\t${directory}/${first.batch}/${entry.filename}\n`);
+        const second = await installer.install(['inter-variable']);
+        assertEqual([second.status, second.cacheStatus, second.fontconfigStatus], ['installed', 'refreshed', 'available']);
+        const inventory = await installer.fontInventory();
+        assertEqual([inventory.status, inventory.fonts.length], ['available', 1]);
+    } finally {
+        GLib.setenv('PATH', previous, true);
+        installer?.destroy();
+    }
+});
+
 test('font service: identical existing files are recognized without redownload', async () => {
     const {FontInstaller} = await service(); const directory = `${tmpDir()}/fonts`;
     let calls = 0; const input = options(directory); const source = input.transport;
