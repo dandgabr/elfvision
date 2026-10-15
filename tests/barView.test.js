@@ -7,14 +7,14 @@ const now = 1800000000000;
 
 test('bar model: demo descriptions preserve current item output and fixed order', async () => {
     const snapshots = demoSnapshots(now);
-    const result = await model({snapshots, settings: {count: 3}, now});
+    const result = await model({snapshots, settings: {count: 3, locale: 'en'}, now});
     assertEqual(result.items.map(item => [item.id, item.visible, item.compact]), [
         ['command-code', false, false], ['codex', true, false], ['claude', true, false],
-        ['antigravity', false, false], ['example-credits', true, false],
+        ['antigravity', true, false],
     ]);
     for (const item of result.items.filter(item => item.visible))
-        assertEqual(item.view, itemView(snapshots.find(s => s.id === item.id), {nowMs: now}));
-    assertEqual(result.items.filter(item => item.visible).map(item => item.view.number), ['82', '97', '$12.40']);
+        assertEqual(item.view, itemView(snapshots.find(s => s.id === item.id), {nowMs: now, locale: 'en'}));
+    assertEqual(result.items.filter(item => item.visible).map(item => item.view.number), ['82', '97', '74']);
 });
 
 test('bar model: empty and paused providers produce no items', async () => {
@@ -37,4 +37,23 @@ test('bar model: unchanged input is equal and latest response updates headline',
     const {items} = await model({...input, snapshots: latest});
     assertEqual(items.filter(item => item.visible).map(item => [item.id, item.compact, item.view.number]), [['codex', true, '100']]);
     assertEqual(snapshots[1].metrics[0].percentUsed, 82);
+});
+
+test('bar model: a chosen list decides the slots, an empty one stays automatic', async () => {
+    const snapshots = demoSnapshots(now);
+    const visible = result => result.items.filter(item => item.visible).map(item => item.id);
+    assertEqual(visible(await model({snapshots, settings: {count: 3, barConnectors: ['command-code', 'antigravity']}, now})),
+        ['command-code', 'antigravity']);
+    assertEqual(visible(await model({snapshots, settings: {count: 3, barConnectors: []}, now})), ['codex', 'claude', 'antigravity']);
+    // More chosen than slots: the first of the list win, drawing keeps the fixed order.
+    assertEqual(visible(await model({snapshots, settings: {count: 2, barConnectors: ['claude', 'command-code', 'codex']}, now})),
+        ['command-code', 'claude']);
+});
+
+test('bar model: unknown or paused choices fall back to automatic so the bar is never empty', async () => {
+    const snapshots = demoSnapshots(now).map(s => s.id === 'codex' ? {...s, tracked: false} : s);
+    const visible = result => result.items.filter(item => item.visible).map(item => item.id);
+    assertEqual(visible(await model({snapshots, settings: {count: 3, barConnectors: ['nope', 'codex']}, now})),
+        ['command-code', 'claude', 'antigravity']);
+    assertEqual(visible(await model({snapshots, settings: {count: 3, headline: true, barConnectors: ['claude', 'antigravity']}, now})), ['claude']);
 });

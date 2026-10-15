@@ -26,8 +26,10 @@ tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M
     warning icon.
 - **Count:** 1 to 5 connector items, setting `bar-count`, default 3. Separate
   accounts using the same provider occupy separate slots and retain independent quotas.
-- **Selection:** automatic (the N worst connectors) or manual. `lib/core/selection.js` supports
-  both, but no setting exposes manual selection yet. Automatic ranks by severity
+- **Selection:** automatic (the N worst connectors) or manual. `bar-connectors` (and
+  `demo-bar-connectors` in Demo) holds the chosen connector ids; empty means automatic, and a
+  list that resolves to nothing visible falls back to automatic so the bar is never empty.
+  When more are chosen than there are slots, the first ids in the list win. Automatic ranks by severity
   (critical, warning, error or not signed in, stale, normal; ties by the highest
   percentage) but draws the selected items in the fixed provider order, so the bar
   does not jump. Failures compete as "warning": real critical and warning states
@@ -60,7 +62,9 @@ tabular), a subordinate `%` (11 px, 70% opacity), a window suffix (`5h`, `W`, `M
   close. While open, the popup is anchored to an invisible copy of the button's box,
   so it stays put when neighbors resize.
 - **Settings:** `position` (`left`, `center`, `right`; default right), `bar-count`
-  and `compact-mode` (`auto`, `always`, `never`). `never` keeps the `%` and the
+  `compact-mode` (`auto`, `always`, `never`) and `primary-metric-bar` (`auto`, `session`, `week`:
+  which window the item displays, with the other as fallback; the state and the ranking still
+  use the most used window). `never` keeps the `%` and the
   suffix and only drops providers. The button goes after the Activities button in
   the left box and first in the right box.
 

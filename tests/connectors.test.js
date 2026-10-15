@@ -21,7 +21,7 @@ test('connectors: recovery with no saved identities creates no phantom accounts'
     }
 });
 function legacyFixture(demo = false) {
-    return ['command-code', 'codex', 'claude', 'antigravity', ...(demo ? ['example-credits'] : [])]
+    return ['command-code', 'codex', 'claude', 'antigravity']
         .map(providerId => ({id: providerId, providerId, label: '', username: ''}));
 }
 function settingsFixture(seed = true) {
@@ -60,8 +60,8 @@ test('connectors: explicitly saved legacy identities remain stable, rename and r
     const settings = settingsFixture(); const store = createConnectorStore(settings, {uuid: () => '12345678-1234-4234-8234-123456789abc'});
     const extra = store.add('codex', 'Work'); assertEqual(extra.id, id); assertEqual(store.list().filter(c => c.providerId === 'codex').length, 2);
     store.update(id, {label: 'Renamed'}); assertEqual(store.get(id).label, 'Renamed'); assertEqual(store.get('codex').id, 'codex');
-    const demo = createConnectorStore(settings, {demo: true}); assertEqual(demo.list().length, 5);
-    store.remove(id); assertEqual(store.list().length, 4); assertEqual(demo.list().length, 5);
+    const demo = createConnectorStore(settings, {demo: true}); assertEqual(demo.list().length, 4);
+    store.remove(id); assertEqual(store.list().length, 4); assertEqual(demo.list().length, 4);
     for (const connector of store.list()) store.remove(connector.id); assertEqual(createConnectorStore(settings).list(), []);
     store.dispose(); demo.dispose();
 });
@@ -157,7 +157,7 @@ for (const source of ['live', 'demo']) {
         const construct = new Function('createConnectorStore', 'createProviders', 'GLib', 'CacheStore', 'QuotaController', 'availableProviders', 'availableDemoProviders', body);
         class Controller { constructor({providers}) { running = providers; } markSynced() {} subscribe() { return () => {}; } start() { return Promise.resolve(); } }
         const extension = {_settings: settings, _disconnectGate: {}, _syncProviders() {}, _createAlerts() {}};
-        construct.call(extension, createConnectorStore, () => [{id: 'example-credits'}], GLib, class {}, Controller, () => [], () => []);
+        construct.call(extension, createConnectorStore, () => [{id: 'openrouter'}], GLib, class {}, Controller, () => [], () => []);
         assertTrue(extension._controller !== null); assertEqual(extension._controller.registryProblem, true);
         assertEqual(running.map(provider => provider.id), []);
     });
@@ -190,25 +190,31 @@ test('connectors: recovery exceeding the identity bound fails explicitly without
     assertTrue(rejected); assertEqual(settings.get_string('connectors'), '{corrupt'); store.dispose();
 });
 
-test('connectors: demo credit identities persist only in the demo registry', () => {
+test('connectors: demo identities persist only in the demo registry', () => {
     const settings = settingsFixture();
     const demo = createConnectorStore(settings, {demo: true, uuid: () => '12345678-1234-4234-8234-123456789abc'});
-    assertEqual(demo.list().map(entry => entry.id), ['command-code', 'codex', 'claude', 'antigravity', 'example-credits']);
-    const credit = demo.add('example-credits', 'Preview credits');
-    assertEqual(demo.get(credit.id).providerId, 'example-credits');
-    assertEqual(providerIdForConnector(credit.id), null);
-    assertEqual(providerIdForConnector(credit.id, {demo: true}), 'example-credits');
+    assertEqual(demo.list().map(entry => entry.id), ['command-code', 'codex', 'claude', 'antigravity']);
+    const extra = demo.add('openrouter', 'Preview credits');
+    assertEqual(demo.get(extra.id).providerId, 'openrouter');
+    assertEqual(providerIdForConnector(extra.id, {demo: true}), 'openrouter');
     const live = createConnectorStore(settings);
-    let rejected = false; try { live.add('example-credits'); } catch (_) { rejected = true; }
-    assertTrue(rejected); assertEqual(live.list().length, 4);
+    assertEqual(live.list().length, 4);
     demo.clear(); assertEqual(createConnectorStore(settings, {demo: true}).list(), []);
     assertEqual(live.list().length, 4); live.dispose(); demo.dispose();
+});
+
+test('connectors: a saved demo registry that lists the removed example connector still loads', () => {
+    const value = JSON.stringify({version: 1, connectors: [
+        {id: 'codex', providerId: 'codex', label: '', username: ''},
+        {id: 'example-credits', providerId: 'example-credits', label: 'Preview credits', username: ''},
+    ]});
+    assertEqual(decodeConnectors(value, {demo: true}).map(entry => entry.id), ['codex']);
 });
 
 import {disconnectAll} from '../lib/services/disconnectAll.js';
 test('connectors: delete all demo isolates live data and keeps an empty registry after restart', async () => {
     const settings = settingsFixture(); const arrays = new Map([
-        ['demo-connected-connectors', ['codex', 'example-credits']], ['untracked-providers', ['example-credits', 'openai-api']]]);
+        ['demo-connected-connectors', ['codex', 'antigravity']], ['untracked-providers', ['antigravity', 'openai-api']]]);
     settings.get_strv = key => arrays.get(key) ?? [];
     settings.set_strv = (key, value) => { arrays.set(key, value); return true; };
     const live = createConnectorStore(settings); live.add('codex', 'Real'); const before = settings.get_string('connectors');
@@ -255,10 +261,10 @@ test('connectors: unavailable quota controller never reads or stores a credentia
 });
 
 test('connectors: failed demo registry write cannot report completed deletion', async () => {
-    const settings = settingsFixture(); const arrays = new Map([['demo-connected-connectors', ['example-credits']], ['untracked-providers', ['example-credits']]]);
+    const settings = settingsFixture(); const arrays = new Map([['demo-connected-connectors', ['antigravity']], ['untracked-providers', ['antigravity']]]);
     settings.get_strv = key => arrays.get(key) ?? [];
     settings.set_strv = (key, value) => { arrays.set(key, value); return true; };
-    const demo = createConnectorStore(settings, {demo: true}); demo.update('example-credits', {label: 'Kept after failure'});
+    const demo = createConnectorStore(settings, {demo: true}); demo.update('antigravity', {label: 'Kept after failure'});
     const before = settings.get_string('demo-connectors'); const original = settings.set_string;
     settings.set_string = (key, value) => key === 'demo-connectors' ? false : original(key, value);
     let failure = false; try { await disconnectAll({settings, demo: true}); } catch (_) { failure = true; }
@@ -275,7 +281,7 @@ import {demoSnapshots} from '../lib/core/fixtures.js';
 
 test('connectors: deleting Example and every demo connector prevents cache ghosts across restart and scenario changes', async () => {
     const settings = settingsFixture(); settings.set_string('data-source', 'demo');
-    settings.get_strv = key => key === 'demo-connected-connectors' ? ['command-code', 'codex', 'claude', 'antigravity', 'example-credits'] : [];
+    settings.get_strv = key => key === 'demo-connected-connectors' ? ['command-code', 'codex', 'claude', 'antigravity', 'openrouter'] : [];
     const root = GLib.path_get_dirname(GLib.path_get_dirname(GLib.filename_from_uri(import.meta.url)[0]));
     const text = new TextDecoder().decode(GLib.file_get_contents(`${root}/extension.js`)[1]);
     const body = text.match(/ {4}_createController\(\) \{([\s\S]*?)\n {4}\}\n\n {4}\/\*\*/)[1];
@@ -286,7 +292,7 @@ test('connectors: deleting Example and every demo connector prevents cache ghost
         save(snapshots) { saved.push(snapshots.map(snapshot => snapshot.id)); }
     }
     const store = createConnectorStore(settings, {demo: true});
-    store.remove('example-credits');
+    store.remove('openrouter');
     for (const clearAll of [false, true]) {
         if (clearAll) store.clear();
         for (const scenario of ['steady', 'flaky', 'drift']) {
@@ -295,10 +301,10 @@ test('connectors: deleting Example and every demo connector prevents cache ghost
             construct.call(extension, createConnectorStore, ({scenario: selected}) => createDemoProviders(selected), GLib, Cached, QuotaController, () => [], availableDemoProviders);
             await extension._controller.start();
             assertEqual(extension._controller.providerIds(), clearAll ? [] : ['command-code', 'codex', 'claude', 'antigravity']);
-            assertTrue(!extension._controller.snapshots().some(snapshot => snapshot.id === 'example-credits'));
+            assertTrue(!extension._controller.snapshots().some(snapshot => snapshot.id === 'openrouter'));
             if (clearAll) assertEqual(extension._controller.snapshots(), []);
             await extension._controller.stop();
-            assertTrue(!saved.at(-1).includes('example-credits'));
+            assertTrue(!saved.at(-1).includes('openrouter'));
         }
     }
     store.dispose();
@@ -341,8 +347,12 @@ test('connectors: successful deletion prunes only exact presentation IDs in its 
     settings.set_strv('popup-hidden-connectors', ['codex', 'claude']);
     settings.set_strv('demo-popup-connector-order', ['codex']);
     settings.set_strv('demo-popup-hidden-connectors', ['codex']);
+    settings.set_strv('bar-connectors', ['codex', 'claude']);
+    settings.set_strv('demo-bar-connectors', ['codex']);
     const store = createConnectorStore(settings);
     store.remove('codex');
+    assertEqual(settings.get_strv('bar-connectors'), ['claude']);
+    assertEqual(settings.get_strv('demo-bar-connectors'), ['codex']);
     assertEqual(settings.get_strv('popup-connector-order'), ['claude']);
     assertEqual(settings.get_strv('popup-hidden-connectors'), ['claude']);
     assertEqual(settings.get_strv('demo-popup-hidden-connectors'), ['codex']);
@@ -355,6 +365,7 @@ test('connectors: successful deletion prunes only exact presentation IDs in its 
     demo.clear();
     assertEqual(settings.get_strv('demo-popup-connector-order'), []);
     assertEqual(settings.get_strv('demo-popup-hidden-connectors'), []);
+    assertEqual(settings.get_strv('demo-bar-connectors'), []);
     demo.dispose();
 });
 test('connectors: failed deletion keeps presentation preferences intact', () => {

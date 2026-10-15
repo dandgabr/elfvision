@@ -56,7 +56,7 @@
         settings.set_string('demo-connectors', JSON.stringify({version: 1, connectors: []}));
         await wait(900);
         indicator = Main.panel.statusArea['gnome-ai-quota@dandgabr.github.io'];
-        check(indicator._controller.snapshots().length === 0 && indicator._cards.size === 0, 'empty demo has no Example Credits ghost');
+        check(indicator._controller.snapshots().length === 0 && indicator._cards.size === 0, 'empty demo has no ghost connector');
         check(indicator._emptyBox.visible && indicator._addAccount.visible && indicator._emptyIcon.visible, 'empty demo offers Add account instead of waiting for nonexistent data');
         settings.set_string('demo-scenario', 'drift'); await wait(900);
         indicator = Main.panel.statusArea['gnome-ai-quota@dandgabr.github.io'];

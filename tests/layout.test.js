@@ -1,5 +1,5 @@
 import {assertEqual, assertTrue, test} from './harness.js';
-import {popupDimensions, popupPresentation, popupKeys, moveConnector, setPopupVisibility} from '../lib/core/popup.js';
+import {popupDimensions, popupPresentation, popupKeys, barKeys, setBarSelected, moveConnector, setPopupVisibility} from '../lib/core/popup.js';
 import {meterGeometry} from '../lib/core/layout.js';
 import {expandText, pseudoTranslations} from '../lib/core/pseudoLocale.js';
 
@@ -30,6 +30,7 @@ test('popup presentation: hiding affects presentation only, and bounds untrusted
     assertEqual(popupPresentation(connectors, null, null).map(c => c.id), ['codex', 'claude', 'antigravity']);
     assertEqual(popupPresentation(connectors, Array(33).fill('claude'), []).map(c => c.id), ['codex', 'claude', 'antigravity']);
     assertEqual(popupKeys(true), {order: 'demo-popup-connector-order', hidden: 'demo-popup-hidden-connectors'});
+    assertEqual([barKeys(true).selected, barKeys(false).selected], ['demo-bar-connectors', 'bar-connectors']);
     assertEqual(popupKeys(false), {order: 'popup-connector-order', hidden: 'popup-hidden-connectors'});
 });
 test('popup presentation: accessible movement preserves hidden entries and registry identity', () => {
@@ -77,4 +78,12 @@ test('popup dimensions: tiny preferences retain a usable content area while resp
         {width: 320, height: 260, contentWidth: 296, scrollHeight: 40});
     assertEqual(popupDimensions({width: 300, height: 200}, 1, 1, {horizontal: 24, vertical: 100}),
         {width: 276, height: 176, contentWidth: 252, scrollHeight: 76});
+});
+
+test('bar choice follows the registry order and ignores unknown ids', () => {
+    const entries = [{id: 'a'}, {id: 'b'}, {id: 'c'}];
+    assertEqual(setBarSelected(entries, [], 'c', true), ['c']);
+    assertEqual(setBarSelected(entries, ['c'], 'a', true), ['a', 'c']);
+    assertEqual(setBarSelected(entries, ['a', 'c'], 'a', false), ['c']);
+    assertEqual(setBarSelected(entries, ['zzz', 'b'], 'nope', true), ['b']);
 });

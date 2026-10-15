@@ -216,7 +216,7 @@ requires an explicit acknowledgement before an OAuth connection starts.
 ## Features
 
 - **Panel and popup:** choose left, center or right placement, show one to five
-  connector items, and use automatic, always, or never compact mode. Connector cards can
+  connector items, choose which connectors take them, pick session or week as the main metric, and use automatic, always, or never compact mode. Connector cards can
   open automatically when they need attention. Set popup width and maximum
   height in logical pixels, or use automatic sizing; the current monitor limits
   its displayed size. Choose which cards appear and arrange them with accessible
@@ -285,8 +285,8 @@ return to their defaults; ordinary upgrades preserve those choices.
 **Remove connector…** removes only the selected connector, its local credential,
 and its quota and alert data after confirmation. Other accounts stay saved.
 **Accounts → Delete all connectors…** removes every connector in the current
-Live or Demo mode after confirmation. Demo deletion includes **Example Credits**
-and never accesses live credentials. Live deletion removes this extension's
+Live or Demo mode after confirmation. Demo deletion never accesses live
+credentials. Live deletion removes this extension's
 credentials, quota snapshots and alert history, including orphaned credential
 entries. Appearance, themes, fonts and client configuration stay saved. Local
 deletion does not revoke an API key on the provider's site. Failed deletions remain

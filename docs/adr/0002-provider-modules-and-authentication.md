@@ -144,7 +144,7 @@ cache entries discard arbitrary response fields. Organization costs never imply
 subscription quota or prepaid balance.
 
 Accounts now offers Delete all connectors for the current data source. Demo
-includes a persistent, removable Example Credits connector; empty lists stay
+connectors are removable; empty lists stay
 empty across restarts. Live metadata clears only after credential/cache deletion
 succeeds under the durable gate. General alone offers Restore configuration,
 preserving connectors and credentials. About adds Daniel G. Araujo's credit/link

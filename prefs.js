@@ -10,6 +10,7 @@ import {scanThemes} from './lib/services/themeFiles.js';
 import {buildAboutGroup} from './lib/prefs/about.js';
 import {buildAccountsPage} from './lib/prefs/accounts.js';
 import {addPopupControls, popupPresentationPage} from './lib/prefs/popup.js';
+import {addBarConnectorsRow} from './lib/prefs/barConnectors.js';
 import {buildNotificationsPage} from './lib/prefs/notifications.js';
 import {createSuggestedFontsGroup} from './lib/prefs/suggestedFonts.js';
 import {builtinCatalog, selectedThemeName, themeDefaultIndicators, themePresentation} from './lib/prefs/themeCatalog.js';
@@ -192,6 +193,7 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
         });
         settings.bind('bar-count', count, 'value', 0);
         bar.add(count);
+        addBarConnectorsRow({group: bar, window, settings, gettext: _, handlerIds});
 
         const compact = choiceRow(settings, 'compact-mode', [
             ['auto', _('Automatic')],
@@ -199,6 +201,13 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
             ['never', _('Never compact')],
         ], _('Compact mode'), _('Automatic: only when space runs out. Always: drops the % sign and the window suffix. Never: hides providers instead.'), handlerIds);
         bar.add(compact);
+
+        const barMetric = choiceRow(settings, 'primary-metric-bar', [
+            ['auto', _('Most used')],
+            ['session', _('Session')],
+            ['week', _('Week')],
+        ], _('Main metric'), _('Which window the bar shows. If a service does not have it, the other one is shown.'), handlerIds);
+        bar.add(barMetric);
 
         page.add(bar);
 
@@ -283,6 +292,12 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
             ['short', _('1h20')],
         ], _('Time until reset'), _('How the countdown to a reset is written.'), handlerIds);
         popup.add(reset);
+        const popupMetric = choiceRow(settings, 'primary-metric-popup', [
+            ['auto', _('Most used')],
+            ['session', _('Session')],
+            ['week', _('Week')],
+        ], _('Main metric'), _('Which window the card headline shows. If a service does not have it, the other one is shown.'), handlerIds);
+        popup.add(popupMetric);
         const autoOpen = new Adw.SwitchRow({
             title: _('Open cards that need attention'),
             subtitle: _('Cards in warning, critical or error states open on their own.'),

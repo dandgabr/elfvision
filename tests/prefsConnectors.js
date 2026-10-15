@@ -52,7 +52,7 @@ app.connect('activate', () => {
             view.dispose();
         }
         check(accounts.controllers.size === 0 && store.list().length === 0, 'fresh demo starts without any default connectors');
-        settings.set_string('demo-connectors', JSON.stringify({version: 1, connectors: ['command-code', 'codex', 'claude', 'antigravity', 'example-credits']
+        settings.set_string('demo-connectors', JSON.stringify({version: 1, connectors: ['command-code', 'codex', 'claude', 'antigravity', 'openrouter']
             .map(providerId => ({id: providerId, providerId, label: '', username: ''}))}));
         await wait();
         check(accounts.controllers.size === 5, 'five explicitly seeded synthetic connectors including credits');
@@ -87,10 +87,10 @@ app.connect('activate', () => {
         check(!store.get(work.id) && store.get('codex'), 'confirmed removal affects only the chosen connector');
         check(!settings.get_strv('demo-connected-connectors').includes(work.id), 'simulated credential state removed');
         check(!button(accounts.page, 'Restore…'), 'Accounts has no configuration restore action');
-        const credit = store.get('example-credits');
+        const credit = store.get('openrouter');
         check(credit && accounts.controllers.has(credit.id), 'credits is an ordinary persisted connector');
         settings.set_strv('demo-connected-connectors', store.list().map(entry => entry.id));
-        settings.set_strv('untracked-providers', ['example-credits', 'unrelated-live']);
+        settings.set_strv('untracked-providers', ['openrouter', 'unrelated-live']);
         settings.set_string('theme', 'glassmorphism');
         const liveBefore = settings.get_string('connectors');
         const deleteAll = button(accounts.page, 'Delete all connectors'); contained(deleteAll, window);

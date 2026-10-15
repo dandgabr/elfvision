@@ -22,6 +22,8 @@
     <key name="popup-hidden-connectors" type="as"><default>[]</default><summary>Connectors hidden only from the popup</summary></key>
     <key name="demo-popup-connector-order" type="as"><default>[]</default><summary>Preferred popup connector order</summary></key>
     <key name="demo-popup-hidden-connectors" type="as"><default>[]</default><summary>Connectors hidden only from the popup</summary></key>
+    <key name="bar-connectors" type="as"><default>[]</default><summary>Connectors chosen for the top bar</summary><description>Empty means automatic: the most used connectors are shown.</description></key>
+    <key name="demo-bar-connectors" type="as"><default>[]</default><summary>Connectors chosen for the top bar</summary><description>Empty means automatic: the most used connectors are shown.</description></key>
     <key name="position" enum="org.gnome.shell.extensions.gnome-ai-quota.Position">
       <default>'right'</default>
       <summary>Panel position</summary>
@@ -97,6 +99,26 @@
       <default>'long'</default>
       <summary>Time until reset</summary>
       <description>long reads "resets in 1h 20min"; short reads "resets in 1h20".</description>
+    </key>
+    <key name="primary-metric-bar" type="s">
+      <choices>
+        <choice value="auto"/>
+        <choice value="session"/>
+        <choice value="week"/>
+      </choices>
+      <default>'auto'</default>
+      <summary>Main metric on the top bar</summary>
+      <description>auto shows the most used window; session or week shows that window, falling back to the other when the service has no such window.</description>
+    </key>
+    <key name="primary-metric-popup" type="s">
+      <choices>
+        <choice value="auto"/>
+        <choice value="session"/>
+        <choice value="week"/>
+      </choices>
+      <default>'auto'</default>
+      <summary>Main metric in the popup</summary>
+      <description>auto shows the most used window; session or week shows that window, falling back to the other when the service has no such window.</description>
     </key>
     <key name="auto-open" type="b">
       <default>true</default>

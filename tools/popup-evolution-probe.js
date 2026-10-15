@@ -28,7 +28,7 @@
         indicator._settings.set_string('color-scheme', scheme);
         indicator._settings.set_boolean('auto-open', true);
         indicator._extension._themes._interface.set_boolean('enable-animations', true);
-        indicator._settings.set_strv('demo-popup-connector-order', ['codex', 'claude', 'example-credits', 'command-code', 'antigravity']);
+        indicator._settings.set_strv('demo-popup-connector-order', ['codex', 'claude', 'openrouter', 'command-code', 'antigravity']);
         indicator.menu.open(false);
         await wait(1200);
         const cases = [
