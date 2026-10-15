@@ -31,3 +31,9 @@ test('theme catalog: genuine System, other built-ins and unavailable selections 
     assertEqual(catalog.themePresentation(themes.find(theme => theme.id === 'glassmorphism'), _).group, 'Surface and materials');
     assertEqual(catalog.selectedThemeName(themes, 'missing', _), 'missing (unavailable)');
 });
+
+test('theme catalog: scanned themes carry their font stacks for the coverage view', () => {
+    const themes = scanThemes(root, {userDirectory: tmpDir()}).themes;
+    const cyberpunk = themes.find(theme => theme.id === 'cyberpunk');
+    assertEqual([cyberpunk.fonts.body.name, cyberpunk.fonts.display.name, cyberpunk.fonts.mono.name], ['Rajdhani', 'Orbitron', 'Share Tech Mono']);
+});
