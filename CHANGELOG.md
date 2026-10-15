@@ -4,7 +4,7 @@ All notable changes to the Elfvision GNOME build. The full release notes are kep
 [docs/temp/](docs/temp/) as `release-v<version>.md`. Versions follow `version-name` in
 [metadata.json](metadata.json).
 
-## Unreleased
+## 0.3.0 — 2026-10-15
 
 ### Added
 - Diagnostic logging to the systemd journal with a closed event catalog, a `log-level` setting and a
