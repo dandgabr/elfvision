@@ -4,7 +4,7 @@ All notable changes to the Elfvision GNOME build. The full release notes are kep
 [docs/temp/](docs/temp/) as `release-v<version>.md`. Versions follow `version-name` in
 [metadata.json](metadata.json).
 
-## Unreleased
+## 0.2.7 — 2026-10-15
 
 ### Fixed
 - Preferences recognise suggested fonts that are already installed, and the coverage list names every theme.
