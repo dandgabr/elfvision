@@ -71,6 +71,9 @@ extension-managed flow until a verified local source exists.
 | Accounts, Local account data | Delete all connectors… | Removes all connectors in the current Live or Demo mode after confirmation. Demo never touches live credentials. Failed deletion stays blocked for retry; Cancel is the default. |
 | General, Top bar | Position | Puts the items in the left, center or right box of the panel. Default: right. |
 | General, Top bar | Providers on the bar | Shows up to this many connector items, from 1 to 5, prioritizing those that need attention. Two accounts with the same provider take two slots. Default: 3. |
+| General, Top bar | Connectors on the bar | Choose which connectors take the slots. Automatic (default) shows the most used ones; a chosen list shows those, and if more are chosen than there are slots the first in the list win. A choice that shows nothing falls back to automatic. |
+| General, Top bar | Main metric | Which window the bar number shows: Most used (default), Session or Week. If a service has no such window, the other one is shown. Warning and critical states still follow the most used window. |
+| General, Popup | Main metric | The same choice for the headline number of each card. Rows inside a card always run from the shortest window to the longest. |
 | General, Top bar | Compact mode | Automatic shrinks the bar only when space runs out; always compact drops the `%` and the suffix; never compact hides providers instead. |
 | General, Colors and theme | Light or dark | Follows the system, or forces light or dark for the popup. The top bar is always dark. |
 | General, Colors and theme | Theme | Opens the theme picker. Default: System (GNOME). |

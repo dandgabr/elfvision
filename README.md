@@ -216,7 +216,7 @@ requires an explicit acknowledgement before an OAuth connection starts.
 ## Features
 
 - **Panel and popup:** choose left, center or right placement, show one to five
-  connector items, and use automatic, always, or never compact mode. Connector cards can
+  connector items, choose which connectors take them, pick session or week as the main metric, and use automatic, always, or never compact mode. Connector cards can
   open automatically when they need attention. Set popup width and maximum
   height in logical pixels, or use automatic sizing; the current monitor limits
   its displayed size. Choose which cards appear and arrange them with accessible
