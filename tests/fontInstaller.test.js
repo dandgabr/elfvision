@@ -46,6 +46,10 @@ test('font service: Fontconfig inventory identifies visible families and their d
         const inventory = await installer.fontInventory();
         assertTrue(['available', 'unavailable'].includes(inventory.status));
         assertTrue(Array.isArray(inventory.fonts));
+        // Regression: the promisified communicate_utf8_async yields [stdout, stderr]; reading
+        // stderr made every inventory empty and every install look "missing".
+        if (inventory.status === 'available')
+            assertTrue(inventory.fonts.length > 0, 'fc-list output is parsed, not discarded');
         if (inventory.status === 'available')
             assertTrue(inventory.fonts.every(font => font.path.startsWith('/') && font.families.length > 0
                 && ['user', 'system', 'other'].includes(font.source)));
