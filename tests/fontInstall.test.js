@@ -117,6 +117,28 @@ test('fonts: theme coverage distinguishes user, system, fallback and missing fac
     assertEqual(fontSource('/root/.local/share/fonts/private.ttf', '/home/daniel/.local/share', '/home/daniel'), 'other');
 });
 
+test('fonts: system-only families are generic, reviewed families are missing, and installed files are counted', async () => {
+    const {reviewedFamilies, suggestedFontsStatus, themeFontCoverage} = await import('../lib/core/fontCoverage.js');
+    const {FONT_MANIFEST} = await import('../lib/core/fontManifest.js');
+    const reviewed = reviewedFamilies(FONT_MANIFEST);
+    const theme = {fonts: {
+        body: {name: 'Times New Roman', generic: 'serif', fallbacks: ['Times']},
+        display: {name: 'Inter', generic: 'sans-serif', fallbacks: []},
+        mono: {name: 'Courier Prime', generic: 'monospace', fallbacks: ['Courier New']},
+    }};
+    assertEqual(themeFontCoverage(theme, [], reviewed), {
+        body: {status: 'generic', family: 'Times New Roman', generic: 'serif', source: null},
+        display: {status: 'missing', family: 'Inter', source: null},
+        mono: {status: 'missing', family: 'Courier Prime', source: null},
+    });
+    const entries = FONT_MANIFEST.slice(0, 3);
+    const records = entries.map(entry => ({families: [entry.family], path: `/home/u/.local/share/fonts/x/${entry.filename}`,
+        filename: entry.filename, source: 'user'}));
+    assertEqual(suggestedFontsStatus(entries, records), {installed: 3, total: 3});
+    assertEqual(suggestedFontsStatus(entries, records.slice(0, 1)), {installed: 1, total: 3});
+    assertEqual(suggestedFontsStatus(entries, records.map(record => ({...record, source: 'system'}))), {installed: 0, total: 3});
+});
+
 test('fonts: atomic commit disables cancellation of an already installed batch', async () => {
     const {FontInstallController} = await core();
     let finish, cancels = 0;
