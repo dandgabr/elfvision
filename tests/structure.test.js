@@ -208,3 +208,63 @@ test('metadata: identity, schema and catalog names agree with the files in the r
     assertTrue(read(`schemas/${metadata['settings-schema']}.gschema.xml`).includes(`id="${metadata['settings-schema']}"`), 'the schema id matches metadata');
     assertTrue(GLib.file_test(`${root}/po/${metadata['gettext-domain']}.pot`, GLib.FileTest.IS_REGULAR), 'the translation template uses the declared domain');
 });
+
+test('logging: nothing outside the journal sink writes to the console, and every event used is in the catalog', async () => {
+    const {EVENTS, LEVELS} = await import('../lib/core/logEvents.js');
+    const files = [...sources('lib'), 'extension.js', 'prefs.js'].filter(path => !['lib/services/diagnostics.js', 'lib/core/log.js'].includes(path));
+    const direct = files.filter(path => /(^|[^\w.])(console\.(log|warn|error|info|debug)|print|printerr|logError)\s*\(|(^|[^\w.])log\s*\(/m.test(
+        text(path).replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')));
+    assertEqual(direct, []);
+    const unknown = files.flatMap(path => [...text(path).matchAll(/(?:diag|logger|_logger)\.log\(\s*'([^']+)'/g)]
+        .map(match => match[1]).filter(name => !Object.hasOwn(EVENTS, name)).map(name => `${path}: ${name}`));
+    assertEqual(unknown, []);
+    // The schema's enum and the logger's levels cannot drift apart.
+    const schema = text('schemas/org.gnome.shell.extensions.gnome-ai-quota.gschema.xml');
+    const nicks = [...schema.match(/LogLevel">([\s\S]*?)<\/enum>/)[1].matchAll(/nick="([a-z]+)"/g)].map(match => match[1]);
+    assertEqual(nicks, LEVELS);
+});
+
+// Count `catch` blocks whose body holds only comments. A brace scanner, not a regular expression:
+// nested quantifiers over comments can backtrack exponentially.
+function silentCatchCount(source) {
+    const code = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+    let count = 0;
+    for (let at = code.indexOf('catch'); at !== -1; at = code.indexOf('catch', at + 5)) {
+        let index = at + 5;
+        while (index < code.length && /\s/.test(code[index])) index++;
+        if (code[index] === '(') {
+            index = code.indexOf(')', index);
+            if (index === -1) break;
+            index++;
+            while (index < code.length && /\s/.test(code[index])) index++;
+        }
+        if (code[index] !== '{') continue;
+        let depth = 1, end = index + 1;
+        while (end < code.length && depth > 0) {
+            if (code[end] === '{') depth++;
+            else if (code[end] === '}') depth--;
+            end++;
+        }
+        if (code.slice(index + 1, end - 1).trim() === '')
+            count++;
+    }
+    return count;
+}
+
+test('logging: the number of catch blocks that swallow an error silently does not grow', () => {
+    // A ratchet (docs/adr/0011): a new failure path either logs, rethrows, or lowers this number.
+    const SILENT_CATCHES_NOW = 21;
+    let count = 0;
+    for (const path of [...sources('lib'), 'extension.js', 'prefs.js'])
+        count += silentCatchCount(text(path));
+    assertTrue(count <= SILENT_CATCHES_NOW, `${count} silent catch blocks (limit ${SILENT_CATCHES_NOW}): log the failure or lower the limit`);
+});
+
+test('logging: the event table in docs/logging.md is the catalog', async () => {
+    const {EVENTS} = await import('../lib/core/logEvents.js');
+    const rows = Object.entries(EVENTS).map(([name, spec]) =>
+        `| \`${name}\` | ${spec.level} | ${Object.keys(spec.fields).map(field => `\`${field}\``).join(', ') || '–'} | ${spec.text} |`);
+    const doc = text('docs/logging.md');
+    const table = doc.match(/<!-- events:start -->\n\| Event[^\n]*\n\|---[^\n]*\n([\s\S]*?)\n<!-- events:end -->/)?.[1];
+    assertEqual(table?.split('\n'), rows);
+});

@@ -14,6 +14,7 @@ import {addBarConnectorsRow} from './lib/prefs/barConnectors.js';
 import {buildNotificationsPage} from './lib/prefs/notifications.js';
 import {createSuggestedFontsGroup} from './lib/prefs/suggestedFonts.js';
 import {builtinCatalog, selectedThemeName, themeDefaultIndicators, themePresentation} from './lib/prefs/themeCatalog.js';
+import {bindLogLevel, setLogProcess} from './lib/services/diagnostics.js';
 import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 /**
@@ -161,6 +162,9 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
 
     fillPreferencesWindow(window) {
         const settings = this.getSettings();
+        setLogProcess('prefs');
+        const unbindLogLevel = bindLogLevel(settings);
+        window.connect('close-request', () => { unbindLogLevel(); return false; });
         const _ = this.gettext.bind(this);
         const handlerIds = [];
         const initialTarget = settings.get_string('prefs-target');

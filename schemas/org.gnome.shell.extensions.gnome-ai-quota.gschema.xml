@@ -11,8 +11,17 @@
     <value nick="never" value="2"/>
   </enum>
 
+  <enum id="org.gnome.shell.extensions.gnome-ai-quota.LogLevel">
+    <value nick="off" value="0"/>
+    <value nick="error" value="1"/>
+    <value nick="warn" value="2"/>
+    <value nick="info" value="3"/>
+    <value nick="debug" value="4"/>
+  </enum>
+
   <schema id="org.gnome.shell.extensions.gnome-ai-quota"
           path="/org/gnome/shell/extensions/gnome-ai-quota/">
+    <key name="log-level" enum="org.gnome.shell.extensions.gnome-ai-quota.LogLevel"><default>'warn'</default><summary>Diagnostic log level</summary><description>How much the extension writes to the systemd journal (filter with ELFVISION_EVENT). The lines never hold credentials, addresses, file paths or account names. Restoring the configuration keeps this choice. Change it with gsettings.</description></key>
     <key name="connectors" type="s"><default>'{"version":1,"connectors":[]}'</default><summary>Saved connector registry</summary><description>Versioned nonsecret connector metadata, including the user's per-connector choice of extension-managed or read-only local-tool credentials. Starts empty; accounts are created explicitly by the user.</description></key>
     <key name="demo-connectors" type="s"><default>'{"version":1,"connectors":[]}'</default><summary>Fictional connector registry</summary><description>Starts empty. Separate synthetic connector metadata; never selects real credentials.</description></key>
     <key name="demo-connected-connectors" type="as"><default>[]</default><summary>Connected fictional accounts</summary><description>Connector identifiers with simulated authentication, separate from real accounts.</description></key>

@@ -80,3 +80,11 @@ The extension never writes, rotates, revokes or deletes an external credential.
 Missing, locked, ambiguous or rejected sources do not fall back to a different
 credential mode. API requests continue to use the provider's existing HTTPS host
 allowlist and redaction rules.
+
+## Amendment: diagnostic logging (ADR 0011)
+
+The extension now writes diagnostic lines to the systemd journal. The journal is readable by the
+session and persists after "Delete all connectors", so the model for it is stricter than for the
+keyring: lines come from a closed catalog with typed fields and no free text, never carry a
+connector id, an address, a path or an error message, and name a provider only on warnings, errors
+and debug lines. Actions of the user are not logged there.

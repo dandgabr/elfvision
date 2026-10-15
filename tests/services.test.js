@@ -186,7 +186,7 @@ test('restore defaults: tracking and setup reset while connector data and creden
         'credentials-revision': ['i', 7], 'credentials-touched': ['s', 'codex'], 'command-code-username': ['s', 'someone'],
         'font-refresh-request': ['i', 5], 'font-refresh-ack': ['i', 4], 'font-refresh-status': ['s', 'available'],
         'connectors': ['s', '{"version":1,"connectors":[]}'], 'demo-connectors': ['s', '{"version":1,"connectors":[]}'], 'demo-connected-connectors': ['as', ['codex']], 'terms-acknowledged': ['as', ['claude']], 'prefs-target': ['s', 'claude'],
-        'test-notification': ['i', 3], 'demo-scenario': ['s', 'flaky'],
+        'test-notification': ['i', 3], 'demo-scenario': ['s', 'flaky'], 'log-level': ['s', 'debug'],
     };
     for (const [key, [type, value]] of Object.entries(kept))
         settings.set_value(key, new GLib.Variant(type, value));

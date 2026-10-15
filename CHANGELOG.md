@@ -4,6 +4,17 @@ All notable changes to the Elfvision GNOME build. The full release notes are kep
 [docs/temp/](docs/temp/) as `release-v<version>.md`. Versions follow `version-name` in
 [metadata.json](metadata.json).
 
+## Unreleased
+
+### Added
+- Diagnostic logging to the systemd journal with a closed event catalog, a `log-level` setting and a
+  rate limit; see [docs/logging.md](docs/logging.md). Every HTTP request, provider fetch, keyring
+  failure, sign-in failure and extension lifecycle step is now observable without recording
+  credentials, addresses, paths or account names.
+
+### Changed
+- The free-text `console.*` messages are replaced by catalog events; stack traces are no longer written.
+
 ## 0.2.7 — 2026-10-15
 
 ### Fixed

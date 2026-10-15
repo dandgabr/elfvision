@@ -24,6 +24,7 @@ import './layout.test.js';
 import './barView.test.js';
 import './fontInstall.test.js';
 import './fontInstaller.test.js';
+import './log.test.js';
 import './disconnect.test.js';
 import './extensionCredentials.test.js';
 import './providerConfig.test.js';
