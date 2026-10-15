@@ -8,7 +8,7 @@ documented with their builds. For installation and account setup, start with
 ## Reading the top bar
 
 Each item represents one connector. It shows the provider icon, the highest used
-percentage among that connector's quota windows, a window suffix (`5h`, `W` or
+percentage among that connector's quota windows (by default; **General → Top bar → Main metric** can pin the session or week window), a window suffix (`5h`, `W` or
 `M`) and a small progress bar. Monetary connectors show the reported amount;
 progress bars appear only when a cap is known. Hover for
 the state and time until reset. Color has a matching symbol:
@@ -78,7 +78,7 @@ extension-managed flow until a verified local source exists.
 | General, Colors and theme | Light or dark | Follows the system, or forces light or dark for the popup. The top bar is always dark. |
 | General, Colors and theme | Theme | Opens the theme picker. Default: System (GNOME). |
 | General, Colors and theme | Your themes | Opens the folder for your own themes. |
-| General, Suggested fonts | Install suggested fonts… | Reviews pinned, licensed fonts used by all built-in themes before an optional download. The expanded coverage list distinguishes user/system availability, fallbacks and missing families. Cancel is the default; theme selection never installs fonts. |
+| General, Suggested fonts | Install suggested fonts… | Reviews pinned, licensed fonts used by all built-in themes before an optional download. When Preferences opens, the row reports how many suggested font files this user already has and offers **Check again**, which re-reads Fontconfig and the Shell without downloading anything that is already installed. The expanded coverage list shows, for each theme, where each font comes from (user or system), a fallback in use, a family that is missing, or a system font that is not part of the suggested set (shown with its generic fallback). Cancel is the default; theme selection never installs fonts. |
 | General, Colors and theme | Effects | Off stops motion and textures while preserving the selected material. Subtle allows short interactions and static decoration; Full permits compatible ambient motion. Default: Subtle. System animation settings take precedence. |
 | General, Colors and theme | Transparency | Allows transparent backgrounds. Off keeps reading surfaces and backgrounds opaque. Default: on. |
 | General, Colors and theme | Material | Follows the theme or selects Translucent, Decorative glass, or Frosted glass where supported by the built-in theme. Turn Transparency off for an opaque background. Default: follow the theme. |
@@ -194,6 +194,17 @@ The paths below assume the default XDG directories. Custom `XDG_CONFIG_HOME` and
 | Public OAuth client configuration | `~/.config/gnome-ai-quota/providers.local.json` |
 | Custom themes | `~/.local/share/gnome-ai-quota/themes/<id>/theme.json` |
 | Installed client-ID helper | `~/.local/share/gnome-shell/extensions/gnome-ai-quota@dandgabr.github.io/tools/import-client-ids.py` |
+| Last known quota readings and alert state (no secrets) | `~/.cache/gnome-ai-quota/snapshots.json`, `alerts.json` |
+| Theme stylesheet cache | `~/.cache/gnome-ai-quota/theme-*.css` |
+| Disconnect coordination state (no secrets) | `~/.local/state/gnome-ai-quota/` |
+| Fonts installed from Suggested fonts | `~/.local/share/fonts/gnome-ai-quota/` |
+
+**Delete all connectors** clears the cache and coordination files and the keyring items
+above; **Restore configuration** resets settings only. To uninstall completely, run
+**Delete all connectors** first, then `gnome-extensions uninstall
+gnome-ai-quota@dandgabr.github.io`, and optionally remove the folders in this table and
+`dconf reset -f /org/gnome/shell/extensions/gnome-ai-quota/`. Removing the font folder
+uninstalls the suggested fonts.
 
 Extension-managed API keys and OAuth tokens live in the desktop keyring. In read-only local-tool
 mode, only exact allowlisted files or the named keyring service are read; credentials are never

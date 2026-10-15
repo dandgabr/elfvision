@@ -12,6 +12,9 @@ desktop integrations are planned.
 | [Themes](themes.md) | Custom theme format, tokens, validation and native effect profiles |
 | [Development](development.md) | Build, package, test, try changes in isolated shells, add themes or translations and contribute |
 | [Pitfalls](pitfalls.md) | GNOME widget, layout and lifecycle problems to avoid while developing |
+| [Changelog](../CHANGELOG.md) | What changed in each release |
+| [Security policy](../SECURITY.md) | Supported builds and private reporting |
+| [Architecture decisions](adr/README.md) | Why the code is shaped the way it is |
 
 Internal design records are indexed under [ADRs](adr/README.md). Plans and review
 evidence live under `temp/`; those records distinguish completed automated checks

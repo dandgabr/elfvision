@@ -73,7 +73,8 @@ notifications. Every provider is optional; selecting one does not sign you in.
 The installable file is named
 `elfvision-gnome.shell-extension.zip`. Download it and
 `SHA256SUMS` from the [releases page](https://github.com/dandgabr/elfvision/releases).
-The release also includes a build manifest identifying the source commit.
+The release also includes `build-manifest.json`, which identifies the source commit
+(`tools/release-assets.sh` writes both files; releases before 0.2.7 may lack them).
 There is no extensions.gnome.org listing. From the download folder, verify and
 install the archive:
 
@@ -150,9 +151,9 @@ Then press **Connect**, review the provider notice, and sign in
 through your browser. If the browser cannot return to this computer, paste the
 final callback address or displayed code into the field offered by Preferences.
 
-The default **Gerenciado pela extensão** mode keeps API keys and OAuth tokens in
-the desktop keyring. For Command Code, Codex, Claude or Antigravity, you can
-instead choose **Use credentials from a local tool** for that connector. This
+By default, the extension keeps API keys and OAuth tokens in the desktop
+keyring. For Command Code, Codex, Claude or Antigravity, you can instead turn on
+**Use credentials from a local tool** for that connector. This
 mode reads only the documented source for the selected provider: Command Code's
 `~/.commandcode/auth.json`, Codex's `~/.codex/auth.json`, Claude Code's
 `~/.claude/.credentials.json`, or the `service=gemini` keyring item for

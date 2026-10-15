@@ -1,7 +1,7 @@
 # 0005. Popup design and defaults
 
-Status: accepted. The one-column popup, failure states, empty states and the settings below are
-implemented, except what is marked planned.
+Status: accepted, partly implemented. The one-column popup, failure states, empty states and the
+settings below are implemented, except what is marked planned.
 
 ## Context
 
@@ -15,7 +15,7 @@ Defaults:
 
 | Option | Default | Setting |
 |---|---|---|
-| Layout | one column of collapsible cards, 360 to 400 px | none |
+| Layout | one column of collapsible cards, 420 px automatic width (`popup-width`; 0 means automatic) | none |
 | Cards in warning, critical or error | open on their own; a card the user opens or closes by hand keeps that choice until its state changes | `auto-open` |
 | Relative reset | `resets in 1h 20min` (or `1h20`) | `reset-format` |
 | Clock | follow GNOME (12 or 24 hours) | `clock-format` |

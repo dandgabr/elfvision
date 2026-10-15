@@ -59,12 +59,15 @@ hex validation alone does not establish accessible contrast.
 Font names remain local fallback choices. General → Suggested fonts offers a
 separate explicit installation of every reviewed family used by the built-in
 themes, with variable faces and the static weights those themes request. The
-36 font files cover 28 families; their source revision, hashes and OFL licenses
+suggested font files cover the reviewed families; their source revision, hashes and OFL licenses
 are pinned in [the manifest](../lib/core/fontManifest.js). Choosing a theme
 never downloads fonts, and theme JSON cannot add download addresses. The
 preferences page reports each theme's body, display and monospace availability
 from the current user's Fontconfig inventory, including whether a match comes
-from the user or system directories. The installer reports cache and family
+from the user or system directories. A role is shown as available (with its
+source), as a fallback that is in use, as missing when a suggested family is not
+installed, or as a system font when the family is not part of the suggested set
+(for example Times New Roman), in which case the generic family is used. The installer reports cache and family
 discovery separately, then asks the running Shell to refresh Pango and recompile
 the active theme. Fonts private to another account do not count as available;
 system-owned fonts in visible system directories do.

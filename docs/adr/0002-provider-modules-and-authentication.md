@@ -1,7 +1,8 @@
 # 0002. Provider modules, own authentication, harness isolation
 
-Status: accepted and implemented. All four providers are real (Command Code in M2, Codex,
-Claude and Antigravity in M3); the registry, the sign-in and the token handling are in ADR 0009.
+Status: accepted and implemented. The four subscription providers are real (Command Code in M2,
+Codex, Claude and Antigravity in M3); four API reporting providers were added later (see the
+amendment below). The registry, the sign-in and the token handling are in ADR 0009.
 
 ## Context
 

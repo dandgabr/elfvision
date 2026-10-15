@@ -10,9 +10,9 @@ and the RTL/long-text pass also received independent reviews.
 
 ## Context
 
-M0 to M3 give a working bar, popup and four providers. M4 makes it quiet and finished: system
+M0 to M3 give a working bar, popup and the four subscription providers (API reporting providers came later). M4 makes it quiet and finished: system
 notifications, a connection alert, a legend, a bar tooltip, a "not tracked" section, an About page,
-Restore defaults and a first-use assistant. ADR 0008 asked three things to be settled first: where
+Restore configuration (first called "Restore defaults") and a first-use assistant. ADR 0008 asked three things to be settled first: where
 an alert is raised, what the connection alert means for a paused provider, and where the
 notification text is reviewed.
 

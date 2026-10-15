@@ -1,6 +1,6 @@
 # 0004. Top-bar design
 
-Status: accepted. The bar, its states, selection and adaptive layout are
+Status: accepted, partly implemented. The bar, its states, selection and adaptive layout are
 implemented, except motion (see "Not implemented").
 
 ## Context

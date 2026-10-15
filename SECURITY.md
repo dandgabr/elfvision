@@ -1,7 +1,8 @@
 # Security policy
 
-Security maintenance targets the latest released Elfvision build and its shared
-provider code. The currently released integration supports **GNOME Shell 50**;
+Security maintenance targets the latest released Elfvision build (the 0.2.x line) and its
+shared provider code. Consent and terms-of-service risks of the OAuth providers are described
+in the README under "Provider access and consent". The currently released integration supports **GNOME Shell 50**;
 KDE Plasma and other integrations are planned. Reports affecting development
 code are welcome: include the commit, build or integration, desktop environment
 or window manager, and version so the affected code can be identified. Planned

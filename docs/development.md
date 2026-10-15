@@ -18,7 +18,9 @@ GNOME implementation is built this way, the
 
 You need GNOME Shell 50, `gjs`, `glib-compile-schemas`, the gettext tools
 (`msgfmt`, `xgettext`, `msgmerge`), `python3`, and `mutter-devkit` for the nested
-shell (`sudo dnf install mutter-devkit`).
+shell (`sudo dnf install mutter-devkit`). Packaging uses `gnome-extensions`, `zip` and
+`unzip`; the checks also use `flock`, `dbus-run-session`, `gnome-keyring` and, when
+installed, ShellCheck. The screenshot checks use `python3-pillow`.
 
 ```sh
 git clone https://github.com/dandgabr/elfvision.git
@@ -54,13 +56,13 @@ lib/core/           pure JavaScript: contract, scheduler, errors, cache format, 
                     of each provider's reply, theme compiler and its CSS template,
                     severity, pacing, selection, fitting, formatting, view models, the alert
                     rules (alerts.js), their texts (alertText.js), safe text and the
-                    Restore defaults classification (defaults.js)
+                    Restore configuration classification (defaults.js)
 lib/providers/     the registry, one module per provider, the demo providers
 lib/oauth/          PKCE, the sign-in's local server and flow, the token manager
 lib/services/       GLib, Gio and Soup glue: HTTP, keyring, timers, cache and alert files,
                     theme files, theme manager, quota controller, alert service and the
                     suspend watcher (the only code that talks to the system bus)
-lib/prefs/          account controllers and views, the setup assistant, Notifications, About and Restore defaults
+lib/prefs/          account controllers and views, the setup assistant, Notifications, About and Restore configuration
                     (GTK 4, libadwaita)
 lib/ui/             St widgets (St is the shell's widget toolkit): meter, bar item, provider card, indicator, tooltip, the
                     notifier (the only code that makes notifications), legend and the
@@ -69,7 +71,7 @@ themes/builtin/     the 22 built-in themes, one folder each with a theme.json
 themes/v1.txt       the style slugs that tools/gen-themes.py generates
 schemas/            GSettings schema
 icons/              symbolic SVG icons, one per provider id, and the application icon
-.github/            CI workflows (gitleaks, static analysis), Dependabot, pinned scanners
+.github/            CI workflows (gitleaks, sast, lint), Dependabot, issue and vulnerability forms, pinned scanners
 po/                 gettext template and translations
 tests/              unit tests (no GNOME Shell needed)
 tools/              build, translation, theme generation and test-shell scripts
@@ -97,7 +99,7 @@ and rebuilds metadata after confirmation. Demo uses separate connector metadata
 and simulated controllers; its connect/remove actions cannot start a browser,
 keyring operation, or provider request. Keep this separation in probes.
 
-Restore defaults resets `untracked-providers` and `first-use-done` alongside
+Restore configuration resets `untracked-providers` and `first-use-done` alongside
 appearance and notification settings. It preserves live/demo connector lists,
 credentials, terms, coordination state, public client configuration, and the data
 source. See the [connector design](temp/specs/2026-10-08-connectors-design.md)
@@ -404,7 +406,9 @@ The archive follows the [standard GNOME extension layout](https://gjs.guide/exte
 The current metadata declares `version-name: "0.2.6"` and Shell `50`. Keep the
 website-managed numeric `version` field unset for local distribution, as
 [GNOME documents](https://gjs.guide/extensions/overview/anatomy.html#version).
-A local package build does not publish a GitHub release.
+A local package build does not publish a GitHub release. A release carries three files:
+the ZIP, `build-manifest.json` and `SHA256SUMS`, written by `tools/release-assets.sh`.
+`tools/check.sh` lists the checks it skipped and fails them when `GAQ_REQUIRE_ALL=1`.
 
 ## Signing in to OAuth providers
 
@@ -563,7 +567,8 @@ committed.
 | `tools/build.sh` | Compiles the schema and the translations. Run it after changing `schemas/` or `po/`. |
 | `tools/check.sh` | The checks to run before a commit (see [Tests](#tests)). |
 | `tools/sast.sh` | The static analysis that CI runs, locally (see [Static analysis](#static-analysis)). |
-| `tools/pack.sh` | Builds the installable zip, including the client-id helper. |
+| `tools/pack.sh` | Builds the installable zip, including the client-id helper, and fails when a runtime file is missing or a development file ships. |
+| `tools/release-assets.sh` | Writes `dist/build-manifest.json` and `dist/SHA256SUMS` for a release (run after `pack.sh`, on a clean checkout). |
 | `tools/prefs-smoke.sh`, `tools/layout-check.sh` | Setup lifecycle and narrow/RTL/long-text checks in an isolated shell. |
 | `tools/headless-shell.sh`, `tools/nested-shell.sh` | Throwaway GNOME Shells (see [Running and checking](#running-and-checking-the-extension)). |
 | `tools/i18n.sh`, `tools/po-fill.py`, `tools/check-po.py` | Translation workflow and its checks (see [Translations](#translations)). |
@@ -591,7 +596,7 @@ committed.
 
 1. Add the key to `schemas/*.gschema.xml` with a summary, a description, a default and a range or
    choices where the value is limited.
-2. Put it in `RESET_KEYS` or `KEPT_KEYS` in `lib/core/defaults.js` (what Restore defaults does with it).
+2. Put it in `RESET_KEYS` or `KEPT_KEYS` in `lib/core/defaults.js` (what Restore configuration does with it).
    A test fails until you do.
 3. Run `tools/build.sh`, because some tests read the compiled schema.
 4. Add the control in `prefs.js` or `lib/prefs`, with every text through `gettext`, then translate the new
