@@ -906,3 +906,8 @@ test('monetary mixed quotas keep unknown spend as a currency row', () => {
     assertEqual(view.groups[0].rows[1].noMeter, true);
     assertEqual(view.groups[0].topText, '40');
 });
+
+test('format: a duration just under a minute does not read as 60s', () => {
+    assertEqual(formatDuration(59600), '1min');
+    assertEqual(formatDuration(59400), '59s');
+});

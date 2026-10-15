@@ -258,6 +258,7 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
         const folder = GLib.build_filenamev([GLib.get_user_data_dir(), 'gnome-ai-quota', 'themes']);
         const folderRow = new Adw.ActionRow({
             title: _('Your themes'),
+            use_markup: false,   // the path comes from the user's home directory
             subtitle: _('One folder per theme, with a theme.json inside: %s').format(folder),
         });
         const open = new Gtk.Button({
@@ -266,8 +267,12 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
             tooltip_text: _('Open the themes folder'),
         });
         open.connect('clicked', () => {
-            GLib.mkdir_with_parents(folder, 0o755);
-            Gio.AppInfo.launch_default_for_uri(GLib.filename_to_uri(folder, null), null);
+            try {
+                GLib.mkdir_with_parents(folder, 0o755);
+                Gio.AppInfo.launch_default_for_uri(GLib.filename_to_uri(folder, null), null);
+            } catch (_error) {
+                window.add_toast(new Adw.Toast({title: _('Could not open the themes folder.')}));
+            }
         });
         folderRow.add_suffix(open);
         look.add(folderRow);
@@ -368,6 +373,6 @@ export default class ElfvisionGnomePreferences extends ExtensionPreferences {
         const unsubscribes = [...accounts.controllers.values()].map(controller => controller.subscribe(considerSetup));
         window.connect('close-request', () => { unsubscribes.forEach(fn => fn()); return false; });
         // Keyring lookup finishes asynchronously. Unknown or unavailable accounts never count as absent.
-        Promise.all([...accounts.controllers.values()].map(controller => controller.refresh())).then(considerSetup);
+        Promise.allSettled([...accounts.controllers.values()].map(controller => controller.refresh())).then(considerSetup);
     }
 }

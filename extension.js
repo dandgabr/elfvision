@@ -315,7 +315,13 @@ export default class ElfvisionGnomeExtension extends Extension {
         this._syncGeneration = (this._syncGeneration ?? 0) + 1;
         this._destroyIndicator();
         this._destroyController({flush: false});
-        this._createController();
-        this._createIndicator();
+        try {
+            this._createController();
+            this._createIndicator();
+        } catch (error) {
+            // A signal callback must not throw into the Shell; keep the next state change able to retry.
+            this._disconnectFingerprint = null;
+            console.error(`Elfvision: cannot rebuild after a credential change: ${error.message}\n${error.stack ?? ''}`);
+        }
     }
 }

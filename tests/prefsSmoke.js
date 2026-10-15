@@ -64,15 +64,16 @@ app.connect('activate', () => {
                 rows.forEach(w => { w.active = true; });
             }
             if (step === 2) {
-                const command = widgets.find(w => w instanceof Gtk.Label && w.label.includes('python3 -I'));
-                check(command && command.selectable && !command.wrap && !command.label.includes('\n'), 'missing-client command is selectable and one line');
-                let scroll = command.get_parent();
-                while (scroll && !(scroll instanceof Gtk.ScrolledWindow)) scroll = scroll.get_parent();
-                check(scroll && scroll.get_hadjustment().get_upper() > scroll.get_hadjustment().get_page_size(), 'long command can be read by horizontal scrolling');
-                const [commandAllocated, commandBounds] = scroll.compute_bounds(window);
-                check(commandAllocated && commandBounds.get_x() >= -1 && commandBounds.get_x() + commandBounds.get_width() <= window.get_width() + 1,
-                    'command viewport stays inside actual window');
-                check(widgets.filter(w => w instanceof Adw.PreferencesGroup).length === availableProviders().length + 2, 'every chosen provider has a group');
+                // The command is no longer shown as a label: it is found automatically or copied.
+                const discovery = widgets.filter(w => w instanceof Gtk.Button
+                    && [translate('Find configuration automatically'), translate('Copy command')].includes(w.label));
+                check(discovery.length > 0, 'missing-client setup offers automatic discovery and a copyable command');
+                for (const action of discovery.filter(w => w.get_mapped())) {
+                    const [actionAllocated, actionBounds] = action.compute_bounds(window);
+                    check(actionAllocated && actionBounds.get_x() >= -1 && actionBounds.get_x() + actionBounds.get_width() <= window.get_width() + 1,
+                        `${action.label} stays inside actual window`);
+                }
+                check(widgets.filter(w => w instanceof Adw.PreferencesGroup).length === availableProviders().length + 1, `every chosen provider has a group (${widgets.filter(w => w instanceof Adw.PreferencesGroup).length} groups for ${availableProviders().length} providers)`);
             }
             if (step === 3) {
                 const count = widgets.find(w => w instanceof Adw.SpinRow);

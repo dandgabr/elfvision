@@ -175,7 +175,7 @@ app.connect('activate', () => {
                     ['expired', {connected: true}, 'Reconnect'],
                     ['refused', {connected: true}, 'Disconnect'],
                     ['keyring', {connected: false, keyringDown: true}, null],
-                    ['missing-client', {keyringDown: false, hasConfig: false}, 'Copy command'],
+                    ['missing-client', {keyringDown: false, hasConfig: false}, 'Find configuration automatically'],
                 ];
                 for (const [name, state, focusLabel] of cases) {
                     s.set_value('account-status', new GLib.Variant('a{ss}', name === 'expired' || name === 'refused' ? {claude: name} : {}));
