@@ -28,6 +28,12 @@ export default defineConfig([
         languageOptions: {globals: {global: 'readonly'}},
     },
     {
+        // Diagnostics go through the closed catalog (docs/adr/0011); only the journal sink may fall back to the console.
+        files: ['extension.js', 'prefs.js', 'lib/**/*.js'],
+        ignores: ['lib/services/diagnostics.js'],
+        rules: {'no-console': 'error'},
+    },
+    {
         files: ['tests/**/*.js'],
         languageOptions: {globals: {print: 'readonly', printerr: 'readonly'}},
         // Test fixtures keep the same callback signatures as the production interfaces.

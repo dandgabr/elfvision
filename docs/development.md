@@ -560,6 +560,17 @@ entries. To add a language, add `po/<lang>.po` (`msgmerge` can create it from th
 template) and run `tools/i18n.sh compile`. The compiled `locale/` directory is not
 committed.
 
+## Logging
+
+Diagnostics go through `lib/core/log.js` and the closed catalog in `lib/core/logEvents.js`
+([ADR 0011](adr/0011-logging.md), [guide](logging.md)). To record a new failure path, add an event
+to the catalog (a level, typed fields, a one-line meaning), call it with `diag.log('name', {…})`
+from a service or through an injected `logger` from a pure module, and run the tests: the table in
+`docs/logging.md` must be regenerated from the catalog (the structure test prints the expected rows).
+Never pass an error message, an address, a path or an identifier of an account; use an enum field
+and `errorName(error)`. `console.*`, `print` and `logError` are rejected by ESLint and by
+`tests/structure.test.js`.
+
 ## Tools
 
 | Script | What it does |

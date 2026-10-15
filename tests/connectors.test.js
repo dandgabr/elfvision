@@ -154,10 +154,10 @@ for (const source of ['live', 'demo']) {
         const settings = settingsFixture(); settings.set_string('data-source', source); settings.set_string(source === 'demo' ? 'demo-connectors' : 'connectors', '{bad');
         settings.get_strv = () => [];
         let running;
-        const construct = new Function('createConnectorStore', 'createProviders', 'GLib', 'CacheStore', 'QuotaController', 'availableProviders', 'availableDemoProviders', body);
+        const construct = new Function('createConnectorStore', 'createProviders', 'GLib', 'CacheStore', 'QuotaController', 'availableProviders', 'availableDemoProviders', 'diag', 'errorName', body);
         class Controller { constructor({providers}) { running = providers; } markSynced() {} subscribe() { return () => {}; } start() { return Promise.resolve(); } }
         const extension = {_settings: settings, _disconnectGate: {}, _syncProviders() {}, _createAlerts() {}};
-        construct.call(extension, createConnectorStore, () => [{id: 'openrouter'}], GLib, class {}, Controller, () => [], () => []);
+        construct.call(extension, createConnectorStore, () => [{id: 'openrouter'}], GLib, class {}, Controller, () => [], () => [], {log() {}}, () => 'other');
         assertTrue(extension._controller !== null); assertEqual(extension._controller.registryProblem, true);
         assertEqual(running.map(provider => provider.id), []);
     });

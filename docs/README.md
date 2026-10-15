@@ -12,6 +12,7 @@ desktop integrations are planned.
 | [Themes](themes.md) | Custom theme format, tokens, validation and native effect profiles |
 | [Development](development.md) | Build, package, test, try changes in isolated shells, add themes or translations and contribute |
 | [Pitfalls](pitfalls.md) | GNOME widget, layout and lifecycle problems to avoid while developing |
+| [Logging](logging.md) | Reading the diagnostic journal, the level and every event |
 | [Changelog](../CHANGELOG.md) | What changed in each release |
 | [Security policy](../SECURITY.md) | Supported builds and private reporting |
 | [Architecture decisions](adr/README.md) | Why the code is shaped the way it is |

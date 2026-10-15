@@ -20,6 +20,7 @@ replaced gets a new record, and the old one is marked `superseded by NNNN` and k
 | [0008](0008-mvp-roadmap.md) | Milestones M0 to M4 and open items | accepted |
 | [0009](0009-adding-providers.md) | How providers are added (M3) | accepted |
 | [0010](0010-alerts-and-polish.md) | Alerts, notifications and polish (M4) | accepted |
+| [0011](0011-logging.md) | Diagnostic logging to the journal; audit history planned | accepted |
 
 The status column uses one of three values: `accepted`, `accepted, partly implemented` or
 `superseded by NNNN`. What is not yet built is listed in the status line of the record itself.

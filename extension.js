@@ -19,6 +19,8 @@ import {ThemeManager} from './lib/services/themeManager.js';
 import {ThemeTemplateSnapshot} from './lib/services/themeFiles.js';
 import GaqIndicator from './lib/ui/indicator.js';
 import {AlertNotifier} from './lib/ui/notifier.js';
+import {errorName} from './lib/core/log.js';
+import {bindLogLevel, diag, setLogProcess} from './lib/services/diagnostics.js';
 
 // Index inside the panel box. The left box starts with the Activities button,
 // so the indicator goes right after it.
@@ -27,6 +29,9 @@ const BOX_INDEX = {left: 1, center: 0, right: 0};
 export default class ElfvisionGnomeExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
+        setLogProcess('shell');
+        this._unbindLogLevel = bindLogLevel(this._settings);
+        diag.log('ext.enabled');
         this._disconnectGate = getDisconnectGate();
         this._disconnectFingerprint = '';
         this._disconnectCancel = this._disconnectGate.registerCanceller(() => {
@@ -69,7 +74,7 @@ export default class ElfvisionGnomeExtension extends Extension {
             try {
                 this._createIndicator();
             } catch (error) {
-                console.error(`Elfvision: cannot move the indicator: ${error.message}\n${error.stack ?? ''}`);
+                diag.log('ext.rebuild_failed', {phase: 'position', errorName: errorName(error)});
             }
         });
         const rebuild = () => {
@@ -79,7 +84,7 @@ export default class ElfvisionGnomeExtension extends Extension {
                 this._createController();
                 this._createIndicator();
             } catch (error) {
-                console.error(`Elfvision: cannot rebuild: ${error.message}\n${error.stack ?? ''}`);
+                diag.log('ext.rebuild_failed', {phase: 'rebuild', errorName: errorName(error)});
             }
         };
         // A new demo scenario only matters for demo data: real providers must not be restarted.
@@ -111,6 +116,10 @@ export default class ElfvisionGnomeExtension extends Extension {
     }
 
     disable() {
+        // Synchronous and last-in: the journal has nothing pending, so nothing can outlive the extension.
+        diag.log('ext.disabled');
+        this._unbindLogLevel?.();
+        this._unbindLogLevel = null;
         const disconnectGate = this._disconnectGate;
         this._disconnectUnsubscribe?.();
         this._disconnectUnsubscribe = null;
@@ -147,7 +156,7 @@ export default class ElfvisionGnomeExtension extends Extension {
         const source = this._settings.get_string('data-source');
         const store = createConnectorStore(this._settings, {demo: source === 'demo'});
         let connectors;
-        try { connectors = store.list(); this._connectorRegistryProblem = false; } catch (_error) { connectors = []; this._connectorRegistryProblem = true; console.warn('Elfvision: connector registry unavailable; open Preferences to recover it'); } finally { store.dispose(); }
+        try { connectors = store.list(); this._connectorRegistryProblem = false; } catch (_error) { connectors = []; this._connectorRegistryProblem = true; diag.log('ext.registry_unavailable'); } finally { store.dispose(); }
         const untracked = this._settings.get_strv('untracked-providers');
         const connected = this._settings.get_strv('demo-connected-connectors');
         const providers = source === 'demo' ? [...connectors.filter(c => connected.includes(c.id) && !untracked.includes(c.id)).map(connector => {
@@ -167,7 +176,7 @@ export default class ElfvisionGnomeExtension extends Extension {
             this._syncProviders();
         }
         this._controller.start().catch(error =>
-            console.error(`Elfvision: cannot start: ${error.message}`));
+            diag.log('ext.start_failed', {phase: 'controller', errorName: errorName(error)}));
         this._createAlerts(cacheDirectory);
     }
 
@@ -189,7 +198,7 @@ export default class ElfvisionGnomeExtension extends Extension {
             notify: event => this._notifier.show(event),
         });
         this._alerts.start().catch(error =>
-            console.error(`Elfvision: cannot start the alerts: ${error?.message ?? error}`));
+            diag.log('ext.start_failed', {phase: 'alerts', errorName: errorName(error)}));
         // After the computer wakes up the data looks old and the network is slow to return: keep
         // the connection alert quiet for a while, then ask the providers again.
         this._power = new PowerWatcher({onResume: () => {
@@ -250,7 +259,7 @@ export default class ElfvisionGnomeExtension extends Extension {
                 availableProviders().flatMap(meta => entries.filter(c => c.providerId === meta.id).map(c => c.id)));
             controller.markSynced();
         } catch (error) {
-            console.error(`Elfvision: cannot sync the providers: ${error.message}\n${error.stack ?? ''}`);
+            diag.log('ext.rebuild_failed', {phase: 'sync', errorName: errorName(error)});
             // After a failure the list is as known as it will get: do not claim "nothing".
             if (generation === this._syncGeneration && controller === this._controller)
                 controller.markSynced();
@@ -321,7 +330,7 @@ export default class ElfvisionGnomeExtension extends Extension {
         } catch (error) {
             // A signal callback must not throw into the Shell; keep the next state change able to retry.
             this._disconnectFingerprint = null;
-            console.error(`Elfvision: cannot rebuild after a credential change: ${error.message}\n${error.stack ?? ''}`);
+            diag.log('ext.rebuild_failed', {phase: 'rebuild', errorName: errorName(error)});
         }
     }
 }
