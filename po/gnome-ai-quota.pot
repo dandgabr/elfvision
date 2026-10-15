@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Elfvision\n"
 "Report-Msgid-Bugs-To: https://github.com/dandgabr/elfvision/issues\n"
-"POT-Creation-Date: 2026-10-14 21:57-0300\n"
+"POT-Creation-Date: 2026-10-15 10:30-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -623,7 +623,7 @@ msgstr ""
 #: lib/prefs/accounts.js:269 lib/prefs/accounts.js:395
 #: lib/prefs/credentialModeControl.js:75 lib/prefs/disconnectDialog.js:38
 #: lib/prefs/oauthGroup.js:63 lib/prefs/oauthGroup.js:193
-#: lib/prefs/suggestedFonts.js:55 lib/prefs/suggestedFonts.js:114
+#: lib/prefs/suggestedFonts.js:59 lib/prefs/suggestedFonts.js:136
 #: lib/prefs/termsDialog.js:48
 msgid "Cancel"
 msgstr ""
@@ -1900,246 +1900,282 @@ msgstr ""
 msgid "Choose which connectors appear in the popup and their order."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:50
+#: lib/prefs/suggestedFonts.js:51
 msgid "Suggested fonts"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:51
+#: lib/prefs/suggestedFonts.js:52
 msgid ""
 "Optional fonts used by the built-in themes. Fonts are checked in the current "
 "user and system font directories."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:52
+#: lib/prefs/suggestedFonts.js:53
 msgid "Install suggested fonts…"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:53
+#: lib/prefs/suggestedFonts.js:54
 msgid ""
 "Install the reviewed fonts used by all built-in themes. Review the source "
 "and licenses before downloading."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:54
+#: lib/prefs/suggestedFonts.js:55
 msgid "Review…"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:57
+#: lib/prefs/suggestedFonts.js:61
 msgid "Checking the fonts visible to this user…"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:57
+#: lib/prefs/suggestedFonts.js:61
 msgid "Font coverage by theme"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:60
+#: lib/prefs/suggestedFonts.js:65
 msgid "Font status has not been checked."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:67
+#: lib/prefs/suggestedFonts.js:72
 msgid "Fontconfig check is unavailable."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:75
+#: lib/prefs/suggestedFonts.js:80
 msgid "Fontconfig could not inspect the fonts for this user."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:76
+#: lib/prefs/suggestedFonts.js:81
 msgid "Font status is unavailable."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:79
+#: lib/prefs/suggestedFonts.js:84
 msgid "Fontconfig inventory for this user and the system."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:80
+#: lib/prefs/suggestedFonts.js:85
 msgid "other visible directory"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:80
+#: lib/prefs/suggestedFonts.js:85
 msgid "system"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:80
+#: lib/prefs/suggestedFonts.js:85
 msgid "user"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:81
+#: lib/prefs/suggestedFonts.js:86
 msgid "system and other directory"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:81
+#: lib/prefs/suggestedFonts.js:86
 msgid "user and other directory"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:81
+#: lib/prefs/suggestedFonts.js:86
 msgid "user and system"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:82
+#: lib/prefs/suggestedFonts.js:87
 msgid "user, system, and other directory"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:83
+#: lib/prefs/suggestedFonts.js:88
 msgid "Body"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:83
+#: lib/prefs/suggestedFonts.js:88
 msgid "Display"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:83
+#: lib/prefs/suggestedFonts.js:88
 msgid "Monospace"
 msgstr ""
 
 #: lib/prefs/suggestedFonts.js:89
+msgid "cursive"
+msgstr ""
+
+#: lib/prefs/suggestedFonts.js:89
+msgid "monospace"
+msgstr ""
+
+#: lib/prefs/suggestedFonts.js:89
+msgid "sans-serif"
+msgstr ""
+
+#: lib/prefs/suggestedFonts.js:89
+msgid "serif"
+msgstr ""
+
+#: lib/prefs/suggestedFonts.js:95
 #, javascript-format
 msgid "%s: system default"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:91
+#: lib/prefs/suggestedFonts.js:97
 #, javascript-format
 msgid "%s: %s (%s)"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:93
+#: lib/prefs/suggestedFonts.js:99
 #, javascript-format
 msgid "%s: using %s fallback (%s)"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:94
+#: lib/prefs/suggestedFonts.js:101
+#, javascript-format
+msgid "%s: %s is not installed; using the system %s font"
+msgstr ""
+
+#: lib/prefs/suggestedFonts.js:102
 #, javascript-format
 msgid "%s: %s is missing"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:94
+#: lib/prefs/suggestedFonts.js:102
 msgid "font"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:103
+#: lib/prefs/suggestedFonts.js:111
+msgid "Check again"
+msgstr ""
+
+#: lib/prefs/suggestedFonts.js:115
+#, javascript-format
+msgid "All %d suggested font files are installed for this user."
+msgstr ""
+
+#: lib/prefs/suggestedFonts.js:117
+#, javascript-format
+msgid ""
+"%d of %d suggested font files are installed for this user. Install the rest."
+msgstr ""
+
+#: lib/prefs/suggestedFonts.js:125
 #, javascript-format
 msgid "Source: %s"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:104
+#: lib/prefs/suggestedFonts.js:126
 #, javascript-format
 msgid "Pinned revision: %s"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:105
+#: lib/prefs/suggestedFonts.js:127
 #, javascript-format
 msgid "Total download: %d bytes"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:107
+#: lib/prefs/suggestedFonts.js:129
 #, javascript-format
 msgid "%d bytes · SIL Open Font License 1.1"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:111
+#: lib/prefs/suggestedFonts.js:133
 msgid "Install suggested fonts?"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:112
+#: lib/prefs/suggestedFonts.js:134
 msgid ""
 "Download the reviewed font files from GitHub and install them for your user "
 "account. Existing files are preserved. Choosing a theme never installs fonts."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:115
+#: lib/prefs/suggestedFonts.js:137
 msgid "Download and install"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:129
+#: lib/prefs/suggestedFonts.js:151
 msgid "Review the font sources and licenses."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:130
+#: lib/prefs/suggestedFonts.js:152
 msgid "Files are installed. Checking Fontconfig and the running GNOME Shell."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:131
+#: lib/prefs/suggestedFonts.js:153
 msgid "Cancelled. Installed-font fallbacks remain available."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:132
+#: lib/prefs/suggestedFonts.js:154
 msgid ""
 "Fonts were not installed. Check the connection or installation permissions "
 "and try again; existing files were preserved."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:134
+#: lib/prefs/suggestedFonts.js:156
 msgid ""
 "An existing font file conflicts with this version. It was preserved; no "
 "files were replaced."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:136
+#: lib/prefs/suggestedFonts.js:158
 msgid ""
 "Font verification failed. Nothing was installed; installed-font fallbacks "
 "remain available."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:137
+#: lib/prefs/suggestedFonts.js:159
 msgid ""
 "The font installation directory is unsafe. Nothing was installed; existing "
 "files were preserved."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:138
+#: lib/prefs/suggestedFonts.js:160
 #, javascript-format
 msgid "Downloading: %d of %d bytes"
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:139
+#: lib/prefs/suggestedFonts.js:161
 msgid ""
 "Font files are installed, but the Fontconfig cache could not be refreshed. "
 "Retry the check or sign in again."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:140
+#: lib/prefs/suggestedFonts.js:162
 msgid ""
 "Fontconfig could not run its font inventory. Check that Fontconfig tools are "
 "available in this session."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:141
+#: lib/prefs/suggestedFonts.js:163
 msgid ""
 "Fontconfig did not find all installed font families. Check the current user "
 "font directory and permissions."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:142
+#: lib/prefs/suggestedFonts.js:164
 msgid ""
 "Fontconfig and GNOME Shell both see the suggested fonts. The active theme "
 "has been refreshed."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:143
+#: lib/prefs/suggestedFonts.js:165
 msgid ""
 "Fontconfig sees the fonts, but the GNOME Shell Pango map is missing a "
 "family. Reopen the session if the theme still uses a fallback."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:144
+#: lib/prefs/suggestedFonts.js:166
 msgid ""
 "Fontconfig sees the fonts, but GNOME Shell could not refresh the active "
 "theme. Reopen the session if the theme still uses a fallback."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:145
+#: lib/prefs/suggestedFonts.js:167
 msgid ""
 "Fontconfig sees the fonts, but GNOME Shell did not answer the refresh "
 "request. Reopen the session if the theme still uses a fallback."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:146
+#: lib/prefs/suggestedFonts.js:168
 msgid ""
 "Font files are installed. The GNOME Shell refresh check was cancelled; "
 "reopen the session if the theme still uses a fallback."
 msgstr ""
 
-#: lib/prefs/suggestedFonts.js:147
+#: lib/prefs/suggestedFonts.js:169
 msgid ""
 "Fontconfig sees the fonts. GNOME Shell did not confirm a refresh; reopen the "
 "session if the theme still uses a fallback."

@@ -356,6 +356,23 @@ app.connect('activate', () => {
                 check(destroyed === 1, 'font installer is destroyed exactly once');
             }
         });
+        await run('suggested fonts row reports files that are already installed', async () => {
+            const {FONT_MANIFEST} = await import('../lib/core/fontManifest.js');
+            for (const [present, subtitle, label] of [[FONT_MANIFEST.length, 'are installed for this user.', 'Check again'],
+                [1, 'Install the rest.', 'Review…'], [0, 'Install the reviewed fonts', 'Review…']]) {
+                const window = newWindow();
+                const fonts = FONT_MANIFEST.slice(0, present).map(entry => ({families: [entry.family], filename: entry.filename,
+                    path: `/home/u/.local/share/fonts/gnome-ai-quota/b/${entry.filename}`, source: 'user'}));
+                const installer = {install: async () => ({}), cancel() {}, destroy() {}, fontInventory: async () => ({status: 'available', fonts})};
+                const view = createSuggestedFontsGroup({window, gettext: _, settings: settings(), installer});
+                const page = new Adw.PreferencesPage(); page.add(view.group); window.add(page); window.present(); await wait(); await wait();
+                try {
+                    const row = walk(view.group).find(w => w instanceof Adw.ActionRow);
+                    check(row.subtitle.includes(subtitle), `installed state ${present}: ${row.subtitle}`);
+                    check(button(view.group, label), `installed state ${present} uses the ${label} action`);
+                } finally { view.destroy(); window.close(); }
+            }
+        });
         await run('reopened setup rejects incompatible warning thresholds as one batch', async () => {
             const window = newWindow(), s = settings();
             window.add(new Adw.PreferencesPage({title: 'General'}));
