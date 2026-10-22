@@ -31,13 +31,14 @@ has a command that prints quota. The extension therefore needs its own access.
 | Command Code | API key pasted by the user | `GET api.commandcode.ai/alpha/billing/credits` and `/alpha/billing/subscriptions` |
 | Codex | OAuth 2 (PKCE) | `GET chatgpt.com/backend-api/wham/usage` |
 | Claude | OAuth 2 (PKCE) | `GET api.anthropic.com/api/oauth/usage` with header `anthropic-beta: oauth-2025-04-20` |
-| Antigravity | OAuth 2 (Google, PKCE) | `POST daily-cloudcode-pa.googleapis.com/v1internal:retrieveUserQuotaSummary` (User-Agent contains `antigravity`) |
+| Antigravity | OAuth 2 (Google, PKCE) | `POST daily-cloudcode-pa.googleapis.com/v1internal:retrieveUserQuotaSummary` (User-Agent formatted as `antigravity/cli/...`) |
 
 The Antigravity endpoint is undocumented and its quota message has evolved: current replies encode
 `remainingFraction` as the `remaining` oneof `{case: "remainingFraction", value}`, while older
 replies placed `remainingFraction` directly on each bucket. The parser accepts both. An unknown
 present oneof is unusable quota data, not an exhausted bucket; only a wholly omitted fraction with
-a valid reset time is interpreted as zero remaining.
+a valid reset time is interpreted as zero remaining. Furthermore, the endpoint requires a CLI-style
+User-Agent (`antigravity/cli/...`) to return Gemini and Gemini 4 Argon quota groups alongside Claude and GPT.
 
 These endpoints are unofficial and may change without notice.
 
