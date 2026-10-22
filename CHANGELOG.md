@@ -4,6 +4,16 @@ All notable changes to the Elfvision GNOME build. The full release notes are kep
 [docs/temp/](docs/temp/) as `release-v<version>.md`. Versions follow `version-name` in
 [metadata.json](metadata.json).
 
+## 0.3.1 — 2026-10-21
+
+### Fixed
+- Antigravity quota parsing now reads the current `remaining` oneof format and remains compatible
+  with older replies that used a top-level `remainingFraction`.
+- Unknown quota fraction variants are reported as unavailable rather than being shown as exhausted.
+
+### Documentation
+- Updated the Antigravity API response notes in ADR 0002 and ADR 0009.
+
 ## 0.3.0 — 2026-10-15
 
 ### Added

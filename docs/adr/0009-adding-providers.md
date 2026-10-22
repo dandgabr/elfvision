@@ -212,7 +212,10 @@ settings; authentication there does not modify the user's normal session.
   per request, because a session-wide one would override it); the extension sends
   `antigravity/1.0 gnome-ai-quota`, or the one in the local file. The reply has two pools, Gemini
   (`gemini-` buckets) and Claude and GPT (`3p-` buckets), each with a five-hour and a weekly
-  window. Its terms forbid this use outright and Google may act on the whole Google account, so
+  window. Current bucket replies encode the remaining fraction as `remaining: {case:
+  "remainingFraction", value}`; older replies used a top-level `remainingFraction`. The parser
+  accepts both forms and does not treat an unknown present oneof as zero remaining. Its terms
+  forbid this use outright and Google may act on the whole Google account, so
   the notice is stronger than the others. The helper picks the id and secret by asking Google's
   token address with a made-up code: `invalid_grant` means they belong together. Only a single
   such pair is accepted; several would be other Google clients inside the program.

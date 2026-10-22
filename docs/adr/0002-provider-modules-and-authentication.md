@@ -33,6 +33,12 @@ has a command that prints quota. The extension therefore needs its own access.
 | Claude | OAuth 2 (PKCE) | `GET api.anthropic.com/api/oauth/usage` with header `anthropic-beta: oauth-2025-04-20` |
 | Antigravity | OAuth 2 (Google, PKCE) | `POST daily-cloudcode-pa.googleapis.com/v1internal:retrieveUserQuotaSummary` (User-Agent contains `antigravity`) |
 
+The Antigravity endpoint is undocumented and its quota message has evolved: current replies encode
+`remainingFraction` as the `remaining` oneof `{case: "remainingFraction", value}`, while older
+replies placed `remainingFraction` directly on each bucket. The parser accepts both. An unknown
+present oneof is unusable quota data, not an exhausted bucket; only a wholly omitted fraction with
+a valid reset time is interpreted as zero remaining.
+
 These endpoints are unofficial and may change without notice.
 
 4. **Data contract** (`lib/core/contract.js`):

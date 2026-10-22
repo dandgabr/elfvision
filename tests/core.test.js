@@ -667,6 +667,23 @@ test('antigravity: buckets become two pools with a five-hour and a weekly window
     assertEqual(metrics[2].pool, {id: 'claude-gpt', name: 'Claude and GPT', short: 'C/G'});
 });
 
+test('antigravity: reads the current oneof remainingFraction field', () => {
+    const body = {groups: [{buckets: [
+        {bucketId: 'gemini-weekly', window: 'weekly', remaining: {case: 'remainingFraction', value: 0.4864}},
+        {bucketId: '3p-claude', window: '5h', remaining: {case: 'remainingFraction', value: 0.9395}},
+    ]}]};
+    const {metrics} = parseQuota(body);
+    assertEqual(metrics.map(metric => [metric.id, Math.round(metric.percentUsed * 100) / 100]), [
+        ['gemini-weekly', 51.36], ['claude-gpt-5h', 6.05],
+    ]);
+});
+
+test('antigravity: an unknown remaining oneof is not mistaken for exhausted quota', () => {
+    assertEqual(failureOf2(() => parseQuota({groups: [{buckets: [
+        {bucketId: 'gemini-weekly', window: 'weekly', remaining: {case: 'reserved', value: 0}, resetTime: '2026-10-12T05:00:00Z'},
+    ]}]})), 'provider_changed');
+});
+
 test('antigravity: unknown pools and windows, repeated buckets and bad fractions are skipped', () => {
     const {metrics} = parseQuota({groups: [{buckets: [
         {bucketId: 'gemini-a', window: '5h', remainingFraction: 0.5},
