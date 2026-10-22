@@ -678,6 +678,53 @@ test('antigravity: reads the current oneof remainingFraction field', () => {
     ]);
 });
 
+test('antigravity: handles gemini-argon as a separate pool from standard gemini', () => {
+    const body = {
+        groups: [
+            {displayName: 'Gemini Models', buckets: [
+                {bucketId: 'gemini-weekly', window: 'weekly', remaining: {case: 'remainingFraction', value: 0.45}, resetTime: '2026-10-24T01:38:32Z'},
+                {bucketId: 'gemini-5h', window: '5h', remaining: {case: 'remainingFraction', value: 0.84}, resetTime: '2026-10-22T04:09:57Z'},
+            ]},
+            {displayName: 'Claude and GPT models', buckets: [
+                {bucketId: '3p-weekly', window: 'weekly', remaining: {case: 'remainingFraction', value: 1}, resetTime: '2026-10-24T18:31:02Z'},
+                {bucketId: '3p-5h', window: '5h', remaining: {case: 'remainingFraction', value: 1}, resetTime: '2026-10-22T02:59:12Z'},
+            ]},
+            {displayName: 'Gemini 4 Argon', buckets: [
+                {bucketId: 'gemini-argon-wtu-weekly', window: 'weekly', remaining: {case: 'remainingFraction', value: 0.64}, resetTime: '2026-10-29T00:16:36Z'},
+            ]},
+        ],
+    };
+    const {metrics} = parseQuota(body);
+    assertEqual(metrics.map(m => [m.id, m.pool.name, m.pool.short, m.window, Math.round(m.percentUsed)]), [
+        ['gemini-weekly', 'Gemini', 'G', 'week', 55],
+        ['gemini-5h', 'Gemini', 'G', 'session', 16],
+        ['claude-gpt-weekly', 'Claude and GPT', 'C/G', 'week', 0],
+        ['claude-gpt-5h', 'Claude and GPT', 'C/G', 'session', 0],
+        ['gemini-argon-weekly', 'Gemini 4 Argon', 'Argon', 'week', 36],
+    ]);
+});
+
+test('antigravity: oneof with 0 remaining indicates 100% used', () => {
+    const body = {groups: [{buckets: [
+        {bucketId: 'gemini-5h', window: '5h', remaining: {case: 'remainingFraction', value: 0}, resetTime: '2026-10-24T01:38:32Z'},
+        {bucketId: 'gemini-argon-5h', window: '5h', remaining: {case: 'remainingFraction', value: '0'}, resetTime: '2026-10-24T01:38:32Z'},
+    ]}]};
+    const {metrics} = parseQuota(body);
+    assertEqual(metrics.map(m => [m.id, m.percentUsed]), [
+        ['gemini-5h', 100],
+        ['gemini-argon-5h', 100],
+    ]);
+});
+
+test('antigravity: blank strings and malformed resetTime without remaining are dropped', () => {
+    for (const badValue of ['', '   ']) {
+        const body = {groups: [{buckets: [{bucketId: 'gemini-5h', window: '5h', remainingFraction: badValue}]}]};
+        assertEqual(failureOf2(() => parseQuota(body)), 'provider_changed');
+    }
+    const badReset = {groups: [{buckets: [{bucketId: 'gemini-5h', window: '5h', resetTime: 'invalid-date'}]}]};
+    assertEqual(failureOf2(() => parseQuota(badReset)), 'provider_changed');
+});
+
 test('antigravity: an unknown remaining oneof is not mistaken for exhausted quota', () => {
     assertEqual(failureOf2(() => parseQuota({groups: [{buckets: [
         {bucketId: 'gemini-weekly', window: 'weekly', remaining: {case: 'reserved', value: 0}, resetTime: '2026-10-12T05:00:00Z'},
@@ -719,6 +766,7 @@ test('antigravity provider: a POST with an empty JSON body and a User-Agent that
     assertEqual([seen[0].options.method, seen[0].options.body, seen[0].options.contentType], ['POST', '{}', 'application/json']);
     assertEqual([seen[0].options.headers['User-Agent'], seen[0].options.headers.Authorization], [DEFAULT_USER_AGENT, 'Bearer tok']);
     assertEqual(seen[1].options.headers['User-Agent'], 'antigravity/9.9 mine');
+    assertEqual(DEFAULT_USER_AGENT, 'antigravity/cli/1.4.4 gnome-ai-quota');
     assertTrue(DEFAULT_USER_AGENT.includes('antigravity') && DEFAULT_USER_AGENT.includes('gnome-ai-quota'));
 });
 
@@ -777,6 +825,18 @@ test('a number that belongs to a pool says which pool, for the eye and for a scr
     // a provider without pools reads as before
     const plain = barView({id: 'c', name: 'C', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: 1}, metrics: [{id: 'w', kind: 'percent', window: 'week', windowSecs: 604800, percentUsed: 12}]}, ctx);
     assertEqual(plain.accessibleName, 'C: 12% of week used');
+});
+
+test('antigravity: viewmodel formats Gemini 4 Argon in bar and card', () => {
+    const body = {groups: [{buckets: [
+        {bucketId: 'gemini-argon-5h', window: '5h', remaining: {case: 'remainingFraction', value: 0.2}, resetTime: '2026-10-24T01:38:32Z'},
+    ]}]};
+    const snapshot = {id: 'antigravity', name: 'Antigravity', plan: '', state: 'ok', source: {kind: 'fresh', fetchedAt: 1}, metrics: parseQuota(body).metrics};
+    const bar = barView(snapshot);
+    assertEqual([bar.number, bar.suffix], ['80', 'Argon 5h']);
+    const card = cardView(snapshot, {nowMs: 1, locale: 'en'});
+    assertEqual(card.groups.map(g => g.title), ['Gemini 4 Argon']);
+    assertTrue(card.heroSmall.includes('Gemini 4 Argon'));
 });
 
 

@@ -4,6 +4,15 @@ All notable changes to the Elfvision GNOME build. The full release notes are kep
 [docs/temp/](docs/temp/) as `release-v<version>.md`. Versions follow `version-name` in
 [metadata.json](metadata.json).
 
+## 0.3.2 — 2026-10-22
+
+### Fixed
+- Updated the Antigravity default `User-Agent` to `antigravity/cli/1.4.4 gnome-ai-quota` so the Cloud Code endpoint returns Gemini models and Gemini 4 Argon quota groups alongside Claude and GPT.
+- Added separate pool classification for `Gemini 4 Argon` (`gemini-argon-*`) so its weekly quota limit is monitored independently without clobbering the standard Gemini weekly quota.
+
+### Documentation
+- Updated ADR 0002 with the Antigravity User-Agent requirement and Gemini 4 Argon pool details.
+
 ## 0.3.1 — 2026-10-21
 
 ### Fixed
