@@ -21,7 +21,7 @@ stable during the rename so account data and upgrades retain their identity.
   `tools/build.sh` compiles schemas and translation catalogs.
 - Preferences use GTK 4 and libadwaita (`prefs.js`).
 - Plain JavaScript with JSDoc types where they help.
-- Target: GNOME Shell 50, developed on Fedora 44.
+- Target: GNOME Shell 50 and 51; GNOME Shell 50 is declared compatible but has not been tested.
 - **English everywhere** in the repository: code, identifiers, comments,
   documentation, commit messages, issue and pull request text, and the source
   strings (gettext `msgid`) of the interface. Brazilian Portuguese lives only in

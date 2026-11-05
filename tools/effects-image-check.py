@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from PIL import Image
 
-root = Path(__file__).resolve().parents[1]
+root = Path(os.environ.get('GAQ_ARTIFACT_ROOT', Path(__file__).resolve().parents[1]))
 folder = root / '.superpowers/sdd/2026-10-07-post-mvp-execution'
 prefix = 'dark-' if os.getenv('GAQ_EFFECTS_SCHEME') == 'dark' else ''
 metadata = json.loads((folder / f'effects-{prefix}visual.json').read_text())

@@ -184,8 +184,9 @@ connector's generation and refresh token.
 
 Until credential discovery completes, an empty live list means unknown rather
 than disconnected. Demo constructs fictional runtime providers only for simulated
-connected connectors. The nested and headless helpers use private keyrings and
-settings; authentication there does not modify the user's normal session.
+connected connectors. The nested and headless helpers use private settings and block
+Secret Service by default. The headless synthetic-keyring test is an explicit exception;
+do not use real credentials in either helper.
 
 ## Providers added so far
 

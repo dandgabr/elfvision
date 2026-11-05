@@ -16,7 +16,7 @@ GNOME implementation is built this way, the
 
 ## Setup
 
-You need GNOME Shell 50, `gjs`, `glib-compile-schemas`, the gettext tools
+You need GNOME Shell 50 or 51 (50 is declared compatible but has not been tested), `gjs`, `glib-compile-schemas`, the gettext tools
 (`msgfmt`, `xgettext`, `msgmerge`), `python3`, and `mutter-devkit` for the nested
 shell (`sudo dnf install mutter-devkit`). Packaging uses `gnome-extensions`, `zip` and
 `unzip`; the checks also use `flock`, `dbus-run-session`, `gnome-keyring` and, when
@@ -178,13 +178,15 @@ tests whose name contains `<text>`.
 
 The local gate also runs `tests/disconnectDisk.sh` and `tests/disconnectSecrets.sh`.
 They exercise durable cross-process fencing and exact-scope deletion in a private
-state directory, D-Bus session and synthetic keyring. Shell syntax and ShellCheck
+state directory, D-Bus session and synthetic keyring. `tests/disconnectSecrets.sh` requires
+`bwrap` (bubblewrap), working unprivileged user namespaces, and a supported Secret Service
+daemon; it fails closed when these prerequisites are unavailable. Shell syntax and ShellCheck
 include these test scripts. Missing prerequisites fail these gates.
 
 Run it before a commit. For preferences or layout changes, also run:
 
 ```sh
-tools/prefs-smoke.sh  # 360px setup traversal, RTL, text inflation, larger fonts and closing paths
+tools/prefs-smoke.sh states  # isolated fake-controller state checks; not startup
 tools/layout-check.sh # popup allocations and mirrored meters in an isolated demo shell
 tools/effects-check.sh lifecycle # 100 actual effect cycles, geometry and teardown
 tools/effects-check.sh matrix # 264 current policy/resource combinations; no timing claims
@@ -192,7 +194,9 @@ tools/effects-check.sh frames # four 60-second serialized CPU/GPU-finish paint s
 ```
 
 The preferences probe injects fake account controllers for traversal, counts their subscriptions
-and window handlers after every run, and uses an empty private keyring for full-window startup.
+and window handlers. Full-window startup uses an in-memory synthetic Secret Service
+inside bubblewrap; `startup` and the default `all` require working unprivileged user
+namespaces. In `all`, independent checks run before startup, and startup failure is reported.
 Stateful GTK checks also cover delayed saves and validation, disposed callbacks, keyring recovery,
 account/dialog states and focus. The St probe measures enlarged fonts, horizontal label/action
 containment, keyboard focus, RTL meter geometry and tooltip cleanup on an 800px virtual monitor.
@@ -219,11 +223,11 @@ All three leave your session, settings and extensions alone.
 ### Headless shell
 
 `tools/headless-shell.sh` starts `gnome-shell --headless` on its own D-Bus session,
-with an in-memory GSettings backend and a temporary `XDG_DATA_HOME` that links
+with a key-file GSettings backend and a temporary `XDG_DATA_HOME` that links
 this checkout as the only user extension. It enables the extension, prints its state
 and the shell errors that mention it.
 
-All graphical helpers isolate data, configuration, cache, state and runtime;
+All graphical helpers use a temporary HOME and isolate data, configuration, cache, state and runtime;
 `XDG_STATE_HOME` must never fall back to the user's disconnect metadata. They also
 use a distinct Wayland socket and `GIO_USE_VFS=local`. Set
 `GAQ_TEST_MONITORS=1280x800,1600x900` for two virtual monitors. Monitor probes apply
@@ -268,9 +272,19 @@ the window ends the session. It stores settings in a key file instead of memory,
 because the preferences window is a second process and must see the same values as
 the shell.
 
-The nested shell has its own, empty keyring, so no account is connected and the live data source
-has nothing to show. To see the bar, the popup or the notifications working, start it with made-up
-data:
+The graphical helpers accept only `DATA_SOURCE=demo` at startup and do not copy host
+provider configuration. Both run in bubblewrap with a read-only checkout, temporary
+state, private buses and a separate network namespace. They require `bwrap` and working
+unprivileged user namespaces. Secret Service is blocked except in the explicit headless
+synthetic-keyring test. The nested shell exposes the parent Wayland compositor socket;
+that connection remains a trust boundary. The demo check only applies at startup: do not
+switch to live mode or enter real credentials.
+The `tools/check.sh` gate runs `synthetic-oauth-probe.js` with `GAQ_TEST_OO7=1`
+in the isolated headless harness using an invalid synthetic OAuth credential and a private
+keyring. It reports an explicit skip if the oo7 backend is unavailable; `GAQ_REQUIRE_ALL=1`
+turns that skip into a failure. The probe must not run in the nested shell.
+To see the bar,
+the popup or notifications with made-up data:
 
 ```sh
 DATA_SOURCE=demo DEMO_SCENARIO=drift tools/nested-shell.sh
@@ -338,10 +352,8 @@ The wrapper bounds execution and checks native errors; its temporary session is
 removed on exit. Retained screenshots and metrics are ignored by git.
 
 Both Shell helpers use private runtime directories. The interactive nested helper
-preserves the parent Wayland/PipeWire preview endpoints before isolating its own
-sockets and crash marker. `LOCAL_CONFIG_FILE=/path/to/dummy.json` lets a scripted
-nested check use dummy public-client configuration; absent that override, its
-existing read-only copy of app configuration remains the manual sign-in workflow.
+exposes the parent Wayland socket for display; it does not provide a manual sign-in
+workflow.
 
 Pixel comparisons verify local blur, changed backing content and decoration.
 Resource policy combinations and screenshot coverage are separate evidence.
@@ -428,8 +440,7 @@ read it asynchronously with a 16 KiB streaming limit and a maximum 5-second
 cancellation timer for metadata, open, and read operations. Asynchronous stream
 closure follows cancellation; the complete promise has no hard 5-second deadline.
 Shell callers share one read and cache the result for one minute. The nested
-shell copies that file in, so Connect works there too, and keeps the sign-in in
-its own throwaway keyring.
+shell does not copy this configuration or support sign-in.
 
 The optional per-connector harness mode reads only the exact credential sources
 in ADR 0002. File reads enforce owner, private permissions, regular-file type
@@ -580,7 +591,7 @@ and `errorName(error)`. `console.*`, `print` and `logError` are rejected by ESLi
 | `tools/sast.sh` | The static analysis that CI runs, locally (see [Static analysis](#static-analysis)). |
 | `tools/pack.sh` | Builds the installable zip, including the client-id helper, and fails when a runtime file is missing or a development file ships. |
 | `tools/release-assets.sh` | Writes `dist/build-manifest.json` and `dist/SHA256SUMS` for a release (run after `pack.sh`, on a clean checkout). |
-| `tools/prefs-smoke.sh`, `tools/layout-check.sh` | Setup lifecycle and narrow/RTL/long-text checks in an isolated shell. |
+| `tools/prefs-smoke.sh`, `tools/layout-check.sh` | Fake-controller state checks, sandboxed synthetic-service startup, and narrow/RTL/long-text checks. |
 | `tools/headless-shell.sh`, `tools/nested-shell.sh` | Throwaway GNOME Shells (see [Running and checking](#running-and-checking-the-extension)). |
 | `tools/i18n.sh`, `tools/po-fill.py`, `tools/check-po.py` | Translation workflow and its checks (see [Translations](#translations)). |
 | `tools/gen-themes.py` | Generates the built-in themes from the style gallery (see [Themes](#themes)). |

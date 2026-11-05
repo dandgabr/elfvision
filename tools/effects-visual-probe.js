@@ -15,7 +15,7 @@
         const {ThemeEffects} = await import(`file://${root}/lib/ui/themeEffects.js`);
         const wait = ms => new Promise(resolve => GLib.timeout_add(GLib.PRIORITY_DEFAULT, ms, () => { resolve(); return GLib.SOURCE_REMOVE; }));
         const capture = async name => {
-            const path = `${root}/.superpowers/sdd/2026-10-07-post-mvp-execution/${name.replace('effects-', `effects-${prefix}`)}.png`;
+            const path = `${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-07-post-mvp-execution/${name.replace('effects-', `effects-${prefix}`)}.png`;
             const stream = Gio.File.new_for_path(path).replace(null, false, Gio.FileCreateFlags.NONE, null);
             try { await new Shell.Screenshot().screenshot(false, stream); } finally { stream.close(null); }
             result.screenshots.push(path);
@@ -79,7 +79,6 @@
     finally {
         engine?.destroy(); box?.destroy(); process?.force_exit(); result.finished = true;
         const {default: GLibFile} = await import('gi://GLib');
-        const path = GLibFile.getenv('ROOT');
-        GLibFile.file_set_contents(`${path}/.superpowers/sdd/2026-10-07-post-mvp-execution/effects-${GLibFile.getenv('GAQ_EFFECTS_SCHEME') === 'dark' ? 'dark-' : ''}visual.json`, JSON.stringify(result));
+        GLibFile.file_set_contents(`${GLibFile.getenv('WORK')}/captures/.superpowers/sdd/2026-10-07-post-mvp-execution/effects-${GLibFile.getenv('GAQ_EFFECTS_SCHEME') === 'dark' ? 'dark-' : ''}visual.json`, JSON.stringify(result));
     }
 })()

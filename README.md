@@ -4,7 +4,7 @@ Elfvision monitors AI provider quotas, reset times and API spending from your
 Linux desktop. Keep separate connectors for personal and work accounts, check
 usage and balances, and receive alerts without opening each provider's website.
 
-The current build integrates with **GNOME Shell 50** through a native extension.
+The current build integrates with **GNOME Shell 50 and 51** through a native extension.
 Elfvision is expanding to other desktop environments and window managers,
 including **KDE Plasma**. The OAuth integrations are unofficial and carry account risks;
 read [Provider access and consent](#provider-access-and-consent) before connecting.
@@ -26,7 +26,7 @@ read [Provider access and consent](#provider-access-and-consent) before connecti
 
 | Environment | Status | Package |
 |---|---|---|
-| GNOME Shell 50 | Available | GNOME Shell extension ZIP |
+| GNOME Shell 50 and 51 | Available | GNOME Shell extension ZIP |
 | KDE Plasma / KWin | Planned | Integration and package not released yet |
 | Other desktop environments and window managers | Planned | Integration and compatibility to be defined |
 
@@ -60,7 +60,7 @@ notifications. Every provider is optional; selecting one does not sign you in.
 
 ### GNOME build requirements
 
-- GNOME Shell **50**; other versions are not declared compatible.
+- GNOME Shell **50 or 51**. GNOME Shell 50 is declared compatible but has not been tested; other versions are not declared compatible.
 - A desktop Secret Service, such as GNOME Keyring, for API keys and sign-ins.
 - `flock` from util-linux (at `/usr/bin/flock`) for safe coordination across login sessions.
 - Python 3 for the optional OAuth client-ID helper.
@@ -322,7 +322,7 @@ and raw errors.
 
 | Problem | What to check |
 |---|---|
-| Extension is missing after installation | Confirm GNOME Shell 50, log out and back in, then run the enable command. |
+| Extension is missing after installation | Confirm GNOME Shell 50 or 51, log out and back in, then run the enable command. |
 | Only the extension icon appears | Add and connect an account in Accounts. In Demo, use Simulate connect for a fictional connector. |
 | Connect asks for client configuration | Choose Find configuration automatically or use Copy command in the connector editor. |
 | Harness credential is missing or expired | Sign in or renew it in the named local tool, then choose Check now. The extension does not refresh borrowed credentials. |

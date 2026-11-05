@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Assemble labeled technical figures from unchanged native popup crops."""
 import json
+import os
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
-root = Path(__file__).resolve().parents[1]
+root = Path(os.environ.get('GAQ_ARTIFACT_ROOT', Path(__file__).resolve().parents[1]))
 folder = root / '.superpowers/sdd/2026-10-07-post-mvp-execution'
 metadata = json.loads((folder / 'effects-inventory.json').read_text())
 if not metadata.get('finished') or metadata.get('error') or len(metadata['captures']) != 44:
