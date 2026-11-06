@@ -126,6 +126,7 @@ step "unit tests" timeout 600 gjs -m tests/run.js
 step "authored theme variants" python3 -I tools/test-theme-generation.py
 step "cross-process disconnect" timeout 90 tests/disconnectDisk.sh
 step "private keyring disconnect" timeout 90 tests/disconnectSecrets.sh
+step "secret session recovery" timeout 90 bash tests/secretSessionRestart.sh
 step "cross-process connector removal" timeout 90 tests/connectorsDisk.sh
 step "script syntax" syntax
 step "javascript syntax" js_syntax
