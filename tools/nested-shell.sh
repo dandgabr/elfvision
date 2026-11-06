@@ -11,18 +11,24 @@
 # window (or press Ctrl+C here) to end it.
 set -euo pipefail
 
+if [[ ${DATA_SOURCE:-demo} != demo ]]; then
+    echo "DATA_SOURCE must be demo in graphical test sessions" >&2
+    exit 1
+fi
+
 root="$(cd "$(dirname "$0")/.." && pwd)"
 [ -x /usr/libexec/mutter-devkit ] || { echo "mutter-devkit is missing: sudo dnf install mutter-devkit" >&2; exit 1; }
 "$root/tools/build.sh" >/dev/null
 uuid="$(python3 -I -c 'import json,sys;print(json.load(open(sys.argv[1]))["uuid"])' "$root/metadata.json")"
-# Preserve only the parent compositor endpoints before isolating runtime sockets.
+# Preserve only the parent compositor socket before isolating runtime sockets.
 parent_runtime="${XDG_RUNTIME_DIR:-}"
 parent_wayland="${WAYLAND_DISPLAY:-}"
 if [ -n "$parent_wayland" ] && [[ "$parent_wayland" != /* ]]; then
     [ -n "$parent_runtime" ] || { echo "Relative WAYLAND_DISPLAY requires XDG_RUNTIME_DIR" >&2; exit 1; }
     parent_wayland="$parent_runtime/$parent_wayland"
 fi
-parent_pipewire="${PIPEWIRE_RUNTIME_DIR:-$parent_runtime}"
+[ -n "$parent_wayland" ] && [ -S "$parent_wayland" ] || { echo 'WAYLAND_DISPLAY must identify a Wayland socket' >&2; exit 1; }
+command -v bwrap >/dev/null || { echo 'bwrap is required for graphical isolation' >&2; exit 1; }
 work="$(mktemp -d)"
 # Removed on every way out, a signal included: the folder can hold a copy of the client ids.
 # shellcheck source=tools/private-session-cleanup.sh
@@ -33,19 +39,11 @@ trap 'exit 143' TERM
 mkdir -p "$work/data/gnome-shell/extensions"
 ln -s "$root" "$work/data/gnome-shell/extensions/$uuid"
 
-# The client ids of your real configuration, copied (read only, private) so Connect works here.
-real_config="${LOCAL_CONFIG_FILE:-${XDG_CONFIG_HOME:-$HOME/.config}/gnome-ai-quota/providers.local.json}"
-if [ -f "$real_config" ] && [ -r "$real_config" ]; then
-    mkdir -p "$work/config/gnome-ai-quota" && chmod 700 "$work/config/gnome-ai-quota"
-    install -m 600 "$real_config" "$work/config/gnome-ai-quota/providers.local.json"
-fi
-
 mkdir -m 700 "$work/runtime"
 export XDG_RUNTIME_DIR="$work/runtime"
-if [ -n "$parent_wayland" ]; then export WAYLAND_DISPLAY="$parent_wayland"; fi
-# Mutter devkit's preview may use the parent PipeWire endpoint; Shell sockets and
-# crash markers stay private. This does not expose the parent's configuration.
-if [ -n "$parent_pipewire" ]; then export PIPEWIRE_RUNTIME_DIR="$parent_pipewire"; fi
+# The parent socket is mounted at a fixed path inside the sandbox.
+mkdir -m 700 "$work/home"
+export HOME="$work/home"
 export XDG_DATA_HOME="$work/data" XDG_CONFIG_HOME="$work/config" XDG_CACHE_HOME="$work/cache"
 export XDG_STATE_HOME="$work/state" GIO_USE_VFS=local
 # A file backend, not "memory": the preferences window is another process and
@@ -53,7 +51,7 @@ export XDG_STATE_HOME="$work/state" GIO_USE_VFS=local
 # DATA_SOURCE=demo starts with made-up data instead of the real providers, and DEMO_SCENARIO
 # (steady, flaky or drift) says what that data does: drift climbs toward the limits every ten
 # seconds, which is how the notifications are seen without any account.
-for pair in "data-source:${DATA_SOURCE:-}" "demo-scenario:${DEMO_SCENARIO:-}"; do
+for pair in "data-source:demo" "demo-scenario:${DEMO_SCENARIO:-}"; do
     if [ -n "${pair#*:}" ]; then
         GSETTINGS_BACKEND=keyfile GSETTINGS_SCHEMA_DIR="$root/schemas" \
             gsettings set org.gnome.shell.extensions.gnome-ai-quota "${pair%%:*}" "${pair#*:}"
@@ -61,30 +59,48 @@ for pair in "data-source:${DATA_SOURCE:-}" "demo-scenario:${DEMO_SCENARIO:-}"; d
 done
 export WORK="$work" GSETTINGS_BACKEND=keyfile GTK_A11Y=none UUID="$uuid" OPEN_PREFS="${1:-}"
 
-# The sign-in of a test goes to a throwaway keyring, never to your real one.
+# This UI-only session blocks Secret Service; do not test sign-in here.
 unset GNOME_KEYRING_CONTROL SSH_AUTH_SOCK AT_SPI_BUS_ADDRESS
-dbus-run-session -- bash -c '
-    # A throwaway, unlocked keyring, so the provider keys of a test never touch yours.
-    # Its own private runtime folder: it must not touch the control socket of your real keyring.
-    keyring_run="$WORK/keyring-run"
-    mkdir -m 700 "$keyring_run"
-    XDG_RUNTIME_DIR="$keyring_run" gnome-keyring-daemon --start --components=secrets >/dev/null 2>&1 || true
-    # Only the in-memory session collection exists; make it the default one so
-    # libsecret does not ask to create a keyring.
-    gdbus call --session --dest org.freedesktop.secrets --object-path /org/freedesktop/secrets \
-        --method org.freedesktop.Secret.Service.SetAlias default /org/freedesktop/secrets/collection/session >/dev/null 2>&1 || true
+export ROOT_FOR_BUS="$root"
+bwrap --die-with-parent --unshare-all --ro-bind /usr /usr \
+    --symlink usr/lib64 /lib64 --symlink usr/lib /lib --symlink usr/bin /bin \
+    --proc /proc --dev /dev --tmpfs /tmp --tmpfs /run \
+    --ro-bind /etc/passwd /etc/passwd --ro-bind /etc/group /etc/group \
+    --ro-bind "$root" "$root" --bind "$work" "$work" \
+    --ro-bind "$parent_wayland" /run/parent-wayland --chdir "$root" \
+    env -i PATH=/usr/bin:/bin HOME="$HOME" XDG_DATA_HOME="$XDG_DATA_HOME" \
+    XDG_CONFIG_HOME="$XDG_CONFIG_HOME" XDG_CACHE_HOME="$XDG_CACHE_HOME" \
+    XDG_STATE_HOME="$XDG_STATE_HOME" XDG_RUNTIME_DIR="$XDG_RUNTIME_DIR" \
+    WAYLAND_DISPLAY=/run/parent-wayland GIO_USE_VFS=local GSETTINGS_BACKEND=keyfile \
+    GTK_A11Y=none WORK="$WORK" UUID="$UUID" OPEN_PREFS="$OPEN_PREFS" ROOT_FOR_BUS="$ROOT_FOR_BUS" \
+    __EGL_VENDOR_LIBRARY_FILENAMES=/usr/share/glvnd/egl_vendor.d/50_mesa.json \
+    dbus-run-session --config-file="$root/tools/no-secrets-session.conf" -- bash -c '
+    set -euo pipefail
+    # Use a separate bus with no activation directories, never the host system bus.
+    export DBUS_SYSTEM_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/system-bus"
+    dbus-daemon --nofork --config-file="$ROOT_FOR_BUS/tools/no-secrets-session.conf" \
+        --address="$DBUS_SYSTEM_BUS_ADDRESS" >"$XDG_RUNTIME_DIR/system-bus.log" 2>&1 &
+    system_bus=$!
+    trap '\''jobs -pr | xargs -r kill 2>/dev/null || true; wait 2>/dev/null || true'\'' EXIT
+    for _ in $(seq 1 100); do
+        [ -S "$XDG_RUNTIME_DIR/system-bus" ] && break
+        kill -0 "$system_bus" 2>/dev/null || { cat "$XDG_RUNTIME_DIR/system-bus.log" >&2; exit 1; }
+        sleep 0.02
+    done
+    [ -S "$XDG_RUNTIME_DIR/system-bus" ] || { echo "private system bus unavailable" >&2; exit 1; }
+    trap '\''jobs -pr | xargs -r kill 2>/dev/null || true; wait 2>/dev/null || true'\'' EXIT
     gnome-shell --devkit --wayland --unsafe-mode >/dev/null 2>&1 &
     shell=$!
     for _ in $(seq 1 60); do
         sleep 0.5
-        gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions \
+        gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
             --method org.gnome.Shell.Extensions.ListExtensions >/dev/null 2>&1 && break
     done
-    gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions \
+    gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
         --method org.gnome.Shell.Extensions.EnableExtension "$UUID" >/dev/null
     if [ "$OPEN_PREFS" = prefs ]; then
         sleep 2
-        gdbus call --session --dest org.gnome.Shell.Extensions --object-path /org/gnome/Shell/Extensions \
+        gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell \
             --method org.gnome.Shell.Extensions.OpenExtensionPrefs "$UUID" "" "{}" >/dev/null
     fi
     wait "$shell"

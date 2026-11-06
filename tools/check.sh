@@ -99,7 +99,10 @@ shell_loads() {
         return 0
     fi
     local out
-    out="$(timeout 120 tools/headless-shell.sh 2>&1)"
+    if ! out="$(timeout 120 tools/headless-shell.sh 2>&1)"; then
+        printf '%s\n' "$out" >&2
+        return 1
+    fi
     if grep -q "'state': <1.0>" <<<"$out" && grep -q "'error': <''>" <<<"$out"; then
         return 0
     fi
@@ -107,16 +110,29 @@ shell_loads() {
     return 1
 }
 
+synthetic_oauth() {
+    if [ ! -x /usr/libexec/oo7-daemon ]; then
+        skip "synthetic OAuth (oo7 backend unavailable)"
+        return 0
+    fi
+    GAQ_TEST_OO7=1 timeout 120 tools/headless-shell.sh \
+        tools/synthetic-oauth-probe.js 'wait-for:global.gaqSyntheticOAuth?.finished' \
+        tools/synthetic-oauth-verify.js
+}
+
 step "build" tools/build.sh
+step "graphical harness isolation" bash tests/graphicalIsolation.test.sh
 step "unit tests" timeout 600 gjs -m tests/run.js
 step "authored theme variants" python3 -I tools/test-theme-generation.py
 step "cross-process disconnect" timeout 90 tests/disconnectDisk.sh
 step "private keyring disconnect" timeout 90 tests/disconnectSecrets.sh
+step "secret session recovery" timeout 90 bash tests/secretSessionRestart.sh
 step "cross-process connector removal" timeout 90 tests/connectorsDisk.sh
 step "script syntax" syntax
 step "javascript syntax" js_syntax
 step "eslint" js_lint
 step "extension enables in a shell" shell_loads
+step "synthetic OAuth in isolated shell" synthetic_oauth
 step "shellcheck" lint
 step "schemas" glib-compile-schemas --strict --dry-run schemas
 step "translation template" template_in_step

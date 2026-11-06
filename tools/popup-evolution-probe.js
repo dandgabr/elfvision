@@ -4,12 +4,12 @@
     let backdrop;
     try {
         const work = GLib.getenv('WORK');
-        if (!work || GLib.getenv('GSETTINGS_BACKEND') !== 'memory' ||
+        if (!work || GLib.getenv('GSETTINGS_BACKEND') !== 'keyfile' ||
             GLib.getenv('XDG_CONFIG_HOME') !== `${work}/config`)
             throw new Error('Popup captures require isolated synthetic settings');
         const indicator = Object.values(Main.panel.statusArea).find(actor => actor._extension?._themes);
         const root = indicator._extension.path;
-        const folder = `${GLib.getenv('ROOT')}/build/popup-evolution`;
+        const folder = `${GLib.getenv('WORK')}/captures/build/popup-evolution`;
         const {scanThemes} = await import(`file://${root}/lib/services/themeFiles.js`);
         const {default: NativeShell} = await import('gi://Shell');
         const {default: St} = await import('gi://St');
@@ -113,7 +113,7 @@
     finally {
         backdrop?.force_exit(); result.finished = true;
         const suffix = GLib.getenv('GAQ_CAPTURE_THEME') || 'all';
-        GLib.file_set_contents(`${GLib.getenv('ROOT')}/build/popup-evolution/${GLib.getenv('GAQ_CAPTURE_SCHEME')}-${suffix}.json`,
+        GLib.file_set_contents(`${GLib.getenv('WORK')}/captures/build/popup-evolution/${GLib.getenv('GAQ_CAPTURE_SCHEME')}-${suffix}.json`,
             JSON.stringify(result, null, 2));
     }
 })();

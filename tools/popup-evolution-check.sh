@@ -13,7 +13,7 @@ waits=()
 if [[ -z "$GAQ_CAPTURE_THEME" ]]; then
     waits+=(sleep:25 sleep:25 sleep:25 sleep:25)
 fi
-if ! DATA_SOURCE=demo LOG="$scratch/shell.log" timeout --kill-after=5s 190 \
+if ! DATA_SOURCE=demo GAQ_EXPORT_DIR="${GAQ_EXPORT_DIR:-$PWD}" LOG="$scratch/shell.log" timeout --kill-after=5s 190 \
     tools/headless-shell.sh tools/demo-connectors-fixture.js tools/popup-evolution-probe.js \
     "${waits[@]}" 'wait-for:global.gaqPopupEvolution?.finished' tools/popup-evolution-verify.js >"$scratch/result" 2>&1; then
     cat "$scratch/result"

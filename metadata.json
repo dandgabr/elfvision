@@ -3,7 +3,8 @@
   "name": "Elfvision",
   "description": "GNOME Shell integration for Elfvision: monitor AI quotas, reset times and API spending.",
   "shell-version": [
-    "50"
+    "50",
+    "51"
   ],
   "url": "https://github.com/dandgabr/elfvision",
   "gettext-domain": "gnome-ai-quota",

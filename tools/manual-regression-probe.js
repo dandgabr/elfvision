@@ -60,7 +60,7 @@
             sample.menuVisible = indicator.menu.actor.visible;
             const {default: Shell} = await import('gi://Shell');
             const {default: Gio} = await import('gi://Gio');
-            const stream = Gio.File.new_for_path(`${indicator._extension.path}/.superpowers/sdd/2026-10-08-manual-regressions/${prefix}-pointer-${cycle}.png`).replace(null, false, Gio.FileCreateFlags.NONE, null);
+            const stream = Gio.File.new_for_path(`${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-08-manual-regressions/${prefix}-pointer-${cycle}.png`).replace(null, false, Gio.FileCreateFlags.NONE, null);
             try { await new Shell.Screenshot().screenshot(false, stream); } finally { stream.close(null); }
             sample.pick = global.stage.get_actor_at_pos(Clutter.PickMode.REACTIVE, x + 60, y + 12)?.toString();
             pointer.notify_absolute_motion(GLib.get_monotonic_time(), x + 60, y + 12);
@@ -82,7 +82,7 @@
             card._hero.clutter_text.disconnect(attrs); card._hero.disconnect(styles);
             const [heroX, heroY] = card._hero.get_transformed_position();
             sample.heroRegion = [Math.floor(heroX), Math.floor(heroY), Math.ceil(card._hero.width), Math.ceil(card._hero.height)];
-            const afterStream = Gio.File.new_for_path(`${indicator._extension.path}/.superpowers/sdd/2026-10-08-manual-regressions/${prefix}-pointer-after-${cycle}.png`).replace(null, false, Gio.FileCreateFlags.NONE, null);
+            const afterStream = Gio.File.new_for_path(`${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-08-manual-regressions/${prefix}-pointer-after-${cycle}.png`).replace(null, false, Gio.FileCreateFlags.NONE, null);
             try { await new Shell.Screenshot().screenshot(false, afterStream); } finally { afterStream.close(null); }
             result.toggles.push(sample);
             if (!indicator._userOpen.has(id)) throw new Error('Pointer did not activate the credits header');
@@ -112,7 +112,7 @@
     } catch (error) { result.error = error.message; }
     finally {
         result.finished = true;
-        GLib.file_set_contents(`${GLib.getenv('ROOT')}/.superpowers/sdd/2026-10-08-manual-regressions/before.json`, JSON.stringify(result, null, 2));
+        GLib.file_set_contents(`${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-08-manual-regressions/before.json`, JSON.stringify(result, null, 2));
     }
 })();
 'GAQ_MANUAL_REGRESSION_STARTED';

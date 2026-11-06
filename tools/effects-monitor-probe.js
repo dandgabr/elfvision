@@ -35,7 +35,7 @@
         const indicator = Object.values(Main.panel.statusArea).find(actor => actor._extension?._themes);
         check(indicator && indicator._settings.get_string('data-source') === 'demo', 'Synthetic demo only');
         const root = indicator._extension.path;
-        const output = `${root}/.superpowers/sdd/2026-10-07-open-items`;
+        const output = `${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-07-open-items`;
         GLib.mkdir_with_parents(output, 0o700);
         evidenceFile = Gio.File.new_for_path(`${output}/monitor-effects.json`);
         scene = Gio.Subprocess.new(['gjs', '-m', `${root}/tools/effects-window.js`], Gio.SubprocessFlags.NONE);

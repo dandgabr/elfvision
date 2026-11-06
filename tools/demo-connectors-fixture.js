@@ -2,7 +2,7 @@
 // Explicit visual-test fixture. Product defaults and fresh-start probes stay empty.
 (() => {
     const work = GLib.getenv('WORK');
-    if (!work || GLib.getenv('GSETTINGS_BACKEND') !== 'memory' ||
+    if (!work || GLib.getenv('GSETTINGS_BACKEND') !== 'keyfile' ||
         ['CONFIG', 'CACHE', 'STATE', 'DATA'].some(name => GLib.getenv(`XDG_${name}_HOME`) !== `${work}/${name.toLowerCase()}`) ||
         GLib.getenv('XDG_RUNTIME_DIR') !== `${work}/runtime`)
         throw new Error('demo fixture requires the isolated headless harness');
