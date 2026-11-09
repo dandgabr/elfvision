@@ -19,7 +19,7 @@
             for (const theme of scanThemes(root).themes.filter(theme => theme.builtin)) {
                 indicator._settings.set_string('theme', theme.id);
                 await wait(200);
-                const path = `${root}/.superpowers/sdd/2026-10-07-post-mvp-execution/inventory-${scheme}-${theme.id}.png`;
+                const path = `${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-07-post-mvp-execution/inventory-${scheme}-${theme.id}.png`;
                 const stream = Gio.File.new_for_path(path).replace(null, false, Gio.FileCreateFlags.NONE, null);
                 try { await new Shell.Screenshot().screenshot(false, stream); } finally { stream.close(null); }
                 const [x, y] = indicator._effectBackground.get_transformed_position();
@@ -29,7 +29,7 @@
     } catch (error) { result.error = error.message; }
     finally {
         result.finished = true;
-        GLib.file_set_contents(`${GLib.getenv('ROOT')}/.superpowers/sdd/2026-10-07-post-mvp-execution/effects-inventory.json`, JSON.stringify(result));
+        GLib.file_set_contents(`${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-07-post-mvp-execution/effects-inventory.json`, JSON.stringify(result));
     }
 })()
 ; 'GAQ_INVENTORY_STARTED'

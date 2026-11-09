@@ -203,7 +203,9 @@ test('metadata: identity, schema and catalog names agree with the files in the r
     const metadata = JSON.parse(read('metadata.json'));
     assertTrue(/^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+$/.test(metadata.uuid), 'uuid is name@domain');
     assertTrue(/^\d+\.\d+\.\d+$/.test(metadata['version-name']), 'version-name is semantic');
-    assertTrue(Array.isArray(metadata['shell-version']) && metadata['shell-version'].length > 0, 'a Shell version is declared');
+    assertEqual(metadata['shell-version'], ['50', '51']);
+    for (const path of sources('lib/ui'))
+        assertTrue(!/\bvertical\s*:\s*true\b/.test(read(path)), `${path} uses orientation rather than the removed vertical property`);
     assertTrue(GLib.file_test(`${root}/schemas/${metadata['settings-schema']}.gschema.xml`, GLib.FileTest.IS_REGULAR), 'the settings schema file exists');
     assertTrue(read(`schemas/${metadata['settings-schema']}.gschema.xml`).includes(`id="${metadata['settings-schema']}"`), 'the schema id matches metadata');
     assertTrue(GLib.file_test(`${root}/po/${metadata['gettext-domain']}.pot`, GLib.FileTest.IS_REGULAR), 'the translation template uses the declared domain');

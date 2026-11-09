@@ -9,7 +9,7 @@
     };
     try {
         const work = GLib.getenv('WORK');
-        check(work && GLib.getenv('GSETTINGS_BACKEND') === 'memory' &&
+        check(work && GLib.getenv('GSETTINGS_BACKEND') === 'keyfile' &&
             ['CONFIG', 'CACHE', 'STATE', 'DATA'].every(name => GLib.getenv(`XDG_${name}_HOME`) === `${work}/${name.toLowerCase()}`) &&
             GLib.getenv('XDG_RUNTIME_DIR') === `${work}/runtime`, 'Requires the complete private headless harness');
         const indicator = Main.panel.statusArea['gnome-ai-quota@dandgabr.github.io'];
@@ -37,7 +37,7 @@
         await until(() => shown().length === 0 && indicator._chooseVisible.visible);
         await wait(200);
         check(global.stage.get_key_focus() === indicator._chooseVisible, 'All-hidden state focuses recovery action');
-        check(indicator._emptyTitle.text === 'No connectors shown', 'All-hidden message describes presentation');
+        check(indicator._emptyTitle.text === indicator._t.gettext('No connectors shown'), 'All-hidden message describes presentation');
         check(indicator._snapshots.length === 5 && indicator._controller.providerIds().length === 5, 'Hiding does not pause collection');
         check([...original].every(([id, actor]) => indicator._cards.get(id) === actor), 'Hidden actors retain expansion and identity');
         settings.set_strv('demo-popup-hidden-connectors', []);

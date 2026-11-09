@@ -15,7 +15,7 @@
         settings.set_boolean('auto-open', false);
         settings.set_string('theme', 'sistema-gnome'); settings.set_string('color-scheme', 'light');
         settings.set_string('effects-mode', 'off');
-        const directory = `${indicator._extension.path}/docs/temp/reviews/assets/provider-expansion`;
+        const directory = `${GLib.getenv('WORK')}/captures/docs/temp/reviews/assets/provider-expansion`;
         const folder = Gio.File.new_for_path(directory);
         if (!folder.query_exists(null)) folder.make_directory_with_parents(null);
         for (const [id, capped] of [['openai-api', true], ['anthropic-api', false], ['cursor', false], ['openrouter', true]]) {

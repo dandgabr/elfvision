@@ -8,7 +8,6 @@
     }));
     (async () => {
         const indicator = Object.values(Main.panel.statusArea).find(actor => actor._extension?._themes);
-        const root = indicator._extension.path;
         Main.overview.hide();
         Main.welcomeDialog?.close();
         await wait(600);
@@ -46,7 +45,7 @@
                 const bounds = [...card.get_transformed_position(), ...card.get_transformed_size()];
                 if (bounds.some((value, index) => Math.abs(value - entry.card[index]) > 1))
                     throw new Error('Shadow control must preserve card geometry');
-                const path = `${root}/.superpowers/sdd/2026-10-07-open-items/card-shadow-${scheme}-${shadow}.png`;
+                const path = `${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-07-open-items/card-shadow-${scheme}-${shadow}.png`;
                 const stream = Gio.File.new_for_path(path).replace(null, false, Gio.FileCreateFlags.NONE, null);
                 try { await new Shell.Screenshot().screenshot(false, stream); }
                 finally { stream.close(null); }
@@ -57,7 +56,7 @@
         }
         indicator.menu.close(false);
         result.finished = true;
-        GLib.file_set_contents(`${root}/.superpowers/sdd/2026-10-07-open-items/card-shadow.json`, JSON.stringify(result));
+        GLib.file_set_contents(`${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-07-open-items/card-shadow.json`, JSON.stringify(result));
     })().catch(error => { result.error = error.message; result.finished = true; });
     return 'GAQ_CARD_SHADOW_STARTED';
 })()

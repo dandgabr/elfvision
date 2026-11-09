@@ -24,7 +24,7 @@ waits=("sleep:$seconds")
 if [[ ${1:-quick} == matrix ]]; then waits+=("wait-for:global.gaqEffectsBenchmark?.finished"); fi
 if [[ ${1:-quick} == quick ]]; then waits+=("wait-for:global.gaqEffectsResult?.finished"); fi
 if [[ ${1:-quick} == lifecycle ]]; then waits+=("wait-for:global.gaqEffectsLifecycle?.finished"); fi
-if ! DATA_SOURCE=demo SKIP_ENABLE='' LOG="$scratch/shell.log" GAQ_TEST_MONITOR=1280x800 timeout --kill-after=5s "$limit" tools/headless-shell.sh tools/demo-connectors-fixture.js "tools/$probe.js" "${waits[@]}" "tools/$verify.js" > "$scratch/result" 2>&1; then
+if ! DATA_SOURCE=demo SKIP_ENABLE='' GAQ_EXPORT_DIR="${GAQ_EXPORT_DIR:-$PWD}" LOG="$scratch/shell.log" GAQ_TEST_MONITOR=1280x800 timeout --kill-after=5s "$limit" tools/headless-shell.sh tools/demo-connectors-fixture.js "tools/$probe.js" "${waits[@]}" "tools/$verify.js" > "$scratch/result" 2>&1; then
     cat "$scratch/result"; exit 1
 fi
 cat "$scratch/result"
@@ -32,5 +32,5 @@ if grep -q '(false,' "$scratch/result" || ! grep -q "$marker" "$scratch/result";
 if grep -Eq 'already disposed|JS ERROR|CRITICAL|Extension.*Error' "$scratch/shell.log" "$scratch/result"; then
     echo 'Native Shell error in effects gate' >&2; exit 1
 fi
-if [[ ${1:-quick} == visual ]]; then python3 tools/effects-image-check.py; fi
-if [[ ${1:-quick} == inventory ]]; then python3 tools/effects-contact-sheet.py; fi
+if [[ ${1:-quick} == visual ]]; then GAQ_ARTIFACT_ROOT="${GAQ_EXPORT_DIR:-$PWD}" python3 tools/effects-image-check.py; fi
+if [[ ${1:-quick} == inventory ]]; then GAQ_ARTIFACT_ROOT="${GAQ_EXPORT_DIR:-$PWD}" python3 tools/effects-contact-sheet.py; fi

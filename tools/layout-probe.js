@@ -124,7 +124,7 @@
                     // A screenshot of the final RTL/expanded popup is useful for human inspection.
                     if (rtl && expanded && large) {
                         const shot = new Shell.Screenshot();
-                        const stream = Gio.File.new_for_path('/tmp/gaq-rtl-expanded-popup.png').replace(null, false, Gio.FileCreateFlags.NONE, null);
+                        const stream = Gio.File.new_for_path(`${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-07-open-items/gaq-rtl-expanded-popup.png`).replace(null, false, Gio.FileCreateFlags.NONE, null);
                         try {
                             await shot.screenshot(false, stream);
                         } finally {
@@ -162,7 +162,7 @@
                 check(global.stage.get_key_focus() === moneyCard._toggle, 'monetary header retains one keyboard target');
                 if (theme === 'glassmorphism') {
                     await wait(250);
-                    const path = `${GLib.getenv('ROOT')}/.superpowers/sdd/2026-10-07-open-items/money-${rtl ? 'rtl' : 'ltr'}-large.png`;
+                    const path = `${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-07-open-items/money-${rtl ? 'rtl' : 'ltr'}-large.png`;
                     const stream = Gio.File.new_for_path(path).replace(null, false, Gio.FileCreateFlags.NONE, null);
                     try { await new Shell.Screenshot().screenshot(false, stream); }
                     finally { stream.close(null); }

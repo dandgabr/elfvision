@@ -36,7 +36,7 @@
                 await wait(350);
                 const expected = material === 'opaque' ? 'opaque' : selected;
                 if (indicator._effects.inspect().material !== expected) throw new Error(`Requested material not rendered: ${theme.id} ${material}`);
-                const path = `${root}/.superpowers/sdd/2026-10-08-manual-regressions/captures/${theme.id}-${scheme}-${material}.png`;
+                const path = `${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-08-manual-regressions/captures/${theme.id}-${scheme}-${material}.png`;
                 const stream = Gio.File.new_for_path(path).replace(null, false, Gio.FileCreateFlags.NONE, null);
                 try { await new Shell.Screenshot().screenshot(false, stream); } finally { stream.close(null); }
                 result.captures.push({theme: theme.id, name: theme.name, scheme, material, path,
@@ -52,7 +52,7 @@
     } catch (error) { result.error = error.message; }
     finally {
         process?.force_exit(); result.finished = true;
-        GLib.file_set_contents(`${GLib.getenv('ROOT')}/.superpowers/sdd/2026-10-08-manual-regressions/captures/${GLib.getenv('GAQ_CAPTURE_SCHEME')}-${GLib.getenv('GAQ_CAPTURE_OFFSET')}.json`, JSON.stringify(result, null, 2));
+        GLib.file_set_contents(`${GLib.getenv('WORK')}/captures/.superpowers/sdd/2026-10-08-manual-regressions/captures/${GLib.getenv('GAQ_CAPTURE_SCHEME')}-${GLib.getenv('GAQ_CAPTURE_OFFSET')}.json`, JSON.stringify(result, null, 2));
     }
 })();
 'GAQ_MATERIAL_CAPTURES_STARTED';
