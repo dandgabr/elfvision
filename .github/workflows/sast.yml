@@ -10,6 +10,11 @@ on:
   schedule:
     - cron: "23 6 * * 3"
   workflow_dispatch:
+    inputs:
+      runner:
+        description: "Runner to use (e.g. ubuntu-latest, self-hosted)"
+        required: false
+        default: ""
 
 permissions: {}
 
@@ -18,9 +23,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  select-runner:
+    name: select-runner
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      runner: ${{ steps.detect.outputs.runner }}
+    steps:
+      - id: detect
+        run: echo "runner=ubuntu-latest" >> "$GITHUB_OUTPUT"
+
   bandit:
     name: bandit (Python)
-    runs-on: [self-hosted, linux, arm64]
+    needs: select-runner
+    if: always() && !cancelled()
+    runs-on: ${{ inputs.runner || vars.CI_RUNNER || needs.select-runner.outputs.runner || 'self-hosted' }}
     timeout-minutes: 10
     permissions:
       contents: read
@@ -30,7 +47,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: "3.14"
+          python-version: "3.13"
       - name: Install bandit
         run: python -m pip install "$(grep '^bandit==' .github/requirements-sast.txt)"
       - name: Run bandit
@@ -38,7 +55,9 @@ jobs:
 
   semgrep:
     name: semgrep (JavaScript, secrets, security audit)
-    runs-on: [self-hosted, linux, arm64]
+    needs: select-runner
+    if: always() && !cancelled()
+    runs-on: ${{ inputs.runner || vars.CI_RUNNER || needs.select-runner.outputs.runner || 'self-hosted' }}
     timeout-minutes: 15
     permissions:
       contents: read
@@ -48,7 +67,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: "3.14"
+          python-version: "3.13"
       - name: Install semgrep
         run: python -m pip install "$(grep '^semgrep==' .github/requirements-sast.txt)"
       - name: Run semgrep
@@ -59,7 +78,9 @@ jobs:
 
   shellcheck:
     name: shellcheck (shell)
-    runs-on: [self-hosted, linux, arm64]
+    needs: select-runner
+    if: always() && !cancelled()
+    runs-on: ${{ inputs.runner || vars.CI_RUNNER || needs.select-runner.outputs.runner || 'self-hosted' }}
     timeout-minutes: 5
     permissions:
       contents: read
@@ -72,7 +93,9 @@ jobs:
 
   zizmor:
     name: zizmor (workflows)
-    runs-on: [self-hosted, linux, arm64]
+    needs: select-runner
+    if: always() && !cancelled()
+    runs-on: ${{ inputs.runner || vars.CI_RUNNER || needs.select-runner.outputs.runner || 'self-hosted' }}
     timeout-minutes: 5
     permissions:
       contents: read
@@ -82,7 +105,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: "3.14"
+          python-version: "3.13"
       - name: Install zizmor
         run: python -m pip install "$(grep '^zizmor==' .github/requirements-sast.txt)"
       - name: Run zizmor

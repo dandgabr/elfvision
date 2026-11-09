@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      runner:
+        description: "Runner to use (e.g. ubuntu-latest, self-hosted)"
+        required: false
+        default: ""
 
 permissions: {}
 
@@ -13,9 +18,21 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  select-runner:
+    name: select-runner
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      runner: ${{ steps.detect.outputs.runner }}
+    steps:
+      - id: detect
+        run: echo "runner=ubuntu-latest" >> "$GITHUB_OUTPUT"
+
   eslint:
     name: ESLint (GJS and Shell probes)
-    runs-on: [self-hosted, linux, arm64]
+    needs: select-runner
+    if: always() && !cancelled()
+    runs-on: ${{ inputs.runner || vars.CI_RUNNER || needs.select-runner.outputs.runner || 'self-hosted' }}
     timeout-minutes: 5
     permissions:
       contents: read
