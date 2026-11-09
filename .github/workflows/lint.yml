@@ -18,21 +18,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  select-runner:
-    name: select-runner
-    runs-on: ubuntu-latest
-    timeout-minutes: 2
-    outputs:
-      runner: ${{ steps.detect.outputs.runner }}
-    steps:
-      - id: detect
-        run: echo "runner=ubuntu-latest" >> "$GITHUB_OUTPUT"
-
   eslint:
     name: ESLint (GJS and Shell probes)
-    needs: select-runner
-    if: always() && !cancelled()
-    runs-on: ${{ inputs.runner || vars.CI_RUNNER || needs.select-runner.outputs.runner || 'self-hosted' }}
+    runs-on: ${{ inputs.runner || vars.CI_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 5
     permissions:
       contents: read
