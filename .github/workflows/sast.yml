@@ -20,7 +20,7 @@ concurrency:
 jobs:
   bandit:
     name: bandit (Python)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, arm64]
     timeout-minutes: 10
     permissions:
       contents: read
@@ -30,7 +30,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: "3.13"
+          python-version: "3.14"
       - name: Install bandit
         run: python -m pip install "$(grep '^bandit==' .github/requirements-sast.txt)"
       - name: Run bandit
@@ -38,7 +38,7 @@ jobs:
 
   semgrep:
     name: semgrep (JavaScript, secrets, security audit)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, arm64]
     timeout-minutes: 15
     permissions:
       contents: read
@@ -48,7 +48,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: "3.13"
+          python-version: "3.14"
       - name: Install semgrep
         run: python -m pip install "$(grep '^semgrep==' .github/requirements-sast.txt)"
       - name: Run semgrep
@@ -59,7 +59,7 @@ jobs:
 
   shellcheck:
     name: shellcheck (shell)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, arm64]
     timeout-minutes: 5
     permissions:
       contents: read
@@ -72,7 +72,7 @@ jobs:
 
   zizmor:
     name: zizmor (workflows)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, arm64]
     timeout-minutes: 5
     permissions:
       contents: read
@@ -82,7 +82,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: "3.13"
+          python-version: "3.14"
       - name: Install zizmor
         run: python -m pip install "$(grep '^zizmor==' .github/requirements-sast.txt)"
       - name: Run zizmor
