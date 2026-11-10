@@ -2,4 +2,4 @@
 # these versions current; run the same commands locally with `pipx install <tool>`.
 bandit==1.9.4
 semgrep==1.182.1
-zizmor==1.31.1
+zizmor==1.32.0
