@@ -1,5 +1,5 @@
 # The static analysis tools that run in CI (.github/workflows/sast.yml). Dependabot keeps
 # these versions current; run the same commands locally with `pipx install <tool>`.
 bandit==1.9.4
-semgrep==1.182.1
+semgrep==1.183.0
 zizmor==1.31.1
