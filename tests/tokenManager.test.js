@@ -116,21 +116,25 @@ test('tokens: a network failure or a server error does not mark the sign-in as l
     assertEqual([state.stored.refresh, state.refreshCalls.length], ['r1', 3]);
 });
 
-test('tokens: not connected, and a failing keyring keeps the new pair in memory then asks to reconnect', async () => {
+test('tokens: failing keyring retains the rotated pair until storage recovers', async () => {
     assertEqual((await failure(setup({stored: null}).manager.accessToken())).code, 'not_connected');
     const {manager, state} = setup({now: 10 * HOUR, replies: [reply('a2', 'r2', 20 * HOUR)]});
     state.saveFails = 2;
-    assertEqual(await manager.accessToken(), 'a2');      // saved nowhere yet, but usable
+    assertEqual((await failure(manager.accessToken())).code, 'keyring');
     assertEqual(state.saves.length, 0);
-    assertEqual(await manager.accessToken(), 'a2');      // second failure
+    assertEqual((await failure(manager.accessToken())).code, 'keyring');
     assertEqual(await manager.accessToken(), 'a2');      // third attempt succeeds
     assertEqual([state.saves.length, state.stored.refresh], [1, 'r2']);
 
     const {manager: broken, state: gone} = setup({now: 10 * HOUR, replies: [reply('a2', 'r2', 20 * HOUR)]});
     gone.saveFails = 10;
-    await broken.accessToken();
-    await broken.accessToken();
-    assertEqual((await failure(broken.accessToken())).code, 'reconnect');
+    assertEqual((await failure(broken.accessToken())).code, 'keyring');
+    assertEqual((await failure(broken.accessToken())).code, 'keyring');
+    for (let i = 0; i < 8; i++)
+        assertEqual((await failure(broken.accessToken())).code, 'keyring');
+    gone.saveFails = 0;
+    assertEqual(await broken.accessToken(), 'a2');
+    assertEqual([gone.refreshCalls, gone.stored.refresh], [['r1'], 'r2']);
 });
 
 test('tokens: invalidate forces a renewal even for a token that looks valid', async () => {
@@ -163,7 +167,7 @@ test('tokens: a pair waiting to be written is not written after a disconnect or 
     for (const change of [state => { state.stored = null; }, state => { state.stored = {gen: 'g9', access: 'z', refresh: 'rz', expiresAt: 30 * HOUR, scope: ''}; }]) {
         const {manager, state} = setup({now: 10 * HOUR, replies: [reply('a2', 'r2', 20 * HOUR)]});
         state.saveFails = 1;
-        assertEqual(await manager.accessToken(), 'a2');       // the first write failed: pending
+        assertEqual((await failure(manager.accessToken())).code, 'keyring'); // the first write failed: pending
         change(state);
         const before = state.stored;
         const outcome = await failure(manager.accessToken());
