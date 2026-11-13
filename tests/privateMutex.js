@@ -1,6 +1,5 @@
 /* global ARGV */
 import Gio from 'gi://Gio';
-import GLib from 'gi://GLib';
 import {createDisconnectStore, processIdentity, pause} from '../lib/services/disconnectStore.js';
 
 const source = new TextDecoder().decode(Gio.File.new_for_uri(import.meta.url).get_parent().get_parent().get_child('lib').get_child('services').get_child('disconnectStore.js').load_contents(null)[1]);
