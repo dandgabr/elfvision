@@ -64,7 +64,7 @@ jobs:
 
   shellcheck:
     name: shellcheck (shell)
-    runs-on: ${{ inputs.runner || vars.CI_RUNNER || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       contents: read
