@@ -7,6 +7,7 @@ trap 'rm -rf -- "$work"' EXIT
 mkdir -m 700 "$work/runtime" "$work/config" "$work/data" "$work/cache" "$work/state"
 export XDG_RUNTIME_DIR="$work/runtime" XDG_CONFIG_HOME="$work/config" XDG_DATA_HOME="$work/data" XDG_CACHE_HOME="$work/cache" XDG_STATE_HOME="$work/state" GIO_USE_VFS=local
 export GAQ_TEST_REPO="$repo" GAQ_TEST_WORK="$work"
+dbus-run-session -- gjs -m "$repo/tests/privateMutex.js" "$work/state/private-mutex"
 dbus-run-session -- bash -euo pipefail <<'LEGACY'
 gjs -m "$GAQ_TEST_REPO/tests/prefsDisconnectLegacy.js"
 gjs -m "$GAQ_TEST_REPO/tests/prefsDisconnectDisk.js" "$GAQ_TEST_WORK/state/metadata" hold > "$GAQ_TEST_WORK/issued.log" &
